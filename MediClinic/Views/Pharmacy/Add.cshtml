@@ -1,0 +1,125 @@
+﻿@using MediClinic.Models.DTOs;
+@model PharmacyDto;
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+
+
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Pharmacy</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("Index","Pharmacy")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+
+
+            <form class="col-sm-12" asp-action="Add" asp-controller="Pharmacy" method="post" id="PharmacyForm">
+                <input type="hidden" class="text-input" asp-for="@Model.P_ID" placeholder="id">
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Pharmacy Name</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.PharmacyName class="text-input" placeholder="Enter Pharmacy Name">
+                            <span class="required" asp-validation-for="@Model.PharmacyName"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Name</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.Name class="text-input" placeholder="Enter Name">
+                            <span class="required" asp-validation-for="@Model.Name"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Email</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.Email class="text-input" placeholder="Enter Email">
+                            <span class="required" asp-validation-for="@Model.Email"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Phone</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.Phone class="text-input" placeholder="Enter Phone">
+                            <span class="required" asp-validation-for="@Model.Phone"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 1</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.AddressLine1 class="text-input" placeholder="Enter Address Line 1">
+                            <span class="required" asp-validation-for="@Model.AddressLine1"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 2</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.AddressLine2 class="text-input" placeholder="Enter Address Line 2">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 3</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.AddressLine3 class="text-input" placeholder="Enter Address Line 3">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

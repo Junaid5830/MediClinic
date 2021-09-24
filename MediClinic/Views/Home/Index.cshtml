@@ -1,0 +1,1011 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var name = _sessionManager.GetUserName();
+}
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@section styles{
+    <style>
+        .waiting-center {
+            text-align: center !important;
+        }
+
+            .waiting-center h6 {
+                color: #d13276 !important;
+            }
+
+        .value-set {
+            margin: 25px 0 !important;
+        }
+
+        .col.s12.m6.l3.margin-top-2800 {
+            margin-top: 25px
+        }
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-squre {
+            height: 13px;
+            width: 13px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .badge-box {
+            padding: 2px;
+            border-radius: 2px;
+            height: 25px;
+            width: 25px;
+            text-align: center;
+            display: inline-block;
+            background-color: #eff0f0 !important;
+        }
+
+        .select-wrapper .caret {
+            fill: #3248d1 !important;
+        }
+
+        .search-box {
+            color: rgba(0, 0, 0, .87) !important;
+            border: 1.5px solid #efefef !important;
+            width: 60%;
+            height: 24px !important;
+            padding: 8px 20px 8px 48px !important;
+            display: block !important;
+            border-radius: 5px !important;
+        }
+
+            .search-box:hover {
+                border: 1px solid #adadad;
+                border-bottom: 1px solid #adadad !important;
+                background: rgba(230, 230, 230, 0);
+            }
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        @@media screen and (min-width: 2800px) {
+            .input-field .select-wrapper input.select-dropdown {
+                padding: 10px 0 !important;
+                font-size: 20px !important;
+            }
+        }
+
+        .search-bar1 .select-wrapper input.select-dropdown {
+            border: 1px solid #3248d1 !important;
+            border-radius: 40px !important;
+            height: 2rem;
+            margin: 8px 0 0px 0;
+            color: #3248d1 !important;
+            font-size: 12px;
+            text-align: center !important;
+        }
+
+
+        .day-setectz:focus {
+            outline: none !important;
+        }
+
+
+        .dasboard-icon {
+            padding: 14px;
+            border-radius: 4px !important;
+            background: #3248d1 !important;
+        }
+
+        .add-template {
+            color: #3248d1 !important;
+        }
+
+        .progress .determinate {
+            background-color: #3248d1 !important;
+        }
+
+        .progress {
+            background-color: #e2e2e2 !important
+        }
+
+        .search-bar {
+            margin-top: 17px;
+        }
+
+        .search-bar1 {
+            margin-top: 11px;
+        }
+
+        .doc-cen {
+            padding-left: 9px !important
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/app-assets/vendors/chartjs/chart.min.js"></script>
+    <script>
+        $(window).on("load", function () {
+
+            var doughnutSalesChartCTX = $("#doughnut-chart");
+            // Chart Options
+            var browserStatsChartOptions = {
+                cutoutPercentage: 70,
+                legend: {
+                    display: false
+                }
+            };
+            // Chart Data
+            var doughnutSalesChartData = {
+                labels: ["Past Due", "Due In", "Due With", "Coming Up Oppointments", " Missing-Open Tasks", "Tasks", "Legal", "Other"],
+                datasets: [
+                    {
+                        label: "Reminders",
+                        data: [7, 9, 1, 8, 15, 10, 8, 2],
+                        backgroundColor: ["#4523f5", "#f5a623", "#7ed321", "#50e3c2", "#4a90e2", "#9013fe", "#fe133a", "#2df6fe"]
+                    }
+                ]
+            };
+
+            var doughnutSalesChartConfig = {
+                type: "doughnut",
+                options: browserStatsChartOptions,
+                data: doughnutSalesChartData
+            };
+            var doughnutChart = new Chart(doughnutSalesChartCTX, doughnutSalesChartConfig);
+        });
+        $(document).ready(function () {
+            $("li.centralheader").addClass("border-bottom-header-active");
+        });
+
+    </script>
+}
+
+<div class="row">
+
+    <div class="col s12">
+        <div class="container">
+            <div class="row">
+
+                <div class="search-bar1 col s12 m3 l3">
+                    <h5>Reminders</h5>
+
+                </div>
+                <div class="search-bar1 col s6 m2 l2">
+                    <select>
+                        <option value="" disabled selected>5 Days</option>
+                        <option value="1">10 Days</option>
+                        <option value="2">15 Days</option>
+                        <option value="3">20 Days</option>
+                    </select>
+                </div>
+                <div class="search-bar1 col s6 m2 l2 ">
+                    <select>
+                        <option value="" disabled selected>14 Hours</option>
+                        <option value="1">24 Hours</option>
+                        <option value="2">48 Hours</option>
+                        <option value="3">72 Hours</option>
+                    </select>
+                </div>
+                <div class="col s12 m5 l5 display-block search-bar">
+                    <div class="header-search-wrapper display-flex position-relative float-right">
+                        <i class="material-icons position-absolute search-icons">search</i>
+                        <input class="header-search-input z-depth-2 search-box" type="text" name="Search" placeholder="Search in messages">
+
+                    </div>
+                </div>
+            </div>
+            <div id="chartjs-pie-chart">
+
+                <div class="row">
+                    <div class="col s12 m6 l3">
+                        <div class="sample-chart-wrapper"><canvas id="doughnut-chart" height="250" width="223" style="width:223px;height:250px;"></canvas></div>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid #7f00ff;"></span> Past Due<span class="badge-box   float-right">7</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid orange;"></span> Due In<span class="badge-box   float-right">9</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid green;"></span> Due Within<span class="badge-box   float-right">1</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid skyblue;"></span> Coming Up Oppointments<span class="badge-box   float-right">8</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid blue;"></span> Missing-One Tast<span class="badge-box float-right">10</span></p>
+
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid blue;"></span> Task<span class="badge-box float-right">12</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid Red;"></span> Legal<span class="badge-box float-right">20</span></p>
+                        <p class="value-set"><span class="dot-squre" style="border:1px solid orange;"></span> Other<span class="badge-box float-right">5</span></p>
+                    </div>
+                    <div class="col s12 m6 l3 margin-top-2800">
+                        <a href="javascrip:void(0);" class="add-template value-set"><i class="material-icons left">add</i>Add New Template</a>
+                        <p class="value-set"><i class="material-icons left add-template">message</i>  Message Center<span class="badge-box float-right">9</span></p>
+                        <p class="value-set"><i class="material-icons left add-template">drafts</i> Fax Center<span class="badge-box float-right">1</span></p>
+                        <p class="value-set"><i class="material-icons left add-template">email</i> Email Center<span class="badge-box float-right">8</span></p>
+                        <p class="value-set"><i class="material-icons left add-template">error</i> Issues/Attention<span class="badge-box float-right">10</span></p>
+
+                    </div>
+
+                </div>
+            </div>
+            <div id="card-stats">
+                <div class="row">
+                    <div class="col s12 m6 l6 xl3">
+                        <div class="card  padding-4 animate fadeLeft">
+                            <div class="col s8 m8 doc-cen">
+                                <p>Profits & Loss</p>
+                            </div>
+                            <div class="col s4 m4 right-align pr-0">
+                                <i class="material-icons gradient-45deg-light-blue-cyan white-text dasboard-icon">trending_down</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6 xl3">
+                        <div class="card padding-4  animate fadeLeft">
+                            <div class="col s8 m8 doc-cen">
+                                <p>Pending Claims</p>
+                            </div>
+                            <div class="col s4 m4 right-align pr-0">
+                                <i class="material-icons gradient-45deg-light-blue-cyan white-text dasboard-icon">assignment</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6 xl3">
+                        <div class="card padding-4 animate fadeLeft">
+                            <div class="col s8 m8 doc-cen">
+                                <p>Document Center</p>
+                            </div>
+                            <div class="col s4 m4 right-align pr-0">
+                                <i class="material-icons gradient-45deg-light-blue-cyan white-text dasboard-icon">folder</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6 xl3">
+                        <div class="card  padding-4  animate fadeLeft">
+                            <div class="col s8 m8 doc-cen">
+                                <p>Pending Invoices</p>
+                            </div>
+                            <div class="col s4 m4 right-align pr-0">
+                                <i class="material-icons gradient-45deg-light-blue-cyan white-text dasboard-icon">assignment</i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h5>Details Information</h5>
+                <div class="row">
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:red;"></span> Checked In <span class="badge-box float-right">10</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:green;"></span> Available Providers<span class="badge-box float-right">2</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:blue;"></span> In ICU<span class="badge-box float-right">10</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:deeppink;"></span> In Triaj<span class="badge-box float-right">2</span></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:red;"></span> In Session<span class="badge-box float-right">8</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:deeppink;"></span> Available Rooms<span class="badge-box float-right ">15</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:green;"></span> In Surgery<span class="badge-box float-right">8</span></p>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <p><span class="dot" style="background-color:blue;"></span> In Somewhere<span class="badge-box float-right">15</span></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="section">
+
+                <h5>Waiting for</h5>
+                <div class="row waiting-center">
+                    <div class="col s4 m4 l1">
+                        <h6>142</h6>
+                        <p>PT</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>12</h6>
+                        <p>PSY</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>4</h6>
+                        <p>CHIR</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div><div class="col s4 m4 l1">
+                        <h6>5</h6>
+                        <p>ACU</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>8</h6>
+                        <p>TEST</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>9</h6>
+                        <p>DR</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>156</h6>
+                        <p>CONSULT</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l2">
+                        <h6>12</h6>
+                        <p>TRANSPORT</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 40%"></div>
+                        </div>
+                    </div>
+
+                    <div class="col s4 m4 l1">
+                        <h6>5</h6>
+                        <p>PMNR</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 30%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>20</h6>
+                        <p>ORTHO</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>142</h6>
+                        <p>PT</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 60%"></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row waiting-center">
+                    <div class="col s4 m4 l1">
+                        <h6>15</h6>
+                        <p>DME</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 50%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l2">
+                        <h6>5</h6>
+                        <p>RADIOLOGY</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>44</h6>
+                        <p>RX</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 55%"></div>
+                        </div>
+                    </div><div class="col s4 m4 l1">
+                        <h6>142</h6>
+                        <p>LEGAL</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>10</h6>
+                        <p>XYZ</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>7</h6>
+                        <p>RX1</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>82</h6>
+                        <p>XYZ</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>44</h6>
+                        <p>XYZ</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+
+                    <div class="col s4 m4 l1">
+                        <h6>8</h6>
+                        <p>XYZ</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1 ">
+                        <h6>4</h6>
+                        <p>XYZ</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+                    <div class="col s4 m4 l1">
+                        <h6>142</h6>
+                        <p>PT</p>
+                        <div class="progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <!-- START RIGHT SIDEBAR NAV -->
+            <aside id="right-sidebar-nav">
+                <div id="slide-out-right" class="slide-out-right-sidenav sidenav rightside-navigation">
+                    <div class="row">
+                        <div class="slide-out-right-title">
+                            <div class="col s12 border-bottom-1 pb-0 pt-1">
+                                <div class="row">
+                                    <div class="col s2 pr-0 center">
+                                        <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                                    </div>
+                                    <div class="col s10 pl-0">
+                                        <ul class="tabs">
+                                            <li class="tab col s4 p-0">
+                                                <a href="#messages" class="active">
+                                                    <span>Messages</span>
+                                                </a>
+                                            </li>
+                                            <li class="tab col s4 p-0">
+                                                <a href="#settings">
+                                                    <span>Settings</span>
+                                                </a>
+                                            </li>
+                                            <li class="tab col s4 p-0">
+                                                <a href="#activity">
+                                                    <span>Activity</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slide-out-right-body">
+                            <div id="messages" class="col s12">
+                                <div class="collection border-none">
+                                    <input class="header-search-input mt-4 mb-2" type="text" name="Search" placeholder="Search Messages" />
+                                    <ul class="collection p-0">
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Thank you</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">5.00 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Mary Adams</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Hello Boo</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">4.14 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-2.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Caleb Richards</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Hello Boo</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">4.14 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-3.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Caleb Richards</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Keny !</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">9.00 PM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-4.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">June Lane</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Ohh God</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">4.14 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-5.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Edward Fletcher</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Love you</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">5.15 PM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-6.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Crystal Bates</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Can we</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">8.00 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Nathan Watts</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Great!</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">9.53 PM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-8.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Willard Wood</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Do it</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">4.20 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Ronnie Ellis</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Got that</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">5.20 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-9.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Daniel Russell</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Thank you</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">12.00 AM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-10.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Sarah Graves</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Okay you</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">11.14 PM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-off avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-11.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Andrew Hoffman</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Can do</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">7.30 PM</span>
+                                        </li>
+                                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                            <span class="avatar-status avatar-online avatar-50">
+                                                <img src="../../../app-assets/images/avatar/avatar-12.png" alt="avatar" />
+                                                <i></i>
+                                            </span>
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Camila Lynch</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">Leave it</p>
+                                            </div>
+                                            <span class="secondary-content medium-small">2.00 PM</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="settings" class="col s12">
+                                <p class="mt-8 mb-0 ml-5 font-weight-900">GENERAL SETTINGS</p>
+                                <ul class="collection border-none">
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Notifications</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input checked type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Show recent activity</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Show recent activity</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Show Task statistics</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Show your emails</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Email Notifications</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input checked type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <p class="mt-8 mb-0 ml-5 font-weight-900">SYSTEM SETTINGS</p>
+                                <ul class="collection border-none">
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>System Logs</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Error Reporting</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Applications Logs</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input checked type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Backup Servers</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="collection-item border-none mt-3">
+                                        <div class="m-0">
+                                            <span>Audit Logs</span>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input type="checkbox" />
+                                                    <span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="activity" class="col s12">
+                                <div class="activity">
+                                    <p class="mt-5 mb-0 ml-5 font-weight-900">SYSTEM LOGS</p>
+                                    <ul class="collection with-header">
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Homepage mockup design <span class="secondary-content">Just now</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Melissa liked your activity.</p>
+                                            <span class="new badge amber" data-badge-caption="Important"> </span>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Melissa liked your activity Drinks. <span class="secondary-content">10 mins</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                            <span class="new badge light-green" data-badge-caption="Resolved"></span>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                12 new users registered <span class="secondary-content">30 mins</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Tina is attending your activity <span class="secondary-content">2 hrs</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Josh is now following you <span class="secondary-content">5 hrs</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                            <span class="new badge red" data-badge-caption="Pending"></span>
+                                        </li>
+                                    </ul>
+                                    <p class="mt-5 mb-0 ml-5 font-weight-900">APPLICATIONS LOGS</p>
+                                    <ul class="collection with-header">
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                New order received urgent <span class="secondary-content">Just now</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Melissa liked your activity.</p>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">System shutdown. <span class="secondary-content">5 min</span></div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                            <span class="new badge blue" data-badge-caption="Urgent"> </span>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Database overloaded 89% <span class="secondary-content">20 min</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                        </li>
+                                    </ul>
+                                    <p class="mt-5 mb-0 ml-5 font-weight-900">SERVER LOGS</p>
+                                    <ul class="collection with-header">
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">System error <span class="secondary-content">10 min</span></div>
+                                            <p class="mt-0 mb-2">Melissa liked your activity.</p>
+                                        </li>
+                                        <li class="collection-item">
+                                            <div class="font-weight-900">
+                                                Production server down. <span class="secondary-content">1 hrs</span>
+                                            </div>
+                                            <p class="mt-0 mb-2">Here are some news feed interactions concepts.</p>
+                                            <span class="new badge blue" data-badge-caption="Urgent"></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide Out Chat -->
+                <ul id="slide-out-chat" class="sidenav slide-out-right-sidenav-chat">
+                    <li class="center-align pt-2 pb-2 sidenav-close chat-head">
+                        <a href="#!"><i class="material-icons mr-0">chevron_left</i>Elizabeth Elliott</a>
+                    </li>
+                    <li class="chat-body">
+                        <ul class="collection">
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">hello!</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">How can we help? We're here for you!</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">I am looking for the best admin template.?</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">Materialize admin is the responsive materializecss admin template.</p>
+                                </div>
+                            </li>
+
+                            <li class="collection-item display-grid width-100 center-align">
+                                <p>8:20 a.m.</p>
+                            </li>
+
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">Ohh! very nice</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">Thank you.</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">How can I purchase it?</p>
+                                </div>
+                            </li>
+
+                            <li class="collection-item display-grid width-100 center-align">
+                                <p>9:00 a.m.</p>
+                            </li>
+
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">From ThemeForest.</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">Only $24</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">Ohh! Thank you.</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                <span class="avatar-status avatar-online avatar-50">
+                                    <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                </span>
+                                <div class="user-content speech-bubble">
+                                    <p class="medium-small">I will purchase it for sure.</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small">Great, Feel free to get in touch on</p>
+                                </div>
+                            </li>
+                            <li class="collection-item display-flex avatar justify-content-end pl-5 pb-0" data-target="slide-out-chat">
+                                <div class="user-content speech-bubble-right">
+                                    <p class="medium-small"></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="center-align chat-footer">
+                        <form class="col s12" onsubmit="slide_out_chat()" action="javascript:void(0);">
+                            <div class="input-field">
+                                <input id="icon_prefix" type="text" class="search" />
+                                <label for="icon_prefix">Type here..</label>
+                                <a onclick="slide_out_chat()"><i class="material-icons prefix">send</i></a>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </aside>
+            <!-- END RIGHT SIDEBAR NAV -->
+            <div style="bottom: 50px; right: 19px; display:none;" class="fixed-action-btn direction-top">
+                <a class="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow"><i class="material-icons">add</i></a>
+                <ul>
+                    <li><a href="css-helpers.html" class="btn-floating blue"><i class="material-icons">help_outline</i></a></li>
+                    <li><a href="cards-extended.html" class="btn-floating green"><i class="material-icons">widgets</i></a></li>
+                    <li><a href="app-calendar.html" class="btn-floating amber"><i class="material-icons">today</i></a></li>
+                    <li><a href="app-email.html" class="btn-floating red"><i class="material-icons">mail_outline</i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

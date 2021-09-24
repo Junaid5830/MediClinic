@@ -1,0 +1,78 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@model MediClinic.Models.AppointmentViewModel
+
+@{
+    ViewData["Title"] = "VisitView";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var EmployeId = _sessionManager.GetEmployeeId();
+    var RoleType = _sessionManager.GetRoleId();
+    long Id;
+    if (RoleType == 2)
+    {
+        Id = ProviderInfoId;
+    }
+    else
+    {
+        Id = EmployeId;
+    }
+}
+@section styles{ 
+    <style>
+        #VistBtn ul{
+            list-style:none !important;
+            padding-left:0 !important;
+        }
+        #VistBtn ul li{
+            margin:5px 0 !important
+        }
+            #VistBtn ul li .add-btn {
+                width: 125px !important;
+            }
+        .circle{
+            width:100%;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var id = getUrlParameter("visitid");
+            $('.patient-btns').each(function () {
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            })
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">Options</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("PatientVisits","Appointment",new { Id= Id})" class="waves-effect waves-light float-right" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                @Html.Partial("~/Views/Appointment/PartialViews/_VisitsButtons.cshtml")
+            </div>
+            <div class="col-md-10">
+                <partial name="~/Views/Appointment/PartialViews/_PatientProfileVisit.cshtml" />
+
+            </div>
+        </div>
+      
+
+    </div>
+</div>

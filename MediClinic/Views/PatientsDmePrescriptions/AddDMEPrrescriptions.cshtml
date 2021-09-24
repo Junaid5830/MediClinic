@@ -1,0 +1,1673 @@
+﻿@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@model PatientsDmePrescriptionsViewModel
+
+@{
+    ViewData["Title"] = "AddDMEPrrescriptions";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    int unique = 0;
+    var RoleId = _sessionManager.GetRoleId();
+}
+@section styles
+{
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/custom/custom.css">
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        label.error {
+            color: red;
+            font-size: 1rem;
+            display: block;
+            margin-top: 5px;
+        }
+
+        input.error {
+            border: 1px dashed red;
+            font-weight: 300;
+            color: red;
+        }
+    </style>
+    <style>
+
+        img {
+            width: 40px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .textLine {
+            border: none;
+            /*border-bottom: 1px solid black;*/
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: left;
+            background-color: transparent;
+            width: 100px;
+        }
+
+        .icon-trash {
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+   
+
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/js/qrcode.js"></script>
+
+
+    <script>
+
+        debugger
+        var rowCount = 0;
+        var VisitId = '@ViewBag.VisitId';
+        var DoctorName ='@ViewBag.DoctorName';
+        var DoctorId ='@ViewBag.DoctorId';
+        var PatientId = '@ViewBag.PatentId';
+        if ('@ViewBag.PatentId' > 0) {
+            $("#patientId").val(PatientId);
+        }
+        if ('@ViewBag.DoctorId' !="") {
+            $("#prescriberId").val(DoctorId);
+        }
+
+        function resetForm() {
+            $("#IcdCode").empty();
+            $("#description").val("");
+            $("#refferdBy").val("");
+            $("#startDate").val("");
+            $("#billNo").val("");
+            $("#referenceNo").val("");
+            $('#referenceNo').trigger('change');
+            $("#billOption").val("");
+            $('#billOption').trigger('change');
+
+        }
+        //$('.generate-qr-code').click(function () {
+        //    debugger;
+        //    $('#qrcode').empty();
+        //    $('#qrcode').qrcode({ width: '150', height: '150', text: $('#cptCodeCombo').val() + '' + $('#icdCodeCombo').val() + '' + $("#visitId").val() + '' + $("#dmeEquipSupId").val() });
+        //    var canvas = $('#qrcode canvas');
+        //    console.log(canvas);
+        //    var img = canvas.get(0).toDataURL("image/jpeg");
+        //    $("#qrcode").replaceWith('<img   src="' + img + '" />');
+        //    $("#qr-code-image-path").val(img);
+
+        //});
+
+
+        $('#ListingFormDmePrescription').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            var imgs = document.getElementsByClassName("img");
+            var imgSrcs = [];
+
+            for (var i = 0; i < imgs.length; i++) {
+                debugger;
+                var obj = {}
+                //imgSrcs.push(imgs[i].src);
+                obj.ImageUrl = imgs[i].src;
+                imgSrcs.push(obj);
+            }
+            debugger;
+            $(this).ajaxSubmit({
+                data: { barCodeImages: imgSrcs },
+                success: function (response) {
+                    debugger
+                    if (response.error) {
+                        new PNotify({
+                            title: 'Error!',
+                            text: 'Patient does not exist any visit',
+                            delay: 5000,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                    }
+                    else {
+                        $(".checkmark").show().fadeOut(6000);
+                        if (PatientId > 0) {
+                            window.location.href = "/PatientsDmePrescriptions/ListAssignedDme/" + PatientId;
+                        }
+                        else {
+                            window.location.href = "/PatientsDmePrescriptions/ListDMEPrescription"
+                        }
+                    }
+
+
+
+
+                },
+
+            });
+
+        });
+
+
+
+        var m_names = new Array("January", "February", "March",
+            "April", "May", "June", "July", "August", "September",
+            "October", "November", "December");
+        var enddateGet;
+        $(document).ready(function () {
+            $(".select2").select2();
+
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "MM/dd/yy"
+        });
+
+
+        $("#facility").change(function () {
+            debugger
+            let id = $(this).val();
+            let icdlist = $("#IcdCode");
+            console.log(id);
+            debugger
+            resetForm();
+            if (id != null) {
+                //CptCodesByManufactures
+                $.get("/PatientsDmePrescriptions/CptCodesByManufactures", { Id: id }).done(function (data) {
+
+                    if (data.isExisit) {
+                        let option = $('<option selected disabled></option>');
+                        icdlist.append(option);
+                        for (var i = 0; i < data.items.length; i++) {
+
+                            let option = $('<option value="' + data.items[i].dmeGroupItemId + '">' + data.items[i].cptCode + '-' + data.items[i].description + '</option>');
+                            icdlist.append(option);
+
+
+                        }
+
+
+                    } else {
+                        new PNotify({
+                            title: 'Error!',
+                            text: 'Data does not exist',
+                            delay: 5000,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                    }
+
+
+                });
+            }
+
+
+
+        });
+
+
+        $("#IcdCode").change(function () {
+
+            var Id = $(this).val();
+            $.get("/PatientsDmePrescriptions/DmeGroupDescription", { Id: Id }).done(function (data) {
+                debugger
+                if (data.isExisit) {
+                  //  $("#description").val(data.manufactures.itemDescription);
+                    $("#stockNumber").val(data.manufactures.stockNumber);
+                    $("#feeSchedule").val(data.dmeGroupItem.fee);
+                    //$("#facility").val(data.manufactures.manufactureId);
+                    //$("#facility").trigger('change');
+                } else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Inventory does not exist',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+
+            });
+        });
+
+        function CountTotal() {
+
+            var totalAll = 0;
+            $('#dmePrescription tbody  >  tr').each(function () {
+
+                var lineTotal = $(this).find(".chargesCalculated").val();
+                totalAll = parseInt(totalAll) + parseInt(lineTotal);
+
+            });
+            $("#totalCountEnd").val(totalAll);
+
+        }
+
+
+        $('#addBtn').on('click', '.add-btn', function () {
+            var d = new Date();
+            var n = d.getTime();
+            var BillNo = $("#billNo").val();
+            debugger;
+            var codetext = $("#IcdCode").text();
+            var codeValue = $("#IcdCode").val();
+            var refernece_No = $("#referenceNo option:selected").html();
+            let patientId = $("#patientId").val();
+
+            //var barCodeNumber = "Bill No : " + BillNo + '\n'
+            //    + "CPT/HSPC Code: " + codetext + '\n' + "Prescription Reference : " + refernece_No;
+            var barCodeNumber = n + BillNo
+            let count = $('.tby > tr').length;
+            let billingOption = $("#billOption").val();
+            if (billingOption == "RENTAL") {
+                $('#dmePrescription > tbody').append(dayString(count));
+                debugger
+
+
+
+            }
+            else {
+                $('#dmePrescription > tbody').append(dayStringNonRental(count));
+                CountTotal();
+            }
+
+            $("#barCodeNumber" + `${count}`).val(barCodeNumber);
+            $('#qrcode' + `${count}`).empty();
+            $('#qrcode' + `${count}`).qrcode({ width: '300', height: '300', text: barCodeNumber });
+            var canvas = $('#qrcode' + `${count}` + '  canvas');
+            console.log(canvas);
+            var img = canvas.get(0).toDataURL("image/jpeg");
+            $('#qrcode' + `${count}`).replaceWith('<img class="img" DMEPrescriptionList['+count+'].BarCodeImgUrl  src="' + img + '" />');
+
+           // var id = ("#icdCode" + `${count}`)
+           // var id = ("#rentalForm" + `${count}`)
+
+
+            // $("#DmePrescriptionForm").trigger("reset");
+            //$.get("/PatientsDmePrescriptions/DropDownList").done(function (data) {
+            //    debugger
+
+            //    for (var i = 0; i < data.length; i++) {
+            //        var TypeIdlist = $(id);
+            //        var option = $('<option value="' + data[i].dmeGroupItemId + '">' + data[i].cptCode + '</option>');
+            //        TypeIdlist.append(option);
+
+
+            //    }
+            //    $(id + " option[value=" + codeValue + "]").attr("selected", "selected");
+            //});
+            if (billingOption == "NON-RENTAL") {
+                resetForm();
+                $("#facility").val("");
+                $('#facility').trigger('change');
+            }
+
+            return false;
+
+        });
+
+        //$("#dmePrescription").on("blur", "td[name='duration']", function () {
+        //    alert($(this).text());
+        //});
+        //$('body').on('dblclick', '[data-editable]', function () {
+
+        //    var $el = $(this);
+
+        //    var $input = $('<input/>').val($el.text());
+        //    $el.replaceWith($input);
+
+        //    var save = function () {
+        //        var $p = $('<p data-editable />').text($input.val());
+        //        $input.replaceWith($p);
+        //    };
+
+        //    /**
+        //      We're defining the callback with `one`, because we know that
+        //      the element will be gone just after that, and we don't want
+        //      any callbacks leftovers take memory.
+        //      Next time `p` turns into `input` this single callback
+        //      will be applied again.
+        //    */
+        //    $input.one('blur', save).focus();
+
+        //});
+
+        //$("#dmePrescription").on("blur", "td[name='duration']", function () {
+        //    alert($(this).text());
+        //});
+        function dayString(count) {
+            rowCount = count;
+            var dmePatientId = $("#DmePatientId").val();
+            var patientId = $("#patientId").val();
+            var prescriberId = $("#prescriberId").val();
+            var icdCode = $("#IcdCode").select2('data')[0]['text'];
+            var icdCodeValue = $("#IcdCode").val();
+            var fee = $("#feeSchedule").val();
+            var duration = $("#duartion").val();
+            var denomination = $("#denominations").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var charges = $("#charges").val();
+            var stockNumber = $("#stockNumber").val();
+            var description = $("#description").val();
+            var facility = $("#facility").val();
+            var refferdBy = $("#refferdBy").val();
+            var referenceNo = $("#referenceNo").val();
+            var billNo = $("#billNo").val();
+            var billOptionValue = $("#billOption").val();
+            var billOption = $("#billOption").select2('data')[0]['text'];
+            var dayString = '';
+            dayString += '<tr class="card invoice_row invoice-row-' + count + '">';
+            dayString += ' <td>';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].DmePatientId" value="' + dmePatientId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].PrescriberId" value="' + prescriberId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].PatientId" value="' + patientId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].FacilityAssociation" value="' + facility + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].BarCodeNumber" id="barCodeNumber' + count + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].BillNo" value="' + billNo + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].ReferenceNoId" value="' + referenceNo + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].VisitId" value="' + VisitId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].IcdCodeId" value="' + icdCodeValue + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].RentalFormId" id="rentalForm' + count +'" />';
+            dayString += ' </td>';
+            dayString += ' <td>';
+            dayString += ' <input value="' + description + '" type="text" name="DMEPrescriptionList[' + count + '].DiagnosisDescription" class="textLine forUnchaged" />';
+            dayString += ' </td>';
+            dayString += ' <td>';
+            dayString += '<input value="' + icdCode + '" id="icdCode' + count + '" type="text"  class="textLine icdCodeChange"  />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + billOption + '" type="text" name="DMEPrescriptionList[' + count + '].BillingOption" class="textLine forUnchaged" />';
+            dayString += '</td >';
+            dayString += '<td>';
+            dayString += '<input  type="text" name="DMEPrescriptionList[' + count + '].Duration" class="textLine durationClass  text-input" />';
+            dayString += '</td >';
+            dayString += '<td>';
+            dayString += '<select  type="text"  name="DMEPrescriptionList[' + count + '].Denominations" class="textLine select2 denominationChange "  >';
+            dayString += '<option selected disabled value="0" >--Select--</option><option value="Days">Days</option><option value="Month">Month</option><option value="Year">Year</option>';
+            dayString += '</select>';
+            dayString += '</td>';
+            dayString += '<td class="feeSchedule">';
+            dayString += '<input value="' + fee + '" type="text" name="DMEPrescriptionList[' + count + '].FeeSchedule" class="textLine feeSchedule forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input  type="text" name="DMEPrescriptionList[' + count + '].Charges" class="textLine chargesCalculated forUnchaged textLine" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + startDate + '" type="text" name="DMEPrescriptionList[' + count + '].PrescriptionDate" class="textLine startDate forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input id="endDate' + count + '" type="text" name="DMEPrescriptionList[' + count + '].EstimatedEndDate" class="textLine estimatedEndDate forUnchaged " />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + stockNumber + '" type="text" name="DMEPrescriptionList[' + count + '].StockNumber" class="textLine forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<div id="qrcode' + count + '"></div>';
+            dayString += '</td>';
+            dayString += '<td>';
+
+            dayString += '<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn deleteRow remove-tiem">' + '<i class="ti-close"></i></a>';
+            dayString += '</td>';
+            dayString += '</tr>';
+
+            //<a href="#" class="deleteRow"><i class="icon-trash" ></i></a>
+            return dayString;
+
+
+
+        }
+        function dayStringNonRental(count) {
+            debugger
+            let defaultValue="N/A"
+            var dmePatientId = $("#DmePatientId").val();
+            var patientId = $("#patientId").val();
+            var prescriberId = $("#prescriberId").val();
+            var icdCode = $("#IcdCode").select2('data')[0]['text'];
+            var icdCodeValue = $("#IcdCode").val();
+            var fee = $("#feeSchedule").val();
+            var duration = $("#duartion").val();
+            var denomination = $("#denominations").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var charges = $("#charges").val();
+            var stockNumber = $("#stockNumber").val();
+            var description = $("#description").val();
+            var facility = $("#facility").val();
+            var refferdBy = $("#refferdBy").val();
+            var referenceNo = $("#referenceNo").val();
+            var billNo = $("#billNo").val();
+            var billOptionValue = $("#billOption").val();
+            var billOption = $("#billOption").select2('data')[0]['text'];
+            var dayString = '';
+            dayString += '<tr class="card invoice_row invoice-row-' + count + '">';
+            dayString += ' <td>';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].DmePatientId" value="' + dmePatientId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].PrescriberId" value="' + prescriberId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].PatientId" value="' + patientId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].FacilityAssociation" value="' + facility + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].BarCodeNumber" id="barCodeNumber' + count + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].BillNo" value="' + billNo + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].ReferenceNoId" value="' + referenceNo + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].VisitId" value="' + VisitId + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].IcdCodeId" value="' + icdCodeValue + '" />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].Duration"  />';
+            dayString += ' <input type="hidden" name="DMEPrescriptionList[' + count + '].Denominations"  />';
+            dayString += ' </td>';
+            dayString += ' <td>';
+            dayString += ' <input value="' + description + '" type="text" name="DMEPrescriptionList[' + count + '].DiagnosisDescription" class="textLine forUnchaged" />';
+            dayString += ' </td>';
+            dayString += ' <td>';
+            dayString += '<input value="' + icdCode + '" id="icdCode' + count + '" type="text"  class="textLine forUnchaged"  />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + billOption + '" type="text" name="DMEPrescriptionList[' + count + '].BillingOption" class="textLine forUnchaged" />';
+            dayString += '</td >';
+            dayString += '<td>';
+            dayString += '<input  type="text"  value="' + defaultValue+'" class="textLine durationClass  forUnchaged" />';
+            dayString += '</td >';
+
+            dayString += '<td>';
+            dayString += '<input  type="text"  value="' + defaultValue + '" class="textLine durationClass  forUnchaged" />';
+            dayString += '</td >';
+
+            dayString += '<td class="feeSchedule">';
+            dayString += '<input value="' + fee + '" type="text" name="DMEPrescriptionList[' + count + '].FeeSchedule" class="textLine feeSchedule forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input  type="text" value="' + fee +'" name="DMEPrescriptionList[' + count + '].Charges" class="textLine chargesCalculated forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + startDate + '" type="text" name="DMEPrescriptionList[' + count + '].PrescriptionDate" class="textLine startDate forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + startDate +'" id="endDate' + count + '" type="text" name="DMEPrescriptionList[' + count + '].EstimatedEndDate" class="textLine estimatedEndDate forUnchaged " />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<input value="' + stockNumber + '" type="text" name="DMEPrescriptionList[' + count + '].StockNumber" class="textLine forUnchaged" />';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<div id="qrcode' + count + '"></div>';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn deleteRow remove-tiem">' + '<i class="ti-close"></i></a>';
+            dayString += '</td>';
+            dayString += '</tr>';
+
+            //<a href="#" class="deleteRow"><i class="icon-trash" ></i></a>
+            return dayString;
+
+
+
+        }
+
+
+
+
+
+
+        $(document).on('click', '.deleteRow', function () {
+            $(this).closest('tr').remove();
+            CountTotal();
+            return false;
+        });
+        //
+        $(document).find('#dmePrescription tbody').on('keypress keydown', '.forUnchaged', function (e) {
+            debugger
+            e.preventDefault();
+        });
+
+        $(document).find('#dmePrescription tbody').on('focusout', '.durationClass', function () {
+
+            var totalCharges;
+            var duration = $(this).val();
+            var denomination = $(this).closest('tr').find('td .denominationChange').val();
+            var feeSchedule = $(this).closest('tr').find('td .feeSchedule').val();
+            var startDate = $(this).closest('tr').find('td .startDate').val();
+            duration = parseInt(duration)
+            feeSchedule = parseInt(feeSchedule)
+            if (denomination === "Days") {
+                enddateGet = getEndDate(duration, startDate)
+
+                console.log(enddateGet);
+                enddateGet = new Date(enddateGet);
+                console.log(new Date(enddateGet));
+                totalCharges = duration * feeSchedule;
+                $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+
+            } else if (denomination === "Month") {
+                totalCharges = duration * feeSchedule * 30;
+                enddateGet = getEndDate(duration * 30, startDate)
+                enddateGet = new Date(enddateGet);
+                $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+            } else if (denomination === "Year") {
+
+                totalCharges = duration * feeSchedule * 365;
+                enddateGet = getEndDate(duration * 365, startDate)
+                enddateGet = new Date(enddateGet);
+                $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+            } else {
+
+            }
+            CountTotal();
+
+            $(this).addClass('forUnchaged');
+            $(this).removeClass('text-input');
+
+        });
+        //icdCodeChange
+        var previous;
+        $(document).find('#dmePrescription tbody').on('focus',
+            '.icdCodeChange',
+            function (e) {
+                debugger
+                previous = $(this).val();
+                e.preventDefault();
+            });
+        $(document).find('#dmePrescription tbody').on('change',
+            '.icdCodeChange',
+            function (e) {
+                debugger
+
+
+                $(this).val(previous);
+                $(this).attr("selected", "selected");
+                console.log(thisValue);
+
+            });
+
+        $(document).find('#dmePrescription tbody').on('change',
+            '.denominationChange',
+            function (e) {
+
+                var totalCharges;
+                var duration = $(this).closest('tr').find('td .durationClass').val();
+                var feeSchedule = $(this).closest('tr').find('td .feeSchedule').val();
+                var startDate = $(this).closest('tr').find('td .startDate').val();
+
+                duration = parseInt(duration)
+                feeSchedule = parseInt(feeSchedule)
+                var changeVal = $(this).val();
+                if (duration === "") {
+                    $(this).val(0)
+                    $(this).prop('selected', false);
+                }
+                else {
+                    if (changeVal === "Days") {
+                        enddateGet = getEndDate(duration, startDate)
+                        enddateGet = new Date(enddateGet);
+
+
+
+
+                        totalCharges = duration * feeSchedule;
+                        $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                        $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+
+
+                    } else if (changeVal === "Month") {
+                        totalCharges = duration * feeSchedule * 30;
+                        enddateGet = getEndDate(duration * 30, startDate)
+                        enddateGet = new Date(enddateGet);
+                        $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                        $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+                    } else if (changeVal === "Year") {
+
+                        totalCharges = duration * feeSchedule * 365;
+                        enddateGet = getEndDate(duration * 365, startDate)
+                        enddateGet = new Date(enddateGet);
+                        $(this).closest('tr').find('td .chargesCalculated').val(totalCharges);
+                        $(this).closest('tr').find('td .estimatedEndDate').val(m_names[enddateGet.getMonth()] + '/' + enddateGet.getDate() + '/' + enddateGet.getFullYear());
+                    } else {
+
+                    }
+                    CountTotal();
+                    $(this).addClass('forUnchaged');
+                    $(this).removeClass('text-input');
+                }
+                //duration  changeVal
+
+                applyRentalForm(duration, changeVal);
+
+
+
+
+            });
+
+
+        function getEndDate(days,startDate) {
+
+          //  var date = new Date($("#startDate").val()),//startDate
+            var date = new Date(startDate);
+                days = parseInt(days, 10);
+
+            if (!isNaN(date.getTime())) {
+                date.setDate(date.getDate() + days);
+
+                return date.toInputFormat()
+            } else {
+                alert("Invalid Date");
+            }
+        }
+
+
+        //From: http://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+        Date.prototype.toInputFormat = function () {
+            var yyyy = this.getFullYear().toString();
+            var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+            var dd = this.getDate().toString();
+            return yyyy + "-" + (mm[1] ? mm : "0" + mm[0]) + "-" + (dd[1] ? dd : "0" + dd[0]); // padding
+        };
+        //Get QR Codes Images
+        function img_find() {
+
+
+            return imgSrcs;
+        }
+
+        function applyRentalForm(duration,denomination) {
+            let patientId = $("#patientId").val();
+            let providerId = $("#prescriberId").val();
+
+            $.get("/PatientsDmePrescriptions/PatientAndPrescriberDetails", { patId: patientId, providerId: providerId}).done(function (data) {
+                debugger
+                console.log(data);
+                //  //diagnosisIcdRental  durationRental diagnosisDescriptionRental
+                let icdCode = $("#IcdCode").select2('data')[0]['text'];
+                let icdCodeId = $("#IcdCode").val();
+                let description = $("#description").val();
+                let facility = $("#facility").select2('data')[0]['text'];
+                let facilityId = $("#facility").val();
+                let startDate = $("#startDate").val();
+                let durationDenomination = "";
+                durationDenomination = durationDenomination.concat(duration, denomination)
+
+
+
+                $("#dmeRentalForDoctorInfoId").val(providerId);
+                $("#dmeRentalForPatientInfoId").val(patientId);
+                $("#dmeRentalForIcdCodeId").val(icdCodeId);
+                $("#dmeRentalForFacilityId").val(facilityId);
+
+
+
+
+
+                $('.patientNameRental').val(data.patient.fullName);
+                $('.patientDobRental').val(data.patient.dateOfBirth);
+                $('.meritalStatusRental').val(data.patient.maritalStatus);
+                $('.patientAddressRental').val(data.patient.addressLine1);
+                $('.ssPatientNumberRental').val(data.patient.ssn);
+                $('.patientPhoneRental').val(data.patient.homePhone);
+                $('.patientMobileRental').val(data.patient.mobilePhone);
+                $('.patientBusinessPhoneRental').val(data.patient.workPhone);
+                $('.patientEmergencyNameRental').val(data.patient.emergencyPhone);
+                let signaturePatient = "/SignatureImages/" + data.patient.patientSignature;
+                $("#PatientSignatureRental").attr("src", signaturePatient);
+
+                $('.diagnosisIcdRental').val(icdCode);
+                $('.diagnosisDescriptionRental').val(description);
+                $('.stratDateRental').val(startDate);
+                $('.durationRental').val(durationDenomination);
+                $('.facilityAssociationRental').val(facility);
+
+                let signatureImageProvider = data.provider.signImage;
+                $('.providerNameRental').val(data.provider.fullName);
+                $('.providerAddressRental').val(data.provider.addressLine1);
+                $('.providerPhoneRental').val(data.provider.phoneNo);
+                $('.providerFaxRental').val(data.provider.faxNo);
+                $('.providerLicenceRental').val("N/A");
+                $("#RentalFormModal").modal('show');
+            });
+
+
+        }
+
+
+
+        $('#DmeRentalForm').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+
+            debugger;
+            $(this).ajaxSubmit({
+
+                success: function (response) {
+                    debugger
+                    resetForm();
+                    $("#facility").val("");
+                    $('#facility').trigger('change');
+                    $("#RentalFormModal").modal('hide');
+                    let id = '#rentalForm' + rowCount;
+                    $(id).val(response.rentalFormId);
+
+
+
+                },
+
+            });
+
+        });
+
+
+
+
+
+
+
+    </script>
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Patients DME Prescription</h5>
+                </div>
+
+                <div class="col">
+                    @*<a href="#" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                        </a>*@
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" method="post" id="DmePrescriptionForm">
+                <input type="hidden" id="DmePatientId" class="text-input">
+                @*<input type="hidden" id="patientId" class="text-input">*@
+                @*<input type="hidden" id="prescriberId" class="text-input">*@
+                <input type="hidden" id="duartion" class="text-input">
+                <input type="hidden" id="feeSchedule" class="text-input">
+                <input type="hidden" id="denominations" class="text-input">
+                <input type="hidden" id="endDate" class="text-input">
+                <input type="hidden" id="charges" class="text-input">
+                <input type="hidden" id="stockNumber" class="text-input">
+                <div class="row">
+                    @if (RoleId == 5)
+                    {
+                        if (ViewBag.PatentId == 0)
+                        {
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Select Patient</p>
+
+                                <div class="input-field">
+                                    <select type="text" id="patientId" class="select2 text-input" data-placeholder="Select Patient" asp-items="@(new SelectList(Model.Patients,"PatientInfoId","FullName"))">
+                                        <option selected disabled></option>
+                                    </select>
+                                    <span class="required"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" id="patientId" class="text-input">
+                        }
+                        if (ViewBag.DoctorId == "")
+                        {
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Select Prescriber</p>
+
+                                <div class="input-field">
+                                    <select type="text" id="prescriberId" class="select2 text-input" data-placeholder="Select Prescriber" asp-items="@(new SelectList(Model.Prescribers,"ProviderInfoId","FullName"))">
+                                        <option selected disabled></option>
+                                    </select>
+                                    <span class="required"></span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" id="prescriberId" class="text-input">
+                        }
+
+                    }
+                    else
+                    {
+                        <input type="hidden" id="patientId" class="text-input">
+                        <input type="hidden" id="prescriberId" class="text-input">
+                    }
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Facility Association</p>
+
+                        <div class="input-field">
+                            <select type="text" id="facility" class="select2 text-input" data-placeholder="Select Facility Association" asp-items="@(new SelectList(Model.DmeSuppliesManufacturesList,"Id","Manufactures"))">
+                                <option selected disabled></option>
+                            </select>
+                            <span class="required"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>ICD Code</p>
+                        <!-- asp-items="(new SelectList(Model.ItemGroupCptCodeList,"DMEGroupItemId","CPTCode"))"-->
+                        <div class="input-field">
+                            <select type="text" id="IcdCode" class="select2 text-input" data-placeholder="Select  ICD Code">
+                                <option selected disabled></option>
+                            </select>
+                            <span class="required"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Diagnosis Description</p>
+
+                        <div class="input-field">
+                            <input id="description" type="text" class="text-input" placeholder="Enter Diagnosis Description">
+                            <span class="required"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Referred By
+
+                            <div class="input-field">
+                                @*<select id="refferdBy" type="text" class="select2 text-input"><option selected disabled></option></select>*@
+                                <input id="refferdBy" type="text" class="text-input" placeholder="Enter Referred By">
+
+                                <span class="required"></span>
+                            </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Prescription Reference No</p>
+
+                        <div class="input-field">
+
+                            <select asp-items="Html.GetEnumSelectList<ReferenceNo>();" data-placeholder="Select Reference No" id="referenceNo" type="text" class="select2 text-input">
+                                <option selected disabled></option>
+
+                            </select>
+                            <span class="required"></span>
+
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Bill No</p>
+
+                        <div class="input-field">
+                            <input id="billNo" type="text" class="text-input" placeholder="Enter Prescription Reference No">
+                            <span class="required"></span>
+
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Select Bill Option</p>
+                        <div class="input-field">
+                            <select id="billOption" type="text" class="select2 text-input" data-placeholder="Select  Bill Option">
+                                <option selected disabled></option>
+                                <option value="RENTAL">RENTAL</option>
+                                <option value="NON-RENTAL">NON-RENTAL</option>
+                            </select>
+                            <span class="required"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Prescription Start Date</p>
+                        <div class="input-field">
+                            <input type="text" id="startDate" class="text-input datepicker" placeholder="Enter DOB">
+                            <span class="required"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div id="addBtn" class="center">
+                            <button type="button" class="waves-effect waves-light btn add-btn ">Add New</button>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <form asp-controller="PatientsDmePrescriptions" asp-action="AddDMEPrrescriptions" id="ListingFormDmePrescription" method="post">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="dmePrescription">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th></th>
+                                    <th>ITEM/GROUP ITEM</th>
+                                    <th>CPT CODE</th>
+                                    <th>SELECT TYPE</th>
+                                    <th>DURATION</th>
+                                    <th>DENOMINATION</th>
+                                    <th>FEE SCHEDULE</th>
+                                    <th>CHARGES</th>
+                                    <th>ESTIMATED START DATE</th>
+                                    <th>ESTIMATED END DATE</th>
+                                    <th>STOCK NUMBER</th>
+                                    <th>Bar Code</th>
+                                    <th class="all">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tby">
+                                @foreach (var item in Model.DMEPrescriptionList)
+                                {
+                                    <tr class="card invoice_row invoice-row-0">
+                                        <td>
+                                            <input type="hidden" name="DMEPrescriptionList[@unique].DmePatientId" />
+                                            <input type="hidden" name="DMEPrescriptionList[@unique].PrescriberId" />
+                                            <input type="hidden" name="DMEPrescriptionList[@unique].PatientId" />
+                                            <input type="hidden" name="DMEPrescriptionList[@unique].RentalFormId" />
+                                        </td>
+                                        <td>
+                                            <input class="textLine" type="text" name="DMEPrescriptionList[@unique].DiagnosisDescription" />
+                                        </td>
+                                        <td>
+                                            <select type="text" id="IcdCode" name="DMEPrescription[@unique].IcdCodeId" class="select2 textLine text-input" asp-items="@(new SelectList(Model.ItemGroupCptCodeList,"DMEGroupItemId","CPTCode"))">
+                                                <option selected disabled></option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].Duration" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].Denominations" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].FeeSchedule" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].Charges" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].PrescriptionDate" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].EstimatedEndDate" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="DMEPrescriptionList[@unique].StockNumber" class="textLine" />
+                                        </td>
+                                        <td>
+                                            <img class="img" name="DMEPrescriptionList[@unique].BarCodeImgUrl" src="#" alt="Image" />'
+                                        </td>
+                                        <td>
+                                            <a class="deleteRow"> <i class="icon-trash" deleterow="@item.DmePatientId"></i></a>
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                </div>
+                <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                    <p> Total Charges: <input id="totalCountEnd" type="text" class="textLine" /></p>
+
+                </div>
+            </div>
+            <button type="submit" class="waves-effect waves-light btn add-btn ">Save</button>
+            <a href="#" class="waves-effect waves-light Recreate btn">Cancel</a>
+        </form>
+
+    </div>
+</div>
+
+<div id="RentalFormModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form asp-controller="PatientsDmePrescriptions" asp-action="CreateDmeRentalForm"  id="DmeRentalForm" method="post">
+                <input type="hidden" id="dmeRentalForDoctorInfoId" asp-for="DmeRentalFormDto.DoctorInfoId" />
+                <input type="hidden" id="dmeRentalForPatientInfoId" asp-for="DmeRentalFormDto.PatientInfoId" />
+                <input type="hidden" id="dmeRentalForIcdCodeId" asp-for="DmeRentalFormDto.IcdCodeId" />
+                <input type="hidden" id="dmeRentalForFacilityId" asp-for="DmeRentalFormDto.FacilityAssociationId" />
+
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5>
+                                NEW YORK MOTOR VEHICLE NO-FAULT INSURANCE LAW
+                                ASSIGNMENT OF BENEFITS FORM
+
+                            </h5>
+                            <p>
+                                <b>
+                                    (FOR ACCIDENTS OCCURRING ON AND AFTER 3/1/02)
+                                </b>
+                            </p>
+                        </div>
+
+
+                        @*<div class="col">
+                                <a id="arrowIcon" class="waves-effect waves-light float-right mr-2 mt-2" href="DmeSupplies">
+                                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                                </a>
+                            </div>*@
+                    </div>
+                    <div class="row">
+
+                        <div class="input-field">
+                            <p>Claim Number: <span><b><input class="text-input" id="claimNumberRental" asp-for="DmeRentalFormDto.ClaimNo" placeholder="Claim Number" type="text" /></b></span> </p>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <p>
+                            <span>
+                                I, <b><input class="textLine  patientNameRental" id="patientNameRental" readonly type="text" /></b>, ("Assignor") hereby assign to <b><input class="textLine facilityAssociationRental" type="text" /></b>
+                            </span>, ("Assignee") all rights privileges and remedies to payment for
+                            health care services provided by assignee to which I am entitled under Article 51 (the No-Fault statute) of
+                            the Insurance Law. The Assignee hereby certifies that they have not received any payment from or on
+                            behalf of the Assignor and shall not pursue payment directly from the Assignor for services provided by
+                            said Assignee for injuries sustained due to the motor vehicle accident which occurred on
+                            <b>
+                                <input class=" textLine col-md-2 stratDateRental" id="stratDateRental" readonly type="text" />
+                            </b>, notwithstanding any other agreement to the contrary.
+                            This agreement may be revoked by the assignee when benefits are not payable based upon the assignor’s
+                            lack of coverage and/or violation of a policy condition due to the actions or conduct of the assignor
+                        </p>
+
+                    </div>
+                    <div class="row">
+
+                        <p>
+                            <b>
+                                ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR
+                                OTHER PERSON FILES AN APPLICATION FOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM
+                                FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLY FALSE
+                                INFORMATION, OR CONCEALS FOR THE PURPOSE OF MISLEADING, INFORMATION CONCERNING ANY
+                                FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR
+                                CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH
+                                ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGE OR CONVERSION OF
+                                ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES
+                                OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND
+                                SHALL ALSO BE SUBJECT TO A CIVIL PENALTY NOT TO EXCEED FIVE THOUSAND DOLLARS AND THE
+                                VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                            </b>
+                        </p>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>Provider Name: </p>
+                            <div class="input-field">
+
+                                <input class=" textLine facilityAssociationRental" readonly type="text" placeholder="Provider Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>Patient Name: </p>
+                            <div class="input-field">
+
+                                <input class="textLine patientNameRental" readonly type="text" placeholder="Patient Name">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                            <div class="input-field">
+
+                                <p>Provider's Signature: </p>
+                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                    <div class="m-signature-pad--body">
+                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                    </div>
+                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                        <div class="description">Save Your signature before submit the form</div>
+                                        <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                            Upload Image
+                                        </button>
+                                        <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                            Clear
+                                        </button>
+                                        <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                            Save Signature
+                                        </button>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                            <div class="input-field">
+
+
+                                <p>Patient's Signature: </p>
+                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                    <img src="" id="PatientSignatureRental" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    Provider's Address:
+                                </p>
+                                <input class=" textLine " readonly id="providerAddressRental" type="text" placeholder="Patient Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                            <div class="input-field">
+                                <p>
+                                    Patient's Address:
+
+                                </p>
+                                <input class=" textLine patientAddressRental" readonly id="patientAddressRental" type="text" placeholder="Patient Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    Signature Date:
+                                </p>
+                                <input class="text-input" type="date" placeholder="Patient Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    Signature Date:
+                                </p>
+                                <input class="text-input" type="date" placeholder="Patient Name">
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class=" color-blue ">Patient's Info</h6><br />
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    First & Last Name:
+                                </p>
+                                <input class="textLine patientNameRental" readonly type="text" placeholder="First & Last Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    D.O.B:
+                                </p>
+                                <input class="textLine patientDobRental" readonly type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    SS#:
+                                </p>
+                                <input class=" textLine ssPatientNumberRental" readonly type="text" placeholder="SS">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    MARITAL STATUS
+                                </p>
+                                <input class=" textLine meritalStatusRental" readonly type="text" placeholder=" MARITAL STATUS">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    HOME PHONE:
+                                </p>
+                                <input class=" textLine patientPhoneRental" readonly type="text" placeholder=" MARITAL STATUS">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    MOBILE:
+                                </p>
+                                <input class=" textLine patientMobileRental" readonly type="text" placeholder=" Mobile">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    BUSINESS PHONE:
+                                </p>
+                                <input class=" textLine patientBusinessPhoneRental" readonly type="text" placeholder=" BUSINESS PHONE">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    EMERGENCY CONTACT NAME &
+                                </p>
+                                <input class=" textLine patientEmergencyNameRental" readonly type="text" placeholder="EMERGENCY CONTACT NAME &">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    ADDRESS:
+                                </p>
+                                <input class=" textLine patientAddressRental" type="text" placeholder="ADDRESS">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    ADDRESS OF DELIVERY IF DIFFERENT FROM ABOVE:
+                                </p>
+                                <input class="text-input" type="text" placeholder=" ADDRESS OF DELIVERY IF DIFFERENT FROM ABOVE">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    DIAGNOSIS:
+                                </p>
+                                <input class="textLine diagnosisIcdRental" type="text" placeholder=" DIAGNOSIS">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="row">
+                                <p>
+                                    PRESCRIBED SUPPLIES/EQUIPMENT:
+                                </p>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                                    <div class="input-field">
+                                        <input class=" textLine diagnosisDescriptionRental" type="text">
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                                    <div class="input-field">
+
+                                        <input class=" textLine durationRental" type="text" placeholder="Duration">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    PRESCRIBING PHYSICIAN::
+                                </p>
+                                <input class="textLine providerNameRental" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class=" color-blue ">Prescribing Physician :</h6><br />
+                    <div class="row">
+
+
+
+                        <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                            <p>
+                                Address:
+                            </p>
+                            <div class="input-field">
+
+                                <input class="textLine providerAddressRental" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                            <p>
+                                Phone:
+                            </p>
+                            <div class="input-field">
+
+                                <input class=" textLine providerPhoneRental" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                            <p>
+                                Fax:
+                            </p>
+                            <div class="input-field">
+
+                                <input class=" textLine providerFaxRental" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                            <p>
+                                License No:
+                            </p>
+                            <div class="input-field">
+
+                                <input class=" textLine providerLicenceRental" type="text" placeholder="PRESCRIBING PHYSICIAN">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <h6 class=" color-blue ">Insurance INFO</h6><br />
+                    <div class="row">
+
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <p>
+                                Type:
+                            </p>
+
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                <input type="radio" asp-for="DmeRentalFormDto.InsuranceType" value="NF" class="filled-in" />
+                                <span>NF</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                <input type="radio" asp-for="DmeRentalFormDto.InsuranceType" value="WC" class="filled-in" />
+                                <span>WC</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                <input type="radio" asp-for="DmeRentalFormDto.InsuranceType" value="COMMERCIAL" class="filled-in" />
+                                <span>COMMERCIAL</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                <input type="radio" asp-for="DmeRentalFormDto.InsuranceType" value="PVT" class="filled-in" />
+                                <span>PVT</span>
+                            </label>
+                        </div>
+                    </div>
+                    <h6 class=" color-blue ">Insurance Provider</h6><br />
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Insurance Provider:
+                            </p>
+                            <div class="input-field">
+                                <select type="text" class="select2 text-input" data-placeholder="Select Insurance Company" asp-items="@(new SelectList(Model.InsurenceCompanies,"ComapnyID","InsuranceCompanyName"))">
+                                    <option selected disabled></option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Phone
+                            </p>
+                            <div class="input-field">
+
+                                <input class=" textLine" type="text" placeholder="Phone">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Adjuster:
+                            </p>
+                            <div class="input-field">
+
+                                <input class="text-input" asp-for="DmeRentalFormDto.Adjuster" type="text" placeholder="Adjuster">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Accident Date
+                            </p>
+                            <div class="input-field">
+
+                                <input class="text-input" asp-for="DmeRentalFormDto.AccidentDate" type="date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Policy No:
+                            </p>
+                            <div class="input-field">
+
+                                <input class="text-input" asp-for="DmeRentalFormDto.PolicyNo" type="text" placeholder="2566">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Claim No:
+                            </p>
+                            <div class="input-field">
+
+                                <input class="text-input" asp-for="DmeRentalFormDto.ClaimNo" type="text" placeholder="1756">
+                            </div>
+                        </div>
+                    </div>
+                    <h6 class=" color-blue ">Insurance Info</h6><br />
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Device Clean</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Device Working</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Hand Control Accessible</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Patient Has To Call Cpm Solutions Ny If Any Problems</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Patient Or Caregiver Has Demonstrated Competency In Using The Device</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in" />*@
+                                <span>Person Taught If Other Than Patient</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in">*@
+                                <span>Bill Of Rights</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox" class="filled-in">*@
+                                <span>Device Protocols</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox">*@
+                                <span>How To Reach Cpm Solutions Ny With Questions And Problems</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox">*@
+                                <span>Device Operation</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox">*@
+                                <span>When To Contact Doctor</span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                            <label>
+                                @*<input type="checkbox">*@
+                                <span>To Call Cpm Solutions Ny As Instructed</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <p>
+                            BY SIGNING BELOW PATIENT KNOWS AND UNDERSTANDS ALL OF THE CONTENTS OF THIS ASSIGNMENT.
+                            I ALSO ACKNOWLEDGE THAT I HAVE RECEIVED ABOVE MENTIONED EQUIPMENT AND UNDERSTAND MY RIGHTS AND
+                            RESPONSIBILITIES AND UNDERSTAND HOW TO PROPERLY OPERATE THE DEVICE. I ALSO AGREE TO ALLOW AllBody
+                            Healing Supplies LLC TO USE MY PROTECTED HEALTH INFORMATION (PHI) FOR HEALTH INCLUDING PAYMENTS OF
+                            CLAIMS, OBTAINING INFORMATION FROM MY DESIGNATED HEALTH CARE PROVIDER AND FOR QUALITY ASSURANCE
+                            IMPROVEMENTS. IF I CHOOSE NOT TO ALLOW AllBody Healing Supplies LLC, TO RELEASE MY PHI, I WILL BE RESPONSIBLE
+                            FOR PAYMENT OF ALL PRODUCTS, SERVICES I RECEIVED FROM AllBody Healing Supplies LLC. RELEASE OF MY PHI WILL
+                            TERMINATE WHEN MY ACCOUNT BALANCE WITH AllBody Healing Supplies LLC, INC IS AT ZERO DOLLARS FOR MORE
+                            THAN 60 (SIXTY) DAYS. FOR RENTAL EQUIPMENT I UNDERSTAND HOW TO ARRANGE FOR EQUIPMENT RETURN AND
+                            UNDERSTAND THAT IF THIS EQUIPMENT IS DAMAGED, LOST, MISLAID, STOLEN, OR DESTROYED, I AM RESPONSIBLE
+                            FOR THE REPAIR CHARGES OR THE PURCHASE PRICE, WHICHEVER IS LESS.
+
+                        </p>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    Patient Or Authorized Representative Name:
+                                </p>
+                                <input class=" textLine patientNameRental" type="text" placeholder="Patient Or Authorized Representative Name">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p>
+                                    Date Of Execution/delivery:
+                                </p>
+                                <input class="text-input" type="date" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                            <div class="input-field">
+
+
+                                <p> Patient Or Authorized Representative Signature: </p>
+                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                    <img src="" class="PatientSignatureRental" />
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <div class="input-field">
+                                <p> Rep. Signature: </p>
+                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                    <div class="m-signature-pad--body">
+                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                    </div>
+                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                        <div class="description">Save Your signature before submit the form</div>
+                                        <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                            Upload Image
+                                        </button>
+                                        <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                            Clear
+                                        </button>
+                                        <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                            Save Signature
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Date:
+                            </p>
+
+                            <div class="input-field">
+
+                                <input class="text-input" asp-for="DmeRentalFormDto.CreatedDate" type="date" />
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-success float-right">Apply</button>
+                            @*<button class="btn btn-success float-right" onclick="printdiv();">Print</button>*@
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

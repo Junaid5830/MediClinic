@@ -1,0 +1,434 @@
+﻿@using MediClinic.Models
+@model InvoicesViewModel
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    int unique = 0;
+    int sub_total = 0;
+}
+
+
+@section styles{
+    @*<link href="~/Elite/node_modules/select2/dist/css/select2.min.css" rel="stylesheet" type="text/css" />
+        <link href="~/Elite/node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css"
+              href="~/Elite/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css">
+        <link rel="stylesheet" type="text/css"
+              href="~/Elite/node_modules/datatables.net-bs4/css/responsive.dataTables.min.css">*@
+    <style>
+
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .textLine {
+            border: none;
+            border-bottom: 1px solid black;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: left;
+            background-color: transparent;
+        }
+
+        .icon-trash {
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <partial name="~/Views/Appointment/PartialViews/_VisitsButtons.cshtml" />
+            </div>
+
+            <div class="col-10">
+                <div id="breadcrumbs-wrapper">
+                    <div class="row">
+                        <div class=" col" margin-top-8">
+                            <h5 class="breadcrumbs-title color-blue"> New Invoice</h5>
+                        </div>
+
+                        <div class="col">
+                            @*<a href="@Url.Action("Index","Invoices")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                                <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                            </a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col-sm-12 " asp-action="Add" asp-controller="Invoices" method="post">
+                        <input type="text" id="viistId" hidden asp-for="@Model.invoices.VisitId" />
+                        <div class="row">
+
+                            <input type="hidden" class="text-input" asp-for="@Model.invoices.InvoiceId" placeholder="id" id="invId">
+                            <!--<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                    <p> Patient ID</p>-->
+                            @*<div class="input-field patientId">
+                        <input type="text" class="text-input ipaitentId"  asp-for="@Model.invoices.PatientId" placeholder="Enter Patient Name " id="patientId">
+                    </div>*@
+                            <!--</div>-->
+                            @*<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Patient Name</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for="@Model.invoices.Name" class="text-input" placeholder="Enter User ID" id="name">
+                            <span class="required" asp-validation-for="@Model.invoices.Name"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Patient Phn No</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for="@Model.invoices.MobileNumber" class="text-input" placeholder="Enter User ID" id="phnNo">
+                            <span class="required" asp-validation-for="@Model.invoices.MobileNumber"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Patient Email</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for="@Model.invoices.Email" class="text-input" placeholder="Enter User ID" id="emial">
+                            <span class="required" asp-validation-for="@Model.invoices.Email"></span>
+                        </div>
+                    </div>*@
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Billing Address</p>
+
+                                <div class="input-field">
+                                    <input type="text" asp-for="@Model.invoices.Address" class="text-input" placeholder="Enter User ID" id="address">
+                                    <span class="required" asp-validation-for="@Model.invoices.Address"></span>
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>
+                                    Terms
+                                </p>
+
+                                <div class="input-field">
+                                    <select asp-for="@Model.invoices.Terms" class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Terms</option>
+                                        <option value="AK">Due on Receipt</option>
+                                        <option value="HI">Net 10</option>
+                                        <option value="AK">Net 15</option>
+                                        <option value="HI">Net 30</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Invoice Date</p>
+
+                                <div class="input-field">
+                                    <input type="date" asp-for="@Model.invoices.InvoiceDate" class="text-input" placeholder="select Invoice date">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Due Date</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" asp-for="@Model.invoices.DueDate" placeholder="select due date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p> Crew #</p>
+
+                                <div class="input-field">
+                                    <input type="number" class="text-input" asp-for="@Model.invoices.Crew" placeholder="Enter Crew # ">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Message on Invoice</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" asp-for="@Model.invoices.MessageOnInvoice" placeholder="Enter Message on Invoice">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p> Message on Statement</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" asp-for="@Model.invoices.MessageOnStatement" placeholder="Enter Crew # ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row tablee">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="myTableEUO" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>PRODUCT/SERVICE</th>
+                                                <th>DESCRIPTION</th>
+                                                <th>QTY</th>
+                                                <th>RATE </th>
+                                                <th> AMOUNT</th>
+                                                <th>TAX</th>
+                                                <th class="all">Action  </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="tby">
+                                            @foreach (var item in Model.invoicesChargesList)
+                                            {
+                                                <tr class="card invoice-row-0 invoice_row" style="cursor: pointer">
+                                                    <text name="invoicesChargesList[@unique].InvoiceChargesId" type="hidden" value="@item.InvoiceChargesId" />
+                                                    <td class=""><input name="invoicesChargesList[@unique].Product" type="text" placeholder="Enter Product" class="textLine product" value="@item.Product" /></td>
+                                                    <td class=""><input name="invoicesChargesList[@unique].Description" type="text" placeholder="Enter Description" class="textLine description" value="@item.Description" /></td>
+                                                    <td class=""><input name="invoicesChargesList[@unique].Qty" type="text" placeholder="Enter Quantity" class="textLine quantity" value="@item.Qty" /></td>
+                                                    <td class=""><input name="invoicesChargesList[@unique].Rate" type="text" placeholder="Enter Rate" class="textLine rate" value="@item.Rate" /></td>
+                                                    <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" class="textLine amount amount_data" data-Quantity="@unique" value="@item.Amount" /></td>
+                                                    <td class="">
+                                                        <label>
+                                                            <input type="checkbox" class="select-all" checked="checked">
+                                                            <span></span>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <a class="deleteRow"> <i class="icon-trash" deleterow="@item.InvoiceChargesId"></i></a>
+                                                    </td>
+                                                </tr>
+                                                unique++;
+                                                sub_total = Convert.ToInt32(sub_total + @item.Amount);
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="btnhit">
+                            <div class="col-sm-6">
+                                <div class="mt-2">
+                                    <a class="btn btn-primary addlines form-add-btn" data-count="0" onclick="">Add lines </a>
+                                    <a class="btn btn-primary clearlines"> Clear all lines </a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="container">
+                                            <div class="row">
+
+                                                <div class="col">
+                                                    <p>Subtotal </p>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" name="gtotal" id="gtotal" class="form-control">
+                                                </div>
+                                            </div>
+
+                                            <div class="row ">
+                                                <div class="col">
+                                                    <p>Taxable subtotal </p>
+                                                </div>
+                                                <div class="col">
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col ">
+                                                    <p></p>
+                                                    <div class="input-field  ">
+                                                        <div class="dropdownauto"><input class="text-input input-styling sales" id="tax" type="text" placeholder="sales tax rate" style="width:96%;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col s5 m5 l5">
+                                                    <p></p>
+                                                    <div class="input-field ">
+                                                        <input class="text-input" type="text" style="width:50%; border-color: #D4D7DC;
+                                                         background-color: #ECEEF1;
+                                                          color: #818181;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p></p>
+                                                    <div class="input-field col s12 m12 l12 pl-0 mt-0" style="display:inline-flex">
+                                                        <div class="dropdownauto"><input class="text-input input-styling sales" type="text" onchange="AddAmount()" id="discount" placeholder="Discount"></div>
+                                                        <input class="text-input input-styling " type="text" style="width: 30%!important;
+                                                      margin-left: 10px !important;
+                                                      padding-right: 0px !important;">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <span id="discount_"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col">
+                                                    <p>Total </p>
+                                                </div>
+                                                <div class="col">
+                                                    <span id="fv"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col">
+                                                    <p>Balance Due</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p> $0.00 </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <button type="submit" class="waves-effect waves-light btn add-btn btnSaveCharges">Save</button>
+                                    <a class=" btn Recreate">
+                                        Edit
+                                    </a>
+                                    <a class="Recreate btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            debugger;
+            var id = getUrlParameter("id");
+           
+            $("#viistId").val(id);
+            $('.patient-btns').each(function () {
+                debugger;
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+        });
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            AddAmount();
+
+        });
+
+        function dayString(count) {
+            var dayString = '';
+            dayString += '<tr class="card invoice_row invoice-row-' + count + '">';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Product" type="text" placeholder="Enter Product" class="textLine product" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Description" type="text" placeholder="Enter Description" class="textLine description" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Qty" type="text" placeholder="Enter Quantity" class="textLine quantity" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Rate" type="text" placeholder="Enter Rate" class="textLine rate" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Amount" type="text" placeholder="Enter Amount"  onchange="AddAmount()" class="textLine amount_data" data-Quantity="' + count + '" /></td>';
+            dayString += '<td class="">';
+            dayString += '<label>';
+            dayString += '<input type="checkbox" class="select-all" checked="checked">';
+            dayString += '<span></span>';
+            dayString += '</label>';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '<a class="deleteRow"> <i class="icon-trash" id="deleteRow"></i></a>';
+            dayString += '</td>';
+            dayString += '</tr>';
+            return dayString;
+        }
+
+        $('#btnhit').on('click', '.form-add-btn', function () {
+            var count = $('.tby > tr').length;
+            $('#myTableEUO > tbody').append(dayString(count));
+        });
+
+        function AddAmount() {
+            var gTotal = 0;
+            $('.tby > .invoice_row').each(function () {
+                gTotal += parseInt($(this).find(".amount_data").val());
+            });
+            if (!isNaN(gTotal)) {
+                $('#gtotal').val(gTotal);
+            }
+            debugger;
+            var fv = parseInt($('#tax').val()) + parseInt($('#discount').val());
+            if (!isNaN(fv)) {
+                document.getElementById("discount_").innerHTML = "$" + fv;
+            }
+            var fc = parseInt(gTotal) - parseInt(fv);
+            if (!isNaN(fc)) {
+                document.getElementById("fv").innerHTML = "$" + fc;
+            }
+        }
+
+
+
+        $('.ipaitentId').focusout(function () {
+            var Id = $('.ipaitentId').val();
+            $.ajax({
+                type: "GET",
+                url: '/Invoices/GetPtientRecord',
+                data: { id: Id },
+                success: function (data) {
+                    $('#invId').val('');
+                    $('#patientId').attr('value', data.patientInfoId);
+                    $('#name').attr('value', data.firstName);
+                    $('#phnNo').attr('value', data.zip);
+                    $('#emial').attr('value', data.email);
+                    $('#address').attr('value', data.addressLine1);
+                }
+            });
+        });
+        $('#myTableEUO > tbody').on('click', '.deleteRow', function () {
+            DeleteRecord($(this).attr("deleterow"), $(this));
+        });
+
+        function DeleteRecord(id, event) {
+            debugger;
+            if (id != 0) {
+                event.closest('tr').remove();
+                $.get("/Invoice/ChargesDelete", { invoiceCId: id }).done(function (data) {
+                    showDangerNotification("Record Deleted!");
+                });
+            }
+            else {
+                event.closest('tr').remove();
+            }
+        };
+
+
+
+    </script>
+}

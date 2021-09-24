@@ -1,0 +1,230 @@
+﻿@model MediClinic.Models.IMEViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+    ViewData["Title"] = "IMEList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var userRole = _sessionManager.GetRoleId();
+}
+
+
+
+@section styles
+{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            var table = $('#IMETable').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+            $('.select-all').click(function () {
+                debugger;
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+
+        });
+        function deletePatient(ID, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/IME/ImeDelete", { Id: ID }).done(function (data) {
+                debugger;
+
+
+
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        I.M.E
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    @*<div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon11" style="		background-color: #fff !important;
+            "></span>
+                                        </div>*@ <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input data-search type="text" class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                {
+                    <div class="col-sm-12 col-md-3 col-lg-3 addNewNotForPatient">
+
+                        <a class="btn  float-right add-btn set_smallscreen" href="/IME/AddIME">
+                            Add New IME
+                        </a>
+                    </div>
+                }
+            
+            </div>
+
+        </div>
+        @*<div class="row">
+
+                <div class="col-sm-9 col-md-9 col-lg-9">
+
+                    <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                    batch actions
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu batch">
+                    <li><a href="#">option 1</a></li>
+                    <li><a href="#">option 2</a></li> comment batch action
+
+                    </ul>
+
+                </div>
+
+
+            </div>*@
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="IMETable" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+                                </th>
+                                <th>Date of IME</th>
+                                <th>Time of IME</th>
+                                <th>Place of IME</th>
+                                <th>Represented By </th>
+                                <th>Status of ime </th>
+                                <th>Reason </th>
+                                <th>Transcripts </th>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <th data-orderable="false" class="all">Action  </th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.getimeList)
+                            {
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@item.ID">
+                                        <label class="custom-control-label" for="@item.ID"></label>
+                                    </div>
+                                </th>
+
+                                <td>@item.Date.Value.ToString(SystemFormat.DateFormat())</td>
+                                <td>@item.Time</td>
+                                <td>@item.IME_Place</td>
+                                <td>@item.Represented_By</td>
+                                <td>@item.IME_Status</td>
+                                <td>@item.Reason</td>
+                                <td>@item.Transcripts</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deletePatient(@item.ID, this);"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a href="/IME/AddIME?id=@item.ID">Edit</a></li>
+                                            @*<li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>*@
+
+                                        </ul>
+
+                                    </td>
+                                }
+
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

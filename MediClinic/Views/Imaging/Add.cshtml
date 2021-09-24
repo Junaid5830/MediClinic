@@ -1,0 +1,195 @@
+﻿@model MediClinic.Models.ImagingViewModel
+@{
+
+    ViewData["Title"] = "AddImaging";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        //$(document).ready(function () {
+        //    debugger;
+        //    var id = getUrlParameter("id");
+        //    $('.patient-btns').each(function () {
+        //        debugger;
+        //        var url = $(this).attr('href');
+        //        url = url + id;
+        //        $(this).attr('href', url);
+        //    });
+        //});
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+        $(".time-picker").hunterTimePicker();
+    </script>
+}
+
+    
+        
+   
+
+<div class="page-wrapper">
+    <div class="container">
+       
+            @*<div class="col-2">
+                <partial name="~/Views/Appointment/PartialViews/_VisitsButtons.cshtml" />
+            </div>*@
+
+        
+                <div id="breadcrumbs-wrapper">
+                    <!-- Search for small screen-->
+
+                    <div class="row">
+                        <div class=" col" margin-top-8">
+                            <h5 class="breadcrumbs-title color-blue"> Imaging</h5>
+                        </div>
+
+                        <div class="col">
+                            @*<a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Imaging/Index">
+                                <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                            </a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col-sm-12" asp-action="Add" asp-controller="Imaging" method="post">
+                        <input type="hidden" id="viistId" asp-for="imagingDto.VisitId" />
+                        <input type="hidden" class="text-input" asp-for="imagingDto.ImagingId" placeholder="id">
+                        @*<div class="row">
+                    <div class="col-md-6">
+                        <p>Patient Name</p>
+                        <div class="input-field">
+                            <select id="UserId" data-placeholder="Select Patient Name" class="select2 form-control  text-input" asp-for="imagingDto.PatientId"
+                                    asp-items="@(new SelectList(Model.patientInfoBasicDto, "PatientInfoId","FirstName"))">
+                            </select>
+                        </div>
+                    </div>
+
+                </div>*@
+                        <div class="row">
+                            <div class=" col-md-6">
+                                <p>Date of Imaging</p>
+                                <div class="input-field">
+                                    <input type="text" class="text-input datepicker" placeholder="select date" asp-for="imagingDto.DateOfImaging">
+                                </div>
+                            </div>
+                            <div class=" col-md-6">
+                                <p>Time of Imaging</p>
+                                <div class="input-field">
+                                    <input type="text" class="text-input time-picker" placeholder="select time" asp-for="imagingDto.TimmingOfImaging">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <p>
+                                    Reported By
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ReportedBy">
+                                        <option>Select  Reported By</option>
+                                        <option value="AK">Bronx NY</option>
+                                        <option value="HI">New Jersy</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 ">
+                                <p>
+                                    Type of Image
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.TypeOfImage">
+                                        <option>Select  Type of Image</option>
+
+                                        <option value="AK">Smart Guy, Esq</option>
+                                        <option value="HI">Rosy</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <p>
+                                    Report Status
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ReportStatus">
+                                        <option>Select Report Status</option>
+                                        <option value="AK">Yes</option>
+                                        <option value="AK">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 ">
+                                <p>
+                                    Image Film
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ImageFilm">
+                                        <option>Select Image Film</option>
+                                        <option value="AK">N/A</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ">
+                                <p>
+                                    Diagnosis
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.Diagnosis">
+                                        <option>Select Diagnosis</option>
+                                        <option value="AK">No show</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="text-right">
+                                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+         
+    </div>
+</div>
+
+
+
+
+

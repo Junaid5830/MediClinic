@@ -1,0 +1,1629 @@
+﻿@model MediClinic.Models.AssistantViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "Assistant";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var Signature = ViewBag.WriteSignature;
+    var Action = ViewBag.action;
+    var ReminderBy = ViewBag.AssistantImage;
+    var AssistantSignature = ViewBag.AssistantSignatureImage;
+    var SImage = ViewBag.AssistantSignatureImage;
+    var image = ViewBag.AssistantImage;
+
+    if (image == "")
+    {
+        image = string.Empty;
+    }
+    else if (!(image is null))
+
+    {
+        image = "/images/" + ViewBag.AssistantImage;
+    }
+    if (SImage == "")
+    {
+        SImage = string.Empty;
+    }
+    else if (!(SImage is null))
+    {
+        SImage = "/images/" + ViewBag.AssistantSignatureImage;
+    }
+    else
+    {
+        SImage = string.Empty;
+    }
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+
+    <style>
+        .option-btn {
+            background-image: linear-gradient(90deg,#f11771 0,#ff7f84 100%);
+            line-height: 40px !important;
+            height: 41px !important
+        }
+
+        #dropdown1 {
+            height: 125px !important
+        }
+
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+    </style>
+    <style>
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .input-group-append .form-add-btn {
+            margin-top: 0 !important
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .form-add-btn {
+            margin-top: 3.3rem !important;
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -26% !important;
+        }
+
+        .form-MiddleName {
+            margin-top: -14% !important;
+        }
+
+        .form-LastName {
+            margin-top: -3% !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 48%;
+            left: 46%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .ti-camera {
+            font-size: 22px !important;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff !important;
+            font-size: 17px;
+        }
+
+        .text p {
+            margin-top: 0px !important;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+            .remove-image:hover {
+                background: #E54E4E;
+                padding: 3px 7px 5px;
+                top: 0;
+                right: 22%;
+            }
+
+            .remove-image:active {
+                background: #E54E4E;
+                top: 0;
+                right: 22%;
+            }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+            .imageModel .modal-dialog {
+                max-width: 60% !important
+            }
+
+            .imageModel input.custom-file-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                height: 38px !important;
+                width: 5rem !important;
+                cursor: pointer !important;
+            }
+
+        .cr-slider {
+            width: 75% !important
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 0 2rem !important;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            margin-bottom: 0px;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        #my_camera {
+            margin: 0 auto
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+            color: #fff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        #cameraIcon i {
+            color: #547cea !important;
+            font-size: 22px;
+        }
+
+        .croppie-container .cr-image {
+            top: 25px !important;
+            left: 35px !important;
+        }
+
+        .imageModel .mdi {
+            font-size: 22px !important
+        }
+
+        @@media screen and (max-width:600px) {
+            .form-MiddleName {
+                margin-top: 0% !important;
+            }
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .m-signature-pad {
+            position: relative;
+            font-size: 10px;
+            width: 100%;
+            height: 270px;
+            border: 1px solid #e8e8e8;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+            border-radius: 4px;
+        }
+
+        .m-signature-pad--body {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 20px;
+            bottom: 80px;
+            border: 1px solid #f4f4f4;
+        }
+
+            .m-signature-pad--body canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 4px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+            }
+
+        .m-signature-pad--footer {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 5px;
+            height: 65px;
+        }
+
+            .m-signature-pad--footer .description {
+                color: #C3C3C3;
+                text-align: center;
+                font-size: 1.2em;
+                margin-bottom: 3px;
+            }
+
+        .btn-save {
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: .5px;
+            color: #fff;
+            background-color: #03a9f4;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/Elite/_node_modules/dff/dff.js"></script>
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>*@
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/webcamjs/webcam.js"></script>
+
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.dropify').dropify();
+        });
+    </script>
+    <script>
+        var saveAction = '@ViewBag.Action';
+        var SignaturePath = '@ViewBag.Signature';
+        var IsCapturedScreen = false;
+        var IsRequiredNf2Date = false;
+        var city = '';
+        var hascity = 0;
+        var hassub = 0;
+        var state = '';
+        var nbhd = '';
+        var subloc = '';
+        var country = '';
+        var hascountry = 0;
+        $('#Assis_zip').keyup(function () {
+            $zval = $('#Assis_zip').val();
+            if ($zval.length == 5) {
+                $jCSval = getCityState($zval, true);
+            }
+        });
+        function getCityState($zip, $blnUSA) {
+
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+                if (response.status == "ZERO_RESULTS") {
+                    $("#err_zip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+
+                    $("#Assis_city").val(city);
+                    $("#Assis_state").val(state);
+                    $("#Assis_country").val(country);
+                    //$('#modal1').modal('open');
+                }
+                //find the city and state
+
+
+                //pre-fill the city and state
+
+            });
+        }
+
+        $('#facility_zip').keyup(function () {
+
+            $zval = $('#facility_zip').val();
+
+            if ($zval.length == 5) {
+                $jCSval = getEmergencyCityState($zval, true);
+
+            }
+
+        });
+        function getEmergencyCityState($zip, $blnUSA) {
+
+            var date = new Date();
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+
+                if (response.status == "ZERO_RESULTS") {
+                    $("#facilityerr_zip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+                    $("#facility_city").val(city);
+                    $("#facility_state").val(state);
+                    $("#facility_country").val(country);
+
+                }
+                //find the city and state
+
+                //pre-fill the city and state
+
+            });
+        }
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            $("#Update").hide();
+            $('#take_snapbtn').hide();
+            $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+            $(".remove-Sigatureimage").hide();
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+            if (saveAction == "Update") {
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                $(".UploadSignature_show").on('click', function () {
+                    $(".forPatientSignatures").show();
+                    $(".signImage #dropifyimage .dropify-wrapper").show();
+                    $(".signatureimage_text").show();
+                    $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                    $("#signature-pad1").show();
+                }
+            }
+            $('#take_snapbtn').hide();
+            $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+            $(".remove-Sigatureimage").hide();
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+            if (saveAction == "Update") {
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                $(".UploadSignature_show").on('click', function () {
+                    $(".forPatientSignatures").show();
+                    $(".signImage #dropifyimage .dropify-wrapper").show();
+                    $(".signatureimage_text").show();
+                    $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                    $("#signature-pad1").show();
+                }
+            }
+        });
+        $('.select2').select2();
+        $(".time-picker").hunterTimePicker();
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(".time-picker").hunterTimePicker();
+
+        $(".day-check-box").on('click', function () {
+            dayCheckBox($(this));
+        });
+
+
+
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+            Webcam.attach('#my_camera');
+        }
+
+        function take_snapshot() {
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+
+        $(function () {
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+        /*Signature Image*/
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //Signdata = e.target.result;
+                    $('#savetarget').attr('src', e.target.result);
+                    $('#savetarget').show();
+                    $('#UpdateCaseSignature').hide();
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#SignatureImageUpload").change(function () {
+            readURL(this);
+        });
+
+        $(function () {
+            $('#savetarget').hide();
+            var canvas = document.querySelector('#signature-pad1 canvas');
+            var pad = new SignaturePad(canvas);
+            $('#pad_clear').on('click', function () {
+                $('#savetarget').hide();
+                Signdata = "";
+            })
+            $('#accept').on('click', function () {
+                if (pad.isEmpty()) {
+                    Signdata = "";
+
+                    return false;
+                }
+                else {
+                    Signdata = pad.toDataURL();
+                    $('#savetarget').attr('src', Signdata);
+                    $('#UpdateCaseSignature').hide();
+                    $('#savetarget').show();
+                    pad.off();
+
+                }
+            });
+
+            //var ImageURL = Signdata;
+            //var block = ImageURL.split(";");
+            //var contentType = block[0].split(":")[1];
+            //var realData = block[1].split(",")[1];
+            ////$('#Signfiles').val(data);
+
+
+        });
+        /*End Signature Image*/
+        $(function () {
+
+            $(".fax").inputmask('(999) 999-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $('.Fphone').inputmask('1 (999) 999-9999');
+            $(".licenseno").inputmask('999999');
+            $(".npi").inputmask('9999999999');
+            $('.taxid').inputmask('99-9999999');
+
+            $('.selectpicker').selectpicker();
+        });
+        $('#assistantform').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+
+
+            var ProfileSrc = $("#result").attr('src');
+            if ($(this).valid()) {
+                    $('#accept').trigger('click');
+                    $(".btn").attr("disabled", true);
+                    $(this).ajaxSubmit({
+                        data: { Signature: Signdata, profileImage: ProfileSrc },
+                        success: function (data) {
+                            debugger;
+                            var msg = data.success;
+                            if (data.isError == true) {
+                                new PNotify({
+                                    title: 'Error!',
+                                    text: msg,
+                                    delay: 5000,
+                                    type: 'error',
+                                    addclass: 'pnotify-center'
+                                });
+                                $(".btn").attr("disabled", false);
+                                return;
+                            }
+                            
+                            else {
+                                $(".checkmark").show().fadeOut(6000);
+                            window.location.href='@Url.Action("AssistantListSetting", "SettingsElite")'
+                            }
+
+                        },
+                        complete: function (xhr) {
+                        }
+                    });
+
+            }
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper mb-0">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Assistant
+                    </h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/SettingsElite/Setting">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        <form asp-action="AssistanSettingAdd" asp-controller="SettingsElite" method="post" id="assistantform" enctype="multipart/form-data">
+            <input type="hidden" asp-for="assistantSettingDto.AssistantInfoID">
+
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Name <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input class="text-input" asp-for="assistantSettingDto.FirstName" type="text" placeholder="Enter Name">
+                        <span class="required" asp-validation-for="assistantSettingDto.FirstName"></span>
+
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Middle Name</p>
+
+                    <div class="input-field">
+                        <input type="text" asp-for="assistantSettingDto.MiddleName" class="text-input middle-name-input" placeholder="Enter Middle Name">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Last Name <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="text" asp-for="assistantSettingDto.LastName" class="text-input last-name-input" placeholder="Enter Last Name">
+                        <span class="required" asp-validation-for="assistantSettingDto.LastName"></span>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Title <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <select id="Tittle" data-placeholder="Select Title" class="select2 form-control  text-input" asp-for="assistantSettingDto.TittleID"
+                                asp-items="@(new SelectList(Model.AssistantTitleList,"LookupId","LookupValue"))">
+                            <option value="" selected disabled></option>
+                        </select>
+                        <span class="required" id="providerTitleError"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>NPI No <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input npi" asp-for="assistantSettingDto.NpiNumber" placeholder="Enter NPI No">
+                        <span class="required" asp-validation-for="assistantSettingDto.NpiNumber"></span>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>License No <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input licenseno" asp-for="assistantSettingDto.LicenseNo" placeholder="Enter License No">
+                        <span class="required" asp-validation-for="assistantSettingDto.LicenseNo"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Mobile Phone <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input phoneno" asp-for="assistantSettingDto.PhoneNo" placeholder="Enter Phone Number">
+                        <span class="required" asp-validation-for="assistantSettingDto.PhoneNo"></span>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Tax ID <span class="required">*</span></p>
+
+
+                    <div class="input-field">
+                        <input type="text" class="text-input taxid" asp-for="assistantSettingDto.TaxID" placeholder="Enter Tax ID">
+                        <span class="required" asp-validation-for="assistantSettingDto.TaxID"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Email <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="email" class="text-input" asp-for="assistantSettingDto.Email" placeholder="Enter Email">
+                        <span class="required" asp-validation-for="assistantSettingDto.Email"></span>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>DOB</p>
+
+                    <div class="input-field">
+                        <input class="text-input datepicker" asp-for="assistantSettingDto.DOB" type="text" placeholder="Enter email">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Address Line 1 <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input" asp-for="assistantSettingDto.AddressLine1" placeholder="Enter Address Line 1">
+                        <span class="required" asp-validation-for="assistantSettingDto.AddressLine1"></span>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Address Line 2</p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input" asp-for="assistantSettingDto.AddressLine2" placeholder="Enter Address Line 2">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p>Address Line 3</p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input" asp-for="assistantSettingDto.AddressLine3" placeholder="Enter Address Line 3">
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p>ZIP <span class="required">*</span></p>
+                    <div class="input-field">
+                        <input type="text" class="text-input" maxlength="5" asp-for="assistantSettingDto.Zip" id="Assis_zip" placeholder="Enter Zip Code">
+                        <span class="required" asp-validation-for="assistantSettingDto.Zip"></span>
+                        <span class="required" id="err_zip"></span>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p>City</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input city" placeholder="Enter City" id="Assis_city" asp-for="assistantSettingDto.City" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-6 col-md-3">
+
+                    <p>State</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input state" id="Assis_state" asp-for="assistantSettingDto.State" readonly>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <p>Country</p>
+                    <div class="input-field">
+                        <input class="text-input country" type="text" id="Assis_country" placeholder="Enter Country" readonly>
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Facility Association <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input class="text-input" asp-for="assistantSettingDto.FacilityAssociation" type="text" placeholder="Enter Facility Association">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-12 col-md-6">
+                    <p>Specialist Association</p>
+
+                    <div class="input-field">
+                        <select id="Speciality" data-placeholder="Select Specility" class="select2 form-control  text-input" asp-for="assistantSettingDto.SpecialityID"
+                                asp-items="@(new SelectList(Model.AssistantSpeciality,"LookupId","LookupValue"))">
+
+                            <option value="" selected disabled></option>
+                        </select>
+                        <span class="required" id="assistantSpecialityError"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Facility Address Line 1 <span class="required">*</span></p>
+
+                    <div class="input-field">
+                        <input class="text-input" asp-for="assistantSettingDto.FacilityAddress1" type="text" placeholder="Enter Address Line 1">
+                        <span class="required" asp-validation-for="assistantSettingDto.FacilityAddress1"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-12 col-md-6">
+                    <p>Facility Address Line 2</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="assistantSettingDto.FacilityAddress2" placeholder="Enter Address Line 2">
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <p>Facility Address Line 3</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="assistantSettingDto.FacilityAddress3" placeholder="Enter Address Line 2">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-3">
+
+                    <p>ZIP <span class="required">*</span></p>
+                    <div class="input-field">
+                        <input class="text-input" asp-for="assistantSettingDto.FacilityZip" id="facility_zip" type="text" placeholder="Enter zip code">
+                        <span class="required" asp-validation-for="assistantSettingDto.Zip"></span>
+                        <span class="required" id="facilityerr_zip"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <p>City</p>
+                    <div class="input-field">
+                        <input class="text-input city" asp-for="assistantSettingDto.FacilityCity" type="text" id="facility_city" placeholder="Enter City" readonly>
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <p>State</p>
+                    <div class="input-field">
+                        <input class="text-input state" type="text" asp-for="assistantSettingDto.FacilityState" id="facility_state" placeholder="Select State" readonly>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <p>Country</p>
+                    <div class="input-field">
+                        <input class="text-input country" type="text" asp-for="assistantSettingDto.FacilityCountry" id="facility_country" placeholder="Enter Country" readonly>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Facility Phone</p>
+
+                    <div class="input-field">
+                        <input class="text-input Fphone" type="text" asp-for="assistantSettingDto.FacilityPhone" placeholder="Enter Mobile Phone">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Facility Email</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="email" asp-for="assistantSettingDto.FacilityEmail" placeholder="Enter email">
+                        <span class="required" asp-validation-for="assistantSettingDto.FacilityEmail"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Assign Room Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="assistantSettingDto.AssignRoomNo" placeholder="Enter Room Number">
+                    </div>
+
+
+
+
+                </div>
+                <div class="col s12 m6">
+                    <p>Assign Bed Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter BedNumber">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Authorized To Prescribe</p>
+
+                    <div class="input-field">
+                        <select class="select2 text-input" data-placeholder="Select Prescribe" asp-for="assistantSettingDto.AuthorizedToPrescribe">
+                            <option selected disabled value=""></option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="col s12 m6">
+                    <p>Authorized To Examine</p>
+
+                    <div class="input-field">
+                        <select class="select2 text-input" data-placeholder="Select Examine" asp-for="assistantSettingDto.AuthorizedToExamin">
+                            <option selected disabled value=""></option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Authorized To Bill</p>
+
+                    <div class="input-field">
+                        <select class="select2 text-input" data-placeholder="Select Bill" asp-for="assistantSettingDto.AuthorizedToBill">
+                            <option selected disabled value=""></option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="col s12 m6">
+                    <p>Rent Based</p>
+
+                    <div class="input-field">
+                        <select class="select2 text-input" data-placeholder="Select Rent" asp-for="assistantSettingDto.RentType">
+                            <option selected disabled value=""></option>
+                            <option value="1">Monthy</option>
+                            <option value="2">Weekly</option>
+                            <option value="3">Daily</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class=" col ">
+                    <p>Fee</p>
+                    <div class="input-field">
+                        <input class="text-input" asp-for="assistantSettingDto.RentFee" type="text" placeholder="Enter Rent">
+                        <span class="required" asp-validation-for="assistantSettingDto.RentFee"></span>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Billed Period</p>
+
+                    <div class="input-field">
+                        <select class="select2 text-input" data-placeholder="Select Period" asp-for="assistantSettingDto.BillPeriod">
+                            <option selected disabled value="">Select Option</option>
+                            <option value="1">Monthly</option>
+                            <option value="0">Weekly</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class=" col ">
+                    <p>User Name <span class="required">*</span></p>
+                    <input type="text" asp-for="assistantSettingDto.UserName" class="text-input" placeholder="Enter User Name">
+                    <span class="required" asp-validation-for="assistantSettingDto.UserName"></span>
+                </div>
+                <div class=" col ">
+                    <p>Password <span class="required">*</span></p>
+                    <div class="input-field">
+                        <input class="text-input" type="password" asp-for="assistantSettingDto.Password" placeholder="Enter Password">
+                        <span class="required" asp-validation-for="assistantSettingDto.Password"></span>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <p>Generate Authorization Code</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Authorization Code ">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    @if (Action == "Update")
+                    {
+                        if (Signature == "Empty.png")
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+                                </div>
+                            </div>
+                            <img id="savetarget" height="250" width="600" />
+                            <input type="file" id="SignatureImageUpload" asp-for="assistantSettingDto.SignImage" style="display:none" />
+
+                            <span class="WriteSignatureError required"></span>
+                        }
+                        else if (Signature == null)
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+                                </div>
+                            </div>
+                            <img id="savetarget" height="250" width="600" />
+                            <input type="file" id="SignatureImageUpload" asp-for="assistantSettingDto.SignImage" style="display:none" />
+
+                            <span class="WriteSignatureError required"></span>
+                        }
+                        else if (Signature == "")
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+                                </div>
+                            </div>
+
+                            <img id="savetarget" height="250" style="width:600px" />
+                            <input type="file" id="SignatureImageUpload" asp-for="assistantSettingDto.SignImage" style="display:none" />
+
+                        }
+                        else
+                        {
+                            <p>Your Signature is :</p>
+                            <img id="savetarget" height="250" width="450" />
+
+                            <img src="/SignatureImages/@Signature" class="SignatureImageUpdate" id="UpdateCaseSignature" height="250" />
+                            <div class="row">
+                                <div class="col s12 ">
+                                    <a class="Signaturepad_show btn add-btn patientSignatureTxtField">Update Signature</a>
+                                </div>
+                            </div>
+
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn add-btn btn-sm clear signature_pad_cancel">
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn btn-sm add-btn clear signature_pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+                                </div>
+                            </div>
+                            <span class="WriteSignatureError required"></span>
+                            <input type="file" id="SignatureImageUpload" asp-for="assistantSettingDto.SignImage" style="display:none" />
+
+                        }
+                    }
+                    else
+                    {
+                        <p>Write Signature Or Upload Signature Image</p>
+                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                            <div class="m-signature-pad--body">
+                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                            </div>
+                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                <div class="description">Save Your signature before submit the form</div>
+                                <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+                                    Upload Image
+                                </button>
+                                <button type="button" class="btn btn-sm add-btn clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                    Clear
+                                </button>
+                                <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                    Save Signature
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m6">
+                                <img id="savetarget" height="250" width="600" />
+
+                            </div>
+                        </div>
+                        <span class="WriteSignatureError required"></span>
+                        <input type="file" id="SignatureImageUpload" style="display:none" />
+                    }
+                    <input id="HidenWriteSignPic" hidden="hidden" value="@Signature" asp-for="assistantSettingDto.HiddenWriteSignImage" />
+
+                    <input id="HidenProfilePic" hidden="hidden" value="@ReminderBy" asp-for="assistantSettingDto.Remindimage" />
+                </div>
+                <div class="col s12 m6">
+                    <p>Upload Picture</p>
+                    <div class="center">
+                        <div class="docs-preview clearfix">
+                            <div class="img-preview preview-lg">
+                                <div id="result-wrapper">
+                                    @if (Action == "Update")
+                                    {
+                                        @if (image == null)
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                        else if (image == "")
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                        else
+                                        {
+                                            <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+                                            @*<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">*@
+                                            <img src="@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                        <div class="middle">
+                                            <div class="text">
+                                                <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                <p>Upload</p>
+                                            </div>
+                                        </div>
+                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div id="main-cropper"></div>
+                                            <div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+                                                <div class="panel-heading">Camera</div>
+                                                <div class="panel-body">
+                                                    <div id="my_camera"></div>
+                                                    <!-- A button for taking snaps -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 center">
+                                                <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                    <i class="mdi mdi-camera"></i>
+                                                </a>
+                                                <a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                    <i class="mdi mdi-cloud-upload"></i>
+                                                    <input type="file" class="custom-file-input" id="upload">
+                                                </a>
+                                                <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6 pr-0 input-field">
+
+                    <p>Authorizes Face ID Recogniztion</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-6 col-lg-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="secondaryYes" name="assistantSettingDto.AuthorizedFaceId" class="custom-control-input " value="true" autocomplete="off">
+                                <label class="custom-control-label" for="secondaryYes">Yes</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-6 col-lg-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="secondaryNo" name="assistantSettingDto.AuthorizedFaceId" class="custom-control-input" value="false" autocomplete="off">
+                                <label class="custom-control-label" for="secondaryNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <p>Authorizes Biometric Recogniztion</p>
+                    <div class="row">
+                        <div class="col-sm-6 col-6 col-lg-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="RecogniztionYes" name="assistantSettingDto.AuthorizedBioMetric" class="custom-control-input " value="true" autocomplete="off">
+                                <label class="custom-control-label" for="RecogniztionYes">Yes</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-6 col-lg-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="RecogniztionNo" name="assistantSettingDto.AuthorizedBioMetric" class="custom-control-input" value="false" autocomplete="off">
+                                <label class="custom-control-label" for="RecogniztionNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-12 col-lg-12 mt-2 mb-2" style="text-align:center">
+                    <button type="submit" id="SaveButton" class="btn add-btn">Save</button>
+
+                    <a href="@Url.Action("AssistantListSetting", "SettingsElite")" class="ml-2 Recreate btn">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

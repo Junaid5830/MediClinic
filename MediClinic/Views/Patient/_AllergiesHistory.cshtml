@@ -1,0 +1,84 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<div class="section">
+
+    <div class="card">
+        <div class="card-content">
+            <h5 class="color-blue">
+                Allergies History
+            </h5>
+
+            <div class="row">
+                <div class="col s12">
+                    <label>Are You Allergic To Any Medication? </label>
+
+                    <p>
+                        <label>
+                            <input name="group1" type="radio" value="true" class="rbAllergiesHistory" />
+                            <span>Yes</span>
+                        </label>
+                        <label>
+                            <input name="group1" type="radio" value="false" class="rbAllergiesHistory" checked />
+                            <span>No</span>
+                        </label>
+                    </p>
+                </div>
+            </div>
+
+            <div id="AllergiesHistory" style="display:none">
+
+                <partial name="_ManageAllergiesHistory" />
+
+                <div class="row mt-2">
+                    <div class="col m4 l4 s12 pt-1">
+                        <p> Allergy To</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="problem name" />
+                        </div>
+                    </div>
+                    <div class="col m4 l4 s12 pt-1">
+                        <p> Reaction</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="reaction" />
+                        </div>
+                    </div>
+                    <div class="col m4 l4 s12 pt-1">
+                        <p> Notes</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="notes" />
+                        </div>
+                    </div>
+                   
+                    <div class="col s12 m12 right mt-2" style="text-align:right">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    $(".rbAllergiesHistory")
+        .change(function () {
+            debugger;
+            var val = $(this).val();
+            if (val == 'true') {
+                $("#AllergiesHistory").show();
+
+            }
+            else {
+                $("#AllergiesHistory").hide();
+            }
+        });
+</script>

@@ -1,0 +1,91 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@using  MedliClinic.Utilities.Utility
+
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ManagePatientAppointment";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var patientName = _sessionManager.GetPatientName();
+    var roleId = _sessionManager.GetRoleId();
+    var currUserId = _sessionManager.GetUserId();
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <table id="Appointment-table" class="table display table-option">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                    <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                </div>
+
+                            </th>
+                            <th>Provider Name</th>
+                            <th>Appointment Date</th>
+                            <th>Appointment Time</th>
+                            <th data-orderable="false" class="all">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.patientAppointmentBasicsList != null)
+                        {
+                            foreach (var item in Model.patientAppointmentBasicsList)
+                            {
+                                <tr class="card">
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="@item.AppointmentId" value="check">
+                                            <label class="custom-control-label" for="@item.AppointmentId"></label>
+                                        </div>
+
+                                    </td>
+                                    <td>Dr. @item.DocFullName </td>
+
+                                    @if (item.Date is null)
+                                    {
+                                        <td>@DateTime.Today.ToString(SystemFormat.DateFormat())</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.Date.Value.ToString(SystemFormat.DateFormat())</td>
+                                    }
+                                    @if (item.AppointmentType == "Exact")
+                                    {
+                                        <td>@item.Date.Value.ToString(SystemFormat.DateFormat())</td>
+                                    }
+                                    else
+                                    {
+                                        @*<td>@item.StartTime.Value.ToString(SystemFormat.TimeFormat())</td>*@
+                                        <td></td>
+                                    }
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class='dropdown-menu Table_Drop ul_Caim'>
+                                            <li><a href="javascript:void(0);" class="option-a">View</a></li>
+                                            <li onclick="Editappointment(@item.AppointmentId)"><a href="javascript:void(0);" class="option-a">Edit</a></li>
+                                            <li onclick="deleteappointment(@item.AppointmentId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

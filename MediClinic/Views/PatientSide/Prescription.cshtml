@@ -1,0 +1,236 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "Prescription";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var roleId = _sessionManager.GetRoleId();
+
+}
+@section styles{
+    <style>
+        .dropdown-select {
+            background-color: #fff !important;
+            color: #6b6f82 !important;
+            border: 1px solid #6b6f82 !important;
+            margin-top: 0px !important;
+            padding: 5px 1rem;
+            border-radius: 4px;
+            height: 41px;
+            line-height: 27px;
+            box-shadow: 0px 0px 3px #6b6f82;
+        }
+
+        .dropbody {
+            margin-top: 40px !important;
+        }
+
+        #breadcrumbs-wrapper {
+            background: unset !important;
+        }
+
+        #breadcrumbs-wrapper.breadcrumbs-bg-image .breadcrumbs-title {
+            color: #6666ef;
+        }
+
+        .chev-right {
+            line-height: 1.5 !important;
+            padding: 0 0.2rem !important
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        #breadcrumbs-wrapper {
+            background: unset !important;
+        }
+
+        #breadcrumbs-wrapper.breadcrumbs-bg-image .breadcrumbs-title {
+            color: #6666ef;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $("#PrescriptionList").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 9], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+        function myFillNowFunction(prescriptionId, roleId) {
+            debugger;
+            var uri;
+            var route;
+            if (roleId == 2) {
+                route = "/PatientSide/AddPrescription" + "/" + prescriptionId + "";
+                var Tabname = "#test2";
+                uri = route + decodeURIComponent(Tabname);
+            }
+            else {
+                route = "/PatientSide/ViewPrescription" + "/" + prescriptionId + "";
+                uri = route;
+            }
+            window.location.href = uri;
+        }
+
+        function deleteprescription(preId, event) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/Deleteprescription", { prescriptionlId: preId }).done(function (data) {
+                        if (data) {
+                            event.closest('tr').remove();
+                            new PNotify({
+                                title: 'Success!',
+                                text: 'Record deleted successfully',
+                                delay: 2500,
+                                type: 'success',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                        else {
+                            new PNotify({
+                                title: 'Error!',
+                                text: 'Something went wrong',
+                                delay: 2500,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m3 l2 margin-top-8">
+                <h5 class="breadcrumbs-title color-blue">Prescription</h5>
+            </div>
+            <div class="col s9 m5 l6 display-block">
+                <div class="header-search-wrapper display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" data-search placeholder="Search">
+                    <a class="btn ml-2 search-btn">
+                        Search
+                    </a>
+                </div>
+            </div>
+            @if (roleId == 2)
+            {
+                <div class="col s12 m4 l4">
+                    <a href="@Url.Action("AddPrescription", "PatientSide")" class="btn waves-effect waves-light add-btn float-right">
+                        Add New Prescription
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@if (roleId == 2)
+{
+    <div id="batch_action">
+        <div class="container">
+            <div class="row">
+                <div class="col s9 m9 l9">
+                    <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                    <ul id='dropdown5' class='dropdown-content dropbody'>
+                        <li><a href="javascript:void(0);">Option 1</a></li>
+                        <li><a href="javascript:void(0);">Option 2</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <table id="PrescriptionList" class="display table-option">
+                <thead>
+                    <tr class="uppercase">
+                        @if (roleId == 2)
+                        {
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="select-all" />
+                                    <span></span>
+                                </label>
+                            </th>
+                        }
+                        <th>Medication Name</th>
+                        <th>Quantity</th>
+                        <th>Frequency</th>
+                        <th>Dose</th>
+                        <th>Unit</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Medication Comments</th>
+                        <th data-searchable=false class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.prescriptionBasicsList != null)
+                    {
+                        foreach (var item in Model.prescriptionBasicsList)
+                        {
+                            <tr class="card">
+                                @if (roleId == 2)
+                                {
+                                    <th>
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                }
+                                <td>@item.Medication.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.FrequencyId</td>
+                                <td>@item.Dose</td>
+                                <td>@item.Unit</td>
+                                <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                <td>@item.Notes</td>
+                                <td class="action">
+                                    <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown_@item.Id'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                                    <ul id='dropdown_@item.Id' class='dropdown-content'>
+
+                                        @if (roleId == 2)
+                                        {
+                                            <li><a href="javascript:void(0);" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                            <li onclick="myFillNowFunction(@item.Id,@roleId)"><a href="javascript:void(0);" class="option-a"><i class="material-icons">share</i>Edit</a></li>
+                                            <li onclick="deleteprescription(@item.Id, this);"><a href="javascript:void(0);" class="option-a"><i class="material-icons">share</i>Delete</a></li>
+                                            <li onclick="myFillNowFunction(@item.Id,'')"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li onclick="myFillNowFunction(@item.Id,@roleId)"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                            <li><a href="javascript:void(0);" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

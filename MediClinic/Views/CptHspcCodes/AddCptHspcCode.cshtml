@@ -1,0 +1,135 @@
+﻿@model CptHspcCodesViewModel
+@{
+    ViewData["Title"] = "AddCptHspcCode";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+
+}
+@section scripts{
+    <script>
+        $(".select2").select2();
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Add New CPT/HSPC Code</h5>
+                </div>
+                <div class="col">
+                    <a href="/CptHspcCodes/Index" class="waves-effect waves-light float-right" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" method="post" data-ajax="true" data-ajax-success="onInventoryCreate(data)">
+                <input type="hidden" asp-for="CptHspcCodes.CptCodeId" />
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            CPT/HSPC Code
+                        </p>
+                        <div class="input-field">
+                            <input asp-for="CptHspcCodes.CptHspcCode" type="text" class="text-input" placeholder="Enter CPT COde">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Short Description</p>
+
+                        <div class="input-field">
+                            <input  placeholder="Enter Short Description" class="text-input" asp-for="CptHspcCodes.ShortDescription" />
+                              
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Full Description</p>
+
+                        <div class="input-field">
+                            <input  placeholder="Enter Full Description" class="text-input"  asp-for="CptHspcCodes.FullDescription" />
+                               
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Modifier</p>
+
+                        <div class="input-field">
+                            <input  asp-for="CptHspcCodes.Modifier" type="text" class="text-input" placeholder="Enter Modifie">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Type</p>
+
+                        <div class="input-field">
+                            <input asp-for="CptHspcCodes.Type" type="text" class="text-input" placeholder="Enter Type">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Visit Type</p>
+
+                        <div class="input-field">
+                            <input asp-for="CptHspcCodes.VisitType" type="text" class="text-input" placeholder="Enter Visit Typer">
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+                
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                           Select Currency
+                        </p>
+
+                        <div class="input-field">
+                            
+                            <select data-placeholder="Select Currency" asp-for="CptHspcCodes.Currency" class="select2 cptCode_Name" >
+                                <option selected disabled></option>
+                                <option value="USD">USD</option>
+                                <option value="PKR">PKR</option>
+                                <option value="SR">SR</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Fee Schedule
+                        </p>
+
+                        <div class="input-field">
+                            <input asp-for="CptHspcCodes.FeeSchedule" type="text"  class="text-input" placeholder="Enter Fee Schedule">
+                           
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

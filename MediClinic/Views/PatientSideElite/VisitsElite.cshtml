@@ -1,0 +1,826 @@
+﻿
+@{
+    ViewData["Title"] = "VisitsElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+
+
+
+
+@section styles
+{
+    <link rel="stylesheet" type="text/css"
+          href="~/Elite/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" type="text/css"
+          href="~/Elite/node_modules/datatables.net-bs4/css/responsive.dataTables.min.css">
+    <link href="~/Elite/node_modules/nestable/nestable.css" rel="stylesheet" type="text/css" />
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+    <style>
+        .dd {
+            max-width: 800px;
+        }
+
+        .dd-handle:hover {
+            color: black !important;
+            background: inherit !important;
+            cursor: auto !important;
+        }
+
+        .dd-handle {
+            width: 760px;
+            box-shadow: unset !important;
+            border: unset !important;
+            background: #ffffff00 !important;
+        }
+
+        .dd-item {
+            width: 767px;
+            cursor: auto !important;
+        }
+
+            .dd-item > button {
+                width: 17px !important;
+                height: 19px !important;
+            }
+
+        .width-adjust {
+            margin-left: 6%;
+        }
+
+        .width-adjusth {
+            margin-left: 2%;
+        }
+
+        .width-adjusth-phy {
+            margin-left: 11%;
+        }
+
+        .width-adjusth-total {
+            margin-left: 9%;
+        }
+
+        .width-adjusth-cpt {
+            margin-left: 2%;
+        }
+
+        .width-adjust-doc {
+            margin-left: 4%;
+        }
+
+        .dd-placeholder {
+            display: none !important;
+        }
+
+        .actions-width {
+            padding-left: 1%;
+        }
+
+        .th-width {
+            width: 950px !important;
+        }
+
+        th.th-actions-width-action {
+            padding: 5px 30px !important;
+        }
+
+        @@media screen and (min-width: 2800px) {
+            th {
+                font-size: 20px !important;
+            }
+
+            .width-adjusth-phy {
+                margin-left: 2% !important
+            }
+
+            .width-adjusth-total {
+                margin-left: 4% !important;
+            }
+
+            .width-adjusth-cpt {
+                margin-left: 1.5% !important
+            }
+
+            .action-btn {
+                height: 51px !important;
+            }
+        }
+
+        @@media screen and (max-width:1265px) {
+            .width-adjust {
+                margin-left: 4%;
+            }
+        }
+
+        .width-Visit {
+            margin-left: 25px;
+        }
+
+        .checkBox_Set {
+            padding-top: 23px !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/Elite/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            $('#VisitsElite').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 2], "orderable": false }],
+
+            });
+
+
+        });
+
+    </script>
+    /*
+    * Nested - Extra Components
+    */
+
+    <script src="~/Elite/_node_modules/jquery.nestable/jquery.nestable.js"></script>
+    <script src="~/Elite/js/extra-components-nestable.js"></script>
+
+
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+           
+                <div class="row">
+                    <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue">
+                            Visits
+                        </h5>
+                    </div>
+                    <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                        @*<div class="input-group-prepend">
+                                                            <span class="input-group-text" id="basic-addon11" style="		background-color: #fff !important;
+                            "></span>
+                                                        </div>*@ <div class="header-search-wrapper  display-flex position-relative">
+                            <i class="ti-search position-absolute  search-icons"></i>
+                            <input type="text" class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                            <a class="btn ml-2 search-btn">
+                                Search
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 col-lg-3 addNewNotForPatient">
+
+                        <a class="btn  float-right add-btn set_smallscreen" href="/patientSideElite/AddvisitElite">
+                            Add New Visits
+                        </a>
+                    </div>
+
+                </div>
+            
+        </div>
+        <div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">
+
+                @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                    @*Batch Actions*@
+                    @*<span class="caret"></span>*@
+                </button>
+                @*<ul class="dropdown-menu batch">*@
+                    @*<li><a href="#">Option 1</a></li>*@
+                    @*<li><a href="#">Option 2</a></li> Comment batch action*@
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+
+                <div class="set_Table">
+                    <div id="basic-Netables">
+                        <table id="VisitsElite" class="table  ">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th class="checkBox_Set">
+                                        <input type="checkbox" class="select-all">
+
+
+
+                                    </th>
+                                    <th>
+
+                                        <span class="width-Visit"> Visit/Procedure</span>
+                                        <span class="width-adjusth">Date/Time </span>
+                                        <span class="width-adjusth-phy">Physician </span>
+                                        <span class="width-adjusth-total">Total </span>
+                                        <span class="width-adjusth-cpt">CPT CODE </span>
+                                        <span class="width-adjusth-cpt">ICD CODE </span>
+                                    </th>
+                                    <th class="all">Action  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" class="select-all">
+                                            <span></span>
+                                        </label>
+
+                                    </th>
+
+
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable9">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="2">
+                                                    <div class="dd-handle">
+                                                        <span class="width-adjust">EMG </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E124 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">EMG </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">EMG </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%" class="th-width">
+                                        <div class="dd" id="nestable3">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="5">
+                                                    <div class="dd-handle">
+                                                        <span class="width-adjust">PSYCH </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">4 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="6">
+                                                            <span class="width-adjust">PSYCH </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1</span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="7">
+                                                            <span class="width-adjust">PSYCH </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="8">
+                                                            <span class="width-adjust">PSYCH </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="10">
+                                                            <span class="width-adjust">PSYCH </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">1</span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable4">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="4">
+                                                    <div class="dd-handle">
+
+                                                        <span class="width-adjust">CPT </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">CPT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">CPT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+
+                                                        <li class="dd-item" data-id="9">
+                                                            <span class="width-adjust">CPT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="10">
+                                                            <span class="width-adjust">CPT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable5">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="5">
+                                                    <div class="dd-handle">
+
+                                                        <span class="width-adjust">VS-NCT </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">VS-NCT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">VS-NCT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+
+                                                        <li class="dd-item" data-id="9">
+                                                            <span class="width-adjust">VS-NCT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="10">
+                                                            <span class="width-adjust">VS-NCT </span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable6">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="6">
+                                                    <div class="dd-handle">
+
+                                                        <span class="width-adjust"> Knee Surgery </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">Knee Surgery</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">Knee Surgery</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+
+                                                        <li class="dd-item" data-id="9">
+                                                            <span class="width-adjust">Knee Surgery</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="10">
+                                                            <span class="width-adjust">Knee Surgery</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable7">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="7">
+                                                    <div class="dd-handle">
+                                                        <span class="width-adjust">PMNR </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">PMNR</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">PMNR</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+
+                                                        <li class="dd-item" data-id="9">
+                                                            <span class="width-adjust">PMNR</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="10">
+                                                            <span class="width-adjust">PMNR</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                                <tr class="card" style="cursor: pointer">
+                                    <th class="checkBox_Set">
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <td style="width:70%">
+                                        <div class="dd" id="nestable8">
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="8">
+                                                    <div class="dd-handle">
+
+                                                        <span class="width-adjust">MUA </span>
+                                                        <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                        <span class="width-adjust-doc"> Dr Duralei Durimar </span>
+                                                        <span class="width-adjust">2 </span>
+                                                        <span class="width-adjust">E125 </span>
+                                                        <span class="width-adjust">
+                                                            12345678
+                                                        </span>
+                                                    </div>
+                                                    <ol class="dd-list">
+                                                        <li class="dd-item" data-id="3">
+                                                            <span class="width-adjust">MUA</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+                                                        <li class="dd-item" data-id="4">
+                                                            <span class="width-adjust">MUA</span>
+                                                            <span class="width-adjust">12/23/18 12:00 AM </span>
+                                                            <span class="width-adjust-doc"> Dr Aibolit Shmaibolit </span>
+                                                            <span class="width-adjust">2 </span>
+                                                            <span class="width-adjust">E124 </span>
+                                                            <span class="width-adjust">
+                                                                12345678
+                                                            </span>
+                                                        </li>
+
+                                                    </ol>
+                                                </li>
+
+                                            </ol>
+                                        </div>
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                                        </ul>
+
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

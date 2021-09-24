@@ -1,0 +1,54 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHDetailPregnancyHistory != null && Model.GetMHDetailPregnancyHistory.Count() > 0)
+{
+    <table class="table centered highlight bordered">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Delivery Date</th>
+                <th>Delivery Type</th>
+                <th>Gender</th>
+                <th>Number Of Pregnancies</th>
+                <th>Number Of Living Childrens</th>
+                <th>Number Of Abortions</th>
+                <th>Number Of Miscarriages</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHDetailPregnancyHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>
+                        @if (loop.DeliveryDate.HasValue)
+                        {
+                            @loop.DeliveryDate.Value.ToShortDateString()
+                        }
+                    </td>
+                    <td>@loop.DeliveryType</td>
+                    <td>@loop.Gender</td>
+                    <td>@loop.NoOfPregnancies</td>
+                    <td>@loop.NoOfLivingChildren</td>
+                    <td>@loop.NoOfAbortions</td>
+                    <td>@loop.NoOfMiscarriages</td>
+                    <td>@loop.Complications</td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHDetailPregnancyHistory(@loop.Id)"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHDetailPregnancyHistory(@loop.Id)"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

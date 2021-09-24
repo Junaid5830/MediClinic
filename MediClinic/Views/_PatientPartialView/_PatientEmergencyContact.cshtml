@@ -1,0 +1,299 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3">
+                <div class="row mb-1">
+
+
+                    <div class="col s12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s6 m6 margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Emergency Contact</h5>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <form asp-action="PatientEmergencyContact" asp-controller="PatientSide" method="post" id="phoneForm">
+                                        <input class="text-input input-styling" asp-for="patientEmergencyContact.UserId" id="PatientEmergency_UserId" type="text" hidden="hidden">
+                                        <input hidden="hidden" asp-for="patientEmergencyContact.EmergencyContactID" />
+                                        <input hidden="hidden" class="patientinfobasichiddenUserId" asp-for="patientInfoBasicDto.UserId" />
+
+                                        <div class="row">
+                                            <div class="col s12 l6">
+                                                <p>First Name<span class="required"> * </span></p>
+                                                <div class="input-field col s12 m12 pl-0">
+                                                    <input class="text-input emergncyFirstName emergency_tab patientEmergencyTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientEmergencyContact.FirstName" type="text" placeholder="Enter First Name">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.FirstName"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6 ">
+                                                <p>Middle Name</p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyMiddleName emergency_tab patientEmergencyTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientEmergencyContact.MiddleName" type="text" placeholder="Enter Middle Name">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Last Name<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyLastName emergency_tab patientEmergencyTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientEmergencyContact.LastName" type="text" placeholder="Enter Last Name">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.LastName"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Relationship<span class="required"> * </span></p>
+                                                @*<div class="input-field col s12 m12 pl-0">
+            <div class="dropdownauto">
+                <input class="text-input input-styling relationship" id="relationship" type="text" placeholder="Select Relationship">
+                <input type="hidden" id="relationship_ids" asp-for="patientEmergencyContact.RelationshipId" value='' />
+                <span class="required" asp-validation-for="patientEmergencyContact.RelationshipId"></span>
+            </div>
+        </div>*@
+                                                <div class="ui-widget emeregencySelect_tab  col s9 m10 pl-0">
+                                                    <select id="comboboxRelation" class="emergncyRelationShip genericClassForDD emergencyDropDListBeforeEditDisabled" asp-for="patientEmergencyContact.RelationshipId"
+                                                            asp-items="@(new SelectList(Model.PatientRelationshipList,"RelationshipId","RelationshipName"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                    <p class="required" id="comboboxRelation_err"></p>
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right26"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <div class="col s10 m10 pl-0">
+                                                    <span>Same As Patient Address?</span>
+
+                                                </div>
+                                                <div class="col s2 m2">
+                                                    <p>
+                                                        <label>
+                                                            <input type="checkbox" class="filled-in patientEmergencyTxtField" id="emergaddresscheck" />
+                                                            <span></span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Address Line 1<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyAddressLine1 emergency_tab patientEmergencyTxtField" type="text" asp-for="patientEmergencyContact.Address1" placeholder="Enter Address Line 1">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.Address1"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Address Line 2</p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyAddressLine2 emergency_tab patientEmergencyTxtField" type="text" asp-for="patientEmergencyContact.Address2" placeholder="Enter Address Line 2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Address Line 3</p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyAddressLine3 emergency_tab patientEmergencyTxtField" type="text"  asp-for="patientEmergencyContact.Address3" placeholder="Enter Address Line 3">
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m3">
+                                                <p>ZIP Code<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0 pr-0">
+                                                    <input class="text-input emergncyZipCode emergency_tab patientEmergencyTxtField" maxlength="5" id="emergency_Zip" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientEmergencyContact.Zip" placeholder="Enter ZIP Code">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.Zip"></span>
+                                                    <span class="required" id="err_emergencyzip"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m3">
+                                                <p>City</p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input emergncyCity city patientEmergencyTxtField" id="emergency_city"  asp-for="patientEmergencyContact.City" type="text"  readonly>
+                                                    @*<span class="required" asp-validation-for="patientEmergencyContact.City"></span>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>State</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling state patientEmergencyTxtField" id="emergency_state"  asp-for="patientEmergencyContact.State" type="text" readonly>
+                                                        @*<span class="required" asp-validation-for="patientEmergencyContact.State"></span>*@
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>Country</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input country patientEmergencyTxtField" type="text" id="emergency_country" asp-for="patientEmergencyContact.Country" readonly>
+                                                        @*<span class="required" asp-validation-for="patientEmergencyContact.Country"></span>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Home Phone</p>
+                                                <div class="input-field col s12 pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input phoneno emergency_tab patientEmergencyTxtField" type="text" id="emergency_home" asp-for="patientEmergencyContact.HomePhone" placeholder="Enter Home Phone Number">
+                                                    <span class="required" id="errmsg_emerg_Home"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>Mobile Phone<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input phoneno emergency_tab patientEmergencyTxtField" type="text" id="emergency_mobile" asp-for="patientEmergencyContact.MobilePhone" placeholder="Enter Mobile Phone Number">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.MobilePhone"></span>
+                                                    <span class="required" id="errmsg_emerg_mob"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Fax</p>
+                                                <div class="input-field col s12 pl-0">
+                                                    <input class="text-input fax emergency_tab patientEmergencyTxtField" type="text" id="Emer_fax" asp-for="patientEmergencyContact.Fax" placeholder="Enter Fax Number">
+                                                    <span class="required" id="Emer_errmsg_fax"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Email<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input emergency_tab patientEmergencyTxtField" type="email" onkeypress="return AvoidSpace(event)" asp-for="patientEmergencyContact.Email" placeholder="Enter Email Address">
+                                                    <span class="required" asp-validation-for="patientEmergencyContact.Email"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s6 m6">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="checkbox" class="filled-in checkboxesUncheck checkFirst patientEmergencyTxtField" asp-for="patientEmergencyContact.IsSMSNotified" />
+                                                        <span>Accept SMS Notification & Reminders</span>
+                                                    </label>
+                                                </p>
+
+                                            </div>
+                                            <div class="col s6 m6">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="checkbox" class="filled-in checkboxesUncheck checkFirst patientEmergencyTxtField" asp-for="patientEmergencyContact.IsEmailNotified" />
+                                                        <span>Accept Email Notification & Reminders</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <span style="font-size:16px;"> Communication Preference :</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s4 m2 mb-2">
+                                                <label>
+                                                    <input type="checkbox" class="filled-in checkboxesUncheck checkFirst patientEmergencyTxtField" asp-for="patientEmergencyContact.IsCommunicationSMS" />
+                                                    <span> SMS</span>
+                                                </label>
+                                            </div>
+                                            <div class="col s4 m2  mb-2">
+                                                <label>
+                                                    <input type="checkbox" class="filled-in checkboxesUncheck checkFirst patientEmergencyTxtField" asp-for="patientEmergencyContact.IsCommunicationPhone" />
+                                                    <span> Phone</span>
+                                                </label>
+                                            </div>
+                                            <div class="col s4 m2 mb-2">
+                                                <label>
+                                                    <input type="checkbox" class="filled-in checkboxesUncheck checkFirst patientEmergencyTxtField" asp-for="patientEmergencyContact.IsCommunicationEmail" />
+                                                    <span> Email</span>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="row set_rowbtn">
+                                            <div class="col s12 m12" style="text-align:center">
+                                                <button type="submit" id="emerGcyBtn" class="btn add-btn">Save</button>
+
+                                                @if (ViewBag.Action == "Update")
+                                                {
+                                                    <button type="button" data-val="emergencyForm" id="emergenyEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                    <button type="button" data-val="emergencyForm" id="emergenyCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                                }
+                                                else
+                                                {
+                                                    @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                                    <a href="javascript:void(0);" data-val="NewForm" id="emergenyCancel_btn" onclick="emptyPatientEmergencyFields();" class="Recreate btn">Cancel</a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right26" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientEmergencyRelationShip" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateRelationShip(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add New Relation
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input relationshipvalue SignIdType" type="text" asp-for="PatientRelationship.RelationshipName" placeholder="Enter Employment Title " />
+                                <span class="required" asp-validation-for="PatientRelationship.RelationshipName"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

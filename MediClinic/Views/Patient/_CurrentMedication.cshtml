@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+<div class="section">
+     
+    <div class="card">
+        <div class="card-content">
+            <h5 class="color-blue">
+                Current Medications
+            </h5>
+
+            @*<div class="row">
+                <div class="col s12">
+                    <label>Are you currently taking any Medications ? </label>
+
+                    <p>
+                        <label>
+                            <input name="group1" type="radio" value="true" class="rbPastMedication" />
+                            <span>Yes</span>
+                        </label>
+                        <label>
+                            <input name="group1" type="radio" value="false" class="rbPastMedication" checked />
+                            <span>No</span>
+                        </label>
+                    </p>
+                </div>
+            </div>*@
+
+            <div id="CurrentMedication">
+
+                <partial name="_ManageCurrentMedication" />
+
+                <div class="row mt-2">
+                    <div class="col m6 l6 s12 pt-1">
+                        <p> Problem Name</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Problem Name" />
+                        </div>
+                    </div>
+                    <div class="col m6 l6 s12 pt-1">
+                        <p> Reason for taking Medicine</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Reason" />
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p> Strength</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Strength" />
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p> Dose</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Dose" />
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p> Dose Frequency</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Dose Frequency" />
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12  pt-4">
+                            <p>
+                                <label>
+                                    <input type="checkbox" />
+                                    <span>As Needed</span>
+                                </label>
+                            </p>
+                    </div>
+                    <div class="col m12 l12 s12 pt-1">
+                        <p class="mb-0"> Notes</p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Notes" />
+                        </div>
+                    </div>
+                    <div class="col s12 m12 right mt-2" style="text-align:right">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    //$(".rbPastMedication")
+    //    .change(function () {
+    //        debugger;
+    //        var val = $(this).val();
+    //        if (val == 'true') {
+    //            $("#CurrentMedication").show();
+
+    //        }
+    //        else {
+    //            $("#CurrentMedication").hide();
+    //        }
+    //    });
+</script>

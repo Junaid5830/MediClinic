@@ -1,0 +1,153 @@
+﻿@model MediClinic.Models.SettingViewModel
+
+@{
+    ViewData["Title"] = "NF2 Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/pnotify.custom.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+    <script>
+        function onPatientRelationshipCreateToDoSuccess(data) {
+            debugger;
+            new PNotify({
+                title: 'Success!',
+                text: 'Record Save',
+                delay: 5000,
+                type: 'success',
+                addclass: 'pnotify-center'
+            });
+             $('input').val('');
+             $('textarea').val('');
+             location.reload();
+        }
+        function editPatientRelationship(id)
+        {
+               $.ajax({
+
+                            type: "POST",
+                            url: '@Url.Action("PatientRelationshipEdit", "Setting")',
+                            data: { patientRelationshipId: id },
+                            success: function (data) {
+                                debugger;
+                                $("#PatientRelationship_PatientRelationshipId").val(data.patientRelationshipId);
+                                $("#PatientRelationship_PatientRelationshipName").val(data.patientRelationshipName);
+                            },
+                            error: function (result) {
+                             alert("Error");
+                       }
+                });
+        }
+        function deletePatientRelationship(id) {
+               $.ajax({
+
+                   type: "POST",
+                   url: '@Url.Action("PatientRelationshipDelete", "Setting")',
+                   data: { patientRelationshipId: id },
+                   success: function (data) {
+                       new PNotify({
+                           title: 'Success!',
+                           text: 'Record Delete',
+                           delay: 5000,
+                           type: 'success',
+                           addclass: 'pnotify-center'
+                       });
+                       location.reload();
+                   },
+                   error: function (result) {
+                       alert("Error");
+                   }
+               });
+        }
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6">
+                <h5 class="breadcrumbs-title color-blue mt-0">
+                    Patient NF2 Status
+                </h5>
+            </div>
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="/Home/Settings">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown10'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown10' class='dropdown-content dropbody'>
+                    <li><a href="javascript:void(0);">Option 1</a></li>
+                    <li><a href="javascript:void(0);">Option 2</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m6">
+        <div class="container">
+            <table id="nf2-status-table" class="table">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Patient Relationship</th>
+
+                        <th class="all">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="patient-relationship-body">
+                    <partial name="~/Views/Setting/PartialView/_PatientRelationshipList.cshtml" />
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="col s12 m6 mt-4">
+        <div class="container">
+
+
+            <form class="form-inline" method="post" asp-action="PatientRelationship" asp-controller="Setting" id="patient-relationship-form" data-ajax="true" data-ajax-success="onPatientRelationshipCreateToDoSuccess(data)">
+                <input hidden="hidden" asp-for="PatientRelationship.RelationshipId" />
+
+                <h6>
+                    Add New Patient Relationship
+                </h6><div class="input-field col s12 m12 pl-0">
+                    <div class="">  <input class="text-input" asp-for="PatientRelationship.RelationshipName" type="text" placeholder="Enter Patient Relationship"></div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <button type="submit" class="waves-effect waves-light add-btn btn">Save</button>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>

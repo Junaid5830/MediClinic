@@ -1,0 +1,466 @@
+﻿@model MediClinic.Models.ClaimViewModal
+
+@{
+    ViewData["Title"] = "AddNewClaim";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .text-align {
+            text-align: right;
+        }
+
+        .total-bill {
+            margin-left: 250px;
+        }
+
+        .color {
+            color: #f04f85 !important;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .top_part {
+            margin-top: 25px;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/microsoft/signalr/notify.js"></script>
+
+    <script>
+        $(".select2").select2();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $(".sDate")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        minDate: 0
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $(".eDate").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+
+        function onCreateClaim(data) {
+            debugger;
+
+            if (data == "Sucessfull") {
+                $(".checkmark").show().fadeOut(6000);
+                $('.select2').val('').trigger('change');
+                $('input').val('');
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+        }
+    </script>
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        @*<div class="row">
+            <div class="col-sm-12">
+                <div class="card top_part">
+                    <div class="card-content">
+
+                        <div class="row">
+                            <div class="col-4 col-sm-3 col-md-4 col-lg-3">
+                                <h6>Total Billed</h6>
+                                <p>$300,000.00</p>
+                            </div>
+                            <div class="col-4 col-sm-3 col-md-4 col-lg-3">
+                                <h6>Total Paid</h6>
+                                <p>$500.000</p>
+                            </div>
+                            <div class="col-4 col-sm-6 col-md-4 col-lg-5">
+                                <div class="float-right">
+                                    <h6>Outstanding</h6>
+                                    <p style=" color: #f04f85 !important; ">$200,000.00</p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Add New Claim</h5>
+                </div>
+                <div class="col text-align">
+
+                    @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                        Select Bill Status
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu batch">
+                        <li><a href="#"> All Claims</a></li>
+                        <li><a href="#">Pending Claims </a></li>
+                        <li><a href="#">No Billed Claims </a></li>
+
+                    </ul>*@
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-6 col-sm-6  col-md-6 col-lg-6">
+                <h6>
+                    Bill No : <span class="color">1001</span>
+
+                </h6>
+            </div>
+            <div class="col-xs-6 col-sm-6  col-md-6 col-lg-6">
+                <h6>
+                    Bill Sent Date : <span class="color">1/12/18</span>
+
+                </h6>
+            </div>
+        </div>
+
+        <div class="row">
+            <form class="col-sm-12" asp-action="AddNewClaim" asp-controller="Provider" method="post" data-ajax="true" data-ajax-success="onCreateClaim(data)">
+                <input type="text" hidden="hidden" asp-for="claim.Claim_Id" />
+                <input type="text" hidden="hidden" asp-for="claim.VisitId" />
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Bill Date <span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input type="text" class="datepicker text-input" asp-for="claim.BillDate" placeholder="mm/dd/yyyy">
+                            <span asp-validation-for="claim.BillDate" class="required"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Due Date <span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input type="text" class="datepicker text-input" asp-for="claim.DueDate" placeholder="mm/dd/yyyy">
+                            <span class="required" asp-validation-for="claim.DueDate"></span>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Date of Service</p>
+
+                        <div class="input-field">
+                            <input type="text" class="datepicker text-input" asp-for="claim.DateOfService" placeholder="mm/dd/yyyy">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Duration Of Service<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input type="text" class="datepicker text-input" asp-for="claim.DurationOfService" placeholder="mm/dd/yyyy">
+                            <span class="required" asp-validation-for="claim.DurationOfService"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Type Of Service
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.TypeOfService" data-placeholder="Select Service Type">
+                                <option selected disabled value=""></option>
+
+                                <option value="Billed">Billed</option>
+                                <option value="Non-Billed">Non-Billed</option>
+                                <option value="OT">OT</option>
+                                <option value="OPD">OPD</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>DOS <span class="required"> * </span></p>
+                        <div class="row">
+                            <div class="input-field col-md-2 col-sm-2 col-md-2 col-xl-2 col-2">
+                                <label>From</label>
+                            </div>
+                            <div class="input-field col-md-4 col-sm-4 col-md-4 col-xl-4 col-4">
+                                <div class="dropdownauto">
+                                    <input class="sDate text-input input-styling Form" asp-for="claim.DosFrom" type="text" placeholder="Select From">
+                                    <span class="required" asp-validation-for="claim.DosFrom"></span>
+
+                                </div>
+
+                            </div>
+                            <div class="input-fieldcol-md-2 col-sm-2 col-md-2 col-xl-2 col-2">
+                                <label>TO</label>
+                            </div>
+                            <div class="input-field col-md-4 col-sm-4 col-md-4 col-xl-4 col-4">
+                                <div class="dropdownauto">
+                                    <input class="eDate text-input input-styling Form" asp-for="claim.DosTo" type="text" placeholder="Select To">
+                                    <span class="required" asp-validation-for="claim.DosTo"></span>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Place Of Service</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="claim.PlaceOfService" placeholder="Enter Reminders">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Description Of Service
+                        </p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="claim.DescriptionOfService" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Case Type
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.CaseType" data-placeholder="Select Case Type" style="width: 100%;">
+                                <option selected value="" disabled></option>
+                                <option value="No-Fault">No-Fault</option>
+                                <option value="WC">WC</option>
+                                <option value="Private">Private</option>
+                                <option value="Self/Out of Pocket">Self/Out of Pocket</option>
+                                <option value="Medicare">Medicare</option>
+                                <option value="Tricare">Tricare</option>
+                                <option value="Champva">Champva</option>
+                                <option value="Group Health Plan">Group Health Plan</option>
+                                <option value="Feca Blk Lung">Feca Blk Lung</option>
+                                <option value="Medicaid">Medicaid</option>
+                                <option value="Lien">Lien</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Fee Schedule
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.FeeSchedule" data-placeholder="Select Fee Schedule">
+                                <option selected disabled value="">Select Fee Schedule </option>
+                                <option value="125">$125</option>
+                                <option value="146">$146</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            CPT/HSPC Code
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.CPTCode" data-placeholder="Select CPT Code" asp-items="@(new SelectList(Model.CPTList,"CPTCodeId","Name"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Total Bill
+                        </p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="claim.TotalBill" placeholder="Enter Total Bill" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Outstanding Balance</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="claim.OutStandingBalance" placeholder="Enter Outstanding Balance">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            ICD Code
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" data-placeholder="Select ICD Code" asp-for="claim.ICDCode" asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Diagnosis Code
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.DiagnosisCode" data-placeholder="Select Diagnosis Code" asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Referring Provider
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.ReferringProvider" data-placeholder="Select Referring Provider">
+                                <option value="" selected disabled></option>
+
+                                <option value="Dr. Xeven">Dr. Xeven</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Treating provider
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.TreatingProvider" data-placeholder="Select Treating Provider">
+                                <option value="" selected disabled></option>
+
+                                <option value="Dr. Xeven">Dr. Xeven</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Assistant
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.Assistant" data-placeholder="Select Assistant Provider">
+                                <option value="" selected disabled></option>
+
+                                <option value="Dr. Xeven">Dr. Xeven</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Bill Status
+                        </p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" asp-for="claim.BillStatus" data-placeholder="Select Bill Status">
+                                <option value="" selected disabled></option>
+                                <option value="Billed">Billed</option>
+                                <option value="Non-Billed">Non-Billed</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Tracking No</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="claim.TrackingNo" placeholder="Enter Tracking No">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="@Url.Action("Claims", "Provider")" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+

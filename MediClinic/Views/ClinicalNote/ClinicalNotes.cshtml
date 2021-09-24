@@ -1,0 +1,1055 @@
+﻿@model MediClinic.Models.ClinicalViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "Clinical Notes";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var actionType = ViewBag.ActionType;
+    bool? isEditAble = ViewBag.IsEditable;
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var UserRole = _sessionManager.GetRoleId();
+    var noteWriterName = _sessionManager.GetProviderName();
+
+}
+
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" crossorigin="anonymous">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .addBtn {
+            padding-right: 7px !important;
+            padding-left: 4px !important;
+            line-height: initial !important;
+            letter-spacing: 0 !important;
+        }
+
+
+        .addIcon {
+            margin-right: 0px !important;
+        }
+
+        .dateRow {
+            margin-top: -6px;
+        }
+
+        .textMargin {
+            margin-top: -6px;
+        }
+
+        textarea {
+            height: 125px;
+            resize: none;
+        }
+
+        .actionButton {
+            width: 120px;
+            height: 40px;
+        }
+
+
+
+
+
+        .select-wrapper input.select-dropdown {
+            display: none !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        .select-wrapper .caret {
+            display: none !important;
+        }
+
+        #newDiv {
+            width: 100%;
+        }
+
+        .textarea {
+            width: 100%;
+            border: 1px solid #cfcfcf !important;
+            border-radius: 4px;
+        }
+
+        .illness {
+            height: 60px !important;
+        }
+    </style>
+}
+
+
+
+
+@section scripts{
+
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <script type="text/javascript">
+        $(".select2").select2();
+        $(function () {
+            $('#noteTypeDD').select2();
+        });
+            var canEdit = '@isEditAble';
+            if (canEdit == "False" && '@actionType' == "Update")
+            {
+                $('#notesSubmitBtn').hide();
+                $('#notesEditBtn').hide();
+                $('#notesCancelBtn').hide();
+            }
+
+
+        var isEditable = true;
+        var targetWriteTextAreaInputId = "";
+        var previousTargetTextAreaInputId = "";
+        var targetWriteNoteValue = "";
+        var currentSelectedNoteBookName = "";
+        var textToBePopulatedOn = "";
+        var currentContext = "";
+
+        //For speech to text API
+        var speechRecognition = window.webkitSpeechRecognition;
+        var recognition = new speechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+
+        var contentSubjective = '';
+        var contentObjective = '';
+        var contentAssessment = '';
+        var contentPlan = '';
+
+        //History of Illness
+
+        var contentLocationComments = '';
+        var contentQuantityComments = '';
+        var contentSeverityComments = '';
+        var contentDurationComments = '';
+        var contentOnsetComments = '';
+        var contentContextComments = '';
+        var contentFactorsComments = '';
+        var contentSymptomsComments = '';
+        var contentTreatmentComments = '';
+        var contentPreviousTreatment = '';
+
+
+
+        recognition.continuous = true;
+
+        recognition.onstart = function () {
+        }
+
+        recognition.onspeechend = function () {
+        }
+
+        recognition.onerror = function () {
+        }
+
+        recognition.onresult = function (event) {
+            debugger;
+            var current = event.resultIndex;
+
+            if (isEditable) {
+                var transcript = event.results[current][0].transcript;
+
+                if (currentSelectedNoteBookName === "speechToTextAreaObjective") {
+                    textToBePopulatedOn = "speechToTextAreaObjective";
+                    currentContext = contentObjective;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaSubjective") {
+                    textToBePopulatedOn = "speechToTextAreaSubjective";
+                    currentContext = contentSubjective;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaAssessment") {
+                    textToBePopulatedOn = "speechToTextAreaAssessment";
+                    currentContext = contentAssessment;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaPlan") {
+                    textToBePopulatedOn = "speechToTextAreaPlan";
+                    currentContext = contentPlan;
+                }
+
+                //History of Illness
+                 
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_LocationComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_LocationComments";
+                   currentContext = contentLocationComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_QuantityComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_QuantityComments";
+                    currentContext = contentQuantityComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_SeverityComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_SeverityComments";
+                    currentContext = contentSeverityComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_DurationComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_DurationComments";
+                    currentContext = contentDurationComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_OnsetComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_OnsetComments";
+                    currentContext = contentOnsetComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_ContextComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_ContextComments";
+                    currentContext = contentContextComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_FactorComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_FactorComments";
+                    currentContext = contentFactorsComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_AssociatedComments") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_AssociatedComments";
+                    currentContext = contentSymptomsComments;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_PreviousTreatment") {
+                    textToBePopulatedOn = "HistoryOfillnessDto_PreviousTreatment";
+                    currentContext = contentPreviousTreatment;
+                }
+
+
+                //contentSubjective += transcript;
+                currentContext = currentContext + '' + transcript;
+
+                //targetWriteNoteValue += transcript;
+                if ('@actionType' == "Update") {
+                    $("#" + textToBePopulatedOn).val(currentContext);
+                }
+                else if ('@actionType' == "Save") {
+                    //$("#" + textToBePopulatedOn).val(targetWriteNoteValue);
+                    $("#" + textToBePopulatedOn).val(currentContext);
+                }
+
+
+                //To take latest 
+
+                if (currentSelectedNoteBookName === "speechToTextAreaObjective") {
+                    contentObjective = currentContext;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaSubjective") {
+                    contentSubjective = currentContext;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaAssessment") {
+                    contentAssessment = currentContext;
+                }
+                else if (currentSelectedNoteBookName === "speechToTextAreaPlan") {
+                    contentPlan = currentContext;
+                }
+
+
+                //History of Illness
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_LocationComments") {
+                    contentLocationComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_QuantityComments") {
+                    contentQuantityComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_SeverityComments") {
+                    contentSeverityComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_DurationComments") {
+                    contentDurationComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_OnsetComments") {
+                    contentOnsetComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_ContextComments") {
+                    contentContextComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_FactorComments") {
+                    contentFactorsComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_AssociatedComments") {
+                    contentSymptomsComments = currentContext;
+                }
+
+                else if (currentSelectedNoteBookName === "HistoryOfillnessDto_PreviousTreatment") {
+                    contentPreviousTreatment = currentContext;
+                }
+
+            }
+            //previousTargetTextAreaInputId = targetWriteTextAreaInputId;
+        }
+
+        function openConnection() {
+            debugger;
+            $('.notesStartAgainBtn .waves-ripple').remove();
+
+            //For multiple notebooks
+            if (currentSelectedNoteBookName === "speechToTextAreaSubjective") {
+                if (contentSubjective.length) {
+                    contentSubjective += '';
+                }
+            }
+            else if (currentSelectedNoteBookName === "speechToTextAreaObjective") {
+                if (contentObjective.length) {
+                    contentObjective += '';
+                }
+            }
+            else if (currentSelectedNoteBookName === "speechToTextAreaAssessment") {
+                if (contentAssessment.length) {
+                    contentAssessment += '';
+                }
+            }
+            else if (currentSelectedNoteBookName === "speechToTextAreaPlan") {
+                if (contentPlan.length) {
+                    contentPlan += '';
+                }
+            }
+
+            //recognition.stop();
+            //recognition.abort();
+            recognition.start();
+            //setTimeout(function () {
+            //    recognition.start();
+            //},1000)
+            
+        }
+
+
+
+         $('#newDiv').find('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                dateFormat: "mm/dd/yy"
+            });
+
+        if ('@actionType' == "Update") {
+            debugger;
+            disableFormFields();
+
+            //setTimeout(function () {
+            ////$('.select-dropdown').hide();
+            ////$('.dropdown-trigger').hide();
+
+            //}, 500);
+
+            if ('@ViewBag.IsVoiceToTextRecord' == "True") {
+                $('.notesStartAgainBtn').show();
+                    openConnection();
+            }
+        }
+
+
+
+
+        function appendNoteForm() {
+            var notesTimes = $('#NotesQuantity').val();
+            if (notesTimes == "") {
+                $('#Notes_errmsg').html("Enter No of Notes");
+            }
+            else {
+                $('#Notes_errmsg').html("");
+                $('#notesSubmitBtn').attr('disabled', false);
+                $('#notesCancelBtn').attr('disabled', false);
+            }
+            $("#newDiv").empty();
+            for (var i = 0; i < notesTimes; i++) {
+                var newInput = $('<div class="row"><div class="col s12 m4 pl-0"><p>Note Date<span class="required"> * </span></p><input id="noteDate-' + i + '" type="text" name="ClinicalNotesList[' + i + '].NoteDate" class="forRemoveValidateMsg noteDate cliniCalInput datepicker text-input" placeholder="MM/DD/YYYY" data-val="' + i + '"><span class="required" data-val="' + i + '" id="dateError-' + i + '" "></span></div><div class="col s12 m2"><div class="row"><p>Note No</p><div class=" col s12 m12 pl-0"> <input name="ClinicalNotesList[' + i + '].NoteNo" class="text-input cliniCalInput input-styling noteNumber" type="text" placeholder="note no"></div></div></div><div class="col s12 m2"><div class="row"><p>Note By</p><div class=" col s12 m12 pl-0"> <input disabled="disabled" class="text-input input-styling noteBy" value="@noteWriterName" type="text" placeholder="note by"></div></div></div><div class="col s12 m4 "><p>Note Type<span class="required"> * </span></p><div class="input-field"><select class="forRemoveValidateMsg text-input noteTypeDropDown" id="noteTypeDropDown-' + i + '" data-val="' + i + '" name="ClinicalNotesList[' + i + '].NoteType"><option value="" disabled selected>Choose Note Type</option></select><span class="required" id="noteTypeError-' + i + '" "></span></div></div><div class="row"><div class="col s12 m12"><p>Write Note<span class="required"> * </span></p> <textarea name="ClinicalNotesList[' + i + '].WriteNote" class="forRemoveValidateMsg textarea input-styling border-radius-4 writerNotes cliniCalInput" id="writeNotes-' + i + '" data-val="' + i + '"> </textarea><span class="required" id="writeNotesError-' + i + '"></span></div></div></div><div class="row"><div class="col s12"><a href="javascript:void(0);" onclick="openConnection();" style="display:none;" id="notesStartAgainBtn-' + i + '" class="waves-effect waves-light Recreate btn notesStartAgainBtn">refresh</a></div></div><hr>');
+                $('#newDiv').append(newInput);
+            }
+
+
+            $('#newDiv').find('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                dateFormat: "mm/dd/yy"
+            });
+
+
+            $.get("/ClinicalNote/GetNoteTypes").done(function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var TypeIdlist = $(".noteTypeDropDown");
+                    TypeIdlist.append($('<option></option>').val(data[i].lookupId).text(data[i].lookupValue));
+                }
+            });
+
+        }
+
+
+
+
+        $(document).on('change', '.noteTypeDropDown', function (event) {
+            debugger;
+            if (this.value == "49") {
+                $('.notesStartAgainBtn').show();
+                openConnection();
+            }
+            else {
+                $('.notesStartAgainBtn').hide();
+                recognition.stop();
+            }
+        });
+
+        $(document).on('click', '.writerNotes', function () {
+            debugger;
+            targetWriteTextAreaInputId = this.id;
+            targetWriteNoteValue = this.value;
+            console.log(this.id);
+        });
+
+
+        //Validation Section
+        $('#clinicalForm').on('submit', function (event) {
+            debugger;
+            $('#notesSubmitBtn .waves-ripple').remove();
+            var isValid = true;
+
+            var notesDate = $('#newDiv').find('.noteDate');
+            for (var i = 0; i < notesDate.length; i++) {
+                if (notesDate[i].value == "") {
+                    $('#dateError-' + i).html('Please provide notes date');
+                    isValid = false;
+                }
+            }
+
+            var noteTypes = $('#newDiv').find('.noteTypeDropDown');
+            for (var i = 0; i < noteTypes.length; i++) {
+                if (noteTypes[i].value == "") {
+                    $('#noteTypeError-' + i).html('Please select note type');
+                    isValid = false;
+                }
+            }
+
+             var writeNotes = $('#newDiv').find('.writerNotes');
+            for (var i = 0; i < writeNotes.length; i++) {
+                if (writeNotes[i].value == " ") {
+                    $('#writeNotesError-' + i).html('Please provide Notes');
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                return false;
+                event.preventDefault();
+            }
+
+        })
+
+        $(document).on('click', '.forRemoveValidateMsg', function () {
+            var counterId = $(this).attr('data-val');
+            var dateValue = $('#noteDate-' + counterId).val();
+            var noteTypeValue = $('#noteTypeDropDown-' + counterId).val();
+            var writeNoteValue = $('#writeNotes-' + counterId).val();
+
+            if (dateValue) {
+                $('#dateError-' + counterId).html("");
+            }
+            if (noteTypeValue) {
+                $('#noteTypeError-' + counterId).html("");
+            }
+            if (writeNoteValue != " " && writeNoteValue != "" && writeNoteValue != undefined) {
+                $('#writeNotesError-' + counterId).html("");
+            }
+        })
+
+
+        // Disable/Enable Form Conventions
+        function emptyClinicalFields() {
+            $('.noteTypeDropDown').val("");
+            $('.cliniCalInput').val("");
+        }
+
+        function disableFormFields() {
+            $('.noteTypeDropDown').attr('disabled', true);
+            $('.cliniCalInput').attr('disabled', true);
+            $('#notesSubmitBtn').attr('disabled', true);
+            $('.notesStartAgainBtn').attr('disabled', true);
+            $('#notesCancelBtn .waves-ripple').remove();
+            isEditable = false;
+        }
+
+        function enableFormFields() {
+            $('.noteTypeDropDown').attr('disabled', false);
+            $('.cliniCalInput').attr('disabled', false);
+            $('#notesSubmitBtn').attr('disabled', false);
+            $('.notesStartAgainBtn').attr('disabled', false);
+            $('#notesEditBtn .waves-ripple').remove();
+            isEditable = true;
+        }
+
+        
+        function currentContextChange(currentID) {
+            currentSelectedNoteBookName = currentID;
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-3">
+                    <h5 class="breadcrumbs-title color-blue mt-0">Clinical Notes</h5>
+                </div>
+
+                <div class="col-6 col-sm-6 col-md-9">
+                    <a class="waves-effect waves-light float-right" style="margin-top: -4%" href="@Url.Action("ClinicalNotesList","ClinicalNote",new {Id = patientInfoId })">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-inline" id="clinicalForm" asp-action="ClinicalNotes" asp-controller="ClinicalNote">
+
+                    <div id="newDiv">
+                        <input type="hidden" asp-for="ClinicalNoteDto.ClinicalNoteId" />
+                        <input type="hidden" asp-for="ClinicalNoteDto.VisitId" />
+                        @*<input type="hidden" asp-for="ClinicalNoteDto.RosId" />
+                        <input type="hidden" asp-for="ClinicalNoteDto.HistoryOfIllnessId" />*@
+                        <div class="row ">
+
+                            <div class="col-6 col-sm-6 col-md-3">
+                                <p>Note Date<span class="required"> * </span></p>
+                                <input type="text" class="datepicker text-input NoteDate cliniCalInput" asp-for="ClinicalNoteDto.NoteDate" placeholder="MM/DD/YYYY">
+                                <span class="required" asp-validation-for="ClinicalNoteDto.NoteDate"></span>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-3">
+                                <p>Note No</p>
+                                <input class="text-input input-styling noteNumber cliniCalInput" asp-for="ClinicalNoteDto.NoteNo" type="text" placeholder="note no">
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-3">
+                                <p>Note By</p>
+                                <input class="text-input input-styling" value="@noteWriterName" disabled="disabled" type="text" placeholder="note by">
+                            </div>
+
+                            <div class="col-6 col-sm-6 col-md-3">
+                                <p>Note Type<span class="required"> * </span></p>
+                                <select id="noteTypeDD" data-placeholder="Select Note Type" class="select2 noteTypeDropDown" asp-for="ClinicalNoteDto.NoteType"
+                                        asp-items="@(new SelectList(Model.NoteTypes,"LookupId","LookupValue"))">
+                                    <option value="" disabled="disabled" selected="selected"></option>
+                                </select>
+                                <span class="required" asp-validation-for="ClinicalNoteDto.NoteType"></span>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <p>Subjective<span class="required"> * </span></p>
+                                <textarea asp-for="ClinicalNoteDto.WriteNote" id="speechToTextAreaSubjective" onmouseup="currentContextChange('speechToTextAreaSubjective')" class="textarea input-styling border-radius-4 cliniCalInput"> </textarea>
+                                <span class="required" asp-validation-for="ClinicalNoteDto.WriteNote"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="javascript:void(0);" onclick="openConnection();" style="display:none;" @*id="notesStartAgainBtn"*@ class="waves-effect waves-light Recreate btn notesStartAgainBtn">refresh</a>
+                            </div>
+                        </div>
+                        @*<div class="row mt-3">
+                            <div class="col-12">
+                                <h4 class="color-blue">History of Illness</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Location</p>
+                                <input asp-for="HistoryOfillnessDto.Location" class="text-input input-styling" type="text" placeholder="Enter Location">
+                            </div>
+                            <div class="col">
+                                <p>Location Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.LocationComments" onmouseup="currentContextChange('HistoryOfillnessDto_LocationComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Quantity</p>
+                                <input asp-for="HistoryOfillnessDto.Quantity" class="text-input input-styling" type="text" placeholder="Enter Quantity">
+
+                            </div>
+                            <div class="col">
+                                <p>Quantity Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.QuantityComments" onmouseup="currentContextChange('HistoryOfillnessDto_QuantityComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Severity</p>
+                                <input asp-for="HistoryOfillnessDto.Severity" class="text-input input-styling" type="text" placeholder="Enter Severity">
+
+                            </div>
+                            <div class="col">
+                                <p>Severity Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.SeverityComments" onmouseup="currentContextChange('HistoryOfillnessDto_SeverityComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <p>Duration</p>
+                                <input asp-for="HistoryOfillnessDto.Duration" class="text-input input-styling" type="text" placeholder="Enter Duration">
+
+                            </div>
+                            <div class="col">
+                                <p>Duration Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.DurationComments" onmouseup="currentContextChange('HistoryOfillnessDto_DurationComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Onset / Timing</p>
+                                <input asp-for="HistoryOfillnessDto.Onset" class="text-input input-styling" type="text" placeholder="Enter Onset / Timing">
+
+                            </div>
+                            <div class="col">
+                                <p>Onset / Timing Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.OnsetComments" onmouseup="currentContextChange('HistoryOfillnessDto_OnsetComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Context</p>
+                                <input asp-for="HistoryOfillnessDto.Context" class="text-input input-styling" type="text" placeholder="Enter Context">
+
+                            </div>
+                            <div class="col">
+                                <p>Context Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.ContextComments" onmouseup="currentContextChange('HistoryOfillnessDto_ContextComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Modifying Factors</p>
+                                <input asp-for="HistoryOfillnessDto.Factor" class="text-input input-styling" type="text" placeholder="Enter Modifying Factors">
+
+                            </div>
+                            <div class="col">
+                                <p>Modifying Factors Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.FactorComments" onmouseup="currentContextChange('HistoryOfillnessDto_FactorComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Associated Symptoms</p>
+                                <input asp-for="HistoryOfillnessDto.Associated" class="text-input input-styling" type="text" placeholder="Enter Associated">
+
+                            </div>
+                            <div class="col">
+                                <p>Associated Symptoms Comments</p>
+                                <textarea asp-for="HistoryOfillnessDto.AssociatedComments" onmouseup="currentContextChange('HistoryOfillnessDto_AssociatedComments')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-12 col-md-6">
+                                <p>Previous Treatment</p>
+                                <textarea asp-for="HistoryOfillnessDto.PreviousTreatment" onmouseup="currentContextChange('HistoryOfillnessDto_PreviousTreatment')" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>*@
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <p>Objective<span class="required"> * </span></p>
+                                <textarea asp-for="ClinicalNoteDto.ObjectiveNotes" id="speechToTextAreaObjective" onmouseup="currentContextChange('speechToTextAreaObjective')" class="textarea input-styling border-radius-4 cliniCalInput"> </textarea>
+                                <span class="required" asp-validation-for="ClinicalNoteDto.ObjectiveNotes"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-sm-12">
+                                <a href="javascript:void(0);" onclick="openConnection();" style="display:none;" class="waves-effect waves-light Recreate btn notesStartAgainBtn">refresh</a>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-12">
+                                <h4 class="color-blue">Review of Symptoms (ROS)</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>General</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.General" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>General</p>
+                                <input asp-for="ClincalROSDto.GeneralText" class="text-input input-styling" type="text" placeholder="Enter General">
+                            </div>
+                            <div class="col">
+                                <p>General Comments</p>
+                                <textarea asp-for="ClincalROSDto.GeneralComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Skin</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Skin" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Skin</p>
+                                <input asp-for="ClincalROSDto.SkinText" class="text-input input-styling" type="text" placeholder="Enter Skin">
+
+                            </div>
+                            <div class="col">
+                                <p>Skin Comments</p>
+                                <textarea asp-for="ClincalROSDto.SkinComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Heent</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Heent" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Heent</p>
+                                <input asp-for="ClincalROSDto.HeentText" class="text-input input-styling" type="text" placeholder="Enter Heent">
+
+                            </div>
+                            <div class="col">
+                                <p>Heent Comments</p>
+                                <textarea asp-for="ClincalROSDto.HeentComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Neck</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Neck" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Neck</p>
+                                <input asp-for="ClincalROSDto.NeckText" class="text-input input-styling" type="text" placeholder="Enter Neck">
+
+                            </div>
+                            <div class="col">
+                                <p>Neck Comments</p>
+                                <textarea asp-for="ClincalROSDto.NeckComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Breasts</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Breast" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Breasts</p>
+                                <input asp-for="ClincalROSDto.BreastText" class="text-input input-styling" type="text" placeholder="Enter Breasts">
+
+                            </div>
+                            <div class="col">
+                                <p>Breasts Comments</p>
+                                <textarea asp-for="ClincalROSDto.BreastComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col">
+                                <p>Cardiovascular</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Cardiovascular" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Cardiovascular</p>
+                                <input asp-for="ClincalROSDto.CardiovascularText" class="text-input input-styling" type="text" placeholder="Enter Cardiovascular">
+
+                            </div>
+                            <div class="col">
+                                <p>Cardiovascular Comments</p>
+                                <textarea asp-for="ClincalROSDto.CardiovascularComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Respiratory</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Respiratory" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Respiratory</p>
+                                <input asp-for="ClincalROSDto.RespiratoryText" class="text-input input-styling" type="text" placeholder="Enter Respiratory">
+
+                            </div>
+                            <div class="col">
+                                <p>Respiratory Comments</p>
+                                <textarea asp-for="ClincalROSDto.RespiratoryComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>GI</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.GI" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>GI</p>
+                                <input asp-for="ClincalROSDto.GIText" class="text-input input-styling" type="text" placeholder="Enter GI">
+
+                            </div>
+                            <div class="col">
+                                <p>GI Comments</p>
+                                <textarea asp-for="ClincalROSDto.GIComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Urinary</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Urinary" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Urinary</p>
+                                <input asp-for="ClincalROSDto.UrinaryText" class="text-input input-styling" type="text" placeholder="Enter Urinary">
+
+                            </div>
+                            <div class="col">
+                                <p>Urinary Comments</p>
+                                <textarea asp-for="ClincalROSDto.UrinaryComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Genital(Male)</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.GenitalMale" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Genital(Male)</p>
+                                <input asp-for="ClincalROSDto.GenitalMaleText" class="text-input input-styling" type="text" placeholder="Enter Genital">
+
+                            </div>
+                            <div class="col">
+                                <p>Genital(Male) Comments</p>
+                                <textarea asp-for="ClincalROSDto.GenitalMaleComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Genital(Female)</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.GenitalFemale" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Genital(Female)</p>
+                                <input asp-for="ClincalROSDto.GenitalFemaleText" class="text-input input-styling" type="text" placeholder="Enter Genital">
+
+                            </div>
+                            <div class="col">
+                                <p>Genital(Female) Comments</p>
+                                <textarea asp-for="ClincalROSDto.GenitalFemaleComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Periph. Vasc.</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Periph" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Periph. Vasc.</p>
+                                <input asp-for="ClincalROSDto.PeriphText" class="text-input input-styling" type="text" placeholder="Enter Periph. Vasc.">
+
+                            </div>
+                            <div class="col">
+                                <p>Periph. Vasc. Comments</p>
+                                <textarea asp-for="ClincalROSDto.PeriphComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>MSK</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.msk" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>MSK</p>
+                                <input asp-for="ClincalROSDto.mskText" class="text-input input-styling" type="text" placeholder="Enter MSK">
+
+                            </div>
+                            <div class="col">
+                                <p>MSK Comments</p>
+                                <textarea asp-for="ClincalROSDto.mskComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Neurological</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Neurological" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Neurological</p>
+                                <input asp-for="ClincalROSDto.NeurologicalText" class="text-input input-styling" type="text" placeholder="Enter Neurological">
+
+                            </div>
+                            <div class="col">
+                                <p>Neurological Comments</p>
+                                <textarea asp-for="ClincalROSDto.NeurologicalComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Endocrine</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Endocrine" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Endocrine</p>
+                                <input asp-for="ClincalROSDto.EndocrineText" class="text-input input-styling" type="text" placeholder="Enter Endocrine">
+
+                            </div>
+                            <div class="col">
+                                <p>Endocrine Comments</p>
+                                <textarea asp-for="ClincalROSDto.EndocrineComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Psychiatric</p>
+                                <div class="switch">
+                                    <input asp-for="ClincalROSDto.Psychiatric" type="checkbox" id="PatientIdCheckBox" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col">
+                                <p>Psychiatric</p>
+                                <input asp-for="ClincalROSDto.PsychiatricText" class="text-input input-styling" type="text" placeholder="Enter Psychiatric">
+
+                            </div>
+                            <div class="col">
+                                <p>Psychiatric Comments</p>
+                                <textarea asp-for="ClincalROSDto.PsychiatricComment" class="textarea input-styling illness" placeholder="Enter Comment"> </textarea>
+
+                            </div>
+                        </div>*@
+                       
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <p>Assessment<span class="required"> * </span></p>
+                                <textarea asp-for="ClinicalNoteDto.AssessmentNotes" id="speechToTextAreaAssessment" onmouseup="currentContextChange('speechToTextAreaAssessment')" class="textarea input-styling border-radius-4 cliniCalInput"> </textarea>
+                                <span class="required" asp-validation-for="ClinicalNoteDto.AssessmentNotes"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="javascript:void(0);" onclick="openConnection();" style="display:none;" class="waves-effect waves-light Recreate btn notesStartAgainBtn">refresh</a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <p>Plan<span class="required"> * </span></p>
+                                <textarea asp-for="ClinicalNoteDto.PlanNotes" id="speechToTextAreaPlan" onmouseup="currentContextChange('speechToTextAreaPlan')" class="textarea input-styling border-radius-4 cliniCalInput"> </textarea>
+                                <span class="required" asp-validation-for="ClinicalNoteDto.PlanNotes"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <a href="javascript:void(0);" onclick="openConnection();" style="display:none;" class="waves-effect waves-light Recreate btn notesStartAgainBtn">refresh</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>
+                                    ICD Code
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" data-placeholder="Select ICD Code" asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                                        <option value="" selected disabled></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2" style="width:100%;">
+                        <div class="col-sm-12 col-md-12 center">
+                            <button type="submit" id="notesSubmitBtn" class="waves-effect waves-light btn add-btn">Save</button>
+                            @if (actionType == "Update")
+                            {
+                                <a href="javascript:void(0);" onclick="enableFormFields();" id="notesEditBtn" class="waves-effect waves-light Recreate btn">Edit</a>
+                                <a href="javascript:void(0);" onclick="disableFormFields();" id="notesCancelBtn" class="waves-effect waves-light Recreate btn">Cancel</a>
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0);" id="notesCancelBtn" class="waves-effect waves-light Recreate btn" onclick="emptyClinicalFields();">Cancel</a>
+                            }
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="container">
+
+
+</div>
+
+

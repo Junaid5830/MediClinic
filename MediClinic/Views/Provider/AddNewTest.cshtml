@@ -1,0 +1,111 @@
+﻿
+
+@{
+    ViewData["Title"] = "AddNewTest";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+  
+}
+@section scripts{
+   
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(document).ready(function () {
+            $('.dropify').dropify();
+        });
+
+    </script>
+    
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">        
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue">New Tests</h5>
+                    </div>
+
+                    <div class="col">
+                        <a href="@Url.Action("Tests","provider")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>
+
+                </div>
+           
+        </div>
+     
+                <div class="row">
+                    <form class="col-sm-12  ">
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Visit/Procedure Category</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter Visit/Procedure Category">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p> Date/Time</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select Date">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Physician</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter Physician">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>ICD Code</p>
+
+                                <div class="input-field">
+                                    <input type="number" class="text-input" placeholder="Enter ICD Code">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>CPT Code</p>
+
+                                <div class="input-field">
+                                    <input type="number" class="text-input" placeholder="Enter CPT Code">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Send</a>
+                                    @*<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>*@
+                                    <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+  
+    </div>
+</div>
+
+
+
+

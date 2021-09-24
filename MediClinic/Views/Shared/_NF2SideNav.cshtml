@@ -1,0 +1,55 @@
+﻿<aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
+    <div class="brand-sidebar">
+        <h1 class="logo-wrapper">
+            <a class="brand-logo brand-logo2 darken-1" href="@Url.Action("Index","Home")"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a>
+            <a class="navbar-toggler" href="javascript:void(0);"><i class="material-icons sideBarCollapseIcon">subject</i></a>
+        </h1>
+    </div>
+    <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+         
+        <li class="bold" id="@ViewBag.CoverLetter">
+            <a class="waves-effect waves-cyan " href="@Url.Action("CoverLetter","NF2")">        <i class="material-icons">insert_drive_file</i><span class="menu-title" data-i18n="">Cover Letter</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.NoFaultBenefits">
+            <a class="waves-effect waves-cyan " href="@Url.Action("NoFaultBenefits","NF2")">       <i class="material-icons">insert_link</i>  <span class="menu-title" data-i18n="">No Fault Benefits</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.VerificationOfTreatment">
+            <a class="waves-effect waves-cyan " href="@Url.Action("VerificationOfTreatment","NF2")">   <i class="material-icons">check</i>   <span class="menu-title" data-i18n="">Treatment Verification </span></a>
+        </li>
+        <li class="bold" id="@ViewBag.VerificationOfHospitalTreatment">
+            <a class="waves-effect waves-cyan " href="@Url.Action("VerificationOfHospitalTreatment","NF2")">         <i class="material-icons">local_hospital</i>        <span class="menu-title" data-i18n="">Hospital Treatment</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.HospitalFacilityForm">
+            <a class="waves-effect waves-cyan " href="@Url.Action("HospitalFacilityForm","NF2")">            <i class="material-icons">location_city</i>     <span class="menu-title" data-i18n="">Hospital Facility Form</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.EmployerWageVerificationReport">
+            <a class="waves-effect waves-cyan " href="@Url.Action("EmployerWageVerificationReport","NF2")">              <i class="material-icons">attach_money</i>  <span class="menu-title" data-i18n="">Employer Wage Verification Report</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.VerificationOfSelfEmploymentIncome">
+            <a class="waves-effect waves-cyan " href="@Url.Action("VerificationOfSelfEmploymentIncome","NF2")">         <i class="material-icons">person_pin</i>    <span class="menu-title" data-i18n="">Self Employment Income</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.SocialSecurityDisabilityBenefits">
+            <a class="waves-effect waves-cyan " href="@Url.Action("SocialSecurityDisabilityBenefits","NF2")">          <i class="material-icons">accessible</i>     <span class="menu-title" data-i18n="">Social Security Disability Benefits</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.NYSDisabilityBenefit">
+            <a class="waves-effect waves-cyan " href="@Url.Action("NYSDisabilityBenefit","NF2")">             <i class="material-icons">airline_seat_legroom_extra</i>    <span class="menu-title" data-i18n="">NYS Disability Benefit</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DenialOfClaimForm">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DenialOfClaimForm","NF2")"> <i class="material-icons">assignment</i><span class="menu-title" data-i18n="">Claim Form Denial </span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.PIPSubrogationAgreement">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PIPSubrogationAgreement","NF2")"><i class="material-icons">class</i><span class="menu-title" data-i18n="">PIP Subrogation Agreement</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.LumpSumSettlementAggreement">
+            <a class="waves-effect waves-cyan " href="@Url.Action("LumpSumSettlementAggreement","NF2")"><i class="material-icons">monetization_on</i><span class="menu-title" data-i18n="">Lump-sum Settlement</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.ElectionOfOption">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ElectionOfOption","NF2")"><i class="material-icons">mode_edit</i><span class="menu-title" data-i18n="">Election Option</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.AssignementOfBenefitsForm">
+            <a class="waves-effect waves-cyan " href="@Url.Action("AssignementOfBenefitsForm","NF2")"><i class="material-icons">note</i><span class="menu-title" data-i18n="">Benefits Form</span></a>
+        </li>
+        
+    </ul>
+    <div class="navigation-background"></div><a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="javascript:void(0);" data-target="slide-out"><i class="material-icons">menu</i></a>
+</aside>

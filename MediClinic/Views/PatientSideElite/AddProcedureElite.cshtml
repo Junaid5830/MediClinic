@@ -1,0 +1,123 @@
+﻿
+
+@{
+    ViewData["Title"] = "AddRedminderElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+   
+    <style>
+
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+    </style>
+    <link rel="stylesheet" href="~/Elite/node_modules/dropify/dist/css/dropify.min.css">
+}
+@section scripts{
+  
+    <script>
+        $(function () {
+
+       
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+    <script src="~/Elite/node_modules/dropify/dist/js/dropify.min.js"></script>
+    <script>
+	$(document).ready(function () {
+		$('.dropify').dropify();
+	});
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Procedures and Tests</h5>
+                    </div>
+
+                    <div class="col">
+                        <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/patientSideElite/ProcedureTestsElite">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>
+
+                </div>
+            
+        </div>
+        
+                <div class="row">
+                    <form class="col-sm-12  ">
+                        <div class="row">
+
+                            <div class=" col ">
+                                <p>Visit/Procedure Category</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter Visit/Procedure Category">
+                                </div>
+                            </div>
+                            <div class=" col ">
+                                <p> Date/Time</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class=" col ">
+                                <p>Phsician</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter Phsician">
+                                </div>
+                            </div>
+                            <div class=" col ">
+                                <p>ICD Code</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter ICD Code">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-md-6 ">
+                                <p>CPT Code</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter CPT Code">
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="text-right">
+                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+         
+
+    </div>
+</div>
+
+
+
+
+

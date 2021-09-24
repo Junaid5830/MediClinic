@@ -1,0 +1,81 @@
+﻿@model MediClinic.Models.DMEViewModal
+
+
+@{
+    ViewData["Title"] = "AddDME";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+
+
+
+}
+
+
+@section styles{
+
+
+
+}
+
+
+@section scripts{
+
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+            function onDMCSuccess(data) {
+                alert("1");
+            }
+        });
+        function onDMCSuccess(data) {
+            alert("2");
+        }
+    </script>
+    @*<script src="~/Elite/node_modules/dropify/dist/js/dropify.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            //$('.dropify').dropify();
+            function onDMCSuccess(data) {
+                alert("1");
+            }
+        });
+        function onDMCSuccess(data) {
+            alert("2");
+        }
+    </script>
+
+
+
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> DME Supplies/Equipment</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("DME","DME")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <partial name="~/Views/DME/_DMESupplies.cshtml"/>
+        </div>
+    </div>
+</div>
+<script>
+    function onDMCSuccess(data) {
+        alert("2");
+    }
+</script>

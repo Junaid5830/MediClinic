@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "PatientMedicalHistory";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+            <ul class="tabs Exam-tab">
+                <li class="tab"><a class="active" href="#test1">Exam</a></li>
+                <li class="tab"><a href="#test2">Medical Problem</a></li>
+
+                <li class="tab"><a href="#test4">Prescription</a></li>
+                <li class="tab"><a href="#test5">Test</a></li>
+                <li class="tab"><a href="#test6">DME Supplies</a></li>
+                <li class="tab"><a href="#test7">Imaging</a></li>
+                <li class="tab"><a href="#test8">Lab</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div id="test1">
+
+        <partial name="~/Views/_PatientPartialView/_AddExam.cshtml" />
+    </div>
+    <div id="test2">
+        <partial name="~/Views/_PatientPartialView/_MedicalProblem.cshtml">
+    </div>
+
+    <div id="test4">
+        <partial name="~/Views/_PatientPartialView/_Prescription.cshtml" />
+    </div>
+    <div id="test5">
+        <partial name="~/Views/_PatientPartialView/_ProcedureTests.cshtml" />
+    </div>
+    <div id="test6">
+        <partial name="~/Views/_PatientPartialView/_DME.cshtml" />
+    </div>
+    <div id="test7">
+        <partial name="~/Views/_PatientPartialView/_Imaging.cshtml" />
+    </div>
+    <div id="test8">
+        <partial name="~/Views/_PatientPartialView/_Lab.cshtml" />
+    </div>
+</div>
+
+

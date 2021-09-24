@@ -1,0 +1,115 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHPastMedicationHistory != null && Model.GetMHPastMedicationHistory.Count() > 0)
+{
+    <table class="table centered highlight">
+        <thead>
+            <tr>
+
+                <th class="left">Sr#</th>
+
+                <th>Name</th>
+                <th>Reason For Taking Medicine</th>
+                <th>Dose</th>
+                <th>Dose Frequency</th>
+                <th>Doctor Name</th>
+                <th>Doctor Number</th>
+                <th>Pharmacy Name</th>
+                <th>Pharmacy Number</th>
+                <th>As Needed</th>
+                <th>Notes</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHPastMedicationHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Name</td>
+                    <td>@loop.ReasonForMedicine</td>
+                    @if (loop.Dose != null)
+                    {
+                        <td>@loop.Dose</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+
+                    @if (loop.DoseFrequency != null)
+                    {
+                        <td>@loop.DoseFrequency</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    @if (loop.DocName != null)
+                    {
+                        <td>@loop.DocName</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.DocNumber != null)
+                    {
+                        <td>@loop.DocNumber</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.PharName != null)
+                    {
+                        <td>@loop.PharName</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.PharNumber != null)
+                    {
+                        <td>@loop.PharNumber</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    @if (loop.AsNeeded != true)
+                    {
+                        <td>NO</td>
+                    }
+                    else
+                    {
+                        <td>YES</td>
+                    }
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    <td>
+                        <a href="javascript:void(0)" class="EditMHPastMedicationHistory" MHPastMedicationHistoryId="@loop.Id"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" class="DeleteMHPastMedicationHistory" MHPastMedicationHistoryId="@loop.Id"><i class="mdi mdi-delete"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

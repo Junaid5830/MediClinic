@@ -1,0 +1,434 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var RoleType = _sessionManager.GetRoleId();
+
+    ViewData["Title"] = "SettingPatient";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientId = ViewContext.RouteData.Values["id"];
+
+}
+@section Styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="~/Elite/node_modules/dropify/dist/css/dropify.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+        .select2 {
+            width: 100% !important;
+        }
+
+        .tab-content .container {
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        h3, h4 {
+            color: #333 !important
+        }
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Patient Settings</h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" href="@Url.Action("Setting","SettingsElite",new { Id= patientId})" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs customtab" role="tablist">
+            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"> <span class="hidden-xs-down">List Settings</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><span class="hidden-xs-down"></span>Summary Settings</a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"> <span class="hidden-xs-down">Print Settings</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"> <span class="hidden-xs-down">Required Fields</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"> <span class="hidden-xs-down">Emergency Contact</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"> <span class="hidden-xs-down">Login and Security</span></a> </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab1" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_ListSettings.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="tab2" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_SummarySetting.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="tab3" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_PrintSetting.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="tab4" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_RequiredFields.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="tab5" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_EmergencyContact.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="tab6" role="tabpanel">
+                <partial name="../settingsElite/_PatientSetting/_LoginSecurity.cshtml" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!--Patient Settings Script -->
+    <script type="text/javascript">
+        //For patient display settings
+    function checkBoxChangeDisplaySettings(event) {
+    debugger;
+        var values = {};
+
+        // Claim info checkboxes logic
+        if ($(event).attr('data-val') == "ClaimNumber" || $(event).attr('data-val') == "PolicyNumber" || $(event).attr('data-val') == "InsuranceNumber") {
+            var isChecked = $(event).prop('checked');
+            if (isChecked) {
+                $('#claimInfoCheckBox').prop('checked', false);
+                var data = $('#claimInfoCheckBox');
+                var closestDiv = data.closest('div');
+                closestDiv.addClass('off');
+            }
+        }
+        else if ($(event).attr('data-val') == "FullClaimInfo") {
+            var isChecked = $(event).prop('checked');
+            if (isChecked) {
+
+                $('.claimInfoCheckboxes').prop('checked', false);
+                var data = $('.claimInfoCheckboxes');
+                var closestDiv = data.closest('div');
+                closestDiv.addClass('off');
+
+                $('.claimInfoCheckboxes').attr('disabled', true);
+                closestDiv.attr('disabled', 'disabled');
+            }
+            else {
+                $('.claimInfoCheckboxes').attr('disabled', false);
+                var data = $('.claimInfoCheckboxes');
+                var closestDiv = data.closest('div');
+                closestDiv.removeAttr('disabled')
+            }
+        }
+
+        //return false;
+
+
+    values.Phone = $('#phoneCheckBox').is(':checked');
+    values.Sms = $('#smsCheckBox').is(':checked');
+    values.Email = $('#emailCheckBox').is(':checked');
+    values.Fax = $('#faxCheckBox').is(':checked');
+    values.Print = $('#printCheckBox').is(':checked');
+    values.FirstName = $('#fNameCheckBox').is(':checked');
+    values.LastName = $('#lNameCheckBox').is(':checked');
+    values.DOB = $('#dobCheckBox').is(':checked');
+    values.Age = $('#ageCheckBox').is(':checked');
+    values.Address = $('#addressSummaryCheckBox').is(':checked');
+    values.Gender = $('#genderCheckBox').is(':checked');
+    values.MobilePhone = $('#mPhoneCheckBox').is(':checked');
+    values.HomePhone = $('#hPhoneCheckBox').is(':checked');
+    values.EmergencyPhone = $('#emerPhoneCheckBox').is(':checked');
+    values.Languages = $('#languageCheckBox').is(':checked');
+    values.CaseType = $('#caseTypeCheckBox').is(':checked');
+    values.ClaimNumber = $('#claimNoCheckBox').is(':checked');
+    values.PolicyNumber = $('#policyNoCheckBox').is(':checked');
+    values.InsuranceNumber = $('#insuranceInfoCheckBox').is(':checked');
+    values.FullClaimInfo = $('#claimInfoCheckBox').is(':checked');
+    values.DateCreated = $('#dateCreatedCheckBox').is(':checked');
+    values.PrimaryDr = $('#pDRCheckBox').is(':checked');
+    values.Dispatch = $('#dispatchCheckBox').is(':checked');
+    values.RouteOptions = $('#routeOptionCheckBox').is(':checked');
+    values.FirstVisit = $('#firstVisitCheckBox').is(':checked');
+    values.LastVisit = $('#lastVisitCheckBox').is(':checked');
+    values.LastExam = $('#lastExamCheckBox').is(':checked');
+    values.Vitals = $('#vitalCheckBox').is(':checked');
+    values.BodyStatus = $('#bodyStatusCheckBox').is(':checked');
+    values.Tests = $('#testsCheckBox').is(':checked');
+    values.Reminders = $('#remindersCheckBox').is(':checked');
+    values.Missing = $('#missingCheckBox').is(':checked');
+    values.PIAttorney = $('#pIAttroneyCheckBox').is(':checked');
+    values.Paralegal = $('#paralegalCheckBox').is(':checked');
+    values.CollectionAttorney = $('#collectionAttorneyCheckBox').is(':checked');
+    values.ReferralName = $('#referralNameCheckBox').is(':checked');
+    values.CurrentLocationInFacility = $('#currentLocationCheckBox').is(':checked');
+    values.LastIME = $('#lastIMECheckBox').is(':checked');
+    values.LastEUO = $('#lastEUOCheckBox').is(':checked');
+    values.AllVisit = $('#allvisitsCheckBox').is(':checked');
+    values.NumberOfVisits = $('#noOfVisitCheckBox').is(':checked');
+        values.RelatedPatientList = $('#relatedPatientListCheckBox').is(':checked');
+        values.UserId = $('#hiddenDisplaySettingsUserId').val();
+    //values.PatientId = @patientId;
+    $("input").prop("disabled", true);
+    submitDisplayOrPrintSettings(values,"summarySettings");
+    }
+
+        //For Print Settings
+        function checkBoxChangePrintSettingsDisplaySettings() {
+            debugger;
+             var printValues = {};
+             printValues.FIrstName = $('#firstNameBox').is(':checked');
+             printValues.LastName = $('#lastNameBox').is(':checked');
+             printValues.DOB = $('#DOBPrintCheckBox').is(':checked');
+             printValues.Age = $('#agePrintCheckBox').is(':checked');
+             printValues.Address = $('#AddressPrintCheckBox').is(':checked');
+             printValues.SSNumber = $('#SSNPrintCheckBox').is(':checked');
+             printValues.Gender = $('#GenderPrintCheckBox').is(':checked');
+             printValues.MaritalStatus = $('#MSCheckBox').is(':checked');
+             printValues.MobilePhone = $('#MPhoneCheckBox').is(':checked');
+             printValues.HomePhone = $('#HPhoneCheckBox').is(':checked');
+             printValues.EmergencyPhone = $('#EmergencyPhoneCheckBox').is(':checked');
+             printValues.languages = $('#LanguagesPhoneCheckBox').is(':checked');
+             printValues.CaseType = $('#CaseTypeCheckBox').is(':checked');
+             printValues.ClaimNumber = $('#ClaimNumberCheckBox').is(':checked');
+             printValues.PolicyNumber = $('#PolicyNumberCheckBox').is(':checked');
+             printValues.WCBNumber = $('#WCBCheckBox').is(':checked');
+             printValues.CarrierCaseNumber = $('#CCNumberCheckBox').is(':checked');
+             printValues.PolicyHolderName = $('#PHNameCheckBox').is(':checked');
+             printValues.EmployerInfo = $('#EmployerInfoCheckBox').is(':checked');
+             printValues.DOA = $('#DOACheckBox').is(':checked');
+             printValues.PlaceTimeOfAccident = $('#PTOIncidentCheckBox').is(':checked');
+             printValues.FullInsuranceInfo = $('#FullInsurancInfoCheckBox').is(':checked');
+             printValues.FullClaimInfo = $('#FullClaimInfoCheckBox').is(':checked');
+             printValues.Nf2fillingDate = $('#NF2FillingCheckBox').is(':checked');
+             printValues.DateCreated = $('#CreatedDateCheckBox').is(':checked');
+             printValues.PrimaryDr = $('#PrimaryDrCheckBox').is(':checked');
+             printValues.FirstVisit = $('#FirstVisitPrintCheckBox').is(':checked');
+             printValues.LastVisit = $('#LastVisitCheckBox').is(':checked');
+             printValues.LastExam = $('#LastExamCheckBox').is(':checked');
+             printValues.Vitals = $('#vitalsPrintCheckBox').is(':checked');
+             printValues.BodyStatus = $('#bodyStatusPrintCheckBox').is(':checked');
+             printValues.Tests = $('#testsPrintCheckBox').is(':checked');
+             printValues.Reminder = $('#remainderPrintCheckBox').is(':checked');
+             printValues.Missing = $('#MissingPrintCheckBox').is(':checked');
+             printValues.FullPIAttorneyinfo = $('#FullPIAttorneyPrintCheckBox').is(':checked');
+             printValues.Paralegal = $('#ParalegalPrintCheckBox').is(':checked');
+             printValues.CollectionAttorney = $('#CollectionAttorneyPrintCheckBox').is(':checked');
+             printValues.ReferralName = $('#ReferralNamePrintCheckBox').is(':checked');
+             printValues.CurrentLocationInFacility = $('#CurrentlocationInFacilityPrintCheckBox').is(':checked');
+             printValues.LastIME = $('#lastIMEPrintCheckBox').is(':checked');
+             printValues.LastEUO = $('#lastEUOPrintCheckBox').is(':checked');
+             printValues.AllVisits = $('#allVisitPrintCheckBox').is(':checked');
+             printValues.NumberOfVisits = $('#numberVisitPrintCheckBox').is(':checked');
+             printValues.RelatedPatientList = $('#relatedPatientPrintCheckBox').is(':checked');
+             printValues.UserId = $('#hiddenPrintSettingsUserId').val();
+
+            //printValues.PatientId = @patientId;
+            $("input").prop("disabled", true);
+            submitDisplayOrPrintSettings(printValues,"printSettings");
+        }
+
+
+
+              //For Patient List Settings
+     function checkBoxChangeListSettings() {
+            debugger;
+             var listValues = {};
+             listValues.PatientId = $('#PatientIdCheckBox').is(':checked');
+             listValues.Name = $('#NameCheckBox').is(':checked');
+             listValues.HomePhone = $('#homePhoneCheckBox').is(':checked');
+             listValues.MobilePhone = $('#mobilePhoneCheckBox').is(':checked');
+             listValues.Address = $('#addressListCheckBox').is(':checked');
+             listValues.DOB = $('#DobCheckBox').is(':checked');
+             listValues.Attorney = $('#AttorneyCheckBox').is(':checked');
+             listValues.Paralegal = $('#ParalegalCheckBox').is(':checked');
+             listValues.Dispatch = $('#DispatchCheckBox').is(':checked');
+             listValues.AssignTransport = $('#assignTransportCheckBox').is(':checked');
+             listValues.Route = $('#RouteCheckBox').is(':checked');
+             listValues.BarcodeNumber = $('#BarcodeCheckBox').is(':checked');
+             listValues.Gender = $('#GenderCheckBox').is(':checked');
+             listValues.MartialStatus = $('#MartialCheckBox').is(':checked');
+             listValues.HighRisk = $('#HighCheckBox').is(':checked');
+             listValues.Pregnent = $('#PregnentCheckBox').is(':checked');
+             listValues.REFERRALNAME = $('#REFERRALCheckBox').is(':checked');
+             listValues.FirstName = $('#FirstNameCheckBox').is(':checked');
+             listValues.LastName = $('#LastNameCheckBox').is(':checked');
+             listValues.UserId = $('#UserIdHidden').val();
+
+           // printValues.PatientId = @patientId;
+            $("input").prop("disabled", true);
+            submitPatientListSettings(listValues);
+        }
+
+
+        //Patient Require Field Settings
+            function checkBoxChangeRequiredFieldSettings() {
+            debugger;
+             var requireValues = {};
+             requireValues.FirstName = $('#FirstNameCheckBox').is(':checked');
+             requireValues.LastName = $('#LastNameCheckBox1').is(':checked');
+             requireValues.DOB = $('#DOBCheckBox').is(':checked');
+             requireValues.SSNumber = $('#SSNumCheckBox').is(':checked');
+             requireValues.MaritalStatus = $('#MaritalCheckBox').is(':checked');
+             requireValues.Address = $('#AddressCheckBox').is(':checked');
+             requireValues.UserName = $('#UserIdCheckBox').is(':checked');
+             requireValues.Email = $('#EmaildCheckBox').is(':checked');
+             requireValues.Password = $('#PasswordCheckBox').is(':checked');
+             requireValues.ZipCode = $('#ZipCodeCheckBox').is(':checked');
+             requireValues.PatientColorStatus = $('#PatientColorStatusCheckBox').is(':checked');
+             requireValues.Languages = $('#LanguagesCheckBox').is(':checked');
+             requireValues.EmployementStatus = $('#EmployeStatusCheckBox').is(':checked');
+             requireValues.EmploymentTitle = $('#EmployeTitleCheckBox').is(':checked');
+             requireValues.ReferralName = $('#ReferralCheckBox').is(':checked');
+             requireValues.PatientTreatmentStatus = $('#PatientTreatmentCheckBox').is(':checked');
+             requireValues.PatientLegalStatus = $('#PatientLegalStatusCheckBox').is(':checked');
+             requireValues.PhoneNumber = $('#PhoneCheckBox').is(':checked');
+             requireValues.MobileNumber = $('#MobileCheckBox').is(':checked');
+             requireValues.WorkNumber = $('#WorkCheckBox').is(':checked');
+             requireValues.EmergencyNumber = $('#EmergencyCheckBox').is(':checked');
+             requireValues.Gender = $('#GenderCheckBox1').is(':checked');
+             requireValues.UserId = $('#UserIdHidden').val();
+           // printValues.PatientId = @patientId;
+            $("input").prop("disabled", true);
+            submitRequireFieldSettings(requireValues);
+        }
+
+
+
+         function submitDisplayOrPrintSettings(summaryObj, title) {
+            if (title == "summarySettings") {
+                $.post("/Setting/PatientSummarySetting", { settingValues: summaryObj }).done(function (data) {
+                    notify();
+                 });
+            }
+            else {
+                 $.post("/Setting/PatientPrintSetting", { settingValues: summaryObj }).done(function (data) {
+                    notify();
+                 });
+            }
+        }
+
+         function submitPatientListSettings(summaryObj) {
+            $.post("/Setting/PatientListSetting", { settingValues: summaryObj }).done(function (data) {
+                notify();
+                });
+        }
+           function submitRequireFieldSettings(summaryObj) {
+            $.post("/Setting/PatientRequiredFieldsInEditing", { requireValues: summaryObj }).done(function (data) {
+                notify();
+                });
+        }
+
+         function notify() {
+             $("input").prop("disabled", false);
+        Command: toastr["info"]("Record saved Successfully")
+
+            toastr.options = {
+              "closeButton": false,
+              "debug": false,
+              "newestOnTop": false,
+              "progressBar": false,
+              "positionClass": "toast-top-right",
+              "preventDuplicates": false,
+              "onclick": null,
+              "showDuration": "10",
+              "hideDuration": "1500",
+              "timeOut": "1500",
+              "extendedTimeOut": "100",
+              "showEasing": "swing",
+              "hideEasing": "linear",
+              "showMethod": "fadeIn",
+              "hideMethod": "fadeOut"
+            }
+        }
+
+        if ($('#claimInfoCheckBox').prop('checked')) {
+            $('.claimInfoCheckboxes').attr('disabled', true);
+        }
+    </script>
+
+}

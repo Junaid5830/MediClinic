@@ -1,0 +1,192 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using MedliClinic.Utilities.Utility
+@{
+    static string CLassNameMethord(int id)
+    {
+        // Arrived  CheckedIn InSession Completed NotConfirmed Rescheduled Canceled Late NotShow CheckedOut
+        string className = string.Empty;
+        if (id == 1)
+        {
+            className = "Arrived";
+        }
+        else if (id == 2)
+        {
+            className = "CheckedIn";
+        }
+        else if (id == 3)
+        {
+            className = "InSession";
+        }
+        else if (id == 4)
+        {
+            className = "Completed";
+        }
+        else if (id == 5)
+        {
+            className = "NotConfirmed";
+        }
+        else if (id == 6)
+        {
+            className = "Rescheduled";
+        }
+        else if (id == 7)
+        {
+            className = "Canceled";
+        }
+        else if (id == 8)
+        {
+            className = "Pending";
+        }
+        else if (id == 9)
+        {
+            className = "NotShow";
+        }
+        else if (id == 10)
+        {
+            className = "CheckedOut";
+        }
+        else
+        {
+            className = "";
+        }
+        return className;
+    }
+}
+<table id="myTableEUO" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th class="disable">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll"></label>
+                </div>
+
+            </th>
+            <th>Appointment No</th>
+            <th>Appointment type</th>
+            <th>Current Status</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Doctor Name</th>
+            <th>Patient Name</th>
+            <th>Date</th>
+            <th>Change Status</th>
+            @*<th data-searchable="false" data-orderable="false" class="all">Action  </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (!(Model.AppoinmentListforRecep is null))
+        {
+            @foreach (var item in Model.AppoinmentListforRecep)
+            {
+                var id = item.StatusId;
+                string className = "";
+                if (id > 0)
+                {
+                    className = CLassNameMethord(id);
+                }
+        <tr class="card" style="cursor: pointer">
+            <th>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="@item.AppointmentId" value="check">
+                    <label class="custom-control-label" for="@item.AppointmentId"></label>
+                </div>
+            </th>
+            <td>@item.AppointmentId</td>
+            <td>@item.AppointmentType</td>
+            @if (item.StatusId == 1)
+            {
+                <td class="@className">Arrived</td>
+            }
+            else if (item.StatusId == 2)
+            {
+                <td class="@className">Checked In</td>
+            }
+            else if (item.StatusId == 3)
+            {
+                <td class="@className">In Session</td>
+            }
+            else if (item.StatusId == 4)
+            {
+                <td class="@className">Completed</td>
+            }
+            else if (item.StatusId == 5)
+            {
+                <td class="@className">Not Confirmed</td>
+            }
+            else if (item.StatusId == 6)
+            {
+                <td class="@className">Rescheduled</td>
+            }
+            else if (item.StatusId == 7)
+            {
+                <td class="@className">Cancelled</td>
+            }
+            else if (item.StatusId == 8)
+            {
+                <td class="@className">Pending</td>
+            }
+            else if (item.StatusId == 9)
+            {
+                <td class="@className">Not Show</td>
+            }
+            else if (item.StatusId == 10)
+            {
+                <td class="@className">Checked Out</td>
+            }
+            else
+            {
+                <td>N/A</td>
+            }
+
+            <td>@item.StartTime</td>
+            @if (item.EndTime == item.StartTime)
+            {
+                <td>N/A</td>
+            }
+            else
+            {
+                <td>@item.EndTime</td>
+
+            }
+            <td>@item.DoctrFullName</td>
+            <td>@item.PatientName</td>
+            <td>@item.DateOfWeek.Value.ToString(SystemFormat.DateFormat())</td>
+            <td class="action">
+                <select id="statusChange" onchange="StatusChange(@item.AppointmentId,@item.PatientInfoId , this)" class="form-control forColorChange">
+                    <option value="" selected disabled>Select Status</option>
+                    <option value="1">Arrived</option>
+                    <option value="2">Checked In</option>
+                    <option value="3">In Session</option>
+                    <option value="4">Completed</option>
+                    <option value="5">Not Confirmed</option>
+                    <option value="6">Rescheduled</option>
+                    <option value="7">Cancelled</option>
+                    <option value="8">Pending</option>
+                    <option value="9">Not Show</option>
+                    <option value="10">Checked Out</option>
+                </select>
+            </td>
+
+            <!--<td class="action">
+    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+        Options-->
+            @*<span class="caret"></span>*@
+            <!--</button>
+        <ul class="dropdown-menu Table_Drop ul_Caim">
+            <li><a href="javascript:void(0);">View</a></li>
+            <li><a href="javascript:void(0);">Delete</a></li>
+            <li><a href="javascript:void(0);">Edit</a></li>
+
+        </ul>
+
+    </td>-->
+        </tr>
+            }
+        }
+
+
+    </tbody>
+</table>
+
+

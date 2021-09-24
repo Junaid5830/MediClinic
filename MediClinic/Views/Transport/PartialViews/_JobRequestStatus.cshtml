@@ -1,0 +1,52 @@
+﻿@model MediClinic.Models.TransportViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="Jobtable" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th>Job Id</th>
+            <th>Pickup Point</th>
+            <th>Destination Point</th>
+            <th>Job Status</th>            
+            <th data-searchable=false data-orderable="false" class="all">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!(Model is null))
+        {
+            @if (!(Model.DriverJobRequestStatus is null))
+            {
+                @foreach (var item in Model.DriverJobRequestStatus)
+                {
+                    <tr class="card">
+                        <td>@item.JobRequestId</td>
+
+                        
+                        <td>@item.PickUpLocation</td>
+                        <td>@item.DestinationLocation</td>
+                        @if (!(item.DriverCurrentJobStatus is null))
+                        {
+                            <td>@item.DriverCurrentJobStatus</td>
+
+                        }
+                        else
+                        {
+                            <td>N/A</td>
+                        }
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                                @*<li><a href="@Url.Action("Index","ClinicOverView",new {Id = item.DriverId })" class="option-a">View Route</a></li>*@
+
+                            </ul>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

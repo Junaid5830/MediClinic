@@ -1,0 +1,64 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.MHRecreationalDrugsHistoryList != null && Model.MHRecreationalDrugsHistoryList.Count() > 0)
+{
+    <table class="table centered highlight bordered">
+        <thead>
+            <tr>
+
+                <th class="left">Sr#</th>
+
+                <th>Drugs</th>
+                <th>Drug Type</th>
+                <th>Last Used</th>
+                <th>Notes</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.MHRecreationalDrugsHistoryList)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+
+                    <td class="left">@Sr</td>
+
+                    <td>@loop.Drugs</td>
+                    <td>@loop.RecreationalDugsType</td>
+                    @if (loop.RecreationalDrugsLastUsed != null)
+                    {
+                        <td>@loop.RecreationalDrugsLastUsed</td>
+
+                    }
+                    else
+                    {
+                        <td>N/A</td>
+                    }
+
+                    @if (loop.RecreationDrugsNotes != null)
+                    {
+                        <td><span class="">@loop.RecreationDrugsNotes</span></td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    <td>
+                        <a href="javascript:void(0)" class="EditMHRecreationalDrugsHistory" MHRecreationalDrugsHistoryId="@loop.Id"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" class="DeleteMHRecreationalDrugsHistory" MHRecreationalDrugsHistoryId="@loop.Id"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+

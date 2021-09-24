@@ -1,0 +1,546 @@
+﻿@model MediClinic.Models.ReportsViewModel
+
+@{
+    ViewData["Title"] = "DoctorInitalReport";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+
+        .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+            color: #fff !important;
+            background-color: #547cea !important;
+        }
+
+        .customtab li a.nav-link.active {
+            border-bottom: 2px solid black !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .Exams {
+            margin-top: 25px;
+        }
+
+            .Exams p {
+                margin-top: 1rem !important;
+            }
+
+        .DMeSupplies p {
+            margin-top: 1rem !important;
+        }
+
+        .AddReminder {
+            display: none;
+        }
+
+        .prescription {
+            display: none;
+        }
+
+        .Test {
+            display: none;
+        }
+
+            .Test p {
+                margin-top: 1rem !important;
+            }
+
+        .Lab {
+            display: none;
+        }
+
+        .Vitals {
+            display: none;
+        }
+
+        .DMeSupplies {
+            display: none;
+        }
+
+        .Imaging {
+            display: none;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script>
+        $('.select2').select2();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+        $(function () {
+
+            $(".fax").inputmask('(999) 999-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $(".licenseno").inputmask('999999');
+            $(".npi").inputmask('9999999999');
+            $('.taxid').inputmask('99-9999999');
+            $('#ssn').inputmask('999-99-9999');
+        });
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+        var room = 1;
+
+        function education_fields() {
+
+            room++;
+            var objTo = document.getElementById('BillingInformation_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + room);
+            var rdiv = 'removeclass' + room;
+            //'<div class="row"><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" placeholder="School name"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Major" name="Major[]" value="" placeholder="Major"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Degree" name="Degree[]" value="" placeholder="Degree"></div></div><div class="col-sm-3 nopadding"><div class="form-group"><div class="input-group"> <select class="form-control" id="educationDate" name="educationDate[]"><option value="">Date</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option> </select><div class="input-group-append"> <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i> </button></div></div></div></div><div class="clear"></div></row>';
+            divtest.innerHTML = '<section class="tr"><div class="row"><div class="col-sm-2"><div class="row"><div class="col-sm-6"><div class="input-field"><input name="DateForm" class="datepicker text-input td" id="from" type="text" placeholder="MM/DD/YYYY"></div></div>To<div class="col-sm-6"><div class="input-field"><input class="datepicker text-input td input-styling claim_tab patientClaimInfoTxtField" name="DateTo" id="to" type="text" placeholder="MM/DD/YYYY"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="PlaceOfService"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="LeaveBank"/></div></div><div class="col-sm-3"><div class="row"><div class="col-sm-6"><div class="input-field"><input class="text-input td" type="text" name="CPT"></div></div><div class="col-sm-6"><div class="input-field"><input class=" text-input td" type="text" name="Modifier"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DisgnosisCode"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Charges"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DaysOrUnits"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="COB"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Zip"/></div></div></div><div class="row"><div class="col"><div class="input-group-append float-right"><button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="ti-minus"></i> </button></div></div></div></div>'
+            objTo.appendChild(divtest)
+        }
+
+        function remove_education_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+        function OnSuccessPatientInfomation(data) {
+            debugger;
+            if (data.success) {
+                $(".checkmark").show().fadeOut(6000);
+                $("input").val('');
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Email is already exist',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        $('input[name="reportHistoryDto.InjuryOrillnes"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.InjuryOrillnes"]:checked').val();
+            if (ans1 == "Patient") {
+
+                $('#InjuryOrillnesDetail').hide();
+            }
+            else if (ans1 == "Medical Records") {
+                $('#InjuryOrillnesDetail').hide();
+
+            }
+            else {
+                $('#InjuryOrillnesDetail').show();
+            }
+        });
+        $('input[name="reportHistoryDto.Hopsitaliaztion"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.Hopsitaliaztion"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#HistoryhospitalizatonDetail').hide();
+            }
+
+            else {
+                $('#HistoryhospitalizatonDetail').show();
+            }
+        });
+        $('input[name="reportHistoryDto.WorkRelatedInjury"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.WorkRelatedInjury"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkRelatedDetail').hide();
+            }
+
+            else {
+                $('#WorkRelatedDetail').show();
+            }
+        });
+
+        $('input[name="WorkStatus.IsPatientMissedWork"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="WorkStatus.IsPatientMissedWork"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkStatusinjury').show();
+            }
+
+            else {
+                $('#WorkStatusinjury').hide();
+            }
+        });
+        $('input[name="WorkStatus.IsPatientCurrentlyWorking"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="WorkStatus.IsPatientCurrentlyWorking"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkStatusCurrentlyWorking').show();
+            }
+
+            else {
+                $('#WorkStatusCurrentlyWorking').hide();
+            }
+        });
+
+
+        $(document).on('submit', '#ReportBillingInformation', function (e) {
+            var CPT = $("#icdCptCode").val();
+            var charger = $("#charges").val();
+            var Insurance = $("#InsuranceCarrier").val();
+            var PatientName = $("#patientName").val();
+            var codeOne = $("#codeOne").val();
+            if (CPT == "") {
+                $("#HSCPCode").text("Enter Code");
+            }
+            else {
+                $("#HSCPCode").text("");
+            }
+            if (charger == "") {
+                $("#CodeCharge").text("Enter Charges");
+            }
+            else {
+                $("#CodeCharge").text("");
+            }
+            if (Insurance == "") {
+                $("#InsuranceCarrierErr").text("Enter Insurance Carrier");
+            }
+            else {
+                $("#InsuranceCarrierErr").text("");
+            }
+            if (PatientName == "") {
+                $("#PatientNameErr").text("Enter Patient Name");
+            }
+            else {
+                $("#PatientNameErr").text("");
+            }
+            if (codeOne == "") {
+                $("#codeOneErr").text("Enter Code");
+            }
+            else {
+                $("#codeOneErr").text("");
+            }
+            var arrText = [];
+            var CodeObj = {};
+            var MainData = {};
+            $("#invoiceDetail .tr").each(function (index, value) {
+                var obj = {}
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        obj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        obj[$(this).attr('name')] = null;
+                    }
+                });
+                arrText.push(obj);
+            })
+            $(".ICDCode .tr").each(function (index, value) {
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        CodeObj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        CodeObj[$(this).attr('name')] = null;
+
+                    }
+                });
+            })
+            $(".InfoData .tr").each(function (index, value) {
+
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        MainData[$(this).attr('name')] = v.value;
+                    }
+                    else {
+                        MainData[$(this).attr('name')] = null;
+                    }
+                });
+            })
+            var formData = ({ reportBillingInvoices: arrText, reportBillingCodeDto: CodeObj, reportBillingInfoDto: MainData});
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                if (!(CPT == "" || charger == "" || Insurance == "" || PatientName == "" || codeOne == "" )) {
+                    $(this).ajaxSubmit({
+                        data: { reportsViewModel: formData },
+                        success: function (response) {
+                            debugger;
+                            if (response.success) {
+                                $(".checkmark").show().fadeOut(6000);
+                                $("input").val('');
+                            }
+                            else {
+                                new PNotify({
+                                    title: 'Error!',
+                                    text: 'Email is already exist',
+                                    delay: 5000,
+                                    type: 'error',
+                                    addclass: 'pnotify-center'
+                                });
+                            }
+                        },
+                        error: function (response) {
+                            //$('#upload').attr('disabled', false);
+                        },
+
+                        complete: function (xhr) {
+                            OnSuccessPatientInfomation();
+                        }
+                    });
+
+                }
+            }
+        })
+
+        //$("#saveBtn").on('click', function () {
+
+        //    var arrText = [];
+
+        //    $("#invoiceDetail .tr").each(function (index, value) {
+        //        var obj = {}
+        //        $(this).find('.td').each(function (i, v) {
+
+        //            obj[$(this).attr('name')] = v.value;
+        //        });
+        //        arrText.push(obj);
+        //    })
+
+        //    debugger;
+        //     $.ajax({
+        //        type: "POST",
+        //         url: "/Reports/BillingInformation",
+        //         data: { reportBillingInvoices: arrText},
+
+        //        success: function (response) {
+        //            debugger;
+        //            if (response) {
+
+        //            }
+        //            $(".checkmark").show().fadeOut(6000);
+        //            $('input').val('');
+        //            $('select').val('').trigger('change');
+
+        //        },
+        //        failure: function (response) {
+        //            alert(response.responseText);
+        //        },
+        //        error: function (response) {
+        //            alert(response.responseText);
+        //        }
+        //    });
+        //})
+
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Doctor Initial Report</h5>
+                </div>
+                @*<div class="col">
+                        <a href="@Url.Action("Setting","SettingsElite")" class="waves-effect waves-light float-right">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>*@
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mt-2">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#PatientInfo" role="tab"> <span class="hidden-xs-down">Patient Information</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#EmployeeInfo" role="tab"><span class="hidden-xs-down">Employee Information</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#DoctorInfo" role="tab"> <span class="hidden-xs-down">Doctor Information</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#BillingInfo" role="tab"> <span class="hidden-xs-down">Billing Information</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#History" role="tab"> <span class="hidden-xs-down">History</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Exam" role="tab"> <span class="hidden-xs-down">Exam Information</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Opinion" role="tab"> <span class="hidden-xs-down">Doctor Opinion</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Plan" role="tab"> <span class="hidden-xs-down">Plan of Care</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Work" role="tab"> <span class="hidden-xs-down">Work Status</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#OtherInfo" role="tab"> <span class="hidden-xs-down">Other Infomation</span></a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="PatientInfo" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_PatientInformation.cshtml" />
+
+                    </div>
+                    <div class="tab-pane  p-20" id="EmployeeInfo" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_EmployeeInformation.cshtml" />
+                    </div>
+                    <div class="tab-pane  p-20" id="DoctorInfo" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_DoctorInfomation.cshtml" />
+
+                    </div>
+                    <div class="tab-pane  p-20" id="BillingInfo" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_BillingInformation.cshtml" />
+                    </div>
+                    <div class="tab-pane  p-20" id="History" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_History.cshtml" />
+
+                    </div>
+                    <div class="tab-pane  p-20" id="Exam" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_ExamInformation.cshtml"  />
+
+                    </div>
+                    <div class="tab-pane  p-20" id="Opinion" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_DoctorOpinion.cshtml" />
+                    </div>
+                    <div class="tab-pane  p-20" id="Plan" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_PlanOfCare.cshtml" />
+                    </div>
+                    <div class="tab-pane  p-20" id="Work" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_WorkStatus.cshtml" />
+                    </div>
+                    <div class="tab-pane  p-20" id="OtherInfo" role="tabpanel">
+                        <partial name="../Reports/PartialViews/_OtherInformation.cshtml" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="right-sidebar slide-out-right">
+
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+
+            <div class="row">
+                <div class="col-12">
+                    <h5 id="label">Add New Color</h5>
+                    <div class="input-field">
+                        <p>Color Name</p>
+                        <input type="text" id="showPalette">
+                        <span id="color_error" class="required"></span>
+                    </div>
+                    <div class="input-field">
+                        <p>Select Option</p>
+                        <select class="text-input" data-val="true" data-val-required="This field is required">
+                            <option value="">-- Select Option --</option>
+                            <option value="11">Canceled</option>
+                            <option value="12">Pending</option>
+                            <option value="13">Rescheduled</option>
+                            <option value="14">Scheduled</option>
+                            <option value="14">To Be Scheduleded</option>
+                            <option value="14">Unreserachble</option>
+                        </select>
+                    </div>
+                    <input hidden id="AllergyTypeId" type="text" />
+                    <span class="required"></span>
+                    <a href="javascript:void(0);" id="allergy_submission" data-method="AlergyType" class="modal-action btn add-btn right mb-2 allergy_submission">Save</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

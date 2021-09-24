@@ -1,0 +1,231 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h6 class="color-blue">Past DME Supplies</h6>
+            <table id="PastDME-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="PastDME-table" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Date of prescription</th>
+                        <th>items</th>
+                        <th>cpt code</th>
+                        <th>icd code</th>
+                        <th>prescriber</th>
+                        <th>rx image</th>
+                        <th>barcode no</th>
+                        <th>prescription REF. NO</th>
+                        <th>status</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>05.05.18</td>
+
+                        <td>Cane</td>
+                        <td>A123</td>
+                        <td>321312</td>
+                        <td>Dr.Aibolit</td>
+                        <td>
+                            <span class="list-img">
+                                <img src="~/app-assets/images/avatar/avatar-1.png"
+                                     alt="avatar">
+                            </span>
+                        </td>
+                        <td>Z21354235F23</td>
+                        <td>Initial</td>
+                        <td>confirmed</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>                
+                </tbody>
+            </table>
+            <a href="@Url.Action("DMEsupplies","Provider")" class="right exam_viewmore">View More</a>
+            <h6 class="color-blue">Current DME Supplies</h6>
+            <table id="CurrentDME-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Date of prescription</th>
+                        <th>items</th>
+                        <th>cpt code</th>
+                        <th>icd code</th>
+                        <th>prescriber</th>
+                        <th>rx image</th>
+                        <th>barcode no</th>
+                        <th>prescription REF. NO</th>
+                        <th>status</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>05.05.18</td>
+
+                        <td>Cane</td>
+                        <td>A123</td>
+                        <td>321312</td>
+                        <td>Dr.Aibolit</td>
+                        <td>
+                            <span class="list-img">
+                                <img src="~/app-assets/images/avatar/avatar-1.png"
+                                     alt="avatar">
+                            </span>
+                        </td>
+                        <td>Z21354235F23</td>
+                        <td>Follow Up</td>
+                        <td>Received</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mb-1" id="DME_btn">Add New DME</button>
+        </div>
+    </div>
+</div>
+<div class="container" id="DME_form" style="display:none">
+    <div class="row">
+        <div class="col s12">
+            <form class="form-inline">
+                <div class="row">
+
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0 ">
+                            <p>Date of Prescription</p>
+                            <input type="text" class="datepicker text-input" placeholder="Select Date">
+                        </div>
+
+                    </div>
+                    <div class=" col s12 m6">
+                        <div class="input-field  pl-0 ">
+                            <p>Items or Items Group Name/No</p>
+                            <div class="dropdownauto"><input class="text-input input-styling Items" type="text" placeholder="Select Items"></div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col s12 m6">
+                        <div class="input-field  pl-0 ">
+                            <p>CPT Code</p>
+                            <div class="dropdownauto"><input class="text-input input-styling CPT" type="text" placeholder="Select CPT"></div>
+                        </div>
+
+                    </div>
+                    <div class=" col s12 m6">
+                        <div class="input-field  pl-0 ">
+                            <p>ICD Code</p>
+                            <div class="dropdownauto"><input class="text-input input-styling ICD" type="text" placeholder="Select ICD"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field  pl-0">
+                            <p>Prescriber</p>
+                            <div class="dropdownauto"><input class="text-input input-styling Prescriber" type="text" placeholder="Select Prescriber"></div>
+                        </div>
+
+                    </div>
+                    <div class=" col s12 m6">
+                        <p>Barcode No</p>
+
+                        <div class="input-field pl-0 ">
+                            <div class="dropdownauto"><input class="text-input input-styling Barcode"  type="text" placeholder="Select Barcode"></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field  pl-0">
+                            <p>Prescription Refference/No</p>
+                            <div class="dropdownauto"><input class="text-input input-styling RefferenceNo" type="text" placeholder="Select Refference/No"></div>
+                        </div>
+                    </div>
+                    <div class=" col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Status</p>
+                            <div class="dropdownauto"><input class="text-input input-styling Status" type="text" placeholder="Select Status"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                    <div class="col s12 m6">
+                        <div class="col s12 pl-0 ">
+                            <p>Upload Image</p>
+                            <div class="dropify-wrapper"><div class="dropify-message"><span class="file-icon"></span> <p>Drag and drop a file here or click</p><p class="dropify-error">Ooops, something wrong appended.</p></div><div class="dropify-loader"></div><div class="dropify-errors-container"><ul></ul></div><input type="file" id="input-file-now" class="dropify" data-default-file=""><button type="button" class="dropify-clear">Remove</button><div class="dropify-preview"><span class="dropify-render"></span><div class="dropify-infos"><div class="dropify-infos-inner"><p class="dropify-filename"><span class="file-icon"></span> <span class="dropify-filename-inner"></span></p><p class="dropify-infos-message">Drag and drop or click to replace</p></div></div></div></div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="row mt-2 mb-3">
+                    <div class="col s12 m12" style="text-align:center">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

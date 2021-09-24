@@ -1,0 +1,1075 @@
+﻿@model ReportsViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+    <form asp-action="ExamInformation" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+       <input type="text" hidden asp-for="ExamInfromation.VisitId" />
+       <input type="text" hidden asp-for="ExamInfromation.ExamInformationId" />
+        <div class="row">
+
+
+            <div class="col-12 col-md-6">
+                <p>
+                    Date(s) of Examination:
+                </p>
+                <div class="input-field">
+                    <input type="date" class="text-input" asp-for="ExamInfromation.DateOfExam" placeholder="Enter Date of Examination" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <p>Patient's subjective complaints: Check all that apply and identify specific affected body part(s):</p>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsNumbnessTingling" id="Numbness">
+                            <label class="custom-control-label" for="Numbness"> Numbness/Tingling</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.NumbnessTingling" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsSwelling" id="Swelling">
+                            <label class="custom-control-label" for="Swelling">Swelling</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Swelling" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsPain" id="Pain">
+                            <label class="custom-control-label" for="Pain"> Pain</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Pain" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsWeakness" id="Weakness">
+                            <label class="custom-control-label" for="Weakness">Weakness</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Weakness" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsStiffness" id="Stiffness">
+                            <label class="custom-control-label" for="Stiffness"> Stiffness</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Stiffness" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsOtherSpecify" id="Other">
+                            <label class="custom-control-label" for="Other">Other(specify)</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.OtherSpecify" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <p>Type/nature of injury: Check all that apply and identify specific affected body part(s):</p>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="ExamInfromation.IsAbrasion" id="Abrasion">
+                            <label class="custom-control-label" for="Abrasion"> Abrasion</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Abrasion" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsInfectiousDisease" id="Infectious">
+                            <label class="custom-control-label" for="Infectious">Infectious Disease</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Infectious_Disease" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Amputation" asp-for="ExamInfromation.IsAmputation">
+                            <label class="custom-control-label" for="Amputation"> Amputation</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Amputation" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Inhalation" asp-for="ExamInfromation.IsInhalationExposure">
+                            <label class="custom-control-label" for="Inhalation">
+                                Inhalation Exposure
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.InhalationExposure" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsAvulsion" id="Avulsion">
+                            <label class="custom-control-label" for="Avulsion"> Avulsion</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Avulsion" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Laceration" asp-for="ExamInfromation.IsLaceration" >
+                            <label class="custom-control-label" for="Laceration">
+                                Laceration
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Laceration" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsBite" id="Bite">
+                            <label class="custom-control-label" for="Bite"> Bite</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Bite" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsNeedleStick" id="Needle">
+                            <label class="custom-control-label" for="Needle">
+                                Needle Stick
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.NeedleStick" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsBurn" id="Burn">
+                            <label class="custom-control-label" for="Burn"> Burn</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Burn" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsPoisoningToxicEffects" id="Effects">
+                            <label class="custom-control-label" for="Effects">
+                                Poisoning/Toxic Effects
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.PoisoningToxicEffects" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsContusionHematoma" id="Contusion/Hematoma">
+                            <label class="custom-control-label" for="Contusion/Hematoma"> Contusion/Hematoma</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.ContusionHematoma" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsPsychological" id="Psychological">
+                            <label class="custom-control-label" for="Psychological">
+                                Psychological
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Psychological" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsCrushInjury" id="Crush">
+                            <label class="custom-control-label" for="Crush">Crush Injury</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.CrushInjury" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsPunctureWound" id="Puncture">
+                            <label class="custom-control-label" for="Puncture">
+                                Puncture Wound
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.PunctureWound" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsDermatitis" id="Dermatitis">
+                            <label class="custom-control-label" for="Dermatitis">Dermatitis</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Dermatitis" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsRepetitiveStrainInjury" id="Repetitive">
+                            <label class="custom-control-label" for="Repetitive">
+                                Repetitive Strain Injury
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.RepetitiveStrainInjury" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsDislocation" id="Dislocation">
+                            <label class="custom-control-label" for="Dislocation">Dislocation</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Dislocation" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsSpinalCordInjury" id="Cord">
+                            <label class="custom-control-label" for="Cord">
+                                Spinal Cord Injury
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.SpinalCordInjury" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsFracture" id="Fracture">
+                            <label class="custom-control-label" for="Fracture">Fracture</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Fracture" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsSprainStrain" id="Sprain">
+                            <label class="custom-control-label" for="Sprain">
+                                Sprain/Strain
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.SprainStrain" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsHearingLoss" id="Hearing">
+                            <label class="custom-control-label" for="Hearing">
+                                Hearing Loss
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.HearingLoss" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsTornLigamentTendonMuscle" id="Torn">
+                            <label class="custom-control-label" for="Torn">
+                                Torn Ligament,Tendon or Muscle
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.TornLigamentTendonMuscle" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsHernia" id="Hernia">
+                            <label class="custom-control-label" for="Hernia">
+                                Hernia
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Hernia" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsVisionLoss" id="Vision">
+                            <label class="custom-control-label" for="Vision">
+                                Vision Loss
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.VisionLoss" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsOtheinjury" id=" Other (Specify)">
+                            <label class="custom-control-label" for=" Other (Specify)">
+                                Other (Specify)
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.OtherInjury" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row notForPatient">
+            <div class="col">
+                <p>Full Name</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter Full Name" asp-for="ExamInfromation.FullName" />
+                </div>
+            </div>
+            <div class="col">
+                <p>Date of injury/onset of illness</p>
+                <div class="input-field">
+                    <input type="date" class="text-input" placeholder="Enter SSN" asp-for="ExamInfromation.DateOfInjury" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row notForPatient">
+            <div class="col-12">
+                <p>Physical examination:</p>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsNoneAtPresent" id="present">
+                            <label class="custom-control-label" for="present">
+                                None at present
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsBruising" id="Bruising">
+                            <label class="custom-control-label" for="Bruising"> Bruising</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Bruising" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 notForPatient">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsNeuromuscular" id="Neuromuscular">
+                            <label class="custom-control-label" for="Neuromuscular">Neuromuscular Findings:</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsBurns" id="Burns2">
+                            <label class="custom-control-label" for="Burns2"> Burns</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Burns" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsAbnormal" id="Abnormal">
+                            <label class="custom-control-label" for="Abnormal">Abnormal/Restricted ROM</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsCrepitation" id="Crepitation">
+                            <label class="custom-control-label" for="Crepitation"> Crepitation</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Crepitation" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsActiveROM" id="ROM">
+                            <label class="custom-control-label" for="ROM">Active ROM</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.ActiveROM" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsDeformity" id="Deformity">
+                            <label class="custom-control-label" for="Deformity"> Deformity</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Deformity" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsPassiveROM" id="Passive">
+                            <label class="custom-control-label" for="Passive">Passive ROM</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.PassiveROM" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsEdema" id="Edema">
+                            <label class="custom-control-label" for="Edema"> Edema</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Edema" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsGait" id="Gait">
+                            <label class="custom-control-label" for="Gait">Gait</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Gait" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsHematomaLumpSwelling" id="Lump">
+                            <label class="custom-control-label" for="Lump">
+                                Hematoma/Lump/Swelling
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.HematomaLumpSwelling" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsPalpableMuscleSpasm" id="Muscle">
+                            <label class="custom-control-label" for="Muscle">
+                                Palpable Muscle Spasm
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.PalpableMuscleSpasm" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsJointEffusion" id="Joint">
+                            <label class="custom-control-label" for="Joint">
+                                Joint Effusion
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.JointEffusion" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsReflexes" id="Reflexes">
+                            <label class="custom-control-label" for="Reflexes">
+                                Reflexes
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Reflexes" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Sutures" asp-for="ExamInfromation.IsLacerationSutures" >
+                            <label class="custom-control-label"  for="Sutures">
+                                Laceration/Sutures
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.LacerationSutures" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsSensation" id="Sensation">
+                            <label class="custom-control-label" for="Sensation">
+                                Sensation
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Sensation" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsScar" id="Scar">
+                            <label class="custom-control-label" for="Scar">
+                                Scar
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.Scar" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsWastingMuscleAtrophy" id="Wasting">
+                            <label class="custom-control-label" for="Wasting">
+                                Wasting/Muscle Atrophy
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.WastingMuscleAtrophy" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1 notForPatient">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="ExamInfromation.IsOtherFindings" id=" Other findings">
+                            <label class="custom-control-label" for=" Other findings">
+                                Other findings
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="ExamInfromation.OtherFindings" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row notForPatient">
+            <div class="col">
+                <p>Describe any diagnostic test(s) rendered at this visit:</p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="ExamInfromation.AnyDiagnosticTest" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row notForPatient">
+            <div class="col">
+                <p> Describe any treatment(s) rendered at this visit: </p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="ExamInfromation.AnyTreatment" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row notForPatient">
+            <div class="col">
+                <p> Describe prognosis for recovery: </p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="ExamInfromation.PrognosisForRecovery" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row notForPatient">
+            <div class="col">
+                <p> Does the patient's medical history reveal any pre-existing condition(s) that may affect the treatment and/or prognosis?</p>
+                <div class="row">
+                    <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="IsAnyPreexistingConditionYes" asp-for="ExamInfromation.IsAnyPreexistingCondition" value="true" class="custom-control-input  " autocomplete="off" >
+                            <label class="custom-control-label" for="IsAnyPreexistingConditionYes" >Yes</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="IsAnyPreexistingConditionNo"  asp-for="ExamInfromation.IsAnyPreexistingCondition" value="false" class="custom-control-input " autocomplete="off">
+                            <label class="custom-control-label" for="IsAnyPreexistingConditionNo">
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row notForPatient" style="display:none">
+            <div class="col">
+                <textarea placeholder="Enter Detail" class="form-control"></textarea>
+
+            </div>
+        </div> 
+        <div class="row mt-2 mb-2 notForPatient">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                    @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+                </div>
+            </div>
+        </div>
+    </form>

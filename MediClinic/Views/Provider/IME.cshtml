@@ -1,0 +1,259 @@
+﻿
+@{
+    ViewData["Title"] = "IME";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles
+{
+  
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+
+}
+@section scripts{
+ 
+    <script>
+        $(function () {
+            $('#IMETable').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+
+        });
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+        
+     
+                <div class="row">
+                    <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue">
+                            I.M.E
+                        </h5>
+                    </div>
+                    <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                      <div class="header-search-wrapper  display-flex position-relative">
+                            <i class="ti-search position-absolute  search-icons"></i>
+                            <input type="text" class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                            <a class="btn ml-2 search-btn">
+                                Search
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+
+                        <a href="@Url.Action("AddNewIME","provider")" class="btn  float-right add-btn set_smallscreen">
+                            Add New IME
+                        </a>
+                    </div>
+
+                </div>
+           
+        </div>
+        <div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">
+
+                @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                    @*Batch Actions*@
+                    @*<span class="caret"></span>*@
+                </button>
+                @*<ul class="dropdown-menu batch">*@
+                    @*<li><a href="#">Option 1</a></li>*@
+                    @*<li><a href="#">Option 2</a></li> Comment batch action*@
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="IMETable" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>
+                                    <input type="checkbox" class="select-all">
+
+
+
+                                </th>
+                                <th>Date of IME</th>
+                                <th>Time of IME</th>
+                                <th>Place of IME</th>
+                                <th>Represented By </th>
+                                <th>Status of ime </th>
+                                <th>Reason </th>
+                                <th>Transcripts </th>
+                                <th class="all">Action  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <label>
+                                        <input type="checkbox" class="select-all">
+                                        <span></span>
+                                    </label>
+
+                                </th>
+
+                                <td>07/07/2020 </td>
+                                <td>11:20pm</td>
+                                <td>Bronx NY</td>
+                                <td>Smart Guy, Esq</td>
+                                <td>No Show</td>
+                                <td>YES</td>
+                                <td>No</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);"><i ></i>View</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Print</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Share</a></li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <label>
+                                        <input type="checkbox" class="select-all">
+                                        <span></span>
+                                    </label>
+
+                                </th>
+
+                                <td>07/07/2020 </td>
+                                <td>11:20pm</td>
+                                <td>Bronx NY</td>
+                                <td>Smart Guy, Esq</td>
+                                <td>No Show</td>
+                                <td>YES</td>
+                                <td>No</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);"><i ></i>View</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Print</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Share</a></li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <label>
+                                        <input type="checkbox" class="select-all">
+                                        <span></span>
+                                    </label>
+
+                                </th>
+
+                                <td>07/07/2020 </td>
+                                <td>11:20pm</td>
+                                <td>Bronx NY</td>
+                                <td>Smart Guy, Esq</td>
+                                <td>No Show</td>
+                                <td>YES</td>
+                                <td>No</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);"><i></i>View</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Print</a></li>
+                                        <li><a href="javascript:void(0);"><i ></i>Share</a></li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

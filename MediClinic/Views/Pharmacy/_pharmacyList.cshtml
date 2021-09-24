@@ -1,0 +1,59 @@
+﻿<div class="table-responsive">
+    <table id="myTableClaim" class="table dataTables_wrapper ">
+        <thead>
+            <tr class="uppercase">
+                <th>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                        <label class="custom-control-label" for="selectAll"></label>
+                    </div>
+                </th>
+                <th>PHARMACY NAME</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>PHONE</th>
+                <th>ADDRESS1</th>
+                <th>ADDRES2</th>
+                <th>ADDRESS3</th>
+
+                <th class="all">Action  </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="card" style="cursor: pointer">
+                    <th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="@item.P_ID">
+                            <label class="custom-control-label" for="@item.P_ID"></label>
+                        </div>
+                    </th>
+                    @*<td hidden>@item.P_ID</td>*@
+                    <td>@item.PharmacyName</td>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phone</td>
+                    <td>@item.AddressLine1</td>
+                    <td>@item.AddressLine2</td>
+                    <td>@item.AddressLine3</td>
+
+                    <td class="action">
+                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                            Options
+                            @*<span class="caret"></span>*@
+                        </button>
+                        <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                            @*<li><a href="javascript:void(0);">View</a></li>*@
+                            <li onclick="deletePhar(@item.P_ID,this)"><a href="javascript:void(0);">Delete</a></li>
+                            <li><a href="/Pharmacy/Add?id=@item.P_ID">Edit</a></li>
+                        </ul>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

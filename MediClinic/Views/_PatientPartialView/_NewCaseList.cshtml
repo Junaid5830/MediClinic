@@ -1,0 +1,24 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+
+@if (Model.addNewCaseTypeList != null)
+{
+
+    var lastItem = Model.addNewCaseTypeList.ToList();
+    foreach (var item in lastItem)
+    {
+        <div class="col s4 m4 mb-1">
+            <p>
+
+                <label>
+                    <input type="radio" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName" name="patientCaseTypeBasicDto.CaseTypeName" value="@item.NewCaseTypeName" />
+                    <span>@item.NewCaseTypeName</span>
+                </label>
+            </p>
+        </div>
+    }
+
+}
+
+

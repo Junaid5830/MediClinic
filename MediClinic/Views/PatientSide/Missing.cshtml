@@ -1,0 +1,115 @@
+﻿@model MediClinic.Models.PatientMissingViewModel
+
+@{
+    ViewData["Title"] = "Missing";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+@{
+    var NewId = ViewContext.RouteData.Values["id"];
+    var totalCountMissingFields = 0;
+    var remainderCountMissingFields = 0;
+}
+
+@section scripts{
+    <script>
+        var clickfrom = null;
+        function myFillNowFunction(controller,action,patientId,tabNo) {
+            debugger;
+            // var route = "@Url.Action("PatientInfo", "PatientSide", new {id=NewId})";
+            var route = "/" + controller + "/" + action + "/" + patientId + "/"  + "";
+            var Tabname = tabNo;
+            var uri = route + decodeURIComponent(Tabname);
+            window.location.href = uri;
+        }
+    </script>
+}
+
+@section styles {
+    <style>
+        .card .card-content{
+            padding:10px 24px !important;
+        }
+        .card{
+            height:250px !important;
+            max-height:250px !important;
+        }
+        .chip {
+            background-color: #ff9494 !important;
+            color: #fff !important;
+            cursor:pointer;
+        }
+    </style>
+
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6 ">
+                <h5 class="breadcrumbs-title color-blue mt-0">Missing(Incomplete Forms)</h5>
+            </div>
+
+            @*<div class="col s6 m6 ">
+                    <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="/Home/visits">
+                        <i class="material-icons  right arrow-icon">arrow_back</i>
+
+                    </a>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div class="row white">
+    <div class="col  s12">
+        <div class="row">
+            @if (!(Model.PatientMissingsListDto is null) && Model.PatientMissingsListDto.Count > 0)
+            {
+                foreach (var item in Model.PatientMissingsListDto)
+                {
+                    <div class="col s6 m6 l3">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <h6 class="card-title">@item.CardHeading</h6>
+                                    </div>
+                                    <div class=" col s12">
+                                        @{var internalLoopCounter = 0;  remainderCountMissingFields = 0;}
+                                        @{ totalCountMissingFields = item.MissingFieldsList.Count;}
+                                        @foreach (var itemm in item.MissingFieldsList)
+                                        {
+                                            remainderCountMissingFields++;
+
+                                            if (remainderCountMissingFields <= 3)
+                                            {
+                                                <div class="chip " onclick="myFillNowFunction('@item.ControllerName','@item.ActionName',@item.PatientId,'@item.TabNumber');">
+                                                    @itemm
+                                                </div>
+                                                internalLoopCounter++;
+                                            }
+                                        }
+                                        @{var moreItems = totalCountMissingFields - internalLoopCounter; }
+                                        <a>More @moreItems</a>
+                                    </div>
+                                    <div class="col s12 padding-top-20">
+                                        <a class="btn add-btn" onclick="myFillNowFunction('@item.ControllerName','@item.ActionName',@item.PatientId,'@item.TabNumber');">
+                                            Complete Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            }
+
+        </div>
+
+
+    </div>
+
+</div>

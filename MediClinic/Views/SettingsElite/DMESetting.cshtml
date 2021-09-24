@@ -1,0 +1,703 @@
+﻿@model DmeInvetoryViewModel
+@{
+    ViewData["Title"] = "DMESetting";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+     /*   .nav {
+            display: block ruby !important;
+            height: 64px;
+            overflow-y: auto
+        }*/
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        .tab-content .container {
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        h3, h4 {
+            color: #333 !important
+        }
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">DME Setting</h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" href="@Url.Action("Setting","SettingsElite")" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"> <span class="hidden-xs-down">INVENTORY</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><span class="hidden-xs-down"></span>DME/SUPPLIES MANUFACTURES</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><span class="hidden-xs-down"></span>MAKE & NAME Model</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><span class="hidden-xs-down"></span>ITEM GROUPS</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab5" role="tab"><span class="hidden-xs-down"></span>DENOMINATION & DURATION </a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab6" role="tab"><span class="hidden-xs-down"></span>REMINDERS & NOTIFICATIONS </a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab7" role="tab"><span class="hidden-xs-down"></span>DUE DATES  </a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab8" role="tab"><span class="hidden-xs-down"></span>RENTAL OPTIONS</a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-md-2" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Inventory List</h5>
+                                </div>
+
+                                <div class="col-md-10 text-align">
+
+                                    <a href="@Url.Action("AddDMEInventory","DMEInventory")" class="btn  float-right add-btn set_smallscreen">
+                                        Add New Inventory Item
+                                    </a>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row tablee">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="inventoryItemGrid" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>Item Description</th>
+                                                <th>Manufacturar</th>
+                                                <th>Make/Name</th>
+                                                <th>Model</th>
+                                                <th>Serial Number</th>
+                                                <th>Stock Number</th>
+                                                <th>Total Inventory Quantity</th>
+                                                <th>Existing Inventory Quantity</th>
+                                                <th>Sub Group of</th>
+                                                <th>CPT Code</th>
+                                                <th>Actions</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.DmeInventoryList)
+                                            {
+                                            <tr class="card">
+                                                <td>@item.ItemDescription</td>
+                                                <td>@item.Manufacture.Manufactures</td>
+                                                <td>@item.MakeNameModel.Make</td>
+                                                <td>@item.Model</td>
+                                                <td>@item.SerialNumber</td>
+                                                <td>@item.StockNumber</td>
+                                                <td>@item.TotalInventoryQuantity</td>
+                                                <td>@item.ExistingQuantity</td>
+                                                @if (!(item.SubGroupOf is null))
+                                                {
+                                                    <td>@item.SubGroupOfNavigation.GroupName</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>N/A</td>
+                                                }
+
+                                                <td>@item.CPTCodeNavigation.CPTCode</td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li onclick="Delete_Inventory(@item.Id,this)"><a href="javascript:void(0)">Delete</a></li>
+                                                        <li><a href="/SettingsElite/AddInventory/@item.Id">Edit</a></li>
+                                                        <li><a href="javascript:void(0)">View</a></li>
+                                                    </ul>
+                                                </td>
+
+                                            </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="tab-pane  p-20" id="tab2" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-md-2" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Manufacturer List</h5>
+                                </div>
+
+                                <div class="col-md-10 text-align">
+
+                                    <a asp-action="AddManufacturer" class="btn  float-right add-btn set_smallscreen">
+                                        Add New Manufacturer
+                                    </a>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row tablee">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="manufacturerGrid" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>Manufacturer</th>
+                                                <th>Address</th>
+                                                <th>Phone Number</th>
+                                                <th>Email</th>
+                                                <th>Fax</th>
+                                                <th>Action</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.DmeManufacturesList)
+                                            {
+                                                <tr class="card">
+                                                  
+                                                    <td>@item.Manufactures</td>
+                                                    <td>@item.AddressLine @item.AddressLine2 @item.AddressLine3</td>
+                                                    <td>@item.PhoneNumber</td>
+                                                    <td>@item.Email</td>
+                                                    <td>@item.Fax</td>
+
+                                                    <td class="action">
+                                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                            Options
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                            <li onclick="Delete_Manufacture(@item.Id,this)"><a href="javascript:void(0)">Delete</a></li>
+                                                            <li><a href="/SettingsElite/AddManufacturer/@item.Id">Edit</a></li>
+                                                            <li><a href="javascript:void(0)">View</a></li>
+                                                        </ul>
+                                                    </td>
+
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab3" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-md-2" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Make/Name List</h5>
+                                </div>
+
+                                <div class="col-md-10 text-align">
+
+                                    <a asp-action="AddMakeName" class="btn  float-right add-btn set_smallscreen">
+                                        Add New Make/Name
+                                    </a>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row tablee">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="makeNameGrid" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>Make</th>
+                                                <th>Name</th>
+                                                <th>Model</th>
+                                                <th>Action</th>
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.MakeNameModelList)
+                                            {
+                                                <tr class="card">
+                                                    <td>@item.Make</td>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Model</td>
+
+                                                    <td class="action">
+                                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                            Options
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                            <li onclick="Delete_MakeName(@item.Id,this)"><a href="javascript:void(0)">Delete</a></li>
+                                                            <li><a href="/SettingsElite/AddMakeName/@item.Id">Edit</a></li>
+                                                            <li><a href="javascript:void(0)">View</a></li>
+                                                        </ul>
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab4" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-md-2" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Group List</h5>
+                                </div>
+
+                                <div class="col-md-10 text-align">
+
+                                    <a href="@Url.Action("AddItemGroup","DMEitemgroup")" class="btn  float-right add-btn set_smallscreen">
+                                        Add New Group
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row tablee">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="groupGrid" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>Group#</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Actions</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (!(Model.dMEGroupitemList is null))
+                                            {
+                                                @foreach (var item in Model.dMEGroupitemList)
+                                                {
+                                                    <tr class="card">
+
+                                                        <td>@item.DMEGroupId</td>
+                                                        <td>@item.GroupName</td>
+                                                        <td>@item.GroupDescription</td>
+
+                                                        <td class="action">
+                                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                                Options
+                                                                <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                                <li onclick="Delete_Group(@item.DMEGroupId,this)"><a href="javascript:void(0)">Delete</a></li>
+                                                                @*<li><a href="/SettingsElite/AddManufacturer/@item.DMEGroupId">Edit</a></li>*@
+                                                                <li onclick="ViewGroupitems(@item.DMEGroupId)"><a href="javascript:void(0)">View</a></li>
+                                                            </ul>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            }
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab5" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-md-2" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">DENOMINATION & DURATION List</h5>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Week To Days</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FirstName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Month To Days</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LastNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LastName" data-toggle="toggle" />
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Days To Week</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FirstName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Days To Month</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LastNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LastName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Year To Days</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FirstName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Convert Year To Exact Months,Weeks & Days</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LastNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LastName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab6" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col" margin-top-8">
+                                    <h5 class="breadcrumbs-title color-blue">Reminders & Notifications</h5>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Delivery Reminder With 48 HRS From The Script</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3">
+                                <div class="switch">
+                                    <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FirstName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-3">
+
+                                <div class="switch">
+                                    <input type="checkbox" id="LastNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LastName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab7" role="tabpanel"></div>
+                    <div class="tab-pane  p-20" id="tab8" role="tabpanel"></div>
+
+
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="GroupItemModel" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Group Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn Recreate waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        function ViewGroupitems(GroupId) {
+            $.post("/DMEitemgroup/groupitemList", { Id: GroupId }).done(function (data) {
+                debugger;
+                $("#GroupItemModel .modal-body").html('');
+                $("#GroupItemModel .modal-body").html(data);
+                $("#GroupItemModel").modal('show');
+            });
+
+        }
+        $(function () {
+            $('#inventoryItemGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                ///  'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+            $('#manufacturerGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                // 'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+            $('#makeNameGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                // 'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+            $('#groupGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                // 'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+
+        });
+
+    </script>
+    <script>
+
+
+        function Delete_Inventory(Id, event) {
+            debugger;
+            event.closest('tr').remove();
+            $.post("/DMEInventory/DeleteInventory", { Id: Id }).done(function (data) {
+                debugger;
+                if (data.result) {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Deleted Successfully',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Some Error',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+            });
+}
+        function Delete_MakeName(Id, event) {
+            debugger;
+            event.closest('tr').remove();
+            $.post("/SettingsElite/DeleteMakeName", { Id: Id }).done(function (data) {
+                debugger;
+                if (data.result) {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Deleted Successfully',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Some Error',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+            });
+
+        }
+        function Delete_Manufacture(Id, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.post("/SettingsElite/DeleteManufacturer", { Id: Id }).done(function (data) {
+                debugger;
+                if (data.result) {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Deleted Successfully',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Some Error',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+            });
+
+        }
+
+    </script>
+}
+

@@ -1,0 +1,1129 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MediClinic.Models
+@model DashbordViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    string[] arr = { "#0000FF", "#6610f2", "#0000FF", "#CC00CC ", "#003399", "#996600" };
+    int index;
+}
+
+@section styles{
+    <link href="~/Elite/_node_modules/css-chart/css-chart.css" rel="stylesheet" />
+    <style>
+        .index-Select .form-control {
+            border: 1px solid #3248d1 !important;
+            border-radius: 40px !important;
+            height: 2rem !important;
+            margin: 8px 0 0px 0;
+            color: #3248d1 !important;
+            font-size: 12px;
+            text-align: center !important;
+            min-height: 1.8rem !important;
+        }
+
+        .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn), .table-box {
+            width: 90% !important;
+        }
+
+        .bootstrap-select .dropdown-menu li a:focus, .bootstrap-select .dropdown-menu li a {
+            color: #6b6f82 !important;
+            padding: 11px 9px !important;
+            font-size: 15px !important;
+        }
+
+        .dropdown-item.active, .dropdown-item:active {
+            color: #fff;
+            background-color: #f8f9fa !important;
+        }
+
+        .btn-light.focus, .btn-light:focus, .btn-light:not(:disabled):not(.disabled).active:focus, .btn-light:not(:disabled):not(.disabled):active:focus, .show > .btn-light.dropdown-toggle:focus {
+            box-shadow: none !important;
+            outline: none !important;
+        }
+
+
+
+        .bootstrap-select .dropdown-toggle:focus {
+            outline: 0px !important;
+        }
+
+        .filter-option-inner-inner {
+            font-size: 13px !important;
+        }
+
+        .index-Select .dropdown-toggle {
+            height: 33px !important;
+        }
+
+        .index-Select .filter-option {
+            padding-top: 5px !important;
+        }
+
+        .dot-squre {
+            height: 13px;
+            width: 13px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .value-set {
+            margin: 25px 0 !important;
+        }
+
+        .badge-box {
+            padding: 2px;
+            border-radius: 2px;
+            height: 25px;
+            width: 25px;
+            text-align: center;
+            display: inline-block;
+            background-color: #eff0f0 !important;
+        }
+
+        .add-template {
+            color: #3248d1 !important;
+        }
+
+            .add-template span {
+                font-size: 15px !important;
+                font-weight: 400;
+            }
+
+        .set_iconsAlign i {
+            margin-right: 15px;
+            font-size: 24px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            display: inline-block;
+            white-space: nowrap;
+            letter-spacing: normal;
+            text-transform: none;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            background-color: white;
+            font-feature-settings: 'liga';
+            float: left !important;
+        }
+        /*.dropdown-menu.show {
+         min-width:unset !important;
+            transform: none !important;
+        }*/
+
+        #card-stats i {
+            font-size: 24px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            display: inline-block;
+            white-space: nowrap;
+            letter-spacing: normal;
+            text-transform: none;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            background-color: white;
+            font-feature-settings: 'liga';
+            float: left !important;
+            float: right !important;
+            margin-right: 10px;
+        }
+
+        #card-stats {
+            padding-top: 25px;
+        }
+
+            #card-stats .card {
+                border-radius: 5px !important;
+                box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            }
+
+        .doc-cen {
+            padding-left: 9px !important;
+        }
+
+        .dasboard-icon {
+            padding: 14px;
+            border-radius: 4px !important;
+            background: #3248d1 !important;
+        }
+
+        .white-text {
+            color: #fff !important;
+        }
+
+        .padding-4 {
+            padding: 4% !important;
+        }
+
+        #card-stats p {
+            margin-top: 1rem !important;
+        }
+
+      /*  .More_information {
+            margin-top: 22px;
+            margin-bottom: 22px;
+        }*/
+
+        .waiting-center h6 {
+            color: #d13276 !important;
+            font-size: 1.15rem;
+            line-height: 110%;
+            margin: .575rem 0 .46rem 0;
+            font-weight: 300 !important;
+        }
+
+        .waiting-center p {
+            color: #6b6f82;
+        }
+
+        .waiting-center {
+            text-align: center !important;
+        }
+
+        .progress {
+            background-color: #e2e2e2 !important;
+            position: relative;
+            display: block;
+            overflow: hidden;
+            width: 100%;
+            height: 4px;
+            margin: .5rem 0 1rem 0;
+            border-radius: 2px;
+        }
+
+            .progress .determinate {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transition: width .3s linear;
+                background-color: #3248d1 !important;
+            }
+
+        @@media(max-width: 768px) {
+            .set_768 {
+                float: left !important;
+                margin-top: 26px !important;
+                width: 95% !important;
+            }
+        }
+
+        set_dropdown .dropdown-menu.show {
+            min-width: -webkit-fill-available !important;
+            top: 30px !important;
+            transform: none !important;
+            max-height: 186px !important;
+        }
+
+        .set_dropdown .inner.show {
+            overflow-y: hidden !important;
+            min-height: initial !important;
+            max-height: initial !important;
+        }
+    </style>
+    @*<style>
+            .set_dropdown .dropdown-toggle {
+                border: 1px solid #3248d1 !important;
+                border-radius: 40px !important;
+                height: 2rem;
+                color: #3248d1 !important;
+                font-size: 12px;
+                box-shadow: none !important;
+                background-color: #fff !important
+            }
+
+            .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+                text-align: center;
+                /*color: #6b6f8d !important*/
+            }
+
+            .dot-set .dot {
+                height: 10px !important;
+                width: 10px !important
+            }
+
+            .index-Select .form-control {
+                border: 1px solid #3248d1 !important;
+                border-radius: 40px !important;
+                height: 2rem !important;
+                margin: 8px 0 0px 0;
+                color: #3248d1 !important;
+                font-size: 12px;
+                text-align: center !important;
+                min-height: 1.8rem !important;
+            }
+
+            .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn), .table-box {
+                width: 90% !important;
+            }
+
+            .bootstrap-select .dropdown-menu li a:focus, .bootstrap-select .dropdown-menu li a {
+                color: #6b6f82 !important;
+                padding: 11px 9px !important;
+                font-size: 15px !important;
+            }
+
+            .dropdown-item.active, .dropdown-item:active {
+                color: #fff;
+                background-color: #f8f9fa !important;
+            }
+
+            .btn-light.focus, .btn-light:focus, .btn-light:not(:disabled):not(.disabled).active:focus, .btn-light:not(:disabled):not(.disabled):active:focus, .show > .btn-light.dropdown-toggle:focus {
+                box-shadow: none !important;
+                outline: none !important;
+            }
+
+
+
+            .bootstrap-select .dropdown-toggle:focus {
+                outline: 0px !important;
+            }
+
+            .filter-option-inner-inner {
+                font-size: 13px !important;
+            }
+
+            .index-Select .dropdown-toggle {
+                height: 33px !important;
+            }
+
+            .index-Select .filter-option {
+                padding-top: 5px !important;
+            }
+
+            .dot-squre {
+                height: 13px;
+                width: 13px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+
+            .value-set {
+                margin: 3px 0 18px !important;
+            }
+
+            .badge-box {
+                padding: 2px;
+                border-radius: 2px;
+                height: 20px;
+                width: 20px;
+                margin-right: 5px;
+                text-align: center;
+                font-size: 12px;
+                display: inline-block;
+                color: #fff !important;
+            }
+
+            .add-template {
+                color: #547cea !important
+            }
+
+                .add-template span {
+                    font-size: 15px !important;
+                    font-weight: 400;
+                }
+
+            .set_iconsAlign i {
+                margin-right: 15px;
+                font-size: 24px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1;
+                display: inline-block;
+                white-space: nowrap;
+                letter-spacing: normal;
+                text-transform: none;
+                direction: ltr;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+                background-color: white;
+                font-feature-settings: 'liga';
+                float: left !important;
+            }
+            /*.dropdown-menu.show {
+             min-width:unset !important;
+                transform: none !important;
+            }*/
+
+            #card-stats i {
+                font-size: 18px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1;
+                display: inline-block;
+                white-space: nowrap;
+                letter-spacing: normal;
+                text-transform: none;
+                direction: ltr;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+                background-color: white;
+                font-feature-settings: 'liga';
+                float: right !important;
+                margin: 7px 10px;
+            }
+
+            #card-stats i {
+                font-size: 18px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1;
+                display: inline-block;
+                white-space: nowrap;
+                letter-spacing: normal;
+                text-transform: none;
+                direction: ltr;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+                background-color: white;
+                font-feature-settings: 'liga';
+                float: right !important;
+                margin: 7px 10px;
+            }
+
+            #card-statss .mdi {
+                font-size: 18px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1;
+                display: inline-block;
+                white-space: nowrap;
+                letter-spacing: normal;
+                text-transform: none;
+                direction: ltr;
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
+                background-color: #547cea !important;
+                font-feature-settings: 'liga';
+                color: #fff !important;
+                float: right !important;
+                margin: 7px 23px;
+                padding: 12px;
+                font-size: 17px;
+                border-radius: 50%;
+            }
+
+
+            #card-stats {
+                padding-top: 25px;
+            }
+
+                #card-stats .card {
+                    border-radius: 5px !important;
+                    box-shadow: 4px 4px 20px -6px #e2e2e2 !important;
+                    padding: 4px 10px;
+                    border: 1px solid #e2e2e2 !important;
+                }
+
+            #card-statss .card {
+                border-radius: 5px !important;
+                box-shadow: 4px 4px 20px -6px #e2e2e2 !important;
+                padding: 10px 10px;
+                border: 1px solid #e2e2e2 !important;
+            }
+
+            .doc-cen {
+                padding-left: 9px !important;
+            }
+
+            .dasboard-icon {
+                padding: 10px;
+                border-radius: 4px !important;
+                background: #547cea !important;
+            }
+            .white-text {
+                color: #fff !important;
+            }
+            .padding-4 {
+                padding: 4% !important;
+            }
+
+            #card-stats p {
+                margin-top: 1rem !important;
+            }
+           /* .More_information {
+                margin-top: 22px;
+                margin-bottom: 22px;
+            }*/
+            .waiting-center h6 {
+                color: #d13276 !important;
+                font-size: 1.15rem;
+                line-height: 110%;
+                margin: .575rem 0 .46rem 0;
+                font-weight: 300 !important;
+            }
+            .waiting-center p {
+                color: #6b6f82;
+            }
+            .waiting-center {
+                text-align: center !important;
+            }
+            .progress {
+                background-color: #e2e2e2 !important;
+                position: relative;
+                display: block;
+                overflow: hidden;
+                width: 100%;
+                height: 4px;
+                margin: .5rem 0 1rem 0;
+                border-radius: 2px;
+            }
+            .progress .determinate {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                transition: width .3s linear;
+                background-color: #5b889b !important;
+            }
+
+            @@media(max-width: 768px) {
+                .set_768 {
+                    float: left !important;
+                    margin-top: 26px !important;
+                    width: 95% !important;
+                }
+            }
+            set_dropdown .dropdown-menu.show
+            {
+                min-width:  !important;
+                top: 30px !important;
+                transform: none !important;
+                max-height: 186px !important;
+            }
+            .set_dropdown .inner.show
+            {
+                overflow-y: hidden !important;
+                min-height: initial !important;
+                max-height: initial !important;
+            }
+            canvas#chart4
+            {
+                height: 180px !important;
+                width: 200px !important;
+                margin-top: 20px !important;
+            }
+            #card-statss h5 {
+                margin: 0 !important
+            }
+            #card-statss p {
+                margin: 0 !important
+            }
+            .card .table
+            {
+                border-collapse: collapse !important;
+            }
+            #patientdivision .mdi-arrow-down-bold {
+                color: orangered;
+                font-size: 20px;
+            }
+            #patientdivision .mdi-arrow-up-bold {
+                color: greenyellow;
+                font-size: 20px;
+            }
+            #patientdivision table thead tr {
+                background: #547cea !important;
+                color: #fff !important;
+            }
+            .badge-box{
+                color:black;
+            }
+        </style>*@
+}
+@section scripts{
+    <script src="~/Elite/_node_modules/Chart.js/chartjs.init.js"></script>
+    <script src="~/Elite/_node_modules/Chart.js/Chart.min.js"></script>
+    <script>
+        var browserStatsChartOptions = {
+            cutoutPercentage: 70,
+            legend: {
+                display: false
+            }
+        };
+        new Chart(document.getElementById("chart4"),
+            {
+                "type": "doughnut",
+                "options": browserStatsChartOptions,
+                "data": {
+                    "labels": ["Past Due", "Due In", "Due With", "Coming Up Oppointments", " Missing-Open Tasks", "Tasks", "Legal", "Other"],
+                    "datasets": [{
+
+                        "data": [7, 9, 1, 8, 15, 10, 8, 2],
+                        "backgroundColor": ["#4523f5", "#f5a623", "#7ed321", "#50e3c2", "#4a90e2", "#9013fe", "#fe133a", "#2df6fe"]
+                    }
+                    ]
+                }
+            });
+    </script>
+}
+<!--<div class="page-wrapper">
+    <!-- ==============================================================
+     Container fluid
+     ==============================================================
+    <div class="container mt-2 mb-2">
+        <div  class="row set_dropdown mb-3">
+            <div class="col-sm-12 col-md-3 col-lg-3 ">
+                <h3>Reminders</h3>
+            </div>-->
+<!--<div  class="col-sm-6 col-md-2 col-lg-2 col">
+        <select class="selectpicker">
+            <option>5 Days</option>
+            <option>10 Days</option>
+            <option>15 Days</option>
+            <option>20 Days</option>
+        </select>
+
+    </div>
+    <div class="col-sm-6 col-md-2 col-lg-2 col">
+        <select class="selectpicker ">
+            <option>14 Hours</option>
+            <option>24 Hours</option>
+            <option>48 Hours</option>
+            <option>72 Hours</option>
+        </select>
+    </div>
+    <div class="col-lg-5 col-sm-12 col-md-5 ">
+        <div class="form-group set_768" style="width:70% ; border-radius: 5px !important; float:right;">
+            <div class="input-group mb-3">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-md-6 col-lg-3">
+        <div class="wrraper_chart" style="margin-top: -25px;    ">
+            <canvas id="chart4" height="200" width="230"> </canvas>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-3">
+            <a href="/Appointment/PatientCalendar/55"><p class="value-set" style="margin-top: 7px !important; color:#6b6f82;"><span class="badge-box" style="background-color: #50e3c2">@Model.Dashboarcount.today_total_patient</span>Totall Appoinments</p></a>
+            <p class="value-set"><span class="badge-box" style="background-color: #9013fe">@Model.Dashboarcount.today_total_patient_check_In</span>Check In Patients</p>
+            <p class="value-set"><span class="badge-box" style="background-color: #fe133a">@Model.Dashboarcount.today_total_patient_check_Out</span>Check Out Patients</p>
+            <p class="value-set"><span class="badge-box" style="background-color: #7ed321">@Model.Dashboarcount.today_total_patient_cancelled</span>Cancelled</p>
+    </div>
+    <div class="col-md-3">
+        <div id="card-statss">
+            <a href="@Url.Action("Employeelist","Employee")">
+                <div class="card animate fadeLeft">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                            <div class="icon-set">
+                                <i class="mdi mdi-account-multiple left"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 mt-2">
+                            <h5>
+                                @Model.Dashboarcount.EmployeeCount
+                            </h5>
+                            <p>Employee</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="@Url.Action("AssistantList","Assistant")">
+                <div class="card  animate fadeLeft">
+                    <div class="row">
+
+                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                            <div class="icon-set">
+                                <i class="mdi mdi-account-multiple left"></i>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 mt-2">
+                            <h5>@Model.Dashboarcount.TotalAssisstan</h5>
+                            <p>Assisstant</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="card-statss">
+            <a href="@Url.Action("PatientList","PatientsideElite")">
+                <div class="card animate fadeLeft">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                            <div class="icon-set">
+                                <i class="mdi mdi-account-multiple left"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 mt-2"   style="color:#6b6f82;">
+                            <h5>
+                                @Model.Dashboarcount.PatientCount
+                            </h5>
+                            <p>Total Patient</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a href="@Url.Action("ProviderEliteList","Provider")">
+                <div class="card  animate fadeLeft">
+                    <div class="row">
+
+                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                            <div class="icon-set">
+                                <i class="mdi mdi-account-multiple left"></i>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 mt-2">
+                            <h5>@Model.Dashboarcount.ProviderCount</h5>
+                            <p>Total Provider</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>-->
+<!--</div>
+        <div class="section MarginP" style="padding: .5rem 0;">
+            <h3>
+                Details Information
+            </h3>
+            <div class="row dot-set">
+                @if (Model.departmentsDto != null)
+                {
+                    @foreach (var dep in Model.departmentsDto)
+                    {
+                        Random rand = new Random();
+                        index = rand.Next(arr.Length);
+                        <div class="col-sm-12 col-md-6 col-lg-3 ">
+                            <p><span class="dot" style="background-color:@arr[index];"></span> @dep.DepName <span class="badge-box float-right">10</span></p>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div class="section" style="padding: .5rem 0;">
+
+            <h3>Departments</h3>
+
+            <div class="row waiting-center">
+                @if (Model.departmentsDto != null)
+                {
+                    @foreach (var item in Model.departmentsDto)
+                    {
+                        <div class="col-sm-4 col-md-4  col-lg-1 col">
+                            <h6>0</h6>
+                            <p>@item.DepName</p>
+                            <div class="progress">
+                                <div class="determinate" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <div id="card-stats">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card animate fadeLeft">
+                        <div class="row">
+
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Profits &amp; Loss</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4  col right-align pr-0">
+                                <div>   <i class="mdi mdi-trending-up gradient-45deg-light-blue-cyan white-text dasboard-icon "></i></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card  animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Pending Claims</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-file-document-box gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Document Center</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-folder gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Pending Invoices</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-file-document-box gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+-->
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container">
+
+        <div class="row set_dropdown">
+            <div class="col-sm-12 col-md-3 col-lg-3 ">
+                <h3 class="color-blue">Reminders</h3>
+            </div>
+
+            <div class="col-sm-6 col-md-2 col-lg-2 col">
+                <select class="selectpicker index-Select">
+                    <option>5 Days</option>
+                    <option>10 Days</option>
+                    <option>15 Days</option>
+                    <option>20 Days</option>
+                </select>
+
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2 col">
+                <select class="selectpicker index-Select">
+                    <option>14 Hours</option>
+                    <option>24 Hours</option>
+                    <option>48 Hours</option>
+                    <option>72 Hours</option>
+                </select>
+
+            </div>
+            <div class="col-lg-5 col-sm-12 col-md-5 ">
+                <div class="form-group set_768" style="width:70% ; border-radius: 5px !important; float:right;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon11" style="		background-color: #fff !important;
+"><i class="ti-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control set_Place" placeholder="Search In Messages" aria-label="Username" aria-describedby="basic-addon11">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-3">
+
+
+                <div class="wrraper_chart" style="margin-top: -25px;    ">
+                    <canvas id="chart4" height="265" width="295"> </canvas>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-6 col-md-6 col-lg-3">
+                <p class="value-set" style="		margin-top: 7px !important;
+"><span class="dot-squre" style="border: 1px solid #7f00ff;"></span> Past Due<span class="badge-box   float-right">7</span></p>
+                <p class="value-set"><span class="dot-squre" style="border:1px solid orange;"></span> Due In<span class="badge-box   float-right">9</span></p>
+                <p class="value-set"><span class="dot-squre" style="border:1px solid green;"></span> Due Within<span class="badge-box   float-right">1</span></p>
+                <p class="value-set"><span class="dot-squre" style="border:1px solid skyblue;"></span> Coming Up Oppointments<span class="badge-box   float-right">8</span></p>
+                <p class="value-set">
+                    <span class="dot-squre" style=" border: 1px solid blue; "></span> Missing-One Tast<span class="badge-box float-right">10</span>
+                </p>
+
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3">
+                <p class="value-set" style="		margin-top: 7px !important;
+"><span class="dot-squre" style="border:1px solid blue;"></span> Task<span class="badge-box float-right">12</span></p>
+                <p class="value-set"><span class="dot-squre" style="border:1px solid Red;"></span> Legal<span class="badge-box float-right">20</span></p>
+                <p class="value-set"><span class="dot-squre" style="border:1px solid orange;"></span> Other<span class="badge-box float-right">5</span></p>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 set_iconsAlign">
+                <a href="javascrip:void(0);" class="add-template value-set">
+                    <i class="mdi mdi-plus"></i><Span>Add New Template</Span>
+                </a>
+                <p class="value-set"><i class="mdi mdi-message-reply-text add-template"></i>  Message Center<span class="badge-box float-right">9</span></p>
+                <p class="value-set"><i class="mdi mdi-email-open add-template"></i> Fax Center<span class="badge-box float-right">1</span></p>
+                <p class="value-set"><i class="mdi mdi-email add-template"></i> Email Center<span class="badge-box float-right">8</span></p>
+                <p class="value-set"><i class="mdi mdi-alert-circle add-template"></i>Issues/Attention<span class="badge-box float-right">10</span></p>
+            </div>
+
+
+
+
+
+        </div>
+        <div id="card-stats">
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card  padding-4 animate fadeLeft">
+                        <div class="row">
+
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Profits &amp; Loss</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4  col right-align pr-0">
+                                <div>   <i class="mdi mdi-trending-up gradient-45deg-light-blue-cyan white-text dasboard-icon "></i></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card padding-4  animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Pending Claims</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-file-document-box gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card padding-4 animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Document Center</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-folder gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                    <div class="card  padding-4  animate fadeLeft">
+                        <div class="row">
+                            <div class="col-sm-8 col-md-8 col doc-cen">
+                                <p>Pending Invoices</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col right-align pr-0">
+                                <i class="mdi mdi-file-document-box gradient-45deg-light-blue-cyan white-text dasboard-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section MarginP" style="padding: .5rem 0;">
+            <h5 class="color-blue" style="font-size: 1.64rem;
+    line-height: 110%;
+    margin: .82rem 0 .656rem 0;     font-weight: 400;">
+                Details Information
+            </h5>
+            <div class="row More_information">
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:red;"></span> Checked In <span class="badge-box float-right">10</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:green;"></span> Available Providers<span class="badge-box float-right">2</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:blue;"></span> In ICU<span class="badge-box float-right">10</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:deeppink;"></span> In Triaj<span class="badge-box float-right">2</span></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:red;"></span> In Session<span class="badge-box float-right">8</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:deeppink;"></span> Available Rooms<span class="badge-box float-right ">15</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:green;"></span> In Surgery<span class="badge-box float-right">8</span></p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-3 ">
+                    <p><span class="dot" style="background-color:blue;"></span> In Somewhere<span class="badge-box float-right">15</span></p>
+                </div>
+            </div>
+
+        </div>
+        <div class="section" style="padding: .5rem 0;">
+
+            <h5 style="font-size: 1.64rem;
+    line-height: 110%;
+    margin: .82rem 0 .656rem 0;     font-weight: 400;">
+                Waiting for
+            </h5>
+            <div class="row waiting-center">
+                <div class="col-sm-4 col-md-4 col-lg-1 col">
+                    <h6>142</h6>
+                    <p>PT</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>12</h6>
+                    <p>PSY</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 20%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-1 col">
+                    <h6>4</h6>
+                    <p>CHIR</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div> <div class="col-sm-4 col-md-4 col-lg-1 col">
+                    <h6>5</h6>
+                    <p>ACU</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>8</h6>
+                    <p>TEST</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 15%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-1 col">
+                    <h6>9</h6>
+                    <p>DR</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 15%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>156</h6>
+                    <p>CONSULT</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-2 col">
+                    <h6>12</h6>
+                    <p>TRANSPORT</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 40%"></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>5</h6>
+                    <p>PMNR</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>20</h6>
+                    <p>ORTHO</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>142</h6>
+                    <p>PT</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 60%"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row waiting-center">
+                <div class="col s4 m4 l1">
+                    <h6>15</h6>
+                    <p>DME</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-2 col">
+                    <h6>5</h6>
+                    <p>RADIOLOGY</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>44</h6>
+                    <p>RX</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 55%"></div>
+                    </div>
+                </div> <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>142</h6>
+                    <p>LEGAL</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>10</h6>
+                    <p>XYZ</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>7</h6>
+                    <p>RX1</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 25%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>82</h6>
+                    <p>XYZ</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>44</h6>
+                    <p>XYZ</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>8</h6>
+                    <p>XYZ</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>4</h6>
+                    <p>XYZ</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4  col-lg-1 col">
+                    <h6>142</h6>
+                    <p>PT</p>
+                    <div class="progress">
+                        <div class="determinate" style="width: 70%"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>

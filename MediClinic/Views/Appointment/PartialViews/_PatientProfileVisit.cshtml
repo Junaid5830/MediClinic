@@ -1,0 +1,162 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var RoleType = _sessionManager.GetRoleId();
+}
+
+<h4 class="color-blue">Patient Detail</h4>
+<div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-2">
+        @if (Model.patientCompleteInfo.PaitentImage != null)
+        {
+            <img src="~/images/@Model.patientCompleteInfo.PaitentImage" alt="patient" class=" patient-image circle" style="border:2px solid @Model.patientCompleteInfo.Color">
+        }
+        else
+        {
+            <div class="circle FLName" style="border:2px solid @Model.patientCompleteInfo.Color">
+                <h3 class="color-blue">@Model.patientCompleteInfo.FirstNameLetter@Model.patientCompleteInfo.LastNameLetter</h3>
+            </div>
+
+        }
+    </div>
+    <div class="col-sm-9 col-md-9 col-lg-9 col-xl-10 patientdataheight">
+        <div class="row">
+            <div class="col-4 col-sm-3 col-md-3">
+                <p class=" mb-0">Patient ID</p>
+                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PatientInfoId </p>
+            </div>
+           
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Name</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.FirstName  @Model.patientCompleteInfo.LastName</p>
+                    </div>
+              
+            
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class="mb-0">Birthday</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")</p>
+                    </div>
+              
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class="mb-0">Address</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.AddressLine1</p>
+                    </div>
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Gender</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.Gender</p>
+                    </div>
+               
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class="mb-0">Mobile Phone</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.MobilePhone</p>
+                        @if (!Model.patientCompleteInfo.MobilePhone.Equals("N/A"))
+                        {
+                            <input type="hidden" id="phoneNo" value="@Model.patientCompleteInfo.MobilePhone" />
+                        }
+                    </div>
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class="mb-0">Home Phone</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.HomePhone</p>
+
+                    </div>
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Emergency Phone</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.EmergencyPhone</p>
+                    </div>
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class="mb-0">Language</p>
+                        <p class="mt-0 black-text font-weight-600" style="word-wrap:break-word;">@Model.patientCompleteInfo.LanguageName</p>
+                    </div>
+               
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Case Type</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CaseTypeName </p>
+                    </div>
+               
+                <input type="hidden" id="PatientEmail" value="@Model.patientCompleteInfo.Email" />
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Claim  No</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PatientClaimID</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Policy Number</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PolicyNumber</p>
+                    </div>
+                <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">P.I. Attorney</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.AttorneyName</p>
+                    </div>
+               
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Paralegal</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.LeadingParalegalName</p>
+                    </div>
+               
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Collection Attorney</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CollectionAttorney</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Referral Name</p>
+                        <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.ReferralName</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Current Location In facility</p>
+                        <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">I.M.E</p>
+                        <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                    </div>
+              
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">E.U.O</p>
+                        <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Primary Dr</p>
+                        <p class=" mt-0 font-weight-600 black-text">John SMith MD</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Dispatch</p>
+                        <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                    </div>
+                
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Assign Transport</p>
+                        <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                    </div>
+               
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Route Options</p>
+                        <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                    </div>
+              
+                 
+               
+                
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

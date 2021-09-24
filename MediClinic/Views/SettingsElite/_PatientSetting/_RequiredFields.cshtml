@@ -1,0 +1,174 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+<div class="card">
+    <div class="card-content">
+
+        <h5 class="color-blue">Required Fields</h5>
+        <input type="hidden" id="UserIdHidden" asp-for="PatientRequireFieldSettingDto.UserId" />
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>First Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="FirstName" asp-for="PatientRequireFieldSettingDto.FirstName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Last Name
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="LastNameCheckBox1" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="LastName" asp-for="PatientRequireFieldSettingDto.LastName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>DOB</p>
+                <div class="switch">
+                    <input type="checkbox" id="DOBCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="DOB" asp-for="PatientRequireFieldSettingDto.DOB" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>SSN Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="SSNumCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="SSNumber" asp-for="PatientRequireFieldSettingDto.SSNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Marital Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="MaritalCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="MaritalStatus" asp-for="PatientRequireFieldSettingDto.MaritalStatus" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Address
+
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="AddressCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="Address" asp-for="PatientRequireFieldSettingDto.Address" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>User ID</p>
+                <div class="switch">
+                    <input type="checkbox" id="UserIdCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="UserName" asp-for="PatientRequireFieldSettingDto.UserName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Email</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmaildCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="Email" asp-for="PatientRequireFieldSettingDto.Email" data-toggle="toggle" />
+                </div>
+            </div>
+        </div><div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Password</p>
+                <div class="switch">
+                    <input type="checkbox" id="PasswordCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="Password" asp-for="PatientRequireFieldSettingDto.Password" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Zip Code</p>
+                <div class="switch">
+                    <input type="checkbox" id="ZipCodeCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="ZipCode" asp-for="PatientRequireFieldSettingDto.ZipCode" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Patient Color Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="PatientColorStatusCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="ZipCode" asp-for="PatientRequireFieldSettingDto.PatientColorStatus" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Languages
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="LanguagesCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="Languages" asp-for="PatientRequireFieldSettingDto.Languages" data-toggle="toggle" />
+                </div>
+            </div>
+        </div><div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Employee Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmployeStatusCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="EmployementStatus" asp-for="PatientRequireFieldSettingDto.EmployementStatus" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Employee Title
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="EmployeTitleCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="EmploymentTitle" asp-for="PatientRequireFieldSettingDto.EmploymentTitle" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Referral Name
+
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="ReferralCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="ReferralName" asp-for="PatientRequireFieldSettingDto.ReferralName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Patient Treatment Status
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="PatientTreatmentCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="PatientTreatmentStatus" asp-for="PatientRequireFieldSettingDto.PatientTreatmentStatus" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Patient Legal Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="PatientLegalStatusCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="PatientTreatmentStatus" asp-for="PatientRequireFieldSettingDto.PatientLegalStatus" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Phone Number
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="PhoneCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="PhoneNumber" asp-for="PatientRequireFieldSettingDto.PhoneNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Mobile Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="MobileCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="MobileNumber" asp-for="PatientRequireFieldSettingDto.MobileNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Work Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="WorkCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="Work" asp-for="PatientRequireFieldSettingDto.WorkNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>Emergency Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmergencyCheckBox" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="EmergencyNumber" asp-for="PatientRequireFieldSettingDto.EmergencyNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                <p>
+                    Gender
+                </p>
+                <div class="switch">
+                    <input type="checkbox" id="GenderCheckBox1" onchange="checkBoxChangeRequiredFieldSettings(this)" data-val="GenderCheckBox" asp-for="PatientRequireFieldSettingDto.Gender" data-toggle="toggle" />
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

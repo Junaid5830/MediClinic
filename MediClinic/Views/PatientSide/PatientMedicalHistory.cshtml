@@ -1,0 +1,1953 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "PatientMedicalHistory";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+
+@section styles{
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+    <style>
+        tr {
+            padding: 10px 5px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
+        }
+
+        .jc-bs3-container {
+            max-width: 25% !important;
+            width: 100% !important;
+        }
+
+
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        table.table-option tbody tr td ul.dropdown-content {
+            height: 163px !important;
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 100% !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+
+        .card .card-content .content-p {
+            margin: 1rem 0 !important;
+        }
+
+        .card .card-content p {
+            margin-top: 1rem !important;
+        }
+
+        .ui-widget {
+            width: 96% !important;
+        }
+
+        .disable-attributes {
+            pointer-events: none;
+        }
+
+        .swal2-popup .swal2-actions {
+            margin: 1.25em 1.5em !important;
+        }
+
+        .swal2-cancel {
+            background-color: #e74c3c !important;
+            color: #FFF !important;
+        }
+
+            .swal2-cancel:hover {
+                background-color: #c0392b !important;
+                color: #FFF !important;
+            }
+
+        .swal2-confirm:hover {
+            background-color: #2980b9 !important;
+            color: #FFF !important;
+        }
+        .ui-pnotify-title{
+            font-size:20px !important;
+        }
+    </style>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m3 l3">
+                <h5 class="breadcrumbs-title  color-blue">Patient History</h5>
+            </div>
+            <div class="col s6 m9 l9">
+                <a class="waves-effect waves-light float-right" href="javascript:void(0);">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+            <ul class="tabs Exam-tab">
+                <li class="tab"><a class="active" href="#test1">Family History</a></li>
+                <li class="tab"><a href="#test2">Medical History</a></li>
+                <li class="tab"><a href="#test3">Problem History</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="test1">
+        <div id="MHFamilyHistory">
+            <partial name="../_PatientPartialView/_MHFamilyHistory" />
+        </div>
+
+    </div>
+    <div id="test2">
+        <div id="MHPastMedicationHistory">
+            <partial name="../_PatientPartialView/_MHPastDiseaseHistory" />
+        </div>
+
+        <div id="MHPastMedicationHistory">
+            <partial name="../_PatientPartialView/_MHPastMedicationHistory" />
+        </div>
+
+        <div id="MHSocialHistory">
+            <partial name="../_PatientPartialView/_MHSocialHistory" />
+        </div>
+
+        <div id="MHRecreationalDrugsHistory">
+            <partial name="../_PatientPartialView/_MHRecreationalDrugsHistory" />
+        </div>
+        <div id="MHExerciseHistory">
+            <partial name="../_PatientPartialView/_MHExerciseHistory" />
+        </div>
+        <div id="MHMyPhysician">
+            <partial name="../_PatientPartialView/_MHMyPhysician" />
+        </div>
+
+        <div id="MHSurgicalHistory">
+            <partial name="../_PatientPartialView/_MHSurgicalHistory" />
+        </div>
+        <div id="MHPregnaniciesHistory">
+            <partial name="../_PatientPartialView/_MHPregnanciesHistory" />
+        </div>
+
+        <div id="MHDetailPregnaniciesHistory">
+            <partial name="../_PatientPartialView/_MHDetailPregnanciesHistory" />
+        </div>
+
+        <div id="MHAllergiesHistory">
+            <partial name="../_PatientPartialView/_MHAllergiesHistory" />
+        </div>
+
+        <div id="MHPharmacyInfo">
+            <partial name="../_PatientPartialView/_MHPharmacyInfo" />
+        </div>
+
+        <div id="MHHospitalizationsInfo">
+            <partial name="../_PatientPartialView/_MHHospitalizationsInfo" />
+        </div>
+
+        <div id="MHBobbiesHistory">
+            <partial name="../_PatientPartialView/_MHHobbiesHistory" />
+        </div>
+    </div>
+
+    <div id="test3">
+        <partial name="~/Views/_PatientPartialView/_MedicalProblems.cshtml" />
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/year-select.js"></script>
+    <script src="~/js/pnotify.custom.min.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/app-assets/js/polyfill.min.js"></script>
+    <script>
+        $(function () {
+            var addnew = '<li class="ui-menu-item" id="addnew" onClick="MedicalDisease();"><div class="ui-menu-item-wrapper sidenav-trigger sideout"  href="javascript:void(0);" data-target="slide-out-right30"><a class="sidenav-trigger sideout" data-target="slide-out-right30">Add New</a></div></li>';
+
+            $.widget("custom.combobox", {
+                _create: function () {
+                    this.wrapper = $("<span>")
+                        .addClass("custom-combobox")
+                        .insertAfter(this.element);
+
+                    this.element.hide();
+                    this._createAutocomplete();
+                    this._createShowAllButton();
+                },
+
+                _createAutocomplete: function () {
+                    var selected = this.element.children(":selected"),
+                        value = selected.val() ? selected.text() : "";
+
+                    this.input = $("<input>")
+                        .appendTo(this.wrapper)
+                        .val(value)
+                        .attr("title", "")
+                        .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+                        .autocomplete({
+                            delay: 0,
+                            minLength: 0,
+                            source: $.proxy(this, "_source"),
+                            open: function (e, ui) {
+                                $(".ui-autocomplete").append(addnew);
+                            },
+
+                            response: function (event, ui) {
+                                if (!ui.content.length) {
+                                    var noResult = { value: "", label: "No results found" };
+                                    ui.content.push(noResult);
+                                }
+                            }
+                        })
+                        .tooltip({
+                            classes: {
+                                "ui-tooltip": "ui-state-highlight"
+                            }
+                        });
+
+                    this._on(this.input, {
+                        autocompleteselect: function (event, ui) {
+                            ui.item.option.selected = true;
+                            this._trigger("select", event, {
+                                item: ui.item.option
+                            });
+                        },
+
+                        autocompletechange: "_removeIfInvalid"
+                    });
+                },
+
+                _createShowAllButton: function () {
+
+                    var input = this.input,
+                        wasOpen = false;
+
+                    $("<a>")
+                        .attr("tabIndex", -1)
+                        .attr("title", "Show All Items")
+
+                        .appendTo(this.wrapper)
+                        .button({
+                            icons: {
+                                primary: "ui-icon-triangle-1-s"
+                            },
+                            text: false
+                        })
+                        .removeClass("ui-corner-all")
+                        .addClass("custom-combobox-toggle ui-corner-right")
+                        .on("mousedown", function () {
+                            wasOpen = input.autocomplete("widget").is(":visible");
+                        })
+                        .on("click", function () {
+                            input.trigger("focus");
+
+                            // Close if already visible
+                            if (wasOpen) {
+                                return;
+                            }
+
+                            // Pass empty string as value to search for, displaying all results
+                            input.autocomplete("search", "");
+                        });
+                },
+
+                _source: function (request, response) {
+                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                    response(this.element.children("option").map(function () {
+
+                        var text = $(this).text();
+                        if (this.value && (!request.term || matcher.test(text)))
+                            return {
+                                label: text,
+                                value: text,
+                                option: this
+                            };
+                    }));
+                    globalValue = this.input.val();
+
+                },
+
+                _removeIfInvalid: function (event, ui) {
+
+                    // Selected an item, nothing to do
+                    if (ui.item) {
+                        return;
+                    }
+
+                    // Search for a match (case-insensitive)
+                    var value = this.input.val(),
+                        valueLowerCase = value.toLowerCase(),
+                        valid = false;
+
+
+                    this.element.children("option").each(function () {
+                        if ($(this).text().toLowerCase() === valueLowerCase) {
+                            this.selected = valid = true;
+                            return false;
+                        }
+                    });
+
+                    // Found a match, nothing to do
+                    if (valid) {
+
+                        return;
+                    }
+
+                    //Remove invalid value
+
+                    //this.input
+                    //    .val("")
+                    //    .attr("title", value + " didn't match any item");
+                    //.tooltip("open");
+
+                    //this.element.val("");
+                    //this._delay(function () {
+                    //    this.input.tooltip("close").attr("title", "");
+                    //}, 2500);
+                    //this.input.autocomplete("instance").term = "";
+                },
+
+                _destroy: function () {
+                    this.wrapper.remove();
+                    this.element.show();
+                }
+            });
+
+            $("#DiseaseType").combobox();
+
+
+        });
+        function MedicalDisease() {
+            if (globalValue != "") {
+                $(".related_Facility").val(globalValue);
+            }
+
+            $(".nav-collapsible .navbar-toggler").trigger("click");
+            $("#main").css("padding-right", "340px");
+
+        }
+        function onCreateMedicalDisease(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                $('.SignIdType').val('');
+                $('.SignIdType').removeClass('valid');
+
+                var titleSelectList = $('.multilangOpt');
+                titleSelectList.append($('<option></option>').val(data.diseaseTypeId).text(data.diseaseTypeName));
+            }
+        };
+
+    </script>
+    <script>
+        $(document).on("keyup", "#info_Zip", function () {
+            $zval = $('#info_Zip').val();
+            if ($zval.length == 5) {
+                $jCSval = getCityState($zval, true);
+            }
+        });
+        function getCityState($zip, $blnUSA) {
+
+
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+
+                if (response.status == "ZERO_RESULTS") {
+                    $("#err_infozip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+
+                    $("#info_city").val(city);
+                    $("#info_state").val(state);
+                    $("#info_country").val(country);
+                    //$('#modal1').modal('open');
+                }
+                //find the city and state
+
+
+                //pre-fill the city and state
+
+            });
+        }
+
+    </script>
+
+    <script>
+        function SuccessMsg() {
+            new PNotify({
+                title: 'Success!',
+                text: "Record saved successfully.",
+                delay: 2000,
+                type: 'success'
+            });
+        }
+        function DeleteSuccessMsg() {
+            new PNotify({
+                title: 'Success!',
+                text: "Record deleted successfully.",
+                delay: 2000,
+                type: 'success'
+            });
+        }
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Record already exists",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        var sweet2 = {
+            title: "Confirmation!",
+            text: "Are you sure you want to save ?",
+            type: "success",
+            showCloseButton: false,
+            showCancelButton: true,
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            confirmButtonText:
+                'Yes',
+            cancelButtonText:
+                'No',
+            cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            cancelButtonClass: 'btn btn-dark ml-1',
+        }
+        var sweet3 = {
+            title: "Confirmation!",
+            text: "Do you want to delete this record?",
+            type: "errro",
+            showCloseButton: false,
+            showCancelButton: true,
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            confirmButtonText:
+                'Yes',
+            cancelButtonText:
+                'No',
+            cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            cancelButtonClass: 'btn btn-dark ml-1',
+        }
+    </script>
+
+    @*Past Medical*@
+    <script>
+        $(document).on("click", "#dieaseId", function () {
+            $("#MHPastDiseaseHistory_Name_err").html('');
+        });
+        $('#PastMedicalForm').on('submit', function (e) {
+            var dieaseName = $('#MHPastDiseaseHistory_Name').val();
+            if (dieaseName == "") {
+                $("#MHPastDiseaseHistory_Name_err").html("Diease Name is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(dieaseName == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $('#SavePastMedicalForm').attr('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response.isError == true) {
+                                        ExistsMsg();
+                                        $("#SavePastMedicalForm").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHPastDiseaseHistorySucess(response);
+                                    }
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $('#SavePastMedicalForm').attr('disabled', false);
+                            return false;
+                        }
+                    });
+
+                }
+
+            }
+        });
+        function EditMHDiseasePastHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHPastDiseaseHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+                $("#dieaseId").val(data.data.id);
+                $('#MHPastDiseaseHistory_Name').val(data.data.name);
+                $('#dieaseId .custom-combobox-input').val(data.data.name);
+                $("#MHPastDiseaseHistory_Notes").val(data.data.notes);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHDiseasePastHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeletePMHPastDiease", { Id: id }).done(function (data) {
+                        $("#MHPastDiseaseHistoryGrid").empty();
+                        $("#MHPastDiseaseHistoryGrid").html(data);
+                        DeleteSuccessMsg();
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+        function onMHPastDiseaseHistorySucess(data) {
+            SuccessMsg();
+                $("#dieaseId").val('');
+                $('#MHPastDiseaseHistory_Name').val('');
+                $('#dieaseId .custom-combobox-input').val('');
+                $("#MHPastDiseaseHistory_Notes").val('');
+                $("#MHPastDiseaseHistoryGrid").empty();
+                $("#MHPastDiseaseHistoryGrid").html(data);
+                $("#SavePastMedicalForm").prop('disabled', false);
+        }
+    </script>
+
+
+
+    @*Detail Pragnancies*@
+    <script>
+        $(document).on("click", "#genderId", function () {
+            $("#MHDetailPregnanciesHistory_Gender_err").html('');
+        });
+        $('#DetailPragnanciesForm').on('submit', function (e) {
+            var gender = $('#MHDetailPregnanciesHistory_Gender').val();
+            if (gender == "") {
+                $("#MHDetailPregnanciesHistory_Gender_err").html("Gender is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(gender == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $('#SaveDetailPragnanciesForm').attr('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    onMHDetailPregnancyHistorySucess(response);
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $('#SavePastMedicalForm').attr('disabled', false);
+                            return false;
+                        }
+                    });
+
+                }
+
+            }
+        });
+        function EditMHDetailPregnancyHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHDetailPregnacyHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+                $("#MHDetailPregnanciesHistory_Id").val(data.data.id);
+                $("#MHDetailPregnanciesHistory_DeliveryDate").val(data.data.deliveryDate);
+                $("#MHDetailPregnanciesHistory_DeliveryType").val(data.data.deliveryType);
+                $('#genderId .custom-combobox-input').val(data.data.gender);
+                $("#MHDetailPregnanciesHistory_Gender").val(data.data.gender);
+                $("#MHDetailPregnanciesHistory_NoOfPregnancies").val(data.data.noOfPregnancies);
+                $("#MHDetailPregnanciesHistory_NoOfLivingChildren").val(data.data.noOfLivingChildren);
+                $("#MHDetailPregnanciesHistory_NoOfAbortions").val(data.data.noOfAbortions);
+                $("#MHDetailPregnanciesHistory_NoOfMiscarriages").val(data.data.noOfMiscarriages);
+                $("#MHDetailPregnanciesHistory_Complications").val(data.data.complications);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHDetailPregnancyHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHDetailPregnancyHistory", { Id: id }).done(function (data) {
+                        $("#MHDetailPregnanciesHistory").empty();
+                        $("#MHDetailPregnanciesHistory").html(data);
+                        DeleteSuccessMsg();
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+        function onMHDetailPregnancyHistorySucess(data) {
+            SuccessMsg();
+            $("#SaveDetailPragnanciesForm").prop('disabled', false);
+            $("#MHDetailPregnanciesHistory_Id").val('');
+            $("#MHDetailPregnanciesHistory_DeliveryDate").val('');
+            $("#MHDetailPregnanciesHistory_DeliveryType").val('');
+            $('#genderId .custom-combobox-input').val('');
+            $("#MHDetailPregnanciesHistory_Gender").val('');
+            $("#MHDetailPregnanciesHistory_NoOfPregnancies").val('');
+            $("#MHDetailPregnanciesHistory_NoOfLivingChildren").val('');
+            $("#MHDetailPregnanciesHistory_NoOfAbortions").val('');
+            $("#MHDetailPregnanciesHistory_NoOfMiscarriages").val('');
+            $("#MHDetailPregnanciesHistory_Complications").val('');
+            $("#MHDetailPregnanciesHistory_Gender_err").html('');
+            $("#MHDetailPregnanciesHistory").empty();
+            $("#MHDetailPregnanciesHistory").html(data);
+        }
+    </script>
+    @*Family history*@
+    <script>
+        $(document).on("click", "#relationId", function () {
+            $("#MHFamilyHistory_Relation_err").html('');
+        });
+        $('#SaveFamilyHistoryForm').on('submit', function (e) {
+            var relation = $('#MHFamilyHistory_Relation').val();
+            if (relation == "") {
+                $("#MHFamilyHistory_Relation_err").html("Realtion  is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(relation == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $("#SaveFamilyHistory").prop('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response == "exist") {
+                                        ExistsMsg();
+                                        $("#SaveFamilyHistory").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHFamilyHistorySucess(response);
+                                    }
+
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $("#SaveFamilyHistory").prop('disabled', false);
+                            return false;
+                        }
+                    });
+                }
+
+            }
+        });
+        function EditMHFamilyHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHFamilyHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+
+                $("#MHFamilyHistory_Id").val(data.data.id);
+                $("#MHFamilyHistory_Relation").val(data.data.relation);
+                $('#MHFamilyHistory_MedicalConditionsOrCauseDeath').val(data.data.medicalConditionsOrCauseDeath);
+                $('#MHFamilyHistory_Notes').val(data.data.notes);
+                $('#MHFamilyHistory_DeceasedOrDeathAge').val(data.data.deceasedOrDeathAge);
+                $('#relationId .custom-combobox-input').val(data.data.relation);
+
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHFamilyHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHFamilyHistory", { Id: id }).done(function (data) {
+                        $("#MHFamilyHistoryGrid").empty();
+                        $("#MHFamilyHistoryGrid").html(data);
+                        DeleteSuccessMsg();
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+
+        }
+        function onMHFamilyHistorySucess(data) {
+            SuccessMsg();
+            $("#SaveFamilyHistory").prop('disabled', false);
+            $("#MHFamilyHistory_Id").val('');
+            $("#MHFamilyHistory_Relation").val('');
+            $("#relationId .custom-combobox-input").val('');
+            $("#MHFamilyHistory_DeceasedOrDeathAge").val('');
+            $("#MHFamilyHistory_MedicalConditionsOrCauseDeath").val('');
+            $("#MHFamilyHistory_Notes").val('');
+            $("#MHFamilyHistory_Relation_err").html('');
+            $("#MHFamilyHistoryGrid").empty();
+            $("#MHFamilyHistoryGrid").html(data);
+        }
+    </script>
+    @*Allergy*@
+    <script>
+        function EditMHAllergiesHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHAllergiesHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+
+                $("#MHAllergiesHistory_Id").val(data.data.id);
+                $('#MHAllergiesHistory_AllergyTo').val(data.data.allergyTo);
+                $('#MHAllergiesHistory_Recation').val(data.data.recation);
+                $('#MHAllergiesHistory_Notes').val(data.data.notes);
+
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHAllergiesHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHAllergiesHistory", { Id: id }).done(function (data) {
+                        $("#MHAllergiesHistoryGrid").empty();
+                        $("#MHAllergiesHistoryGrid").html(data);
+                        DeleteSuccessMsg();
+
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+
+        }
+
+        $('#PatientAllergyForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                $("#SavePatientAllergyForm").prop('disabled', true);
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SavePatientAllergyForm").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                onMHAllergiesHistorySucess(response);
+                                $("#SavePatientAllergyForm").prop('disabled', false);
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SavePatientAllergyForm").prop('disabled', false);
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $("#SavePatientAllergyForm").prop('disabled', false);
+            }
+        });
+        function onMHAllergiesHistorySucess(data) {
+            SuccessMsg();
+            $("#SavePatientAllergyForm").prop('disabled', false);
+            $("#MHAllergiesHistory_Id").val('');
+            $('#MHAllergiesHistory_AllergyTo').val('');
+            $('#MHAllergiesHistory_Recation').val('');
+            $('#MHAllergiesHistory_Notes').val('');
+            $("#MHAllergiesHistoryGrid").empty();
+            $("#MHAllergiesHistoryGrid").html(data);
+        }
+    </script>
+    @*Hobbies*@
+    <script>
+        $('#PatientHobbiesForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SavePatientHobbies").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SavePatientHobbies").prop('disabled', false);
+                                }
+                                else {
+                                    onMHHobbiesHistorySucess(response);
+                                }
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SavePatientHobbies").prop('disabled', false);
+                        return false;
+                    }
+                });
+            }
+            else {
+                $("#SavePatientHobbies").prop('disabled', false);
+            }
+        });
+
+
+        function EditMHHobbiesHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHHobbiesHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+
+                $("#MHHobbiesHistory_Id").val(data.data.id);
+                $('#MHHobbiesHistory_Hobbies').val(data.data.hobbies);
+
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHHobbiesHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHHobbiesHistory", { Id: id }).done(function (data) {
+                        $("#MHHobbiesHistoryGrid").empty();
+                        $("#MHHobbiesHistoryGrid").html(data);
+                        DeleteSuccessMsg();
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+        function onMHHobbiesHistorySucess(data) {
+            SuccessMsg();
+            $("#SavePatientHobbies").prop('disabled', false);
+            $("#MHHobbiesHistory_Id").val('');
+            $('#MHHobbiesHistory_Hobbies').val('');
+            $("#MHHobbiesHistoryGrid").empty();
+            $("#MHHobbiesHistoryGrid").html(data);
+        }
+    </script>
+    @*Exercise*@
+    <script>
+        $(document).on("click", "#exerciseId", function () {
+            $("#MHExerciseHistory_Exercise_err").html('');
+        });
+        $('#ExerciseHistoryForm').on('submit', function (e) {
+            var exercise = $('#MHExerciseHistory_Exercise').val();
+            if (exercise == "") {
+                $("#MHExerciseHistory_Exercise_err").html("Exercise is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(exercise == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $("#SaveExerciseHistoryForm").prop('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response == "exist") {
+                                        ExistsMsg();
+                                        $("#SaveExerciseHistoryForm").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHExerciseHistorySucess(response);
+                                    }
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $("#SaveExerciseHistoryForm").prop('disabled', false);
+                            return false;
+                        }
+                    });
+                }
+
+            }
+            else {
+                $("#SaveExerciseHistoryForm").prop('disabled', false);
+            }
+        });
+
+        function EditMHExerciseHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHExerciseHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+
+                $("#MHExerciseHistory_Id").val(data.data.id);
+                $("#MHExerciseHistory_Exercise").val(data.data.exercise);
+                $('#exerciseId .custom-combobox-input').val(data.data.exercise);
+                $('#MHExerciseHistory_ExerciseType').val(data.data.exerciseType);
+                $('#weekDaysId .custom-combobox-input').val(data.data.exerciseNoOfDaysPerWeek);
+                $('#MHExerciseHistory_ExerciseNoOfDaysPerWeek').val(data.data.exerciseNoOfDaysPerWeek);
+                $('#MHExerciseHistory_HobbiesOrLeisureActivities').val(data.data.hobbiesOrLeisureActivities);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHExerciseHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHExerciseHistory", { Id: id }).done(function (data) {
+                        DeleteSuccessMsg();
+                        $("#MHExerciseHistoryGrid").empty();
+                        $("#MHExerciseHistoryGrid").html(data);
+
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+
+        }
+        function onMHExerciseHistorySucess(data) {
+            SuccessMsg();
+            $("#SaveExerciseHistoryForm").prop('disabled', false);
+            $("#MHExerciseHistory_Id").val('');
+            $('#exerciseId .custom-combobox-input').val('');
+            $('#MHExerciseHistory_ExerciseType').val('');
+            $('#weekDaysId .custom-combobox-input').val('');
+            $('#MHExerciseHistory_HobbiesOrLeisureActivities').val('');
+            $("#MHExerciseHistoryGrid").empty();
+            $("#MHExerciseHistoryGrid").html(data);
+        }
+    </script>
+    @*//Hospitalizations Scripts*@
+    <script>
+
+        $('#HospitalizationForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SaveHospitalization").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SaveHospitalization").prop('disabled', false);
+                                }
+                                else {
+                                    onMHHospitalizationsInfo(response);
+                                }
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SaveHospitalization").prop('disabled', false);
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $("#SaveHospitalization").prop('disabled', false);
+            }
+        });
+        function onMHHospitalizationsInfo(data) {
+
+            $("#SaveHospitalization").prop('disabled', false);
+            $("#MHHospitalizationsInfoId,#MHHospitalizationsInfoName,#MHHospitalizationsInfoYear,#yearId .custom-combobox-input,#MHHospitalizationsInfoPhoneNo,#MHHospitalizationsInfocountry,#MHHospitalizationsInfoState,#MHHospitalizationsInfocity,#reasonId .custom-combobox-input ,#MHHospitalizationsInfoAddress,#MHHospitalizationsInfoNotes").val('');
+            $('#MHHospitalizationsInfocountry,#MHHospitalizationsInfoState,#MHHospitalizationsInfocity').trigger('change');
+            $("#HospitalizationsInfoGrid").empty();
+            $("#HospitalizationsInfoGrid").html(data);
+            SuccessMsg();
+        }
+    </script>
+    <script>
+        $(document).on("click", ".EditHospitalizationInfo",function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHHospitalizationsInfo", "PatientSide")',
+            data: { Id: $(this).attr("MHHospitalizationsInfoId") },
+            success: function (data) {
+
+                $("#MHHospitalizationsInfoId").val(data.id);
+                $("#MHHospitalizationsInfoName").val(data.hospitalName);
+                $("#MHHospitalizationsInfoYear").val(data.year);
+                $("#yearId .custom-combobox-input").val(data.year);
+                $("#MHHospitalizationsInfoPhoneNo").val(data.phoneNo);
+                $("#MHHospitalizationsInfocountry").val(data.countryId);
+                $("#MHHospitalizationsInfoState").val(data.stateId);
+                $("#MHHospitalizationsInfocity").val(data.cityId);
+                $("#MHHospitalizationsInfoillnessORinjury").val(data.illnessORinjury);
+                $("#reasonId .custom-combobox-input").val(data.illnessORinjury);
+                $("#MHHospitalizationsInfoAddress").val(data.address);
+                $("#MHHospitalizationsInfoNotes").val(data.notes);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+    });
+        $(document).on("click", ".DeleteHospitalizationInfo",function () {
+        var recId = $(this).attr("MHHospitalizationsInfoId");
+            if (recId != undefined) {
+                Swal.fire(sweet3).then((result) => {
+                    if (result.value) {
+                        $.get("/PatientSide/DeleteMHHospitalizationsInfo", { Id: recId }).done(function (data) {
+                            DeleteSuccessMsg();
+                            $("#HospitalizationsInfoGrid").empty();
+                            $("#HospitalizationsInfoGrid").html(data);
+
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+        }
+
+    });
+    </script>
+    @*REcreationl Drugs*@
+    <script>
+        $(document).on("click", ".EditMHRecreationalDrugsHistory",function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHRecreationalDrugHistory", "Patientside")',
+            data: { Id: $(this).attr("MHRecreationalDrugsHistoryId") },
+            success: function (data) {
+
+                $("#MHRecreationalDrugHistoryId").val(data.id);
+                $("#MHRecreationalDrugsHistoryDrugs").val(data.drugs);
+                $("#drugId .custom-combobox-input").val(data.drugs);
+                $("#amountId .custom-combobox-input").val(data.recreationDrugsAmount);
+                $("#MHRecreationalDrugsAmountPerWeek").val(data.recreationDrugsAmount);
+                $("#MHRecreationalDrugsLastUsed").val(data.recreationalDrugsLastUsed);
+                $("#lastYearId .custom-combobox-input").val(data.recreationalDrugsLastUsed);
+                $("#MHRecreationalDrugsType").val(data.recreationalDugsType);
+                $("#MHRecreationalNotes").val(data.recreationDrugsNotes);
+
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+    });
+        $(document).on("click", ".DeleteMHRecreationalDrugsHistory",function () {
+        var recId = $(this).attr("MHRecreationalDrugsHistoryId");
+            if (recId != undefined) {
+                Swal.fire(sweet3).then((result) => {
+                    if (result.value) {
+                        $.get("/PatientSide/DeleteMHRecreationalDrugsHistory", { Id: recId }).done(function (data) {
+                            DeleteSuccessMsg();
+                            $("#MHRecreationalDrugsHistoryGrid").empty();
+                            $("#MHRecreationalDrugsHistoryGrid").html(data);
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+        }
+
+    });
+    </script>
+
+    <script>
+        $(document).on("click", "#drugId", function () {
+            $("#MHRecreationalDrugsHistory_Drugs_err").html('');
+        });
+        $('#RecreationalForm').on('submit', function (e) {
+            var drugs = $('#MHRecreationalDrugsHistoryDrugs').val();
+            if (drugs == "") {
+                $("#MHRecreationalDrugsHistory_Drugs_err").html("Drug Name is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(drugs == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $("#SaveRecreationalForm").prop('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response == "exist") {
+                                        ExistsMsg();
+                                        $("#SaveRecreationalForm").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHRecreationalDrugsHistorySucess(response);
+                                    }
+
+
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $("#SaveRecreationalForm").prop('disabled', false);
+                            return false;
+                        }
+                    });
+                }
+
+            }
+            else {
+                $("#SaveRecreationalForm").prop('disabled', false);
+            }
+        });
+
+        function onMHRecreationalDrugsHistorySucess(data) {
+            $("#SaveRecreationalForm").prop('disabled', false);
+            $("#MHRecreationalDrugsHistoryGrid").empty();
+            $("#MHRecreationalDrugsHistoryGrid").html(data);
+            SuccessMsg();
+            $("#drugId .custom-combobox-input").val('');
+            $("#amountId .custom-combobox-input").val('');
+            $("#lastYearId .custom-combobox-input").val('');
+            $("#MHRecreationalDrugsLastUsed").val("");
+            $("#MHRecreationalDrugsAmountPerWeek").val("");
+            $("#MHRecreationalDrugsLastUsed").trigger("change");
+            $("#MHRecreationalDrugsType").val("");
+            $("#MHRecreationalNotes").val("");
+        }
+    </script>
+    @*SurgicalHistory*@
+
+    <script>
+        $('#MHSurgicalHistoryForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SaveSurgicalHistory").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SaveSurgicalHistory").prop('disabled', false);
+                                }
+                                else {
+                                    onMHSurgicalHistory(response);
+                                }
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SaveSurgicalHistory").prop('disabled', false);
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $("#SaveSurgicalHistory").prop('disabled', false);
+            }
+        });
+        function onMHSurgicalHistory(data) {
+            $("#SaveSurgicalHistory").prop('disabled', false);
+            $("#MHSurgicalHistoryId,#MHSurgicalHistoryDiseases,#MHSurgicalHistorySurgeryType,#MHSurgicalHistoryYear,#surgicalYearId .custom-combobox-input,#MHSurgicalHistoryNotes,#MHSurgicalSurgeonName").val("");
+            SuccessMsg();
+            $("#MHSurgicalHistoryGrid").empty();
+            $("#MHSurgicalHistoryGrid").html(data);
+        }
+    </script>
+    <script>
+        $(document).on("click", ".EditSurgicalHistory",function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHSurgicalHistory", "PatientSide")',
+            data: { Id: $(this).attr("SurgicalHistoryId") },
+            success: function (data) {
+                $("#MHSurgicalHistoryId").val(data.id)
+                $("#MHSurgicalHistorySurgeryType").val(data.surgeryType);
+                $("#MHSurgicalSurgeonName").val(data.surgeonName);
+                $("#MHSurgicalHistoryYear").val(data.year);
+                $("#surgicalYearId .custom-combobox-input").val(data.year);
+                $("#MHSurgicalHistoryNotes").val(data.notes);
+
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+    });
+        $(document).on("click", ".DeleteSurgicalHistory",function () {
+        var recId = $(this).attr("SurgicalHistoryId");
+            if (recId != undefined) {
+                Swal.fire(sweet3).then((result) => {
+                    if (result.value) {
+                        $.get("/PatientSide/DeleteMHSurgicalHistory", { Id: recId }).done(function (data) {
+                            DeleteSuccessMsg();
+                            $("#MHSurgicalHistoryGrid").empty();
+                            $("#MHSurgicalHistoryGrid").html(data);
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+        }
+
+        });
+
+        $('#PregnanciesHistoryForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#MHPregnanciesHistoryFormBtn").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "success") {
+                                    SuccessMsg();
+                                    $("#MHPregnanciesHistoryFormBtn").prop('disabled', false);
+                                    $('html, body').animate({
+                                        scrollTop: $("#DetailPragnanciesForm").offset().top - 100
+                                    }, 2000);
+                                }
+                            }
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#MHPregnanciesHistoryFormBtn").prop('disabled', false);
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $("#MHPregnanciesHistoryFormBtn").prop('disabled', false);
+            }
+        });
+
+    </script>
+    @*Social History*@
+
+    <script>
+        $('#MHSocialHistoryForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                $("#SaveMHSocialHistoryFormBTN").prop('disabled', true);
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SaveMHSocialHistoryFormBTN").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "success") {
+                                    SuccessMsg();
+                                    $("#SaveMHSocialHistoryFormBTN").prop('disabled', false);
+                                    $('html, body').animate({
+                                        scrollTop: $("#RecreationalForm").offset().top - 100
+                                    }, 2000);
+                                }
+                            }
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SaveMHSocialHistoryFormBTN").prop('disabled', false);
+                        return false;
+                    }
+                });
+            }
+            else {
+                $("#SaveMHSocialHistoryFormBTN").prop('disabled', false);
+            }
+        });
+    </script>
+
+    @*Physican*@
+
+    <script>
+        $('#MyPhysicanForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SaveMyPhysicanForm").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SaveMyPhysicanForm").prop('disabled', false);
+                                }
+                                else {
+                                    onMHMyPhysicians(response);
+                                }
+
+                            }
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SaveMyPhysicanForm").prop('disabled', false);
+                        return false;
+                    }
+                });
+            }
+            else {
+                $("#SaveHospitalization").prop('disabled', false);
+            }
+        });
+        function onMHMyPhysicians(data) {
+            $("#SaveMyPhysicanForm").prop('disabled', false);
+            $("#MHMyPhysicianId,#MyPhysicianName,#MyPhysicianLocation,#MyPhysicianHospital,#MyPhysicianPhoneNo,#providerSpeciality,#specialityId .custom-combobox-input,#MyPhysicianNotes").val("");
+            SuccessMsg();
+            $("#MHMyPhysicianGrid").empty();
+            $("#MHMyPhysicianGrid").html(data);
+        }
+    </script>
+    <script>
+        $(document).on("click", ".EditMyPhysician",function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHMyPhysician", "PatientSide")',
+            data: { Id: $(this).attr("MyPhysicianId") },
+            success: function (data) {
+                $("#MHMyPhysicianId").val(data.id);
+                $("#MyPhysicianName").val(data.name);
+                $("#MyPhysicianLocation").val(data.location);
+                $("#MyPhysicianHospital").val(data.hospital);
+                $("#MyPhysicianPhoneNo").val(data.phoneNo);
+                $("#providerSpeciality").val(data.specialty);
+                $("#specialityId .custom-combobox-input").val(data.specialty);
+                $("#MyPhysicianNotes").val(data.notes);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+    });
+        $(document).on("click", ".DeleteMyPhysician",function () {
+        var recId = $(this).attr("MyPhysicianId");
+            if (recId != undefined) {
+                Swal.fire(sweet3).then((result) => {
+                    if (result.value) {
+                        $.get("/PatientSide/DeleteMHMyPhysician", { Id: recId }).done(function (data) {
+                            DeleteSuccessMsg();
+                            $("#MHMyPhysicianGrid").empty();
+                            $("#MHMyPhysicianGrid").html(data);
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+        }
+
+    });
+    </script>
+
+    @*Current Medication*@
+
+    <script>
+        $(document).on("click", "#medicineId", function () {
+            $("#MHPastMedicationHistory_Name_err").html('');
+        });
+        $('#CurrentMedicationForm').on('submit', function (e) {
+            var medicineName = $('#PastMedicationName').val();
+            if (medicineName == "") {
+                $("#MHPastMedicationHistory_Name_err").html("Medication Name is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(medicineName == "")) {
+                    Swal.fire(sweet2).then((result) => {
+                        if (result.value) {
+                            $("#SaveCurrentMedicationForm").prop('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response == "exist") {
+                                        ExistsMsg();
+                                        $("#SaveCurrentMedicationForm").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHPastMedicationHistorySucess(response);
+                                    }
+
+                                },
+                            });
+                        }
+                        if (result.dismiss === swal.DismissReason.cancel) {
+                            $("#SaveCurrentMedicationForm").prop('disabled', false);
+                            return false;
+                        }
+                    });
+                }
+
+            }
+            else {
+                $("#SaveCurrentMedicationForm").prop('disabled', false);
+            }
+        });
+
+        function onMHPastMedicationHistorySucess(data) {
+            $("#SaveCurrentMedicationForm").prop('disabled', false);
+            $('#PastMedicationName').val('').trigger('change');
+            $("#MHPastMedicationHistoryId,#PastMedicationName,#medicineId .custom-combobox-input,#MHPastMedicationHistory_ReasonForMedicine,#PastMedicationDocPharNumber,#MHPastMedicationHistory_Dose,#frequencyId .custom-combobox-input,#MHPastMedicationHistory_Notes,#MHPastMedicationHistory_DocName,#MHPastMedicationHistory_DocNumber,#MHPastMedicationHistory_PharName,#MHPastMedicationHistory_PharNumber").val('');
+            $("#MHPastMedicationHistoryGrid").empty();
+            $("#MHPastMedicationHistoryGrid").html(data);
+            SuccessMsg();
+        }
+    </script>
+    <script>
+        $(document).on("click", ".EditMHPastMedicationHistory",function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHPastMedicationHistory", "PatientSide")',
+            data: { Id: $(this).attr("MHPastMedicationHistoryId") },
+
+            success: function (data) {
+                $("#MHPastMedicationHistoryId").val(data.id);
+                $("#PastMedicationName").val(data.name);
+                $("#medicineId .custom-combobox-input").val(data.name);
+                $("#PastMedicationName").trigger("change");
+                $("#MHPastMedicationHistory_Dose").val(data.dose);
+                $("#MHPastMedicationHistory_ReasonForMedicine").val(data.reasonForMedicine);
+                $("#frequencyId .custom-combobox-input").val(data.doseFrequency);
+                $("PastMedicationDoseFrequency").val(data.doseFrequency);
+                $("#MHPastMedicationHistory_Notes").val(data.notes);
+                $("#MHPastMedicationHistory_DocName").val(data.docName);
+                $("#MHPastMedicationHistory_DocNumber").val(data.docNumber);
+                $("#MHPastMedicationHistory_PharName").val(data.pharName);
+                $("#MHPastMedicationHistory_PharNumber").val(data.pharNumber);
+                $("#MHPastMedicationHistory_AsNeeded").prop("checked", data.asNeeded);
+                if (data.asNeeded == true) {
+                    $("#frequencyId").addClass("disable-attributes");
+                    $("#MHPastMedicationHistory_Dose").prop("disabled", true);
+                    $("#MHPastMedicationHistory_Dose,#PastMedicationDoseFrequency").val("");
+                    $("#frequencyId .custom-combobox-input").val("");
+
+                }
+                else {
+                    $("#frequencyId").removeClass("disable-attributes");
+                    $("#MHPastMedicationHistory_Dose").prop("disabled", false);
+                }
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+    });
+        $(document).on("click", ".DeleteMHPastMedicationHistory",function () {
+        var recId = $(this).attr("MHPastMedicationHistoryId");
+            if (recId != undefined) {
+                Swal.fire(sweet3).then((result) => {
+                    if (result.value) {
+                        $.get("/PatientSide/DeleteMHPastMedicationHistory", { Id: recId }).done(function (data) {
+                            DeleteSuccessMsg();
+                            $("#MHPastMedicationHistoryGrid").empty();
+                            $("#MHPastMedicationHistoryGrid").html(data);
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+        }
+
+    });
+    </script>
+
+    <script>
+        function EditMHPharmacyInfoHistory(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMHPharmacyInfo", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+                $("#MHPharmacyInfo_Id").val(data.data.id);
+                $('#MHPharmacyInfo_Name').val(data.data.name);
+                $('#MHPharmacyInfo_Address').val(data.data.address);
+                $('#MHPharmacyInfo_PhoneNo').val(data.data.phoneNo);
+                $('#MHPharmacyInfo_FaxNo').val(data.data.faxNo);
+                $("#info_Zip").val(data.data.zipCode);
+                $("#info_state").val(data.data.state);
+                $("#info_country").val(data.data.city);
+            },
+            error: function (res) {
+                AjaxFailure(res);
+            }
+        });
+        };
+        function DeleteMHPharmacyInfoHistory(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMHPharmacyInfoHistory", { Id: id }).done(function (data) {
+                        DeleteSuccessMsg();
+                        $("#MHPharmacyInfoGrid").empty();
+                        $("#MHPharmacyInfoGrid").html(data);
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+
+        $('#PharmacyInformationForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SavePharmacyInformationForm").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SavePharmacyInformationForm").prop('disabled', false);
+                                }
+                                else {
+                                    onMHPharmacyInfoHistorySucess(response);
+                                }
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SavePharmacyInformationForm").prop('disabled', false);
+                        return false;
+                    }
+                });
+
+            }
+            else {
+                $("#SavePharmacyInformationForm").prop('disabled', false);
+            }
+        });
+        function onMHPharmacyInfoHistorySucess(data) {
+            SuccessMsg();
+            $("#SavePharmacyInformationForm").prop('disabled', false);
+            $("#MHPharmacyInfo_Id").val('');
+            $('#MHPharmacyInfo_Name').val('');
+            $('#MHPharmacyInfo_Address').val('');
+            $('#MHPharmacyInfo_PhoneNo').val('');
+            $('#MHPharmacyInfo_FaxNo').val('');
+            $("#info_Zip").val('');
+            $("#info_state").val('');
+            $("#info_country").val('');
+            $("#MHPharmacyInfoGrid").empty();
+            $("#MHPharmacyInfoGrid").html(data);
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            if ($("#MHPregnanciesHistory_Contraception").val() == 'Yes') {
+                $("#MHPregnanciesHistory_ContraceptionDetail").prop("readonly", false);
+            }
+            else {
+                $("#MHPregnanciesHistory_ContraceptionDetail").prop("readonly", true);
+                $("#MHPregnanciesHistory_ContraceptionDetail").val("");
+            }
+            if ($("#MHPregnanciesHistory_MenstrualPeriods").val() == 'Menopausal') {
+                $("#MHPregnanciesHistory_MenopauseAge").prop("readonly", false);
+            }
+            else {
+                $("#MHPregnanciesHistory_MenopauseAge").prop("readonly", true);
+                $("#MHPregnanciesHistory_MenopauseAge").val("");
+            }
+            if ($("#MHExerciseHistory_Exercise").val() == 'Yes') {
+                $("#weekDaysId").removeClass("disable-attributes");
+                $("#MHExerciseHistory_ExerciseType").prop("disabled", false);
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").prop("disabled", false);
+            }
+            else {
+                $("#weekDaysId").addClass("disable-attributes");
+                $("#MHExerciseHistory_ExerciseType").prop("disabled", true);
+                $("#MHExerciseHistory_ExerciseType").val("");
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").val("");
+                $("#weekDaysId .custom-combobox-input").val("");
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").prop("disabled", true);
+            }
+            if ($("#MHSocialHistory_Smoking").val() == 'Never Smoker') {
+                $("#quitTobaccoYear").addClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", true);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", true);
+                $("#MHSocialHistoryTobaccoUsedYear").val('');
+                $("#MHSocialHistoryTobaccoAmountPerDay").val('');
+            }
+            else if ($("#MHSocialHistory_Smoking").val() == 'Current Smoker') {
+                $("#quitTobaccoYear").addClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", false);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", false);
+            }
+
+            else {
+                $("#quitTobaccoYear").removeClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", false);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", false);
+            }
+            if ($("#MHSocialHistoryCaffeine").val() == 'No') {
+                $("#cafinatedDrinks").addClass("disable-attributes");
+                $("#MHSocialHistoryCaffeineDrinks").val('');
+                $("#cafinatedDrinks .custom-combobox-input").val('');
+            }
+            else {
+                $("#cafinatedDrinks").removeClass("disable-attributes");
+            }
+            if ($("#MHSocialHistoryAlcohol").val() == 'No') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", true);
+                $("#preferredDrink").addClass("disable-attributes");
+                $("#alcoholDrink").addClass("disable-attributes");
+                $("#MHSocialHistoryAlcoholDrinks").val('');
+                $("#preferredDrink .custom-combobox-input").val('');
+                $("#alcoholDrink .custom-combobox-input").val('');
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Social' || $("#MHSocialHistoryAlcohol").val() == 'Ocassional Drinker') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").addClass("disable-attributes");
+                $("#alcoholDrink .custom-combobox-input").val('');
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Almost Daily' || $("#MHSocialHistoryAlcohol").val() == 'Daily') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Former Drinker' || $("#MHSocialHistoryAlcohol").val() == 'Former Heavy Drinker') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").removeClass("disable-attributes");
+            }
+            else {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").removeClass("disable-attributes");
+            }
+            if ($("#MHRecreationalDrugsHistoryDrugs").val() == 'Currently Taking Drugs') {
+                $("#lastYearId").addClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", false);
+                $("#lastYearId .custom-combobox-input").val('');
+            }
+            else if ($("#MHRecreationalDrugsHistoryDrugs").val() == 'Formerly Taking Drugs') {
+                $("#lastYearId").removeClass("disable-attributes");
+                $("#amountId").removeClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", false);
+            }
+            else {
+                $("#lastYearId").addClass("disable-attributes");
+                $("#amountId").addClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#lastYearId .custom-combobox-input").val('');
+                $("#amountId .custom-combobox-input").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", true);
+            }
+            if ($("#MHPastMedicationHistory_AsNeeded").is(":checked")) {
+                $("#frequencyId").addClass("disable-attributes");
+                $("#MHPastMedicationHistory_Dose").prop("disabled", true);
+                $("#MHPastMedicationHistory_Dose,#PastMedicationDoseFrequency").val("");
+                $("#frequencyId .custom-combobox-input").val("");
+
+            }
+            else {
+                $("#frequencyId").removeClass("disable-attributes");
+                $("#MHPastMedicationHistory_Dose").prop("disabled", false);
+            }
+        })
+        $(document).on("click", ".ui-menu-item-wrapper", function () {
+            debugger;
+            if ($("#MHPregnanciesHistory_Contraception").val() == 'Yes') {
+                $("#MHPregnanciesHistory_ContraceptionDetail").prop("readonly", false);
+            }
+            else {
+                $("#MHPregnanciesHistory_ContraceptionDetail").prop("readonly", true);
+                $("#MHPregnanciesHistory_ContraceptionDetail").val("");
+            }
+            if ($("#MHPregnanciesHistory_MenstrualPeriods").val() == 'Menopausal') {
+                $("#MHPregnanciesHistory_MenopauseAge").prop("readonly", false);
+            }
+            else {
+                $("#MHPregnanciesHistory_MenopauseAge").prop("readonly", true);
+                $("#MHPregnanciesHistory_MenopauseAge").val("");
+            }
+            if ($("#MHExerciseHistory_Exercise").val() == 'Yes') {
+                $("#weekDaysId").removeClass("disable-attributes");
+                $("#MHExerciseHistory_ExerciseType").prop("disabled", false);
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").prop("disabled", false);
+            }
+            else {
+                $("#weekDaysId").addClass("disable-attributes");
+                $("#MHExerciseHistory_ExerciseType").prop("disabled", true);
+                $("#MHExerciseHistory_ExerciseType").val("");
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").val("");
+                $("#weekDaysId .custom-combobox-input").val("");
+                $("#MHExerciseHistory_ExerciseNoOfDaysPerWeek").prop("disabled", true);
+            }
+            if ($("#MHSocialHistory_Smoking").val() == 'Never Smoker') {
+                $("#quitTobaccoYear").addClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", true);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", true);
+                $("#MHSocialHistoryTobaccoUsedYear").val('');
+                $("#MHSocialHistoryTobaccoAmountPerDay").val('');
+            }
+            else if ($("#MHSocialHistory_Smoking").val() == 'Current Smoker') {
+                $("#quitTobaccoYear").addClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", false);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", false);
+            }
+
+            else {
+                $("#quitTobaccoYear").removeClass("disable-attributes");
+                $("#MHSocialHistoryTobaccoUsedYear").prop("disabled", false);
+                $("#MHSocialHistoryTobaccoAmountPerDay").prop("disabled", false);
+            }
+            if ($("#MHSocialHistoryCaffeine").val() == 'No') {
+                $("#cafinatedDrinks").addClass("disable-attributes");
+                $("#MHSocialHistoryCaffeineDrinks").val('');
+                $("#cafinatedDrinks .custom-combobox-input").val('');
+            }
+            else {
+                $("#cafinatedDrinks").removeClass("disable-attributes");
+            }
+            if ($("#MHSocialHistoryAlcohol").val() == 'No') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", true);
+                $("#preferredDrink").addClass("disable-attributes");
+                $("#alcoholDrink").addClass("disable-attributes");
+                $("#MHSocialHistoryAlcoholDrinks").val('');
+                $("#preferredDrink .custom-combobox-input").val('');
+                $("#alcoholDrink .custom-combobox-input").val('');
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Social' || $("#MHSocialHistoryAlcohol").val() == 'Ocassional Drinker') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").addClass("disable-attributes");
+                $("#alcoholDrink .custom-combobox-input").val('');
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Almost Daily' || $("#MHSocialHistoryAlcohol").val() == 'Daily') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+            }
+            else if ($("#MHSocialHistoryAlcohol").val() == 'Former Drinker' || $("#MHSocialHistoryAlcohol").val() == 'Former Heavy Drinker') {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").removeClass("disable-attributes");
+            }
+            else {
+                $("#MHSocialHistoryAlcoholDrinks").prop("disabled", false);
+                $("#preferredDrink").removeClass("disable-attributes");
+                $("#alcoholDrink").removeClass("disable-attributes");
+            }
+            if ($("#MHRecreationalDrugsHistoryDrugs").val() == 'Currently Taking Drugs') {
+                $("#lastYearId").addClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", false);
+                $("#lastYearId .custom-combobox-input").val('');
+            }
+            else if ($("#MHRecreationalDrugsHistoryDrugs").val() == 'Formerly Taking Drugs') {
+                $("#lastYearId").removeClass("disable-attributes");
+                $("#amountId").removeClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", false);
+            }
+            else {
+                $("#lastYearId").addClass("disable-attributes");
+                $("#amountId").addClass("disable-attributes");
+                $("#MHRecreationalDrugsType").val('');
+                $("#lastYearId .custom-combobox-input").val('');
+                $("#amountId .custom-combobox-input").val('');
+                $("#MHRecreationalDrugsType").prop("disabled", true);
+            }
+        });
+        $("#MHPastMedicationHistory_AsNeeded").change(function () {
+            if ($(this).is(":checked")) {
+                $("#frequencyId").addClass("disable-attributes");
+                $("#MHPastMedicationHistory_Dose").prop("disabled", true);
+                $("#MHPastMedicationHistory_Dose,#PastMedicationDoseFrequency").val("");
+                $("#frequencyId .custom-combobox-input").val("");
+
+            }
+            else {
+                $("#frequencyId").removeClass("disable-attributes");
+                $("#MHPastMedicationHistory_Dose").prop("disabled", false);
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var YearSelector = $(".yearselector");
+
+            var currentYear = (new Date()).getFullYear();
+
+            for (var i = currentYear; i >= 2000; i--) {
+                var option = $("<option />");
+                option.text(i);
+                option.val(i);
+                YearSelector.append(option);
+            }
+        });
+    </script>
+
+    <script>
+        $('#MedicalProblemsForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                Swal.fire(sweet2).then((result) => {
+                    if (result.value) {
+                        $("#SaveProblemsBtn").prop('disabled', true);
+                        $(this).ajaxSubmit({
+                            success: function (response) {
+                                if (response == "exist") {
+                                    ExistsMsg();
+                                    $("#SaveProblemsBtn").prop('disabled', false);
+                                }
+                                else {
+                                    onMedicalProblemsHistorySucess(response);
+                                }
+
+                            },
+                        });
+                    }
+                    if (result.dismiss === swal.DismissReason.cancel) {
+                        $("#SaveProblemsBtn").prop('disabled', false);
+                        return false;
+                    }
+                });
+            }
+            else {
+                $("#SaveProblemsBtn").prop('disabled', false);
+            }
+        });
+        function onMedicalProblemsHistorySucess(data) {
+            SuccessMsg();
+            $("#SaveProblemsBtn").prop('disabled', false);
+            $("#patientMedicalProblemBasicDto_MedicalProblemId").val('');
+            $("#dieaseType .custom-combobox-input").val('');
+            $('#patientMedicalProblemBasicDto_DiseaseTypeId').val('');
+            $('#patientMedicalProblemBasicDto_DateYear').val('');
+            $('#patientMedicalProblemBasicDto_CurrentStatus').val('');
+            $("#currentStatus .custom-combobox-input").val('');
+            $("#documentId .custom-combobox-input").val('');
+            $("#patientMedicalProblemBasicDto_DocumentReport").val('');
+            $("#ProblemsHistoryGrid").empty();
+            $("#ProblemsHistoryGrid").html(data);
+        }
+        function DeleteMedicalProblems(id) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/PatientSide/DeleteMedicalProblem", { Id: id }).done(function (data) {
+                        DeleteSuccessMsg();
+                        $("#ProblemsHistoryGrid").empty();
+                        $("#ProblemsHistoryGrid").html(data);
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        }
+        function EditMedicalProblems(id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditMedicalProblemHistory", "PatientSide")',
+            data: { Id: id },
+            success: function (data) {
+                $("#patientMedicalProblemBasicDto_MedicalProblemId").val(data.data.medicalProblemId);
+                $('#patientMedicalProblemBasicDto_PatientId').val(data.data.patientId);
+                $('#patientMedicalProblemBasicDto.ExaminerId').val(data.data.examinerId);
+                $('#patientMedicalProblemBasicDto_DiseaseTypeId').val(data.data.diseaseTypeId);
+                $('#patientMedicalProblemBasicDto_DateYear').val(data.data.dateYear);
+                $("#patientMedicalProblemBasicDto_CurrentStatus").val(data.data.currentStatus);
+                $("#patientMedicalProblemBasicDto_DocumentReport").val(data.data.documentReport);
+                $("#documentId .custom-combobox-input").val(data.data.documentReport);
+                $("#currentStatus .custom-combobox-input").val(data.data.currentStatus);
+                $("#dieaseType .custom-combobox-input").val(data.data.dieaseName);
+            },
+            error: function (res) {
+
+            }
+        });
+        };
+    </script>
+}

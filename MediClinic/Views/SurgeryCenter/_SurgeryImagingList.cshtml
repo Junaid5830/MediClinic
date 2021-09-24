@@ -1,0 +1,58 @@
+﻿@model MediClinic.Models.SurgeryCenterViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="myTableImage" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll"></label>
+                </div>
+
+            </th>
+            <th>Patient Name</th>
+            <th>Date OfI maging</th>
+            <th>Timming Of Imaging</th>
+            <th>Reported By</th>
+            <th>Type Of Image</th>
+            <th>Report Status</th>
+            <th>Image Film</th>
+            <th>Diagnosis</th>
+            <th class="all">Action  </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.getImagingDto)
+        {
+
+            <tr class="card" style="cursor: pointer">
+                <th>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="@item.ImagingId">
+                        <label class="custom-control-label" for="@item.ImagingId"></label>
+                    </div>
+                </th>
+                <td>@item.Patient.FirstName @item.Patient.LastName</td>
+                <td>@item.DateOfImaging.Value.ToString("MM/dd/yyyy")</td>
+                <td>@item.TimmingOfImaging</td>
+                <td>@item.ReportedBy</td>
+                <td>@item.TypeOfImage</td>
+                <td>@item.ReportStatus</td>
+                <td>@item.ImageFilm</td>
+                <td>@item.Diagnosis</td>
+                <td class="action">
+                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                        Options
+                        @*<span class="caret"></span>*@
+                    </button>
+                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                        <li onclick="deleteMesg(@item.ImagingId,this)"><a>Delete</a></li>
+                        <li><a href="/Imaging/Add?id=@item.ImagingId">Edit</a></li>
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

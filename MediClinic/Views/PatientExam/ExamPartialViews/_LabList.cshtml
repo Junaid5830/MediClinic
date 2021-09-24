@@ -1,0 +1,131 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+
+    var userRole = _sessionManager.GetRoleId();
+
+}
+
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Lab</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th> DATE/TIME OF EXAM</th>
+                        <th>EXAMINER</th>
+                        <th>TYPE OF EXAM</th>
+                        <th>REASON FOR EXAM</th>
+                        <th>RESULTS</th>
+                        <th>REPORT</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.getLabList is null))
+                    {
+                        var rec = Model.getLabList.OrderByDescending(x => x.LabId).Skip(1).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card">
+
+                                <td>@rec.DateTime.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.Examiner</td>
+                                <td>@rec.TypeOfExam</td>
+                                <td>@rec.ReasonForExam</td>
+                                <td>@rec.Results</td>
+                                <td>@rec.Report</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.LabId,this)"><a>Delete</a></li>
+                                            <li><a href="/Lab/Add?id=@rec.LabId">Edit</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Lab</h4>
+        <div class="table-responsive">
+            <table id="LabsTable" class="table">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th> DATE/TIME OF EXAM</th>
+                        <th>EXAMINER</th>
+                        <th>TYPE OF EXAM</th>
+                        <th>REASON FOR EXAM</th>
+                        <th>RESULTS</th>
+                        <th>REPORT</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.getLabList is null))
+                    {
+                        var rec = Model.getLabList.OrderByDescending(x => x.LabId).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card">
+
+                                <td>@rec.DateTime.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.Examiner</td>
+                                <td>@rec.TypeOfExam</td>
+                                <td>@rec.ReasonForExam</td>
+                                <td>@rec.Results</td>
+                                <td>@rec.Report</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.LabId,this)"><a>Delete</a></li>
+                                            <li><a href="/Lab/Add?id=@rec.LabId">Edit</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,3443 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var _RoleTypeId = _sessionManager.GetRoleId();
+}
+@{
+    var RoleType = ViewBag.RoleId;
+    ViewData["Title"] = "Patient Info";
+
+    Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+
+
+}
+@{
+    //var ProviderName = ViewBag.ProviderName;
+    var PatientId = ViewContext.RouteData.Values["id"];
+    var WriteSignatureImage = ViewBag.WriteSignature;
+    var SaveOrUpdate = ViewBag.Action;
+    var checkClick = ViewBag.clickValue;
+    if (RoleType == 2)
+    {
+        RoleType = "/PatientSide/PatientList";
+    }
+    else
+    {
+        RoleType = "/PatientSide/PatientSummary/" + ViewBag.InfoId;
+    }
+}
+
+@section styles
+{
+
+
+    <link href="~/app-assets/vendors/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" crossorigin="anonymous">
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+
+    <style>
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border: solid #cfcfcf 1px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            border: solid #cfcfcf 1px !important;
+            padding-bottom: 0px !important;
+            padding-right: 0px !important;
+        }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
+                background-color: #f6f6f6;
+            }
+
+        .select2-container--default.select2-container--disabled .select2-selection--multiple {
+            background-color: #fff !important;
+        }
+
+        .SignatureImageUpdate {
+            width: 100%;
+        }
+
+        .sp-replacer {
+            margin: 15px auto;
+            width: 45%;
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f6f6f6 !important;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1), 0 1px 1px -2px rgba(0, 0, 0, .1), 0 1px 3px 0 rgba(0, 0, 0, .2);
+        }
+
+        .sp-picker-container, .sp-palette-container {
+            background-color: #f6f6f6;
+        }
+
+        .sp-preview {
+            width: 86%;
+            height: 30px;
+        }
+
+        .sp-dd {
+            text-align: center;
+            color: #787878;
+            line-height: 27px;
+            font-size: 11px;
+        }
+
+        .sp-palette .sp-thumb-el {
+            border-radius: 50%;
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .sp-palette .sp-thumb-inner {
+            border-radius: 50%;
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+        }
+
+        .fa-camera:before {
+            font-size: 23px;
+            color: #547cea !important;
+        }
+
+        .empty {
+            box-shadow: 0px 0px 2px 0px red !important;
+            border: 1px solid red !important;
+        }
+
+        .image-area {
+            position: relative;
+            width: 50%;
+            background: #333;
+        }
+
+            .image-area img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-Sigatureimage {
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-image:hover {
+            background: #E54E4E;
+            padding: 3px 7px 5px;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-image:active {
+            background: #E54E4E;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-Sigatureimage:hover {
+            background: #E54E4E;
+            padding: 3px 7px 5px;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-Sigatureimage:active {
+            background: #E54E4E;
+            top: 0;
+            right: 22%;
+        }
+
+        .Signaturepad_show {
+            cursor: pointer;
+            line-height: 30px !important;
+            height: 30px !important;
+            padding: 0px 0.5rem !important;
+            font-size: 12px !important;
+        }
+
+        .UploadSignature_show {
+            cursor: pointer;
+            line-height: 30px !important;
+            height: 30px !important;
+            padding: 0px 0.5rem !important;
+            font-size: 12px !important;
+        }
+
+        #result {
+            cursor: pointer;
+        }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        input.custom-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            padding: 7px 0;
+            height: 48px !important;
+            width: 5rem !important;
+            cursor: pointer !important;
+        }
+
+        .selectize-input {
+            min-height: 3.2rem !important;
+            padding: 14px 12px !important;
+        }
+
+            .selectize-input > input {
+                width: 100% !important;
+            }
+
+            .selectize-input.focus {
+                box-shadow: none !important;
+                border-color: #ccc !important
+            }
+
+        .select-dropdown {
+            display: none !important;
+        }
+
+        .multiple-select-dropdown {
+            height: 200px !important;
+            overflow-y: scroll !important;
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .img-container {
+            max-height: 240px !important;
+            min-height: 240px !important;
+        }
+
+        .patientProfile_pic {
+            border-radius: 50%;
+            opacity: 1;
+            border: 2px solid #efefef;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+            width: 200px;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 47%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff;
+            font-size: 17px;
+        }
+
+        .zip_model .modal-content {
+            text-align: center !important;
+        }
+
+        .zip_model.modal-fixed-footer {
+            height: 40% !important;
+            width: 40% !important;
+        }
+
+        .zip_model {
+            height: 40% !important;
+            width: 40% !important;
+            max-height: 40% !important;
+            background-color: #fff !important;
+            border-radius: 8px !important;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .ui-widget .select-wrapper {
+            display: none
+        }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 125px !important;
+            }
+        }
+
+        .set_formadd {
+            margin-top: 22px !important;
+        }
+
+
+
+        #slide-out-right3.sidenav {
+            top: 66px;
+            width: 340px;
+            padding-bottom: 0;
+        }
+
+        #slide-out-right4.sidenav {
+            top: 66px;
+            width: 340px;
+            padding-bottom: 0;
+        }
+
+        .tabs {
+            height: 700px;
+            white-space: normal;
+        }
+
+        .tab {
+            display: block;
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .tab-content {
+            height: auto;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+        }
+
+        .indicator {
+            display: none;
+        }
+
+        .tabs .tab {
+            text-align: unset !important;
+            text-transform: unset !important;
+            display: block !important;
+        }
+
+            .tabs .tab a {
+                padding: 0 10px !important;
+                color: #757575 !important;
+            }
+
+        h4 {
+            color: #757575 !important
+        }
+
+        i.right {
+            margin-top: 9px !important;
+        }
+
+        .legaldrop {
+            line-height: 48px !important;
+            padding: 0 10px !important;
+        }
+
+            .legaldrop a {
+                color: #757575 !important;
+            }
+
+        #dropdown1 {
+            box-shadow: none !important;
+            width: 230px !important;
+        }
+
+            #dropdown1 li a {
+                line-height: 48px !important;
+            }
+
+        @@media screen and (max-width: 991px) and (min-width: 600px) {
+            .tabs {
+                display: block !important;
+            }
+        }
+
+        @@media screen and (max-width: 600px) {
+            .tabs {
+                height: auto;
+                white-space: nowrap !important;
+                margin-top: 20px;
+                width: 360px !important;
+            }
+
+            .patient_new {
+                display: none
+            }
+        }
+
+        .imageSection {
+            cursor: pointer;
+        }
+
+        .webUrlDiv {
+            cursor: pointer;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script src="~/app-assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="~/app-assets/js/scripts/extra-components-sweetalert.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/Color/spectrum.js"></script>
+    <script src="~/webcamjs/webcam.js"></script>
+
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+
+    <script>
+        var IsCapturedScreen = false;
+        var IsRequiredNf2Date = false;
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $("#showResult").removeAttr("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            $('#result-wrapper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+
+
+        function take_snapshot() {
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#modal1').modal('open');
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        //Usage example:
+        //var file = dataURLtoFile('data:text/plain;base64,aGVsbG8gd29ybGQ=','hello.txt');
+
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeAttr("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+
+
+    </script>
+    <script>
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    debugger;
+                    //Signdata = e.target.result;
+                    $('#savetarget').attr('src', e.target.result);
+                    $('#savetarget').show();
+                    $('#UpdateCaseSignature').hide();
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#SignatureImageUpload").change(function () {
+            readURL(this);
+        });
+
+    </script>
+    <script>
+
+
+
+        function closeCamera() {
+            debugger;
+        }
+
+          $(document).on("click", ".ui-menu-item-wrapper", function () {
+
+              var val = $("#Patient_nf2Status").val();
+              if ($("#Patient_nf2Status").val() == '15') {
+                  IsRequiredNf2Date = true;
+              }
+              else {
+                  IsRequiredNf2Date = false;
+              }
+
+          });
+
+
+        var banColor = ['#ffffff','#000000','#F0FFF0', '#F5FFFA', '#F0FFFF', '#F0F8FF', '#F8F8FF', '#FFF5E', '#F5F5DC', '#FDF5E6', '#FFFAF0', '#FFFFF0', '#FAEBD7', '#FAF0E6', '#FFF0F5'];
+
+        //$(".showPalette").spectrum({
+        //    color: "#f00",
+        //    change: function(color) {
+        //        if( $.inArray( color.toHexString(), banColor ) >= 0 ){
+        //            $("#basic-log").text("change called: " + color.toHexString() +' Is Not Allowed');
+        //            // Reset your palate
+        //            $("#showPalette").val('');
+        //        }
+        //    }
+        //});
+
+
+        $("#showPalette").spectrum({
+            //color: "#f00",
+    allowEmpty:true,
+
+    showInput: true,
+    containerClassName: "full-spectrum",
+    showInitial: true,
+    showPalette: true,
+    showSelectionPalette: true,
+    showAlpha: true,
+    maxPaletteSize: 10,
+    preferredFormat: "hex",
+            change: function (color) {
+                debugger;
+                if (color) {
+                    if ($.inArray(color.toHexString(), banColor) >= 0) {
+                        $("#color_error").text("White color is Not Allowed");
+                        // Reset your palate
+                        $("#showPalette").val('');
+                        $('.sp-clear').trigger('click');
+                    }
+                    else {
+                        $("#color_error").html("");
+                    }
+                }
+
+            },
+    move: function (color) {
+        //updateBorders(color);
+    },
+    show: function () {
+
+    },
+    beforeShow: function () {
+
+    },
+    hide: function (color) {
+        //updateBorders(color);
+    },
+
+    palette: [
+        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", /*"rgb(153, 153, 153)","rgb(183, 183, 183)",*/
+        "rgb(204, 204, 204)", "rgb(217, 217, 217)", /*"rgb(239, 239, 239)", "rgb(243, 243, 243)",*/, "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"],
+        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)"],
+        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+        /*"rgb(133, 32, 12)", "rgb(153, 0, 0)", "rgb(180, 95, 6)", "rgb(191, 144, 0)", "rgb(56, 118, 29)",
+        "rgb(19, 79, 92)", "rgb(17, 85, 204)", "rgb(11, 83, 148)", "rgb(53, 28, 117)", "rgb(116, 27, 71)",*/
+        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+        "rgb(12, 52, 61)", "rgb(28, 69, 135)"]
+    ]
+});
+        var saveAction = '@ViewBag.Action';
+
+
+        //Tabs issue code
+        if (saveAction == 'Update') {
+
+            //$("input").prop("disabled", true);
+            disablePatientInfoFields();
+            disablePatientPhoneFields();
+            disablePatientEmergencyFields();
+            disablePatientSignatureFields();
+            disablePatientClaimFields();
+            disablePatientvehicleFields();
+            disablePatientsecondaryFields();
+            disablePatientTertiaryyFields();
+            disablePatientPIFields();
+            disablePatientCollectionFields();
+
+            $('.patientinfobasichiddenUserId').attr('disabled', false);
+            $('.hiddenPatientPhoneUserId').attr('disabled', false);
+            $('.hiddenSignatureUserId').attr('disabled', false);
+            $('.HiddenPatientInfoFormUserId').attr('disabled', false);
+            $('.hiddenClaimInfoBasicUserid').attr('disabled', false);
+
+            $(".sidenav-trigger").attr("disabled", true);
+            setTimeout(function () {
+            $(".genericClassForDD").closest(".ui-widget").find("input, button").prop("disabled", true);
+            }, 1000);
+            //var select = $("#multilanguage").select2();
+            //var selectize = select[0].select2;
+            //select2.disable();
+        }
+
+        $(document).on('click', '.patientCancelBtn', function () {
+            if (saveAction == "Update") {
+                 var btnFrom = $(this).attr('data-val');
+
+                if (btnFrom == 'InfoForm') {
+                    disablePatientInfoFields();
+                    $(".patientselect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditInfoBtn = false;
+                }
+                else if (btnFrom == 'phoneForm') {
+                    disablePatientPhoneFields();
+                    isEditPhoneBtn = false;
+                }
+                 else if (btnFrom == 'emergencyForm') {
+                    disablePatientEmergencyFields();
+                    $(".emeregencySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditEmergencyBtn = false;
+                }
+                else if (btnFrom == 'signatureForm') {
+                    disablePatientSignatureFields();
+                    $(".signatueSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                    $("#sigCanvas").css('pointer-events', 'none');
+                    $("button[data-action=save]").prop('disabled', true);
+                    $("button[data-action=clear]").prop('disabled', true);
+                    isEditIdAndSignatureBtn = false;
+                }
+                else if (btnFrom == 'claimForm') {
+                    disablePatientClaimFields();
+                    $(".claimSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditClaimInfoBtn = false;
+                }
+                else if (btnFrom == 'vehicleForm') {
+                    disablePatientvehicleFields();
+                    $(".vehicle .custom-combobox-input").autocomplete("option", { disabled: true });
+                    isEditVehicleBtn = false;
+                }
+
+                else if (btnFrom == 'secondaryForm') {
+                    disablePatientsecondaryFields();
+                    $(".secondarySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditSecondaryInsuranceBtn = false;
+                }
+                 else if (btnFrom == 'tertiaryForm') {
+                    disablePatientTertiaryyFields();
+                    $(".tertierySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditTertiaryInsuranceBtn = false;
+                }
+                  else if (btnFrom == 'PIForm') {
+                    disablePatientPIFields();
+                    $(".piSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditPIBtn = false;
+                }
+                 else if (btnFrom == 'CollectionForm') {
+                    disablePatientCollectionFields();
+                    $(".collectionSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+                    isEditCollectionBtn = false;
+                }
+            }
+
+        });
+
+        //$('.patientCancelBtn').on('click', function () {
+        //    debugger;
+
+
+        //});
+
+        var SignaturePath = '@ViewBag.WriteSignature';
+         var city = '';
+        var hascity = 0;
+        var hassub = 0;
+        var state = '';
+        var nbhd = '';
+        var subloc = '';
+        var country = '';
+        var hascountry = 0;
+        $(document).ready(function () {
+        $.support.cors = true;
+        $.ajaxSetup({ cache: false });
+    $('#info_Zip').keyup(function () {
+        $zval = $('#info_Zip').val();
+        if ($zval.length == 5) {
+            $jCSval = getCityState($zval, true);
+        }
+    });
+    function getCityState($zip, $blnUSA) {
+
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+            if (response.status == "ZERO_RESULTS") {
+                $("#err_infozip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+            else {
+                 var address_components = response.results[0].address_components;
+                $.each(address_components, function (index, component) {
+
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+
+            $("#info_city").val(city);
+            $("#info_state").val(state);
+            $("#info_country").val(country);
+            //$('#modal1').modal('open');
+            }
+            //find the city and state
+
+
+            //pre-fill the city and state
+
+        });
+            }
+
+            $('#emergency_Zip').keyup(function () {
+
+                $zval = $('#emergency_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getEmergencyCityState($zval, true);
+
+        }
+
+            });
+             function getEmergencyCityState($zip, $blnUSA)  {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+
+             if (response.status == "ZERO_RESULTS") {
+                        $("#err_emergencyzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+             else {
+                 var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#emergency_city").val(city);
+            $("#emergency_state").val(state);
+            $("#emergency_country").val(country);
+
+             }
+            //find the city and state
+
+            //pre-fill the city and state
+
+        });
+            }
+
+
+              $('#claim_Zip').keyup(function () {
+
+                $zval = $('#claim_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getclaimCityState($zval, true);
+
+        }
+
+            });
+             function getclaimCityState($zip, $blnUSA) {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+           if (response.status == "ZERO_RESULTS") {
+                        $("#err_claimzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+           else {
+                   var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#claim_city").val(city);
+            $("#claim_state").val(state);
+            $("#claim_country").val(country);
+            //$('#modal3').modal('open');
+           }
+            //find the city and state
+
+
+            //pre-fill the city and state
+
+        });
+            }
+
+              $('#secondary_Zip').keyup(function () {
+
+                $zval = $('#secondary_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getsecondaryCityState($zval, true);
+
+        }
+
+            });
+             function getsecondaryCityState($zip, $blnUSA) {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+
+             if (response.status == "ZERO_RESULTS") {
+                $("#err_secondaryzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+             else {
+                      var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#secondary_city").val(city);
+            $("#secondary_state").val(state);
+            $("#secondary_country").val(country);
+            //$('#modal4').modal('open');
+
+             }
+            //find the city and state
+
+            //pre-fill the city and state
+
+        });
+            }
+
+              $('#tertiary_Zip').keyup(function () {
+
+                $zval = $('#tertiary_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getTertiaryCityState($zval, true);
+
+        }
+
+            });
+             function getTertiaryCityState($zip, $blnUSA) {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+          if (response.status == "ZERO_RESULTS") {
+                $("#err_tertiaryZip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+          else {
+               var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#tertiary_city").val(city);
+            $("#tertiary_state").val(state);
+            $("#tertiary_country").val(country);
+            //$('#modal5').modal('open');
+
+          }
+            //find the city and state
+
+            //pre-fill the city and state
+
+        });
+            }
+
+            $('#pi_Zip').keyup(function () {
+
+                $zval = $('#pi_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getpiCityState($zval, true);
+
+        }
+
+            });
+             function getpiCityState($zip, $blnUSA) {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+           if (response.status == "ZERO_RESULTS") {
+                $("#err_piZip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+           else {
+                var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#pi_city").val(city);
+            $("#pi_state").val(state);
+            $("#pi_country").val(country);
+            //$('#modal6').modal('open');
+           }
+            //find the city and state
+
+
+            //pre-fill the city and state
+
+        });
+            }
+
+             $('#collection_Zip').keyup(function () {
+
+                $zval = $('#collection_Zip').val();
+
+                if ($zval.length == 5) {
+                  $jCSval = getcollectionCityState($zval, true);
+
+        }
+
+            });
+             function getcollectionCityState($zip, $blnUSA) {
+
+        var date = new Date();
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+             if (response.status == "ZERO_RESULTS") {
+                $("#err_collectionzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+             else {
+                 var address_components = response.results[0].address_components;
+            $.each(address_components, function (index, component) {
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+            $("#collection_city").val(city);
+            $("#collection_state").val(state);
+            $("#collection_country").val(country);
+            //$('#modal7').modal('open');
+             }
+            //find the city and state
+
+
+            //pre-fill the city and state
+
+        });
+            }
+ });
+        //function PopulateState() {
+
+        //    //    if (hascity == 1) {
+
+        //    //} else if (hassub == 1) {
+        //    //    $('#info_city').val(subloc);
+        //    //} else {
+        //    //    $('#info_city').val(nbhd);
+        //    //}
+        //    $('#info_city').val(city);
+        //    $('#info_state').val(state);
+        //    $('#info_country').val(country);
+        //    //reset
+        //    var hascity = 0;
+        //    var hassub = 0;
+        //    }
+        function PopulateEmergencyState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#emergency_city').val(city);
+            $('#emergency_state').val(state);
+            $('#emergency_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+        }
+                function PopulateclaimState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#claim_city').val(city);
+            $('#claim_state').val(state);
+            $('#claim_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+        }
+        function PopulateSecondaryState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#secondary_city').val(city);
+            $('#secondary_state').val(state);
+            $('#secondary_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+            }
+         function PopulatetertiaryState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#tertiary_city').val(city);
+            $('#tertiary_state').val(state);
+            $('#tertiary_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+        }
+        function PopulatepiState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#pi_city').val(city);
+            $('#pi_state').val(state);
+            $('#pi_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+        }
+          function PopulateCollectionState() {
+
+            //    if (hascity == 1) {
+
+            //} else if (hassub == 1) {
+            //    $('#info_city').val(subloc);
+            //} else {
+            //    $('#info_city').val(nbhd);
+            //}
+            $('#collection_city').val(city);
+            $('#collection_state').val(state);
+            $('#collection_country').val(country);
+            //reset
+            var hascity = 0;
+            var hassub = 0;
+        }
+
+
+        // function DiscardZipCode() {
+        //        $('#info_Zip').val('');
+        //          $('#modal1').modal('close');
+
+        //}
+        function DiscardEmergencyZipCode() {
+                $('#emergency_Zip').val('');
+                  $('#modal2').modal('close');
+
+        }
+                function DiscardclaimZipCode() {
+                $('#claim_Zip').val('');
+                  $('#modal3').modal('close');
+
+        }
+
+        function DiscardSecondaryZipCode() {
+                $('#secondary_Zip').val('');
+                  $('#modal4').modal('close');
+
+        }
+
+                function DiscardtertiaryZipCode() {
+                $('#tertiary_Zip').val('');
+                  $('#modal5').modal('close');
+
+        }
+         function DiscardpiZipCode() {
+                $('#pi_Zip').val('');
+                  $('#modal6').modal('close');
+
+        }
+
+        function DiscardCollectionZipCode() {
+                $('#collection_Zip').val('');
+                  $('#modal7').modal('close');
+
+        }
+
+        $(document).ready(function () {
+
+
+            $('#captureImageFromCam').hide();
+
+            if (saveAction == "Update") {
+                $(".patientselect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".emeregencySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".signatueSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".claimSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".vehicle .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".secondarySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".tertierySelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".piSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".collectionSelect_tab .custom-combobox-input").autocomplete("option", { disabled: true });
+
+
+                //window.onload($('.dropdown-trigger').trigger('click'));
+
+                var secondaryAddress = '@ViewBag.SecondaryAddressContains';
+                if (secondaryAddress == 'True') {
+                    $('#secondaryYes').prop('checked', true);
+                    $('#secondary_add').show();
+                }
+                else if (secondaryAddress == '') {
+                    $('#secondaryNo').prop('checked', true);
+                }
+            }
+            else {
+                $('.checkFirst').prop('checked', true);
+            }
+            $('input:radio[name=yes]').click(function () {
+                var ans1 = $('input:radio[name=yes]:checked').val();
+                if (ans1 == "1") {
+
+                    $('#secondary_add').show();
+                }
+                else {
+                    $('#secondary_add').hide();
+                    $('.secondaryAddressFileds').val('');
+                }
+            });
+            if (saveAction == "Update") {
+
+                var EmergenyPhone = '@ViewBag.EmergencyPhoneContains';
+                if (EmergenyPhone == 'True') {
+                    $('#emergencyPhoneYes').prop('checked', true);
+                    $('#emergencyPhone_hideShow').show();
+                }
+                else if (EmergenyPhone == '') {
+                    $('#emergencyPhoneNo').prop('checked', true);
+                }
+            }
+
+            $('input:radio[name=phoneYes]').click(function () {
+                var ans2 = $('input:radio[name=phoneYes]:checked').val();
+                if (ans2 == "2") {
+
+                    $('#emergencyPhone_hideShow').show();
+                }
+                else {
+                    $('#emergencyPhone_hideShow').hide();
+                    $('#emergency_number').val('');
+                }
+            });
+
+
+             if (saveAction == "Update") {
+                var Passport_number = '@ViewBag.PassportContains';
+                if (Passport_number == 'True') {
+                    $('#PassportNumberYes').prop('checked', true);
+                    $('#Passport_HideShow').show();
+                }
+                else if (Passport_number == '') {
+                    $('#PassportNumberno').prop('checked', true);
+                }
+            }
+            $('input:radio[name=passportYes]').click(function () {
+                var ans2 = $('input:radio[name=passportYes]:checked').val();
+                if (ans2 == "1") {
+
+                    $('#Passport_HideShow').show();
+                }
+                else {
+                    $('#Passport_HideShow').hide();
+                    $('.signaturePassportNumber').val('');
+                }
+            });
+        });
+        if (saveAction == "Update") {
+            $("#colorName").val('@ViewBag.color');
+        }
+        /*patient Vehicle */
+        (function () {
+            $('#VehicleInvolved').change(function () {
+
+                var val = $('#VehicleInvolved').val();
+
+                if ($.isNumeric(val)) {
+                    $('#VehicleInvolved_errmsg').html("");
+                }
+
+            });
+
+            $("#Append-btn").on("click", function () {
+
+
+
+                $("#newDiv").empty();
+
+
+                var val = $("#VehicleInvolved").val();
+                if (val == "") {
+                    $('#VehicleInvolved_errmsg').html("Enter No Of Vehicles");
+                }
+                else {
+                    $('#VehicleInvolved_errmsg').html("");
+                }
+                var providerlistNo = "";
+
+               //<input hidden="hidden" value="empty" id="deleteThisForm-'+ i +'" name="patientVehiclesBasiclist[' + i + '].IsDelete />
+                for (var i = 0; i < val; i++) {
+                    var newInput = $('<div id="mainDiv' + i + '"><div class="row"><div class="col s12 "><a class="right btn delete-btn Recreate forShowBtnVehicle" href="javascript:void(0);" id="btnDeleteForm-' + i + '" onclick="removeForm(' + i + ',this)"><i class="material-icons">delete</i></a><a class="right btn delete-btn Recreate forHideBtnVehicle" style="display:none;"  href="javascript:void(0);" ><i class="material-icons">delete</i></a></div></div>  <input hidden="hidden" class="hiddenAppend" id="counter-' + i + '" /><input hidden="hidden" name="patientVehiclesBasiclist[' + i + '].PatientVehicleID" /><div class="row"><div class="col s12 m6"><p>Vehicles/Entities Info<span class="required"> * </span></p><div class="input-field col s12 pl-0"><input class="patientvehicleInfoTxtField text-input input-styling VehicleInfoInput vehicle_tab" data-val="empty" id="VehicleInfo-' + i + '" name="patientVehiclesBasiclist[' + i + '].VehicleInfo" type="text" placeholder="Enter Vehicles/Entities Info"><span class="required" id="spanVehicleInfo-' + i + '"></span></div></div><div class="col s12 m6"><p>Vehicle/Entities License Plate Number<span class="required"> * </span></p><div class="input-field col s12 pl-0"><input class="patientvehicleInfoTxtField text-input input-styling LicensePlateNumberInput vehicle_tab" data-val="empty" id="LicensePlateNumberInput-' + i + '"  name="patientVehiclesBasiclist[' + i + '].VehicleLicense" type="text" placeholder="Enter Vehicle/Entities License Plate Number"><span class="required" id="spanLicensePlateNumber-' + i + '"></span></div></div></div><div class="row"><div class="col s12 m6 "><p>Vehicles/Entities Registration State<span class="required"> * </span></p><div class="input-field col s12 pl-0"><input class="patientvehicleInfoTxtField text-input input-styling entityRegistrationStateInput vehicle_tab" data-val="empty" id="entityRegistrationStateInput-' + i + '"  name="patientVehiclesBasiclist[' + i + '].VehicleResigrationState" type="text" placeholder="Enter Vehicles/Entities Registration State"><span class="required" id="spanentityRegistrationState-' + i + '"></span></div></div><div class="col s12 m6"><p>Insurance Provider</p><div class="ui-widget"><select  class="vehicleDropDListBeforeEditDisabled vehicleInsurance VehicleComobox VehicleInsuranceProvider vehicle_tab" name="patientVehiclesBasiclist[' + i + '].InsuranceProviderId"><option></option></select></div></div></div></div><div class="row"><div class="col s12 m6" id="role' + i + '"><p>Role</p><div class="input-field col s12 pl-0"><input class="patientvehicleInfoTxtField text-input input-styling vehicle_tab"   name="patientVehiclesBasiclist[' + i + '].Role" type="text" placeholder="Enter Role"></div></div><div class="col s12 m6" id="notes' + i + '"><p>Notes</p><div class="input-field col s12 pl-0"><input class="patientvehicleInfoTxtField text-input input-styling vehicle_tab"   name="patientVehiclesBasiclist[' + i + '].Notes" placeholder="Enter Notes" /></div></div></div><hr id="line' + i + '"/></div> ');
+
+                    $(function () {
+    var addnew = '<li class="ui-menu-item" id="addnew" onClick="InsurandropdownCheck();"><div class="ui-menu-item-wrapper sidenav-trigger sideout"  href="javascript:void(0);" data-target="slide-out-right9"><a class="sidenav-trigger sideout" data-target="slide-out-right2">Add New</a></div></li>';
+
+    $.widget("custom.combobox", {
+        _create: function () {
+            this.wrapper = $("<span>")
+                .addClass("custom-combobox")
+                .insertAfter(this.element);
+
+            this.element.hide();
+            this._createAutocomplete();
+            this._createShowAllButton();
+        },
+
+        _createAutocomplete: function () {
+            var selected = this.element.children(":selected"),
+                value = selected.val() ? selected.text() : "";
+
+            this.input = $("<input>")
+                .appendTo(this.wrapper)
+                .val(value)
+                .attr("title", "")
+                .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+                .autocomplete({
+                    delay: 0,
+                    minLength: 0,
+                    source: $.proxy(this, "_source"),
+                    open: function (e, ui) {
+                        $(".ui-autocomplete").append(addnew);
+                    },
+
+                    response: function (event, ui) {
+                        if (!ui.content.length) {
+                            var noResult = { value: "", label: " No results found" };
+                            ui.content.push(noResult);
+                        }
+                    }
+                })
+                .tooltip({
+                    classes: {
+                        "ui-tooltip": "ui-state-highlight"
+                    }
+                });
+
+            this._on(this.input, {
+                autocompleteselect: function (event, ui) {
+                    ui.item.option.selected = true;
+                    this._trigger("select", event, {
+                        item: ui.item.option
+                    });
+                },
+
+                autocompletechange: "_removeIfInvalid"
+            });
+        },
+
+        _createShowAllButton: function () {
+
+            var input = this.input,
+                wasOpen = false;
+
+            $("<a>")
+                .attr("tabIndex", -1)
+                .attr("title", "Show All Items")
+
+                .appendTo(this.wrapper)
+                .button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-s"
+                    },
+                    text: false
+                })
+                .removeClass("ui-corner-all")
+                .addClass("custom-combobox-toggle ui-corner-right")
+                .on("mousedown", function () {
+                    wasOpen = input.autocomplete("widget").is(":visible");
+                })
+                .on("click", function () {
+                    input.trigger("focus");
+
+                    // Close if already visible
+                    if (wasOpen) {
+                        return;
+                    }
+
+                    // Pass empty string as value to search for, displaying all results
+                    input.autocomplete("search", "");
+                });
+        },
+
+        _source: function (request, response) {
+            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+            response(this.element.children("option").map(function () {
+
+                var text = $(this).text();
+                if (this.value && (!request.term || matcher.test(text)))
+                    return {
+                        label: text,
+                        value: text,
+                        option: this
+                    };
+            }));
+            globalValue = this.input.val();
+
+        },
+
+        _removeIfInvalid: function (event, ui) {
+
+            // Selected an item, nothing to do
+            if (ui.item) {
+                return;
+            }
+
+            // Search for a match (case-insensitive)
+            var value = this.input.val(),
+                valueLowerCase = value.toLowerCase(),
+                valid = false;
+
+
+            this.element.children("option").each(function () {
+                if ($(this).text().toLowerCase() === valueLowerCase) {
+                    this.selected = valid = true;
+                    return false;
+                }
+            });
+
+            // Found a match, nothing to do
+            if (valid) {
+
+                return;
+            }
+        },
+
+        _destroy: function () {
+            this.wrapper.remove();
+            this.element.show();
+        }
+    });
+
+    $(".vehicleInsurance").combobox();
+
+
+});
+                    $('#newDiv').append(newInput);
+                }
+                $()
+                $.get("/PatientSide/InsuranceProviderName").done(function (data) {
+                    //providerlistNo = data;
+                    for (var i = 0; i < data.length; i++) {
+                         var TypeIdlist = $(".VehicleComobox");
+                     TypeIdlist.append($('<option></option>').val(data[i].providerId).text(data[i].providerName));
+
+                    }
+
+                });
+
+                $(".set_rowbtn").show();
+            });
+
+        })();
+        function InsurandropdownCheck() {
+
+    if (globalValue != "") {
+        $(".SignIdType").val(globalValue);
+    }
+
+    $(".nav-collapsible .navbar-toggler").trigger("click");
+    $("#main").css("padding-right", "340px");
+
+        }
+
+
+        function deleteVehicle(vehicleFormId, event) {
+            debugger;
+
+            $.get("/PatientSide/DeleteVehicle", { vehicleId: vehicleFormId }).done(function (data) {
+                debugger;
+                $('#IsDelete-' + vehicleFormId).val(true);
+                var data = event.closest('div#parentDiv-' + vehicleFormId);
+                data.hidden = true
+
+
+                    new PNotify({
+                    title: 'Success!',
+                    text: 'Record deleted successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                });
+
+        }
+
+        function removeForm(formId, event) {
+            debugger;
+            var dataElement = event;
+
+            var inputVehicleInfo = $('#VehicleInfo-'+formId)
+            inputVehicleInfo.attr('data-val', 'goWithoutValidateThis')
+            $('#VehicleInfo-'+formId).val('thisOneIsDeletedRecordFromFrontEnd');
+
+
+            var inputVehiclePlate = $('#LicensePlateNumberInput-'+formId)
+            inputVehiclePlate.attr('data-val','goWithoutValidateThis')
+
+            var inputVehicleState = $('#entityRegistrationStateInput-'+formId)
+            inputVehicleState.attr('data-val','goWithoutValidateThis')
+
+            //var inputIsDelete = $('#deleteThisForm-' + formId);
+            //$('#deleteThisForm-' + formId).val(true);
+            //inputIsDelete.attr('value', true);
+
+            var parentDiv = dataElement.parentElement.parentElement.parentElement;
+            parentDiv.hidden = true;
+
+            var roleElement = $('#role' + formId);
+            roleElement.hide();
+            var noteElement = $('#notes' + formId);
+            noteElement.hide();
+            var lineElement = $('#line' + formId);
+            lineElement.hide();
+        }
+
+
+        /*Signature Image*/
+
+        $(function () {
+            $('#savetarget').hide();
+            var canvas = document.querySelector('#signature-pad1 canvas');
+            var pad = new SignaturePad(canvas);
+           $('#pad_clear').on('click', function () {
+               $('#savetarget').hide();
+               Signdata = "";
+           })
+            $('#accept').on('click', function () {
+                debugger;
+                //if (saveAction == "Update") {
+                //    if (pad.toDataURL() == "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYkAAACmCAYAAAAvUHPqAAAGjElEQVR4Xu3XsQ3AMAwEsXj/pTOBiquf6VWIMnDI+3wECBAgQOAQeGQIECBAgMAlIBLeBgECBAicAiLhcRAgQICASHgDBAgQINAF/El0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYEfgBwQcApxt/iUgAAAAASUVORK5CYII=") {
+                //        $('#savetarget').hide();
+                //        //$(".WriteSignatureError").html("Please First Write Your Signature").show().fadeOut(2200);
+                //         Signdata = "";
+
+                //    }
+                //}
+                //else {
+                //    if (pad.toDataURL() == "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYkAAACmCAYAAAAvUHPqAAAGjElEQVR4Xu3XsQ3AMAwEsXj/pTOBiquf6VWIMnDI+3wECBAgQOAQeGQIECBAgMAlIBLeBgECBAicAiLhcRAgQICASHgDBAgQINAF/El0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYERCJmVNblAABAl1AJLqZCQIECMwIiMTMqS1KgACBLiAS3cwEAQIEZgREYubUFiVAgEAXEIluZoIAAQIzAiIxc2qLEiBAoAuIRDczQYAAgRkBkZg5tUUJECDQBUSim5kgQIDAjIBIzJzaogQIEOgCItHNTBAgQGBGQCRmTm1RAgQIdAGR6GYmCBAgMCMgEjOntigBAgS6gEh0MxMECBCYEfgBwQcApxt/iUgAAAAASUVORK5CYII=") {
+                //    $('#savetarget').hide();
+                //    Signdata = "";
+                //                    $(".WriteSignatureError").html("Please First Write Your Signature").show().fadeOut(2200);
+
+                //    }
+                //}
+
+                if (pad.isEmpty()) {
+                     Signdata = "";
+
+            return false;
+                }
+                 else {
+                     debugger;
+                        Signdata = pad.toDataURL();
+                     $('#savetarget').attr('src', Signdata);
+                     $('#UpdateCaseSignature').hide();
+                     $('#savetarget').show();
+            //         var ImageURL = Signdata;
+            //var block = ImageURL.split(";");
+            //var contentType = block[0].split(":")[1];
+            //var realData = block[1].split(",")[1];
+
+            //                         var Signatureresult = dataURLtoFile(Signdata, "SignatureImage");
+            //         $('#Signfiles').val(Signatureresult);
+                pad.off();
+
+                 }
+
+
+            });
+
+
+
+        });
+  //      var openFile = function(file) {
+  //  var input = file.target;
+
+  //  var reader = new FileReader();
+  //  reader.onload = function(){
+  //    var dataURL = reader.result;
+  //    var output = $(".patientProfile_pic");
+  //    output.src = dataURL;
+  //  };
+  //  reader.readAsDataURL(input.files[0]);
+  //};
+
+        /*Patient Id and Signature*/
+        $(document).ready(function () {
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+            var isValid = true;
+            var local = window.location.origin;
+            var currentActive = $("a.moveOrNot.active").attr('href');
+            var oldURL = document.referrer;
+
+            var block = oldURL.split(local);
+            var hashValue = window.location.hash;
+            if (hashValue == "#test10") {
+                currentActive = "#test10";
+                $('#test1').hide();
+                $('#test10').show();
+                setTimeout(function () {
+                    $('.belowDropDowns').trigger('click');
+                }, 400);
+
+            }
+            else if (hashValue == "#test11") {
+                currentActive = "#test11";
+                $('#test1').hide();
+                $('#test11').show();
+                setTimeout(function () {
+                    $('.belowDropDowns').trigger('click');
+                }, 400);
+
+            }
+
+            var MissingPage = "@Url.Action("Missing", "PatientSide", new {id=PatientId ,clickfrom = checkClick})";
+            var SummaryPage = "@Url.Action("PatientSummary", "PatientSide", new {id=PatientId,clickfrom = checkClick})";
+            if (block[1] == MissingPage || block[1] == SummaryPage) {
+                if (currentActive == "#test1") {
+                    $('.patientinfo_tab').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                    });
+
+
+                     $('.patientselect_tab  input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+
+                else if (currentActive == "#test2") {
+                    $('.phoneNumber_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+
+
+                }
+                else if (currentActive == "#test3") {
+                    $('.emergency_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.emeregencySelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                else if (currentActive == "#test4") {
+                    $('.signatureandId_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.signatueSelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                 else if (currentActive == "#test6") {
+                    $('.claim_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.claimSelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                else if (currentActive == "#test7") {
+                    $('.vehicle_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.custom-combobox input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+                }
+                else if (currentActive == "#test8") {
+                    $('.secondary_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.secondarySelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                else if (currentActive == "#test9") {
+                    $('.tertiary_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.tertierySelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                else if (currentActive == "#test10") {
+                    $('.pi_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.piSelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+                else if (currentActive == "#test11") {
+                    $('.collection_tab').each(function () {
+                    if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                    } else {
+                    $(this).removeClass('empty');
+                    }
+                    });
+                    $('.collectionSelect_tab input').each(function () {
+                        if ($.trim($(this).val()) == '') {
+                        isValid = false;
+                        $(this).addClass('empty');
+                        }
+                        else {
+                        $(this).removeClass('empty');
+                        }
+
+                     });
+
+                }
+            }
+
+
+            $(document).on('submit', '#signatureform', function (e) {
+
+                 var ProfileSrc = $("#result").attr('src');
+                debugger;
+                e.preventDefault();
+                if ($(this).valid()) {
+
+                        $('#accept').trigger('click');
+
+                    debugger;
+                    isSignatureButtonClick = true;
+                    //$('#upload').attr('disabled', true);
+                    $(this).ajaxSubmit({
+                        data: { Signature: Signdata,profileImage:ProfileSrc },
+                        success: function (response) {
+                            //$('#upload').attr('disabled', false);
+                            //$('#upload .waves-ripple').remove();
+                        },
+                        error: function (response) {
+                            //$('#upload').attr('disabled', false);
+                        },
+
+                        complete: function (xhr) {
+                            disablePatientSignatureFields();
+
+                            //$('#upload').attr('disabled', false);
+                            //$('#upload .waves-ripple').remove();
+                            onCreateSignatureForm(xhr.responseJSON);
+                        }
+                    });
+                }
+            })
+            //$('#signatureform').on('submit', function (e) {
+
+            //});
+            function onCreateSignatureForm(data) {
+                var isErrorMessage = data.isError;
+                if (isErrorMessage) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Please provide patient info first',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+                else {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Record Save',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                }
+            }
+
+            function onCreateToDoSuccessId(data) {
+
+
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+            };
+
+        });
+
+$(function () {
+
+    $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+     $(".removebtn-show").on('click', function () {
+         $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+         $(".removebtn-show").hide();
+            })
+});
+
+
+        $(document).ready(function () {
+            $(".remove-Sigatureimage").hide();
+            if (saveAction == "Update") {
+
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                 $(".UploadSignature_show").on('click', function () {
+                     $(".forPatientSignatures").show();
+                     $(".signImage #dropifyimage .dropify-wrapper").show();
+                                     $(".signatureimage_text").show();
+                     $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                     $("#signature-pad1").show();
+                }
+            }
+            $('#multilanguage').select2({
+                placeholder: "Select Languages"
+            });
+            $(".img-preview #result").on('click', function () {
+                debugger;
+                $('#modal1').modal('open');
+            });
+
+
+            $('.txtOnly').keypress(function (e) {
+			var regex = new RegExp("^[a-zA-Z]+$");
+			var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+			if (regex.test(str)) {
+				return true;
+			}
+			else
+			{
+			e.preventDefault();
+			$('.error').show();
+			$('.error').text('Please Enter Alphabate');
+			return false;
+			}
+		});
+
+            //called when key is pressed in textbox
+            $("#VehicleInvolved").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#VehicleInvolved_errmsg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#Collection_phone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_Collection_phone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#Collection_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_Collection_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#CollectionLeadingParalegalPhone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_CollectionLeadingParalegalPhone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#CollectionLeadingParalegalfax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_CollectionLeadingParalegalfax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#LeadingParalegalfax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_LeadingParalegalfax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#legalInfo_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_legalInfo_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#tertiary_num").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#tertiary_errmsg_phone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#tertiery_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#tertiery_errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#secon_num").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#secon_errmsg_phone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#secon_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#secon_errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#adjust_claim_num").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#adjust_claim_errmsg_num").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#adjust_claim_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#adjust_claim_errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#claim_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#claim_errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#claim_number").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#claim_errmsg_number").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#Emer_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#Emer_errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#Home_fax").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_fax").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#ssn").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#home_phone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_Home").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#work_number").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_work").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#mobile_num").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_mobile").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#emergency_number").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_emerg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#emergency_home").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_emerg_Home").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#emergency_mobile").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_emerg_mob").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#adjusterPhone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_adjusterPhone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#LeadingParalegalPhone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_LeadingParalegalPhone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+            $("#legalInfo_phone").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg_legalInfo_phone").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+        });
+        $('#nf2FilledDateInput').change(function () {
+             $("#nf2DateValidationSpan").html("");
+        })
+
+        $(document).on('click', '#btnPatientClaimInfo', function (e) {
+
+                debugger;
+            var nf2ComboVal = $('#Patient_nf2Status').val();
+            var CaseType = $("#Patient_caseType").val();
+            var nf2Date = $("#nf2FilledDateInput").val();
+            if ($("#Patient_nf2Status").val() == '15' && nf2Date == "") {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                 e.preventDefault();
+                return false;
+            }
+            if (nf2ComboVal == "") {
+                $("#nf2_err").html("Select Nf2 Status");
+            }
+            else {
+                $("#nf2_err").html("");
+            }
+                if (CaseType == "") {
+                $("#casetype_err").html("Select Case Type");
+            }
+            else {
+                $("#casetype_err").html("");
+            }
+            if (nf2Date == "" && IsRequiredNf2Date) {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                e.preventDefault();
+                return false;
+            }
+            else {
+                 $("#nf2DateValidationSpan").html("");
+            }
+
+            var isValidForm = $("#patientClaimForm").valid();
+
+        e.preventDefault();
+
+        if (isValidForm) {
+            if (!(nf2ComboVal == "" || CaseType == "")) {
+                isInfoButtonClick = true;
+                $("#patientClaimForm").ajaxSubmit({
+
+                    success: function (response) {
+                        //$('#btnPatientClaimInfo').attr('disabled', false);
+                        //$('#btnPatientClaimInfo .waves-ripple').remove();
+                    },
+                    error: function (response) {
+                        console.log('error');
+                    },
+                    complete: function (xhr) {
+                         disablePatientClaimFields();
+
+                        //$('#btnPatientClaimInfo').attr('disabled', false);
+                        //$('#btnPatientClaimInfo .waves-ripple').remove();
+                        onCreateToDoclaim(xhr.responseJSON);
+
+                    }
+                });
+            }
+
+        }
+
+        });
+    //    $('#patientClaimForm').on('submit', function (e) {
+
+    //});
+
+        function onCreateToDoclaim(data) {
+            debugger;
+            var isErrorMessage = data.isError;
+            if (isErrorMessage) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Please provide patient info first',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+
+        };
+        function onCreateToDoVehicle(data) {
+            debugger;
+            //var errorAt = 0;
+            //for (var i = 0; i < data.length; i++) {
+
+            //    errorAt = data[i].count;
+            //    var info = $("#VehicleInfo-" + errorAt);
+
+            //}
+            var isErrorMessage = data.isError;
+                if (isErrorMessage) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Please provide patient info first',
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+                else {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Record Save',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+        };
+
+        function onCreateToDoPI(data) {
+
+            new PNotify({
+                title: 'Success!',
+                text: 'Record Save',
+                delay: 5000,
+                type: 'success',
+                addclass: 'pnotify-center'
+            });
+        };
+        function onCreateToDocollection(data) {
+            var isErrorMessage = data.isError;
+
+            if (isErrorMessage) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Please provide patient info first',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+        };
+
+        function populatePreviousFromWhenDiscard(formName) {
+            var useId = $('#HiddenPatientInfoFormUserId').val();
+            var convertedUserId = parseInt(useId);
+            debugger;
+            // For patientInfo Form
+
+
+            if (formName == "patientinfo") {
+
+
+
+                 $.get("/PatientSide/GetPatientInfoData", {userId:convertedUserId}).done(function (response) {
+                     debugger;
+                     if (response) {
+                         $(".patientInfoPartialViewDiv").empty();
+                         $(".patientInfoPartialViewDiv").html(response);
+                         $(".infoDropDListBeforeEditDisabled").combobox();
+
+                         $('#multilanguage').select2({
+                             placeholder: "Select Languages"
+                         });
+
+                         $('.select2-container--default.select2-container--focus .select2-selection--multiple').css(
+                             {
+                                 border: "solid #cfcfcf 1px !important"
+                             });
+
+                         $('.select2-container--default .select2-selection--multiple').css({
+
+                             'border': 'solid #cfcfcf 1px !important',
+                             'padding-bottom': '0px !important',
+                             'padding-right': '0px !important'
+                         });
+                         $('.select2-container--default .select2-selection--multiple').css(
+                             {
+                                 'border': 'solid #cfcfcf 1px !important',
+                                 'padding-bottom': "0px !important",
+                                 'padding-right': "0px !important"
+                             });
+
+
+                         $("#showPalette").spectrum({
+                             allowEmpty: true,
+
+                             showInput: true,
+                             containerClassName: "full-spectrum",
+                             showInitial: true,
+                             showPalette: true,
+                             showSelectionPalette: true,
+                             showAlpha: true,
+                             maxPaletteSize: 10,
+                             preferredFormat: "hex",
+
+                             move: function (color) {
+                                 updateBorders(color);
+                             },
+                             show: function () {
+
+                             },
+                             beforeShow: function () {
+
+                             },
+                             hide: function (color) {
+                                 updateBorders(color);
+                             },
+
+                             palette: [
+                                 ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", /*"rgb(153, 153, 153)","rgb(183, 183, 183)",*/
+                                     "rgb(204, 204, 204)", "rgb(217, 217, 217)", /*"rgb(239, 239, 239)", "rgb(243, 243, 243)",*/, "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"],
+                                 ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                                     "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)"],
+                                 ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                                     "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                                     "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                                     "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                                     "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                                     "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                                     "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                                     "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                                     /*"rgb(133, 32, 12)", "rgb(153, 0, 0)", "rgb(180, 95, 6)", "rgb(191, 144, 0)", "rgb(56, 118, 29)",
+                                     "rgb(19, 79, 92)", "rgb(17, 85, 204)", "rgb(11, 83, 148)", "rgb(53, 28, 117)", "rgb(116, 27, 71)",*/
+                                     "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                                     "rgb(12, 52, 61)", "rgb(28, 69, 135)"]
+                             ]
+                         });
+                         disablePatientInfoFields();
+                     }
+                     if (!response) {
+                         emptyPatientInfoFields();
+                         isEditInfoBtn = false;
+                     }
+
+                 });
+            }
+
+            // For patient phoneNumber Form
+
+            else if (formName == "patientPhoneNumber") {
+
+                    $.get("/PatientSide/GetPhoneNumberData", { userId: useId }).done(function (response) {
+                        debugger;
+                        if (response) {
+                            $(".patientPhoneNumberPartialViewDiv").empty();
+                            $(".patientPhoneNumberPartialViewDiv").html(response);
+                            $('.phoneno').mask('1 (999) 999-9999');
+                            $('.fax').mask('(999) 999-9999');
+                            disablePatientPhoneFields();
+                        }
+
+                        if (!response) {
+                            emptyPatientPhoneFields();
+                            isEditPhoneBtn = false;
+                        }
+                    });
+            }
+
+            // For patient phoneEmergency Form
+
+            else if (formName == "phoneEmergencyForm") {
+
+                    $.get("/PatientSide/GetEmergencyData", { userId: useId }).done(function (response) {
+                        debugger;
+                        if (response) {
+                            $(".patientEmergencyNumberPartialViewDiv").empty();
+                            $(".patientEmergencyNumberPartialViewDiv").html(response);
+                            $("#comboboxRelation").combobox();
+                            $('.phoneno').mask('1 (999) 999-9999');
+                            $('.fax').mask('(999) 999-9999');
+                            disablePatientEmergencyFields();
+                        }
+                        if (!response) {
+                            emptyPatientEmergencyFields();
+                             isEditEmergencyBtn = false;
+                        }
+                    });
+            }
+
+
+                   // For patient Signature Form
+
+            else if (formName == "signatureform") {
+
+                    $.get("/PatientSide/GetSignatureFormData", { userId: useId }).done(function (response) {
+                        debugger;
+                        if (response) {
+                            $(".patientSignaturePartialViewDiv").empty();
+                            $(".patientSignaturePartialViewDiv").html(response);
+                            $("#SignatureIdType").combobox();
+
+                            disablePatientSignatureFields();
+                        }
+                        if (!response) {
+                            emptyPatientSignatureFields();
+                             isEditIdAndSignatureBtn = false;
+                        }
+                    });
+            }
+
+                // For patient claim info
+
+            else if (formName == "patientClaimForm") {
+                var claimUserId = $('#Patientclaim_UserId').val();
+
+
+                    $.get("/PatientSide/GetClaimInfoData", { userId: useId }).done(function (response) {
+                        debugger;
+                        if (response) {
+                            $(".patientClaimInfoPartialViewDiv").empty();
+                            $(".patientClaimInfoPartialViewDiv").html(response);
+                            $(".claimDropDListBeforeEditDisabled").combobox();
+                            $('#ssn').mask('999-99-9999');
+                            $('.phoneno').mask('1 (999) 999-9999');
+                            $('.fax').mask('(999) 999-9999');
+                            disablePatientClaimFields();
+                        }
+                        if (!response) {
+                            emptyPatientClaimFields();
+                            isEditClaimInfoBtn = false;
+                        }
+                    });
+
+            }
+
+                 // For patient vehicle
+             else if (formName == "patientVehicleForm") {
+                  $.get("/PatientSide/GetVehicleData", {userId:useId}).done(function (response) {
+                      debugger;
+                      if (response) {
+                          $(".patientVehiclePartialViewDiv").empty();
+                          $(".patientVehiclePartialViewDiv").html(response);
+                          $(".VehicleInsuranceProvider").combobox();
+                          disablePatientvehicleFields();
+                      }
+                      if (!response) {
+                          emptyPatientvehicleFields();
+                          isEditVehicleBtn = false;
+                      }
+                });
+            }
+
+                 // For patient secondary
+             else if (formName == "patientSecondaryForm") {
+                  $.get("/PatientSide/GetSecondaryFormData", {userId:useId}).done(function (response) {
+                      debugger;
+                      if (response) {
+                          $(".patientSecondaryPartialViewDiv").empty();
+                          $(".patientSecondaryPartialViewDiv").html(response);
+                          $(".secondaryDropDListBeforeEditDisabled").combobox();
+                          $('#ssn').mask('999-99-9999');
+                          $('.phoneno').mask('1 (999) 999-9999');
+                          $('.fax').mask('(999) 999-9999');
+                          disablePatientsecondaryFields();
+                      }
+                      if (!response) {
+                          emptyPatientsecondaryFields();
+                          isEditSecondaryInsuranceBtn = false;
+                      }
+                });
+            }
+
+                 // For patient tertiary
+             else if (formName == "patientTertiaryForm") {
+                  $.get("/PatientSide/GetTertiaryFormData", {userId:useId}).done(function (response) {
+                      debugger;
+                      if (response) {
+                          $(".patientTertiaryPartialViewDiv").empty();
+                          $(".patientTertiaryPartialViewDiv").html(response);
+                          $(".TertiaryDropDListBeforeEditDisabled").combobox();
+                          $('#ssn').mask('999-99-9999');
+                          $('.phoneno').mask('1 (999) 999-9999');
+                          $('.fax').mask('(999) 999-9999');
+                          disablePatientTertiaryyFields();
+                      }
+                      if (!response) {
+                          emptyPatientTertiaryFields();
+                          isEditTertiaryInsuranceBtn = false;
+                      }
+
+                });
+            }
+
+                  // For patient personal Injury
+             else if (formName == "PersonalInjuryForm") {
+                  $.get("/PatientSide/GetPIFormData", {userId:useId}).done(function (response) {
+                      debugger;
+                      if (response) {
+                          $(".patientPIPartialViewDiv").empty();
+                          $(".patientPIPartialViewDiv").html(response);
+                          $(".PIDropDListBeforeEditDisabled").combobox();
+                          $('#ssn').mask('999-99-9999');
+                          $('.phoneno').mask('1 (999) 999-9999');
+                          $('.fax').mask('(999) 999-9999');
+                          disablePatientPIFields();
+                      }
+                      if (!response) {
+                          emptyPatientPIFields();
+                          isEditPIBtn = false;
+                      }
+                });
+            }
+
+                 // For patient collection
+             else if (formName == "ArbitrationAttorneyForm") {
+                  $.get("/PatientSide/GetCollectionFormData", {userId:useId}).done(function (response) {
+                      debugger;
+                      if (response) {
+                          $(".patientCollectionPartialViewDiv").empty();
+                          $(".patientCollectionPartialViewDiv").html(response);
+                          $(".CollectionDropDListBeforeEditDisabled").combobox();
+                          $('#ssn').mask('999-99-9999');
+                          $('.phoneno').mask('1 (999) 999-9999');
+                          $('.fax').mask('(999) 999-9999');
+                          disablePatientCollectionFields();
+                      }
+                      if (!response) {
+                          emptyPatientCollectionFields();
+                          isEditCollectionBtn = false;
+                      }
+                });
+            }
+
+        }
+
+
+        //For Email Modal Biding Code
+
+        $(document).on('click', '.importEmailToModal', function (e) {
+            debugger;
+            $("#emailInputModal").attr('disabled', true);
+            $('.removeValidation').html("");
+
+            var emailValue = $(e.target).val();
+
+            if (emailValue) {
+              $('#Emailmodal').modal('open');
+              $('#emailInputModal').val(emailValue);
+            }
+
+        })
+
+        $('#EmailModalForm').on('submit', function (e) {
+            debugger;
+            $("#emailInputModal").attr('disabled', false);
+            e.preventDefault();
+             debugger;
+
+            if ($(this).valid()) {
+                $('#emailModalbtn').attr('disabled', true);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        $('#emailModalbtn').attr('disabled', false);
+                    },
+                    error: function (response) {
+                        $('#emailModalbtn').attr('disabled', false);
+
+                    },
+                    complete: function (xhr) {
+                        $('#emailModalbtn').attr('disabled', false);
+                        onEmailSendSuccess(xhr.responseJSON);
+                    }
+                });
+            }
+            else {
+                $("#emailInputModal").attr('disabled', true);
+            }
+        });
+        function onEmailSendSuccess(data) {
+            $('#emailInputModal').val('');
+            $('#emailInputModal').val('');
+            $('#emailModalSubject').val('');
+            $('.file-path').val('');
+            $('#attachment_file').val('');
+            $('#Emailmodal').modal('close');
+            debugger;
+            if (data) {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Email sent successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+
+
+
+          $(document).on('click', '.numberModalDiv', function (e) {
+              debugger;
+                $('#phoneNoFieldForModal').attr('disabled', true);
+                $('.removeValidation').html("");
+                $('#phoneNoFieldForModal').val('');
+
+            var phone = $(e.target).val();
+            if (phone && phone != "1 (___) ___-____") {
+                $('#SmsModal').modal('open');
+                $('#phoneNoFieldForModal').val(phone);
+                $('#phoneNoFieldForModal').attr('disabled', true);
+            }
+          })
+
+         $('#smsModalForm').on('submit', function (e) {
+            debugger;
+            $('#phoneNoField').attr('disabled', false);
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                    onSendSmsSuccess(response);
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+
+                    }
+                });
+
+            }
+            else {
+                $('#phoneNoField').attr('disabled', true);
+            }
+        });
+
+
+        function onSendSmsSuccess(data) {
+            $('#phoneNoField').val('');
+            $('#msgTxt').val('');
+            $('#SmsModal').modal('close');
+
+            if (data) {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Sms sent successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+
+
+
+
+        $(document).on('click', '.webUrlDiv', function (e) {
+            debugger;
+            var urlValue = $(e.target).val();
+
+            if (urlValue) {
+                var windowUrl = "https://" + urlValue;
+                window.open(windowUrl);
+            }
+
+        })
+
+
+        if ('@SaveOrUpdate' == "Save") {
+             var modalClass = $('.EmailDiv');
+            modalClass.removeClass('importEmailToModal');
+
+            modalClass = $('.phoneDiv');
+            modalClass.removeClass('numberModalDiv');
+        }
+
+
+
+    </script>
+
+
+}
+<div class="container">
+
+    <div class="row">
+        <div class="col s12 l3">
+            @if (_RoleTypeId == 17)
+            {
+            <ul class="tabs tab-demo">
+                <li class="patient_new"><h4>Add Patient</h4></li>
+                <li id="Totest1" class="tab info"><a class="active moveOrNot" href="#test1">Patient Info</a></li>
+            </ul>
+            }
+            else
+            {
+                @if (SaveOrUpdate == "Update")
+                {
+                    <ul class="tabs tab-demo">
+                        <li class="patient_new"><h4>Add Patient</h4></li>
+                        <li id="Totest1" class="tab info"><a class="active moveOrNot" onclick="closeCamera();" href="#test1">Patient Info</a></li>
+                        <li id="Totest2" class="tab phone"><a href="#test2" class="moveOrNot" onclick="closeCamera();" id="saveOrNotPhoneTab">Phone Number</a></li>
+                        <li id="Totest3" class="tab emergency"><a href="#test3" onclick="closeCamera();" class="moveOrNot">Emergency Contact</a></li>
+                        <li id="Totest4" class="tab idandsignature"><a href="#test4" class="moveOrNot">Patient Id and Signatures</a></li>
+                        <li id="Totest6" class="tab claim"><a href="#test6" class="moveOrNot">Claim Info</a></li>
+                        <li id="Totest7" class="tab vehicle"><a href="#test7" class="moveOrNot">Vehicles/Entities Involved</a></li>
+                        <li id="Totest8" class="tab secondary"><a href="#test8" class="moveOrNot">Secondary Insurance Provider</a></li>
+                        <li id="Totest9" class="tab tertiary"><a href="#test9" class="moveOrNot">Tertiary Insurance Provider</a></li>
+                        <li class="legaldrop belowDropDowns"><a class="dropdown-trigger belowDropDowns" href="#!" data-target="dropdown1">Legal Info<i class="material-icons right belowDropDowns">arrow_drop_down</i></a></li>
+
+                    </ul>
+                    <ul id="dropdown1" class="dropdown-content tabs">
+                        <li id="Totest10" class="tab PIAttorneyTab10"><a href="#test10" class="moveOrNot">PI Attorney</a></li>
+                        <li id="Totest11" class="tab PIAttorneyTab11"><a href="#test11" class="moveOrNot">Collection Attorney</a></li>
+
+                    </ul>
+                }
+                else
+                {
+                    <ul class="tabs tab-demo">
+                        <li class="patient_new"><h4>Add Patient</h4></li>
+                        <li id="Totest1" class="tab info"><a class="active moveOrNot" href="#test1">Patient Info</a></li>
+                        <li id="Totest2" class="tab phone"><a href="#test2" class="moveOrNot" id="saveOrNotPhoneTab">Phone Number</a></li>
+                        <li id="Totest3" class="tab emergency"><a href="#test3" class="moveOrNot">Emergency Contact</a></li>
+                        <li id="Totest4" class="tab idandsignature"><a href="#test4" class="moveOrNot">Patient Id and Signatures</a></li>
+                        <li id="Totest6" class="tab claim"><a href="#test6" class="moveOrNot">Claim Info</a></li>
+                        <li id="Totest7" class="tab vehicle"><a href="#test7" class="moveOrNot">Vehicles/Entities Involved</a></li>
+                        <li id="Totest8" class="tab secondary"><a href="#test8" class="moveOrNot">Secondary Insurance Provider</a></li>
+                        <li id="Totest9" class="tab tertiary"><a href="#test9" class="moveOrNot">Tertiary Insurance Provider</a></li>
+                        <li class="legaldrop belowDropDowns"><a class="dropdown-trigger belowDropDowns" href="#!" data-target="dropdown1">Legal Info<i class="material-icons right belowDropDowns">arrow_drop_down</i></a></li>
+
+                    </ul>
+                    <ul id="dropdown1" class="dropdown-content tabs">
+                        <li id="Totest10" class="tab"><a href="#test10" class="moveOrNot">PI Attorney</a></li>
+                        <li id="Totest11" class="tab"><a href="#test11" class="moveOrNot">Collection Attorney</a></li>
+
+                    </ul>
+                }
+            }
+
+
+
+        </div>
+        <div class="col s12 l9">
+            <div class="row">
+                <div class="col s12 right">
+
+                    <a class="waves-effect waves-light float-right" href="@RoleType">
+                        <i class="material-icons  right arrow-icon">arrow_back</i>
+
+                    </a>
+                </div>
+            </div>
+            @if (_RoleTypeId == 17)
+            {
+                <div id="test1" class="col s12 patientInfoPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientInfo.cshtml" />
+                </div>
+            }
+            else
+            {
+                <div id="test1" class="col s12 patientInfoPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientInfo.cshtml" />
+                </div>
+                <div id="test2" class="col s12 patientPhoneNumberPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientPhoneNumber.cshtml" />
+                </div>
+                <div id="test3" class="col s12 patientEmergencyNumberPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientEmergencyContact.cshtml" />
+                </div>
+                <div id="test4" class="col s12 patientSignaturePartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientIdandSignature.cshtml" />
+                </div>
+                @*<div id="test5" class="col s12">
+                <partial name="~/Views/_PatientPartialView/_PatientCaseType.cshtml" />
+            </div>*@
+                <div id="test6" class="col s12 patientClaimInfoPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientClaimInfo.cshtml" />
+                </div>
+                <div id="test7" class="col s12 patientVehiclePartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientVehicles.cshtml" />
+                </div>
+                <div id="test8" class="col s12 patientSecondaryPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientSecondaryInsurance.cshtml" />
+                </div>
+                <div id="test9" class="col s12 patientTertiaryPartialViewDiv">
+                    <partial name="~/Views/_PatientPartialView/_PatientTertiaryInsurance.cshtml" />
+                </div>
+                <div id="test10" class="col s12 patientPIPartialViewDiv" style="display: none;">
+                    <partial name="~/Views/_PatientPartialView/_PatientPI.cshtml" />
+                </div>
+                <div id="test11" class="col s12 patientCollectionPartialViewDiv" style="display:none;">
+                    <partial name="~/Views/_PatientPartialView/_PatientCollection.cshtml" />
+                </div>
+            }
+
+        </div>
+
+    </div>
+    <style>
+        .tabs {
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            width: 100%;
+            margin: 0 auto;
+            white-space: nowrap;
+            background-color: #fff;
+            height: auto !important;
+        }
+
+            .tabs .tab {
+                cursor: pointer;
+                line-height: 48px;
+                display: block;
+                height: 48px;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+        .dropdown-content {
+            overflow: visible;
+        }
+    </style>
+</div>
+
+
+
+<div id="modal1" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="infoModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="infoModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>Country:  <span id="infoModel_country" style="color:#6b6f82 !important"></span></h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulateState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardZipCode()">Cancel</a>
+    </div>
+</div>
+
+
+<div id="modal3" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="claimModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="claimModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>
+                    Country:  <span id="claimModel_country" style="        color: #6b6f82 !important
+"></span>
+                </h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulateclaimState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardclaimZipCode()">Cancel</a>
+    </div>
+</div>
+
+<div id="modal4" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="secondaryModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="secondaryModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>Country:  <span id="secondaryModel_country" style="color:#6b6f82 !important"></span></h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulateSecondaryState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardSecondaryZipCode()">Cancel</a>
+    </div>
+</div>
+
+<div id="modal5" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="tertiaryModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="tertiaryModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>Country:  <span id="tertiaryModel_country" style="color:#6b6f82 !important"></span></h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulatetertiaryState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardtertiaryZipCode()">Cancel</a>
+    </div>
+</div>
+
+<div id="modal6" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="piModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="piModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>Country:  <span id="piModel_country" style="color:#6b6f82 !important"></span></h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulatepiState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardpiZipCode()">Cancel</a>
+    </div>
+</div>
+
+<div id="modal7" class="modal zip_model modal-fixed-footer">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Verify your Zip Code Infomation is Correct?</h5>
+
+        </div>
+
+        <div class="row">
+            <div class="col s12 ">
+                <h6>City :  <span id="collectionModel_city" style="color:#6b6f82 !important"></span></h6>
+                <h6>State : <span id="collectionModel_state" style="color:#6b6f82 !important"></span></h6>
+                <h6>Country:  <span id="collectionModel_country" style="color:#6b6f82 !important"></span></h6>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:void(0);" class="modal-action modal-close btn " onclick="PopulateCollectionState()">Save</a>
+        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary" onclick="DiscardCollectionZipCode()">Cancel</a>
+    </div>
+</div>
+
+
+<div id="SmsModal" class="modal">
+    <div class="modal-content">
+        <form asp-action="EmailSms" asp-controller="PatientSide" id="smsModalForm" method="get">
+            <div class="row">
+                <div class="modal-header">
+                    <a id="closeSmsModel" class="close right color-blue modal-close material-icons" data-dismiss="modal">close</a>
+                    <h5 class="modal-title color-blue"> Compose New Text</h5>
+                </div>
+                <div class="input-field col s12">
+                    <input id="phoneNoFieldForModal" class="form-control" asp-for="SmsDto.PhoneNo" type="text">
+                    <span class="required removeValidation" asp-validation-for="SmsDto.PhoneNo"></span>
+
+                </div>
+                <div class="input-field col s12">
+                    <textarea id="msgTxt" class="materialize-textarea" asp-for="SmsDto.TextMsg" placeholder="Message" style="height:175px !important"></textarea>
+                    <span class="required removeValidation" asp-validation-for="SmsDto.TextMsg"></span>
+
+                </div>
+                <div class="input-field">
+                    <button id="smsModalBtn" class="right btn btn-primary waves-effect waves-green">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div id="Emailmodal" class="modal email-model">
+    <div class="modal-content">
+        <form asp-action="EmailSend" asp-controller="PatientSide" method="post" id="EmailModalForm" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="modal-header">
+                    <a id="closemodel" class="close right color-blue modal-close material-icons" data-dismiss="modal">close</a>
+                    <h5 class="modal-title color-blue"> Compose New Email</h5>
+                </div>
+
+                <div class="input-field col s12">
+                    <input id="emailInputModal" type="email" class="form-control" asp-for="EmailBasicDto.ToEmails" placeholder="To:" disabled>
+                    <span class="required removeValidation" asp-validation-for="EmailBasicDto.ToEmails"></span>
+
+                </div>
+                <div class="input-field col s12">
+                    <input id="emailModalSubject" type="text" class="form-control" asp-for="EmailBasicDto.Subject" placeholder="Subject:" />
+                    <span class="required removeValidation" asp-validation-for="EmailBasicDto.Subject"></span>
+
+
+                </div>
+                <div class="input-field col s12">
+                    <textarea id="emailModalBody" class="materialize-textarea" rows="6" placeholder="Message:" asp-for="EmailBasicDto.Body"></textarea>
+                    <span class="required removeValidation" asp-validation-for="EmailBasicDto.Body"></span>
+                </div>
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>File</span>
+                        <input type="file" id="attachment_file" asp-for="EmailBasicDto.attachmentFilename">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path form-control validate" type="text" placeholder="Upload one or more files">
+                    </div>
+                </div>
+                <div class="input-field">
+                    <button id="emailModalbtn" class="right btn btn-primary">Send</button>
+                    <a class="right btn btn-primary modal-close  mr-2">Cancel</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

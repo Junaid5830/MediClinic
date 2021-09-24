@@ -1,0 +1,380 @@
+﻿@model IEnumerable<MediClinic.Models.EntityModels.DMESupplyEquipment>
+
+@using  MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager;
+@{
+    ViewData["Title"] = "DME Supplies";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var roleId = _sessionManager.GetRoleId();
+
+
+}
+@section scripts{
+
+    <script type="text/javascript">
+
+
+
+        var tableSelectedList = [];
+
+
+        $('.checkbox-table').click(function () {
+            debugger;
+            if ($(this).prop("checked") == true) {
+
+                tableSelectedList.push($(this).attr('data-val'));
+
+
+            }
+            else {
+                tableSelectedList = tableSelectedList.filter(item => item !== $(this).attr('data-val'));
+            }
+
+            if (tableSelectedList && tableSelectedList.length > 1) {
+                console.log(tableSelectedList.length);
+                $('#dropdown').removeAttr('disabled');
+            }
+            else {
+                $('#dropdown').attr("disabled", "disabled");
+            }
+        });
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+            $('#dropdown').attr("disabled", "disabled");
+
+            $('.select-all').click(function () {
+                debugger;
+                $('.table  input').prop('checked', this.checked);
+                if (this.checked) {
+                    $('#dropdown').removeAttr('disabled');
+                } else {
+                    $('#dropdown').attr("disabled", "disabled");
+                }
+            });
+            var table = $("#DME-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+        });
+
+
+        function deleteDMESupEquip(id, event) {
+            debugger;
+
+            $.get("/DME/DeleteDMESupplies", { DMESupplyId: id }).done(function (data) {
+                debugger;
+
+                if (data) {
+                    event.closest('tr').remove();
+
+                    $(".checkmark").show().fadeOut(6000);
+
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Something went wrong',
+                        delay: 2500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+
+            });
+        }
+            function DMEBatchActions(batchType) {
+        debugger
+
+        var selectedList = [];
+        var isAnyChecked = false;
+
+        $('input[type=checkbox]').each(function () {
+            debugger;
+            if ($(this).prop("checked") == true) {
+                if ($(this).attr('data-val') != "all") {
+                    isAnyChecked = true;
+                    selectedList.push($(this).attr('data-val'));
+                }
+            }
+            console.log(selectedList);
+        })
+        if (isAnyChecked) {
+            if (batchType == 'Referal') {
+                location.href = '@Url.Action("DmeReferalBatchPrint", "DME")?DMEIds=' + selectedList;
+            }
+            else if (batchType == 'RxOrder') {
+                location.href = '@Url.Action("DmeRxeOrderBatchPrint", "DME")?DMEIds=' + selectedList;
+            }
+            else if (batchType == 'AobDelivery') {
+                location.href = '@Url.Action("DmeAobBatchPickup", "DME")?DMEIds=' + selectedList;
+            }
+            else if (batchType == 'SupplyReturn') {
+                location.href = '@Url.Action("DmeSupplyReturnBatch", "DME")?DMEIds=' + selectedList;
+            }
+            else if (batchType == 'DmeDelivery') {
+                location.href = '@Url.Action("DmeDelivery", "DME")?DMEIds=' + selectedList[0];
+            }
+        }
+
+
+
+
+    }
+
+    </script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+}
+
+@section styles{
+
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <style>
+        .custom-control-label::after, .custom-control-label::before {
+            top: -0.5rem !important;
+        }
+        /*  .list-img img {
+            width: 40px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+        }*/
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+
+        .position-relative {
+            position: relative;
+        }
+
+        .toggle {
+            margin: 10px auto;
+        }
+
+        .container {
+            padding: 0 1.5rem !important;
+        }
+
+        .toggle-handle {
+            margin-top: -3px !important;
+        }
+
+        .switch {
+            margin: 12px 0;
+        }
+
+        .toggle-group .btn {
+            padding: 0 1rem !important;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #428bca !important;
+        }
+
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+
+        .btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #ccc;
+        }
+
+        .modal {
+            width: 70% !important;
+            max-height: 76% !important;
+        }
+    </style>
+}
+
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <h5 class="breadcrumbs-title color-blue">DME Supplies/Equipment</h5>
+                </div>
+                <div class="col-sm-8 col-md-5 col-lg-5" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (roleId == 1)
+                {
+
+                }
+                else
+                {
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+
+
+                        <a href="/DME/DMESuppliesEdit" class="btn waves-effect waves-light float-right add-btn">
+                            Add New Equipment
+                        </a>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div id="batch_action">
+            <div class="row">
+
+                <div class="col-sm-10 col-md-10 col-lg-10">
+                    <button class="btn  dropdown-toggle batch_button" type="button" data-toggle="dropdown" >
+                        Batch Actions
+                        <span class="caret"></span>
+                    </button>
+                    @*<a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>*@
+                    <ul class='dropdown-menu batch'>
+                        <li><a href="javascript:void(0);" class="modal-trigger" onclick="DMEBatchActions('Referal');">DME Referal</a></li>
+                        @*<li><a href="@Url.Action("DmeDelivery","DME")">DME Delivery</a></li>*@
+                        <li><a onclick="DMEBatchActions('DmeDelivery');">DME Delivery</a></li>
+                        <li><a href="javascript:void(0);" onclick="DMEBatchActions('AobDelivery');"> AOB Delivery Pickup</a></li>
+                        <li><a href="javascript:void(0);" onclick="DMEBatchActions('RxOrder');">DME Rx Order</a></li>
+                        <li><a href="javascript:void(0);" onclick="DMEBatchActions('SupplyReturn');"> SUPPLY RETURN RECEIPT</a></li>
+                    </ul>
+
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 ">
+                    <button class="btn  right dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                        Select DME Template
+                        <span class="caret"></span>
+                    </button>
+                   @* <a class='dropdown-trigger dropdown-select float-right' href='javascript:void(0);' data-target='dropdown4'>Select DME Template<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>*@
+                    <ul class='dropdown-menu batch'>
+                        <li><a href="@Url.Action("DmeReferalPrint","DME")" class="modal-trigger">DME Referal</a></li>
+                        <li><a href="@Url.Action("DmeDelivery","DME")">DME Delivery</a></li>
+                        <li><a href="@Url.Action("DmeAobPickup","DME")"> AOB Delivery Pickup</a></li>
+                        <li><a href="@Url.Action("RxeOrder","DME")">DME Rx Order</a></li>
+                        <li><a href="@Url.Action("SupplyReturnRecipt","DME")"> SUPPLY RETURN RECEIPT</a></li>
+                    </ul>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <table id="DME-table" class="table display table-option">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                @*<label>
+                                        <input type="checkbox" data-val="all" id="selectAll" class="select-all" />
+                                        <span></span>
+                                    </label>*@
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                    <label class="custom-control-label" for="selectAll"></label>
+                                </div>
+
+                            </th>
+                            <th>Doc image</th>
+                            <th>Date of prescription</th>
+                            <th>items</th>
+                            <th>cpt code</th>
+                            <th>icd code</th>
+                            <th>prescriber</th>
+
+                            <th>barcode no</th>
+                            <th>prescription REF. NO</th>
+                            @*<th data-searchable="false" data-orderable="false" class="all">Action</th>*@
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                     
+                        @if (!(Model is null))
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr class="card">
+                                    <th>
+                                        @*<label>
+                                                <input type="checkbox" data-val="@item.DMEEquipSupId" />
+                                                <span></span>
+                                            </label>*@
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input checkbox-table" id="@item.DMEEquipSupId" data-val="@item.DMEEquipSupId">
+                                            <label class="custom-control-label" for="@item.DMEEquipSupId"></label>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <span class="list-img">
+                                            <img src="~/images/@item.ImageUrl"
+                                                 alt="document">
+                                        </span>
+                                    </td>
+                                    <td>@item.PrescriptionDate?.ToString("MM/dd/yyyy")</td>
+
+                                    <td>@item.Item.ItemOrGroupName</td>
+                                    <td>@item.CPTCode.Name</td>
+                                    <td>@item.ICDCode.Name</td>
+                                    <td>Dr.@item.Prescriber.FirstName @item.Prescriber.LastName</td>
+
+                                    <td>@item.BarcodeNo</td>
+                                    <td>@item.PrescriptionRefNo</td>
+                                    <td class="action">
+                                        <button class="btn  dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class='dropdown-menu Table_Drop ul_Caim'>
+                                            <li><a href="@Url.Action("DMESuppliesEdit","DME",new { DMESupplyId = item.DMEEquipSupId})" class="option-a">Edit</a></li>
+
+                                            <li onclick="deleteDMESupEquip(@item.DMEEquipSupId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                            <li><a href="javascript:void(0)" class="option-a">Preview</a></li>
+                                            <li><a href="javascript:void(0)" class="option-a">Print</a></li>
+                                            <li><a href="javascript:void(0)" class="option-a">Share</a></li>
+                                            <li><a href="@Url.Action("DmeReferalPrint","DME",new {DMEId = item.DMEEquipSupId })" class="modal-trigger">DME Referal</a></li>
+                                            <li><a href="@Url.Action("DmeDelivery","DME",new {DMEIds = item.DMEEquipSupId })">DME Delivery</a></li>
+                                            <li><a href="@Url.Action("DmeAobPickup","DME",new {DMEIds = item.DMEEquipSupId })"> AOB Delivery Pickup</a></li>
+                                            <li><a href="@Url.Action("RxeOrder","DME",new {DMEId = item.DMEEquipSupId })">DME Rx Order</a></li>
+                                            <li><a href="@Url.Action("SupplyReturnRecipt","DME",new {DMEId = item.DMEEquipSupId })"> SUPPLY RETURN RECEIPT</a></li>
+                                        </ul>
+                                    </td>
+
+
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewData["Title"] = "StaffDuty";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">STAFF DUTY</h5>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                <p>Department Name</p>
+                <div class="input-field">
+                    <select class="select2   text-input" style="width: 100%;">
+                        <option>Select Department</option>
+                        <option value="0">Radiology</option>
+                        <option value="1">Cardialogy 2</option>
+                        <option value="2">ICU</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                <p>Staff Name</p>
+                <div class="input-field">
+                    <select class="select2   text-input" style="width: 100%;">
+                        <option>Select Staff</option>
+                        <option value="0">Elizebth</option>
+                        <option value="1">JON Nic</option>
+                        <option value="2">J Niklson</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                <p>Start Time</p>
+                <div class="input-field ">
+                    <input type="time" class="text-input" placeholder="Enter time ">
+                </div>
+            </div>
+
+            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                <p>End Time</p>
+                <div class="input-field">
+                    <input type="time" class="text-input" placeholder="Enter time">
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <br />
+        <h3 class="color-blue">Select Days</h3>
+        <div class="row">
+
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Monday
+                    </label>
+                </div>
+            </div>
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Tuesday
+                    </label>
+                </div>
+            </div>
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Wednesday
+                    </label>
+                </div>
+            </div>
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Thursday
+                    </label>
+                </div>
+            </div>
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Friday
+                    </label>
+                </div>
+            </div>
+            <div class=" col-sm-3 col-md-3 col-xl-3 col-6 mt-1 ">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Saturday
+                    </label>
+                </div>
+            </div>
+            <div class="  col-sm-3 col-md-3 col-xl-3 col-6 mt-1  ">
+                <div class="form-check ">
+                    <input class="form-check-input  " type="checkbox" value="">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Sunday
+                    </label>
+                </div>
+            </div>
+
+
+        </div>
+       
+
+    </div>
+   
+</div>
+
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+         $('.select2').select2();
+    </script>
+    
+}

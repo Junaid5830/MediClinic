@@ -1,0 +1,184 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+
+@{
+    ViewData["Title"] = "AddFamilyHistoryElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+
+    <style>
+        .template {
+            padding: 0 2rem !important;
+            line-height: 41px !important;
+            height: 41px !important;
+            background: #547cea !important;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/year-select.js"></script>
+    <script src="~/js/pnotify.custom.min.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/app-assets/js/polyfill.min.js"></script>
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $('#SaveFamilyHistoryForm').on('submit', function (e) {
+            var relation = $('#MHFamilyHistory_Relation').val();
+            if (relation == "") {
+                $("#MHFamilyHistory_Relation_err").html("Realtion  is required");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(relation == "")) {
+                   
+                            $("#SaveFamilyHistory").prop('disabled', true);
+                            $(this).ajaxSubmit({
+                                success: function (response) {
+                                    if (response == "exist") {
+                                        ExistsMsg();
+                                        $("#SaveFamilyHistory").prop('disabled', false);
+                                    }
+                                    else {
+                                        onMHFamilyHistorySucess(response);
+                                        window.location.href = '@Url.Action("FamilyHistoryElite", "PatientSideElite")'
+                                    }
+
+                                },
+                            });
+                        }
+                    }
+               
+        });
+        function onMHFamilyHistorySucess(data) {
+            SuccessMsg();
+            $("#SaveFamilyHistory").prop('disabled', false);
+            $("#MHFamilyHistory_Id").val('');
+            $("#MHFamilyHistory_Relation").val('');
+            $("#relationId").val('').trigger('change');
+            $("#MHFamilyHistory_DeceasedOrDeathAge").val('');
+            $("#MHFamilyHistory_MedicalConditionsOrCauseDeath").val('');
+            $("#MHFamilyHistory_Notes").val('');
+            $("#MHFamilyHistory_Relation_err").html('');
+            $("#MHFamilyHistoryGrid").empty();
+            $("#MHFamilyHistoryGrid").html(data);
+        }
+        function SuccessMsg() {
+            $(".checkmark").show().fadeOut(6000);
+
+        }
+
+    </script>
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Family History</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("FamilyHistoryElite","PatientSideElite")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="button" class="btn btn-lg template">Add New Template</button>
+
+                    <button type="button" class="btn btn-lg template">Add Manual Exam</button>
+                </div>
+            </div>*@
+        <form asp-action="SaveMHFamilyHistory" asp-controller="PatientSideElite" method="post" data-ajax="true" data-ajax-success="onMHFamilyHistorySucess(data)" id="SaveFamilyHistoryForm">
+            <input type="hidden" asp-for="MHFamilyHistory.Id" />
+            <div class="row">
+
+                <div class="col-md-6">
+                    <p>
+                        Relation <span class="required"> * </span>
+                    </p>
+                    <select class="select2" id="relationId" data-placeholder="Select Relation" asp-for="MHFamilyHistory.Relation" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Father", Value="Father"},
+                                                                 new SelectListItem() {Text = "Mother", Value="Mother"},
+                                                                 new SelectListItem() {Text = "Sister", Value="Sister"},
+                                                                 new SelectListItem() {Text = "Brother", Value="Brother"},
+                                                                 new SelectListItem() {Text = "Grand Mother", Value="Grand Mother"},
+                                                                 new SelectListItem() {Text = "Grand Father", Value="Grand Father"},
+                                                                 new SelectListItem() {Text = "Grand Son", Value="Grand Son"},
+                                                                 new SelectListItem() {Text = "Grand Daughter", Value="Grand Daughter"},
+                                                                 new SelectListItem() {Text = "Son", Value="Son"},
+                                                                 new SelectListItem() {Text = "Daughter", Value="Daughter"}
+                                         })">
+                        <option value="" selected disabled>
+                        </option>
+                    </select>
+                    <span class="required" id="MHFamilyHistory_Relation_err"></span>
+
+                </div>
+                <div class="col-md-6">
+                    <p class="content-p">
+                        If Deceased - Death Age
+                    </p>
+                    <input class="text-input" asp-for="MHFamilyHistory.DeceasedOrDeathAge" type="text" placeholder=" If Deceased - Death Age">
+                    <span class="required" asp-validation-for="MHFamilyHistory.DeceasedOrDeathAge"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="content-p">
+                        MEDICAL CONDITIONS/CAUSE OF DEATH
+                    </p>
+                    <input class="text-input" asp-for="MHFamilyHistory.MedicalConditionsOrCauseDeath" type="text" placeholder=" MEDICAL CONDITIONS/CAUSE OF DEATH">
+                    <span class="required" asp-validation-for="MHFamilyHistory.MedicalConditionsOrCauseDeath"></span>
+                </div>
+                <div class="col-md-6">
+                    <p class="content-p">
+                        Notes
+                    </p>
+                    <input class="text-input" asp-for="MHFamilyHistory.Notes" type="text" placeholder="Notes">
+                    <span class="required" asp-validation-for="MHFamilyHistory.Notes"></span>
+                </div>
+            </div>
+
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <button type="submit" id="SaveFamilyHistory" class="btn add-btn">Save</button>
+                    <button type="reset" class="Recreate btn">Cancel</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+

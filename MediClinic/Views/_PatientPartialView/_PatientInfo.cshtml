@@ -1,0 +1,704 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var RoleId = _sessionManager.GetRoleId();
+    
+}
+@section styles{
+    <style>
+        #slide-out-right2.sidenav {
+            top: 66px;
+            width: 340px;
+            padding-bottom: 0;
+        }
+    </style>
+
+}
+
+<!-- Search for small screen-->
+
+
+
+
+
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3 ">
+                <div class="row mb-1">
+
+
+                    <div class="col s12">
+
+                        <div class="container">
+                            <h5 class="color-blue">Patient Info</h5>
+                            <div class="row">
+                                @if (RoleId == 17)
+                                {
+                                <form asp-action="PatientInfo" asp-controller="PatientSide" method="post" class="form-inline col s12" id="patientinfo">
+                                    <input class="text-input input-styling" name="User.UserId" id="PatientInfo_UserId" type="text" hidden="hidden">
+
+                                    <input hidden="hidden" id="hiddenPatientInfoId" asp-for="patientInfoBasicDto.PatientInfoId" />
+                                    <input hidden="hidden" id="HiddenPatientInfoFormUserId" asp-for="patientInfoBasicDto.UserId" />
+
+                                    <div class="row">
+
+
+                                        <div class="col s12 m6">
+                                            <p>First Name <span class="required"> * </span></p>
+                                            <div class="input-field">
+                                                <input class="text-input input-styling patientFirstName patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.FirstName" onkeypress="return AvoidSpace(event)" type="text" placeholder="Enter First Name">
+
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <p>Last Name<span class="required"> * </span></p>
+                                            <div class="input-field">
+                                                <input class="text-input input-styling patientLastName patientinfo_tab patientInfoTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.LastName" placeholder="Enter Last Name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col s12 m6">
+                                            <p>Gender<span class="required"> * </span></p>
+
+                                            <div class="ui-widget patientselect_tab">
+                                                <select id="gender" class="combobox patientGender infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.GenderId"
+                                                        asp-items="@(new SelectList(Model.gender,"LookupId","LookupValue"))">
+                                                    <option></option>
+                                                </select>
+                                                <p class="required" id="gender_err"></p>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <p>Marital Status<span class="required"> * </span></p>
+                                            <div class="ui-widget patientselect_tab">
+                                                <select data-val="@Model.PatientInfoFormRequireSettingsDto.MaritalStatus" id="maritalStatus" class="combobox patientMaritalStatus infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.MaitalStatusId"
+                                                        asp-items="@(new SelectList(Model.maritalStatus,"LookupId","LookupValue"))">
+                                                    <option></option>
+                                                </select>
+                                                <p class="required" id="combobox5_err"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col s12 m6 ">
+                                            <p>User Name<span class="required"> * </span></p>
+
+                                            <div class="input-field col s12 pl-0">
+
+                                                <input class="text-input paientUserId patientinfo_tab patientInfoTxtField" type="text" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.UserName" placeholder="Enter User Name">
+                                                <span class="required" asp-validation-for="patientInfoBasicDto.UserName"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <p>Email<span class="required"> * </span></p>
+                                            <div class="input-field col s12 pl-0 importEmailToModal EmailDiv">
+                                                <input class="text-input paientEmail patientinfo_tab patientInfoTxtField emailForModal" id="patientInfoEmail" type="email" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.Email" placeholder="Enter Email Address">
+                                                <span class="required" asp-validation-for="patientInfoBasicDto.Email"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row set_rowbtn">
+                                        <div class="col s12 m12" style="text-align:center">
+                                            <button type="submit" id="info_btn" class="btn add-btn">Save</button>
+                                            @if (ViewBag.Action == "Update")
+                                            {
+                                                <button type="button" data-val="InfoForm" id="infoEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                <button type="button" data-val="InfoForm" id="infoCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                            }
+                                            else
+                                            {
+                                                @*<a href="javascript:void(0);" data-val="NewForm" id="infoEdit_btn" class="btn Recreate">Edit</a>*@
+                                                <a href="javascript:void(0);" data-val="NewForm" id="infoCancel_btn" onclick="emptyPatientInfoFields();" class="Recreate btn">Cancel</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="PatientInfo" asp-controller="PatientSideElite" method="post" class="form-inline col s12" id="patientinfo">
+                                        <input class="text-input input-styling" name="User.UserId" id="PatientInfo_UserId" type="text" hidden="hidden">
+
+                                        <input hidden="hidden" id="hiddenPatientInfoId" asp-for="patientInfoBasicDto.PatientInfoId" />
+                                        <input hidden="hidden" id="HiddenPatientInfoFormUserId" asp-for="patientInfoBasicDto.UserId" />
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Patient ID</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling patientID" asp-for="PatientInfoIdForDisplay" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class=" col s12 m6">
+                                                <p>Prefix</p>
+                                                <div class="ui-widget patientselect_tab">
+                                                    <select class="combobox patientPrefix infoDropDListBeforeEditDisabled genericClassForDD" id="prefixes" asp-for="patientInfoBasicDto.PrefixId"
+                                                            asp-items="@(new SelectList(Model.prefixs,"LookupId","LookupValue"))">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class=" col s12 m6">
+                                                <p>Suffix</p>
+
+                                                <div class="ui-widget patientselect_tab">
+                                                    <select class="combobox patientSuffix infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.Suffix"
+                                                            asp-items="@(new SelectList(Model.suffix,"LookupId","LookupValue"))">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col s12 m6">
+                                                <p>First Name <span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling patientFirstName patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.FirstName" onkeypress="return AvoidSpace(event)" type="text" placeholder="Enter First Name">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.FirstName"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>Middle Name</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling patientMiddleName patientinfo_tab patientInfoTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.MiddleName" type="text" placeholder="Enter Middle Name">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.MiddleName"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Last Name<span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling patientLastName patientinfo_tab patientInfoTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.LastName" placeholder="Enter Last Name">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.LastName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Gender<span class="required"> * </span></p>
+
+                                                <div class="ui-widget patientselect_tab">
+                                                    <select id="gender" class="combobox patientGender infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.GenderId"
+                                                            asp-items="@(new SelectList(Model.gender,"LookupId","LookupValue"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="gender_err"></p>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>DOB<span class="required"> * </span></p>
+                                                <div class="input-field col s12 m12 l12 pl-0">
+                                                    <input type="text" class="datepicker text-input testDate patientDOB patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.DateOfBirth" placeholder="MM/DD/YYYY">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.DateOfBirth"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>SSN</p>
+                                                <div class="input-field">
+                                                    <input data-val="@Model.PatientInfoFormRequireSettingsDto.SSNumber" class="text-input input-styling patientInfoSsn patientinfo_tab patientInfoTxtField" type="text" id="ssn" asp-for="patientInfoBasicDto.SSN" placeholder="Enter Security Service Number">
+                                                    <span class="required" id="errmsg"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Marital Status<span class="required"> * </span></p>
+                                                <div class="ui-widget patientselect_tab">
+                                                    <select data-val="@Model.PatientInfoFormRequireSettingsDto.MaritalStatus" id="maritalStatus" class="combobox patientMaritalStatus infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.MaitalStatusId"
+                                                            asp-items="@(new SelectList(Model.maritalStatus,"LookupId","LookupValue"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="combobox5_err"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s12 m6 ">
+                                                <p>Race/Ethnicity</p>
+                                                <div class="ui-widget patientselect_tab">
+                                                    <select id="combobox6" class="combobox patientinfo_tab infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.RaceEthnicityId"
+                                                            asp-items="@(new SelectList(Model.RaceEthnicity,"LookupId","LookupValue"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Address Line1<span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling paientAddressLine1 patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine1" placeholder="Enter Address Line1">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.AddressLine1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>Address Line2</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling paientAddressLine2 patientinfo_tab patientInfoTxtField patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine2" placeholder="Enter Address Line2">
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Address Line3</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling paientAddressLine3 patientinfo_tab patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine3" placeholder="Enter Address Line3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>User Name<span class="required"> * </span></p>
+
+                                                <div class="input-field col s12 pl-0">
+
+                                                    <input class="text-input paientUserId patientinfo_tab patientInfoTxtField" type="text" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.UserName" placeholder="Enter User Name">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.UserName"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Email<span class="required"> * </span></p>
+                                                <div class="input-field col s12 pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input paientEmail patientinfo_tab patientInfoTxtField emailForModal" id="patientInfoEmail" type="email" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.Email" placeholder="Enter Email Address">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.Email"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <div class="input-field pl-0">
+                                                    <p class="mb-2">Password <span class="required"> * </span></p>
+
+                                                    <input class="text-input paientPassword patientinfo_tab patientInfoTxtField" type="password" asp-for="patientInfoBasicDto.Password" value="@ViewBag.Password" placeholder="Enter Password">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.Password"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6 ">
+                                                <div class="input-field  pl-0">
+                                                    <p>Confirm Password <span class="required"> * </span></p>
+                                                    <input class="text-input mt-2 paientConPassword patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.ConfirmPassword" value="@ViewBag.Password" type="password" placeholder="Confirm Password">
+                                                    <span class="required" asp-validation-for="patientInfoBasicDto.ConfirmPassword"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s12 m6">
+
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>ZIP Code <span class="required"> * </span></p>
+                                                    <div class="input-field">
+                                                        <input data-val="@Model.PatientInfoFormRequireSettingsDto.ZipCode" class="text-input input-styling paientZipCode patientinfo_tab patientInfoTxtField" maxlength="5" id="info_Zip" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.ZIP" placeholder="Enter ZIP Code">
+                                                        <span class="required" asp-validation-for="patientInfoBasicDto.ZIP"></span>
+                                                        <span class="required" id="err_infozip"></span>
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>City</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling paientCity city patientInfoTxtField" id="info_city" type="text" asp-for="patientInfoBasicDto.City" readonly>
+                                                        @*<span class="required" asp-validation-for="patientInfoBasicDto.City"></span>*@
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>State</p>
+                                                    <div class="input-field">
+
+                                                        <input class="text-input input-styling state paientState patientInfoTxtField" id="info_state" type="text" asp-for="patientInfoBasicDto.State" readonly>
+                                                        @*<span class="required" asp-validation-for="patientInfoBasicDto.State"></span>*@
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>Country</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling paientCountry country patientInfoTxtField" id="info_country" type="text" asp-for="patientInfoBasicDto.Country" readonly>
+                                                        @*<span class="required" asp-validation-for="patientInfoBasicDto.Country"></span>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @if (RoleId == 2)
+                                            {
+
+                                                <div class="col s12 m6">
+                                                    <p>Patient Color Status</p>
+                                                    @*<input type="color" asp-for="patientInfoBasicDto.PatientColor" id="colorName" class="text-input input-field" />*@
+                                                    <input type="text" data-val="@Model.PatientInfoFormRequireSettingsDto.PatientColorStatus" class="patientColorInput patientInfoTxtField" asp-for="patientInfoBasicDto.PatientColor" id="showPalette">
+                                                    <span id="color_error" class="required"></span>
+                                                </div>
+                                                <div class="col s12 m6">
+                                                    <p>Select Language</p>
+                                                    <div class="input-field col s9 l10 pl-0">
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.Languages" multiple="multiple" id="multilanguage" asp-for="patientInfoBasicDto.PatientLanguages"
+                                                                asp-items="@(new SelectList(Model.patientLanguageList, "LanguageId", "LanguageName"))">
+                                                        </select>
+
+                                                    </div>
+                                                    <div class="input-field col s3 m2 pr-0">
+                                                        <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right30"><i class="material-icons">add</i></a>
+
+                                                    </div>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="col s12 m6">
+                                                    <p>Select Language</p>
+
+                                                    <div class="input-field col s9 l10 pl-0">
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.Languages" multiple id="multilanguage" class="multilangOpt" asp-for="patientInfoBasicDto.PatientLanguages"
+                                                                asp-items="@(new SelectList(Model.patientLanguageList, "LanguageName", "LanguageName"))">
+                                                        </select>
+
+                                                    </div>
+                                                    <div class="input-field col s3 m2 pr-0">
+                                                        <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right30"><i class="material-icons">add</i></a>
+
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Employment Status</p>
+                                                <div class="ui-widget patientselect_tab col s9 m10 pl-0">
+                                                    <select data-val="@Model.PatientInfoFormRequireSettingsDto.EmployementStatus" id="Employment_Status" class="empStatusComboPatientInfo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.EmploymentStatusId"
+                                                            asp-items="@(new SelectList(Model.EmploymentStatuslist,"EmploymentStatusId","EmploymentStatus1"))">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right23"><i class="material-icons">add</i></a>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Employment Title</p>
+                                                <div class="ui-widget patientselect_tab col s9 m10 pl-0">
+                                                    <select data-val="@Model.PatientInfoFormRequireSettingsDto.EmploymentTitle" id="Employment_Title" class="employmentTitlePatientInfo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.EmploymentTitleId"
+                                                            asp-items="@(new SelectList(Model.EmploymentTitleList,"EmploymentTitleId","EmploymentTitle1"))">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right24"><i class="material-icons">add</i></a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>Secondary Address</p>
+                                                <div class="col s4 m4 input-field pl-0 mt-3">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" id="secondaryYes" class="with-gap patientInfoTxtField" name="yes" value="1" />
+                                                            <span>Yes</span>
+                                                        </label>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col s4 m4 input-field pl-0 mt-3">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" id="secondaryNo" class="with-gap patientInfoTxtField" name="yes" value="0" />
+                                                            <span>No</span>
+                                                        </label>
+                                                    </p>
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Referral Name</p>
+                                                <div class="input-field">
+                                                    <input data-val="@Model.PatientInfoFormRequireSettingsDto.ReferralName" class="text-input patientInfoReferralName input-styling patientinfo_tab patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.ReferralName" placeholder="Enter Referral Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="secondary_add" style="display:none">
+                                            <div class="col s12 m6">
+                                                <p>Secondary  Address Line 1</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling secondaryAddressFileds pSecondaryAddress1 patientinfo_tab patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.SecondaryAddress1" placeholder="Enter Secondary  Address Line1">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Secondary  Address Line 2</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling secondaryAddressFileds patientinfo_tab pSecondaryAddress2 patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.SecondaryAddress2" placeholder="Enter Secondary  Address Line2">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Secondary  Address Line 3</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling secondaryAddressFileds patientinfo_tab pSecondaryAddress3 patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.SecondaryAddress3" placeholder="Enter Secondary  Address Line3">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Patient Treatment Status<span class="required"> * </span></p>
+                                                <div class="ui-widget patientselect_tab col s9 l10 pl-0">
+                                                    <select data-val="@Model.PatientInfoFormRequireSettingsDto.PatientTreatmentStatus" id="patientTreatment" class="patientTreatmentStatusCombo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.PatientTreatmentId"
+                                                            asp-items="@(new SelectList(Model.patientTreatmentStatuslist,"PatientTreatmentId","PatientTreatmentStatus1"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="combobox_err"></p>
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Patient legal Status<span class="required"> * </span></p>
+                                                <div class="ui-widget patientselect_tab col s9 l10 pl-0">
+                                                    <select data-val="@Model.PatientInfoFormRequireSettingsDto.PatientLegalStatus" id="patientLegal" class="patientLegalStatusCombo patientinfo_tab infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.PatientLegalId"
+                                                            asp-items="@(new SelectList(Model.patientLegalStatusBasicDtoslist,"PatientLegalId","PatientLegalStatus1"))">
+
+                                                        <option value=""></option>
+                                                    </select>
+                                                    <p class="required" id="combobox2_err"></p>
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right2"><i class="material-icons">add</i></a>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                        <div class="row set_rowbtn">
+                                            <div class="col s12 m12" style="text-align:center">
+                                                <button type="submit" id="info_btn" class="btn add-btn">Save</button>
+                                                @if (ViewBag.Action == "Update")
+                                                {
+                                                    <button type="button" data-val="InfoForm" id="infoEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                    <button type="button" data-val="InfoForm" id="infoCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                                }
+                                                else
+                                                {
+                                                    @*<a href="javascript:void(0);" data-val="NewForm" id="infoEdit_btn" class="btn Recreate">Edit</a>*@
+                                                    <a href="javascript:void(0);" data-val="NewForm" id="infoCancel_btn" onclick="emptyPatientInfoFields();" class="Recreate btn">Cancel</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </form>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form class="col s12" asp-action="PatientTreatmentStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientTreatment(data)">
+                            <h5 class="mb-10 blue-text">
+                                Add Patient Treatment Status
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input patient_treatmentStatus patientTreatmentStatusNew" asp-for="patientTreatmentStatusBasicDto.PatientTreatmentStatus1" type="text" placeholder="Enter Patient Treatment Status    " />
+                                <span class="required" asp-validation-for="patientTreatmentStatusBasicDto.PatientTreatmentStatus1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right2" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientLegalStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientlegal(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Patient Legal Status
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input patientLegalStatusNew" type="text" asp-for="patientLegalStatusBasicDto.PatientLegalStatus1" placeholder="Enter Patient Legal Status " />
+                                <span class="required" asp-validation-for="patientLegalStatusBasicDto.PatientLegalStatus1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right23" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="EmploymentStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateEmpStatus(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Employment Status <span class="required"> * </span>
+
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input employementStatus_val SignIdType" type="text" asp-for="EmploymentStatusBasicDto.EmploymentStatus1" placeholder="Enter Employment Status " />
+                                <span class="required" asp-validation-for="EmploymentStatusBasicDto.EmploymentStatus1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right24" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="EmploymentTitle" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateEmpList(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Employment Title
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input employementTitleval SignIdType" type="text" asp-for="EmploymentTitleBasicDto.EmploymentTitle1" placeholder="Enter Employment Title " />
+                                <span class="required" asp-validation-for="EmploymentTitleBasicDto.EmploymentTitle1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right30" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientLanguage" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateLangList(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add New Language
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input employementTitleval SignIdType" type="text" asp-for="patientLanguage.LanguageName" placeholder="Enter Employment Title " />
+                                <span class="required" asp-validation-for="patientLanguage.LanguageName"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

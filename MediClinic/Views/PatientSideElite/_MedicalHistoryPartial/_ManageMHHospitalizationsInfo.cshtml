@@ -1,0 +1,87 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHHospitalizationsInfo != null && Model.GetMHHospitalizationsInfo.Count() > 0)
+{
+    <table class="table centered highlight">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Hospital Name</th>
+                <th>Year</th>
+                <th>Phone No</th>
+                <th>Reason</th>
+                <th>Location</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHHospitalizationsInfo)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+
+                    <td class="left">@Sr</td>
+
+                    <td>@loop.HospitalName</td>
+                    @if (loop.Year != null)
+                    {
+                        <td>@loop.Year</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.PhoneNo != null)
+                    {
+                        <td>@loop.PhoneNo</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.illnessORinjury != null)
+                    {
+                        <td>@loop.illnessORinjury</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.Address != null)
+                    {
+                        <td>@loop.Address</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    <td>
+                        <a href="javascript:void(0)" class="EditHospitalizationInfo" MHHospitalizationsInfoId="@loop.Id"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" class="DeleteHospitalizationInfo" MHHospitalizationsInfoId="@loop.Id"><i class="mdi mdi-delete" ></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

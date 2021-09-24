@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model MediClinic.Models.TransportViewModel
+
+<table id="availableGrid" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th>Driver Id</th>
+            <th>Driver Name</th>
+            <th>Vehicle Id</th>
+            <th data-searchable=false data-orderable="false" class="all">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!(Model is null))
+        {
+            @if (!(Model.DriverListForAssign is null))
+            {
+                @foreach (var item in Model.DriverListForAssign)
+                {
+        <tr class="card">
+            <td>@item.DriverId</td>
+
+            <td>@item.FullName</td>
+            <td>@item.TransportId</td>
+            @*@if (!(item.DriverCurrentJobStatus is null))
+            {
+                <td>@item.DriverCurrentJobStatus</td>
+
+            }
+            else
+            {
+                <td>N/A</td>
+            }*@
+            <td class="action">
+                <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                    Options
+                </button>
+                <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                    @*<li onclick="AssignRoute(@item.DriverId, this);"><a href="javascript:void(0);" class="option-a">Assign Route</a></li>*@
+                    <li><a href="@Url.Action("Index","ClinicOverView",new {DriverId = item.DriverId })">Route</a></li>
+
+                </ul>
+            </td>
+        </tr>
+                }
+            }
+       }
+    </tbody>
+</table>

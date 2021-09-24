@@ -1,0 +1,345 @@
+﻿@model MediClinic.Models.SurgeryCenterViewModel
+
+@{
+    ViewData["Title"] = "Surgery Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+    <style>
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .customtab li a.nav-link {
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .Exams {
+            margin-top: 25px;
+        }
+
+            .Exams p {
+                margin-top: 1rem !important;
+            }
+
+        .DMeSupplies p {
+            margin-top: 1rem !important;
+        }
+
+        .AddReminder {
+            display: none;
+        }
+
+        .prescription {
+            display: none;
+        }
+
+        .Test {
+            display: none;
+        }
+
+            .Test p {
+                margin-top: 1rem !important;
+            }
+
+        .Lab {
+            display: none;
+        }
+
+        .Vitals {
+            display: none;
+        }
+
+        .DMeSupplies {
+            display: none;
+        }
+
+        .Imaging {
+            display: none;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        $(".select2").select2();
+        $("#seleciona").select2();
+        $('.selectpicker').selectpicker();
+
+        $(document).ready(function () {
+            $('.dropify').dropify();
+
+        });
+
+        $(function () {
+            $('.phoneno').inputmask('1 (999) 999-9999');
+        });
+        $('#seleciona').change(function () {
+            var PatFilter = $('#seleciona option:selected').val();
+            $.get("/SurgeryCenter/SurgeryProcedureAndImage", { Id: PatFilter }).done(function (data) {
+                $("#SurgeryCenterTabs").html('');
+                $("#SurgeryCenterTabs").html(data);
+                $("#SurgeryCenterTabs").show();
+                $("#seleciona").select2();
+                $('#myTableClaim').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 7], "orderable": false }],
+                });
+                $('#myTableImage').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+                });
+                $("#AddProcedure_btn").on("click", function () {
+                    $("#ProcedureSection").show();
+                });
+                $("#AddImaging_btn").on("click", function () {
+                    $("#imagingSection").show();
+                });
+                $(".select2").select2();
+                $('.datepicker').datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    yearRange: "c-100:c+10",
+                    showButtonPanel: true,
+                    dateFormat: "mm/dd/yy"
+                });
+                $('.dropify').dropify();
+                $(".time-picker").hunterTimePicker();
+
+            });
+        })
+        function onExactSuccess(data) {
+            debugger;
+            $(".checkmark").show().fadeOut(6000);
+            $('#Proceduretable').html('');
+            $('#Proceduretable').html(data);
+            $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 7], "orderable": false }],
+            });
+        }
+        function onExactSuccessImage(data) {
+            debugger;
+            $(".checkmark").show().fadeOut(6000);
+            $('#ImagingTable').html('');
+            $('#ImagingTable').html(data);
+            $('#myTableImage').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+            });
+           
+        }
+    </script>
+
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Surgery</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("Index","SurgeryCenter")" class="waves-effect waves-light float-right">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <p>Select Patient <span class="required">*</span></p>
+                <select id="seleciona" data-placeholder="Select Patient Name"
+                        asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                    <option value="" selected disabled></option>
+                </select>
+            </div>
+        </div>
+        @*<div class="row">
+                <form class="col-sm-12" asp-action="Add" asp-controller="SurgeryCenter" method="post" id="SurgeryCenterForm">
+                    <input type="hidden" class="text-input" asp-for="SurgeryCenterDto.SurgeryCenterId" placeholder="id">
+                    <input type="hidden" class="text-input" asp-for="SurgeryCenterDto.CreatedBy" />
+                    <input type="hidden" class="text-input" asp-for="SurgeryCenterDto.CreatedDate" />
+
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Name
+                                <span asp-validation-for="SurgeryCenterDto.FirstName" class="text-danger"></span>
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="SurgeryCenterDto.FirstName" class="text-input first-name-input" placeholder="Enter First Name">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                MR Number
+                                <span asp-validation-for="SurgeryCenterDto.MRNumber" class="text-danger"></span>
+                            </p>
+                            <div class="input-field">
+                                <input type="number" asp-for="SurgeryCenterDto.MRNumber" class="text-input mr-number-input" placeholder="Enter MR Number">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Gender
+                                <span asp-validation-for="SurgeryCenterDto.Gender" class="text-danger"></span>
+                            </p>
+                            <div class="input-field">
+                                <select id="GenderSC" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="SurgeryCenterDto.Gender"
+                                        asp-items="@(new SelectList(Model.GenderDtoList,"LookupId","LookupValue"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                DOB
+                                <span asp-validation-for="SurgeryCenterDto.DOB" class="text-danger"></span>
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="SurgeryCenterDto.DOB" class="datepicker text-input dob-input" placeholder="select date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>Phone Number</p>
+
+                            <div class="input-field">
+                                <input type="text" asp-for="SurgeryCenterDto.PhoneNumber" class="phoneno text-input phone-number-input" placeholder="Enter Phone Number">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Email
+                            </p>
+
+                            <div class="input-field">
+                                <input type="email" asp-for="SurgeryCenterDto.Email" class="text-input email-input" placeholder="Enter Email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="center">
+                                <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>*@
+        <div class="row">
+            <div class="col-12 mt-2">
+                <div id="SurgeryCenterTabs" style="display:none">
+                    @*<partial name="~/Views/SurgeryCenter/_SurgeryCenter.cshtml" />*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

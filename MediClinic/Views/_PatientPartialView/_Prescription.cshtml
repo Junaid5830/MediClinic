@@ -1,0 +1,187 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h6 class="color-blue">Past Prescription</h6>
+            <table id="PastPrescriptionList" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="PastPrescriptionList" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Medication Name</th>
+                        <th>Frequency</th>
+                        <th>Dose</th>
+                        <th>Doctor Name</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Medication Comments</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>Panadol</td>
+
+                        <td>Every 3 hours</td>
+                        <td>2</td>
+                        <td>Umer Khan</td>
+                        <td>02/02/2020</td>
+                        <td> 02/02/2020</td>
+                        <td>NO</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <a href="@Url.Action("PrescriptionList","Patient")" class="right exam_viewmore">View More</a>
+            <h6 class="color-blue">Current Prescription</h6>
+            <table id="CurrentPrescriptionList" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="CurrentPrescriptionList" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Medication Name</th>
+                        <th>Frequency</th>
+                        <th>Dose</th>
+                        <th>Doctor Name</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Medication Comments</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>Panadol</td>
+
+                        <td>Every 3 hours</td>
+                        <td>2</td>
+                        <td>Umer Khan</td>
+                        <td>02/02/2020</td>
+                        <td> 02/02/2020</td>
+                        <td>NO</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mb-1" id="prescription_btn">Add New Prescription</button>
+        </div>
+    </div>
+</div>
+<div class="container" id="prescription_form" style="display:none">
+    <div class="row">
+        <div class="col s12">
+            <form class="form-inline">
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Medication Name</p>
+
+                            <div class="dropdownauto"><input class="text-input input-styling MedicationName" type="text" placeholder="Select Medication Name"></div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Frequency</p>
+                            <div class="dropdownauto"><input class="text-input input-styling Frequency" type="text" placeholder="Select Frequency"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Dose</p>
+                            <input class="text-input" type="number" placeholder="Enter Dose">
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Doctor Name</p>
+                            <input class="text-input" type="text" placeholder="Enter Doctor Name">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Start Date</p>
+                            <input type="text" class="datepicker" placeholder="Select Date">
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Stop Date</p>
+                            <input type="text" class="datepicker" placeholder="Select Date">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col s12 m6">
+                        <div class="input-field pl-0">
+                            <p>Medication Comments</p>
+                            <input class="text-input" type="text" placeholder="Enter Medication Comments">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

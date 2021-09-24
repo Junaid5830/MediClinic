@@ -1,0 +1,1167 @@
+﻿@model MediClinic.Models.SettingViewModel
+@{
+    ViewData["Title"] = "Attorney";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var Action = ViewBag.action;
+    var image =  ViewBag.ProviderImage;
+}
+@section styles{
+
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <style>
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        .text-input {
+            cursor: auto !important
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e9ecef !important;
+        }
+
+        /*.page-wrapper {
+            margin: 0 18% 0 18% !important;
+            padding-top: 20px !important;
+        }*/
+        .actions {
+            display: none;
+        }
+
+        .danger {
+            color: red;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .img-preview {
+            margin: 0 auto;
+            height: 250px;
+            width: 250px;
+            border-radius: 50% !important;
+        }
+
+        .remove-image {
+            /* display: none; */
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 43%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .mdi {
+            font-size: 24px !important;
+        }
+
+        .text a, .text p {
+            color: #fff;
+            font-size: 17px;
+        }
+
+        #result {
+            cursor: pointer;
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+        }
+
+        #result-wrapper:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .add-btn {
+            padding: 0 1rem !important;
+            line-height: 36px !important;
+            height: 38px !important;
+            background: #547cea !important;
+            color: white !important;
+        }
+
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+
+        .imageModel input.custom-file-input {
+            width: 5rem;
+            right: 17px;
+            height: 38px !important;
+            top: -40px;
+            cursor: pointer !important;
+        }
+
+        .actionUpload {
+            width: 5rem;
+        }
+
+        .required {
+            color: black !important;
+        }
+    </style>
+    <style>
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .input-group-append .form-add-btn {
+            margin-top: 0 !important
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .form-add-btn {
+            margin-top: 3.3rem !important;
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -22% !important;
+        }
+
+        .form-MiddleName {
+            margin-top: -14% !important;
+        }
+
+        .form-LastName {
+            margin-top: -3% !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 48%;
+            left: 46%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .ti-camera {
+            font-size: 22px !important;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff !important;
+            font-size: 17px;
+        }
+
+        .text p {
+            margin-top: 0px !important;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+            .remove-image:hover {
+                background: #E54E4E;
+                padding: 3px 7px 5px;
+                top: 0;
+                right: 22%;
+            }
+
+            .remove-image:active {
+                background: #E54E4E;
+                top: 0;
+                right: 22%;
+            }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+            .imageModel .modal-dialog {
+                max-width: 60% !important
+            }
+
+            .imageModel input.custom-file-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                height: 38px !important;
+                width: 5rem !important;
+                cursor: pointer !important;
+            }
+
+        .cr-slider {
+            width: 75% !important
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 0 2rem !important;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            margin-bottom: 0px;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        #my_camera {
+            margin: 0 auto
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+            color: #fff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        #cameraIcon i {
+            color: #547cea !important;
+            font-size: 22px;
+        }
+
+        .croppie-container .cr-image {
+            top: 25px !important;
+            left: 35px !important;
+        }
+
+        .imageModel .mdi {
+            font-size: 22px !important
+        }
+
+        @@media screen and (max-width:600px) {
+            .form-MiddleName {
+                margin-top: 0% !important;
+            }
+        }
+    </style>
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/webcamjs/webcam.js"></script>
+    <script>
+        //$(document).ready(function () {
+        //    $('.dropify').dropify();
+        //});
+        //$(document).ready(function () {
+
+        //    // INIT AUTOCOMPLETE
+        //    $('.orderRecord').autocomplete({
+        //        data: {
+        //            "Internal Doctor": null,
+        //            "Chiroprachter": null,
+        //            "Physical Therapyst": null,
+        //            "Acupancturist": null,
+        //            "Psycologist": null,
+        //            "YES, W/ HIPAA AUTHORIZATION": null,
+        //        },
+        //        limit: 10,
+        //        minLength: 0
+        //    });
+        //    $('.recordF').autocomplete({
+        //        data: {
+        //            "$0.25": null,
+        //            "$0.50": null,
+        //            "FREE": null,
+        //            "CUSTOM": null,
+        //        },
+        //        limit: 10,
+        //        minLength: 0
+        //    });
+        //    $('.changeS').autocomplete({
+        //        data: {
+        //            "Activated": null,
+        //            "Deactivated": null,
+        //        },
+        //        limit: 10,
+        //        minLength: 0
+        //    });
+        //    $('#viewR').selectize({
+
+        //    });
+        //    $('#editR').selectize({
+
+        //    });
+        //   $('#editP').selectize({
+
+        //    });
+        //    });
+    </script>
+    <script>
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+    </script>
+    <script>
+
+        var saveAction = '@ViewBag.Action';
+        var IsCapturedScreen = false;
+
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+
+
+        function take_snapshot() {
+            debugger;
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        //Usage example:
+        //var file = dataURLtoFile('data:text/plain;base64,aGVsbG8gd29ybGQ=','hello.txt');
+
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            debugger;
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+
+    </script>
+    <script>
+    //form Submit
+    $('#SettingAttorneyForm').on('submit', function (e) {
+        debugger;
+        e.preventDefault();
+
+        var ProfileSrc = $("#result").attr('src');
+        $(this).ajaxSubmit({
+
+            data: { profileImage: ProfileSrc },
+            success: function (data) {
+
+                var msg = data.success;
+                if (data.isError) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: msg,
+                        delay: 5000,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+
+                    return;
+                }
+                else {
+                    $(".checkmark").show().fadeOut(6000);
+                }
+
+
+
+            },
+            complete: function (xhr) {
+
+            }
+
+        });
+
+    });
+    </script>
+}
+
+@*<div id="batch_action">
+        <div class="container">
+            <div class="row">
+
+                <div class="col s9 m9 l9">
+                    <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown10'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                    <ul id='dropdown10' class='dropdown-content dropbody'>
+                        <li><a href="javascript:void(0);">Option 1</a></li>
+                        <li><a href="javascript:void(0);">Option 2</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper mb-0">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Attorney
+                    </h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/SettingsElite/Setting">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        <form id="SettingAttorneyForm" asp-action="Attorney" asp-controller="Setting" method="post" class="validation-wizard wizard-circle" >
+          <input hidden type="text" asp-for="SettingAttorneyDto.AttorneyId"/>
+            <div class="row">
+
+                <div class="col s12 m6">
+                    <p>TYPE OF ATTORNEY	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.TypeOFAttorney">
+                            <option value="Personal Injury Attorney">Personal Injury Attorney</option>
+                            <option value="Collection Attorney">Collection Attorney</option>
+                            <option value="Criminal Attorney">Criminal Attorney</option>
+                            <option value="Civil Attorney">Civil Attorney</option>
+                            <option value="Pro-Se">Pro-Se</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="col s12 m6">
+                    <p>FIRM NAME	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input asp-for="SettingAttorneyDto.FirmName" class="text-input" type="text" placeholder="Enter firm name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>FIRM ASSOCIATED ATTORNEYS	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.FirmAssociatedAttorney">
+                            <option>Select</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>FIRM ASSOCIATED PARALEGALS	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.FirmAssociatedParalegal">
+                            <option>Select</option>
+
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>FIRM ASSOCIATED CASE MANAGERS	</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.FirmAssociatedCaseManager">
+                            <option>Select</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>FIRM ASSOCIATED CASE SECRETARIES	</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.FirmAssociatedCaseSecretries">
+                            <option>Select</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>FIRM Address	</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <input asp-for="SettingAttorneyDto.Address" class="text-input input-styling doctorSuffix" type="text" placeholder="Select firm informations">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Phone Number	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input class="text-input" type="text" asp-for="SettingAttorneyDto.PhoneNumber" placeholder="Enter UI">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Fax	</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <input asp-for="SettingAttorneyDto.Fax" class="text-input input-styling doctorSuffix" type="text" placeholder="Select firm informations">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Email	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input class="text-input" type="text" asp-for="SettingAttorneyDto.Email" placeholder="Enter UI">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Website	</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <input asp-for="SettingAttorneyDto.Website" class="text-input input-styling doctorSuffix" type="text" placeholder="Select firm informations">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>UI	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input class="text-input" type="text" asp-for="SettingAttorneyDto.UserId" placeholder="Enter UI">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>PASSWORD	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input class="text-input" asp-for="SettingAttorneyDto.Password" type="text" placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>GENERATE AUTHENTICATION CODE	</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input asp-for="SettingAttorneyDto.AuthenticationCode" class="text-input" type="text" placeholder="Enter generate authentication code">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>AUTHORIZED TO REFER CLIENTS</p>
+
+                    <div class="input-field col s12 pl-0">
+                        <input asp-for="SettingAttorneyDto.AuthorizedReferClient" class="text-input" type="text" placeholder="Enter Room No">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>AUTHORIZED TO VIEW RECORDS</p>
+                    <div class="input-field">
+                        <select class="text-input" asp-for="SettingAttorneyDto.AuthorizedViewRecord">
+                            <option value="AUTHORIZED TO VIEW RECORDS">AUTHORIZED TO VIEW RECORDS</option>
+                            <option value="YES, W/HIPAA AUTHORIZATION">YES, W/HIPAA AUTHORIZATION</option>
+                            <option value="NO">NO</option>
+                            <option value="YES, WITH REFERRED CLIENTS">YES, WITH REFERRED CLIENTS</option>
+                            <option value="LIST OF RECORDS AUTHORIZED">LIST OF RECORDS AUTHORIZED</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col s12 m6">
+                    <p>AUTHORIZED TO ORDER RECORDS</p>
+                    <div class="input-field col s12 m12 pl-0">
+                        <select class="text-input" asp-for="SettingAttorneyDto.AuthorizedOtherRecord">
+                            <option value="AUTHORIZED TO VIEW RECORDS">AUTHORIZED TO VIEW RECORDS</option>
+                            <option value="YES, W/HIPAA AUTHORIZATION">YES, W/HIPAA AUTHORIZATION</option>
+                            <option value="NO">NO</option>
+                            <option value="YES, WITH REFERRED CLIENTS">YES, WITH REFERRED CLIENTS</option>
+                            <option value="LIST OF RECORDS AUTHORIZED">LIST OF RECORDS AUTHORIZED</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>AUTHORIZED TO EDIT PROFILE</p>
+                    <div class="input-field">
+                        <select class="text-input" asp-for="SettingAttorneyDto.AuthorizedEditProfile">
+                            <option value="AUTHORIZED TO EDIT PROFILE" disabled selected>AUTHORIZED TO EDIT PROFILE</option>
+                            <option value="Yes">Yes</option>
+                            <option value="NO">NO</option>
+                            <option value="Firm Info">Firm Info</option>
+                            <option value="Login">Login</option>
+                            <option value="Full Access of Editing">Full Access of Editing</option>
+                            <option value="Deleting">Deleting</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col s12 m6 ">
+                    <p>CHANGE STATUS</p>
+                    <div class="input-field col s12 pl-0">
+
+                        <div class="dropdownauto">
+                            <input asp-for="SettingAttorneyDto.Status" class="text-input input-styling changeS" type="text" placeholder="Select Status">
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 ">
+                    <div class="input-field col s12 pl-0">
+                        <p>MEDICAL RECORD FEE SCHEDULE</p>
+                        <div class="input-field col s12 pl-0">
+
+                            <div class="dropdownauto">
+                                <input asp-for="SettingAttorneyDto.MedicalRecordFee" class="text-input input-styling recordF" type="text" placeholder="Select Speciality">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col">
+                    <p>AUTHORIZED TO SEND INTERNAL MESSAGE</p>
+                    <div class="row">
+
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryYes" asp-for="SettingAttorneyDto.AuthorizedSendMessage" class="with-gap" value="true" />
+                                    <span>Yes</span>
+                                </label>
+                            </p>
+
+                        </div>
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryNo" class="with-gap" asp-for="SettingAttorneyDto.AuthorizedSendMessage" value="false" />
+                                    <span>No</span>
+                                </label>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 ">
+                    <p>AUTHORIZES FACE ID RECOGNITION</p>
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryYes" asp-for="SettingAttorneyDto.FaceIdRecognization" value="true" />
+                                    <span>Yes</span>
+                                </label>
+                            </p>
+
+                        </div>
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryNo" asp-for="SettingAttorneyDto.FaceIdRecognization" class="with-gap" value="false" />
+                                    <span>No</span>
+                                </label>
+                            </p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-12 col-md-6">
+                    <p>AUTHORIZES BIOMETRIC RECOGNITION</p>
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryYes" class="with-gap" asp-for="SettingAttorneyDto.BioMetricRecognization" value="true" />
+                                    <span>Yes</span>
+                                </label>
+                            </p>
+                        </div>
+                        <div class="col-4">
+                            <p class="check-btn">
+                                <label>
+                                    <input type="radio" id="secondaryNo" class="with-gap" asp-for="SettingAttorneyDto.BioMetricRecognization" value="false" />
+                                    <span>No</span>
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <input type="text" hidden asp-for="SettingAttorneyDto.AttornyPhoto" />
+                <div class="col s12 m9  pr-0">
+                    <p>Write Signature</p>
+                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                        <div class="m-signature-pad--body">
+                            <canvas width="500" height="200"></canvas>
+                        </div>
+                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                            <div class="description">Save Your signature before submit the form</div>
+                            <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m3  pr-0">
+                    <p>Upload Signature Image</p>
+                    <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col-12 col-lg-6 ">
+                    <div class="center">
+
+                        <div class="docs-preview clearfix">
+                            <div class="img-preview preview-lg">
+                                <div id="result-wrapper">
+                                    @if (Action == "Update")
+                                    {
+                                        if (image == null)
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else if (image == "")
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else
+                                        {
+                                            <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">
+                                            <img src="/images/@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <!----start-->
+                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                        <div class="middle">
+                                            <div class="text">
+                                                <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                <p>Upload</p>
+                                            </div>
+                                        </div>
+
+                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        <!----End-->
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div id="main-cropper"></div>
+                                            <div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+                                                <div class="panel-heading">Camera</div>
+                                                <div class="panel-body">
+                                                    <div id="my_camera"></div>
+                                                    <!-- A button for taking snaps -->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 center">
+                                                <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                    <i class="mdi mdi-camera"></i>
+                                                </a>
+                                                <a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                    <i class="mdi mdi-cloud-upload"></i>
+                                                    <input type="file" class="custom-file-input" id="upload">
+                                                </a>
+                                                <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                    <button type="button" class="waves-effect waves-light Recreate btn">Edit</button>
+                    <button type="reset" class="waves-effect waves-light Recreate btn">Cancel</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

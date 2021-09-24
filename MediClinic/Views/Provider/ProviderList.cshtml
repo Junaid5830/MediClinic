@@ -1,0 +1,315 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@{
+    ViewData["Title"] = "Provider List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+
+    <style>
+
+
+        table.dataTable.display tbody tr.odd:hover {
+            background-color: #f1f1f1 !important;
+        }
+
+
+        .list-img {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+        table.dataTable.dtr-inline.collapsed > tbody > tr[role='row'] > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr[role='row'] > th:first-child:before {
+   
+    left: 40%;
+    
+}
+    </style>
+}
+@section scripts{
+    <script src="~/lib/pnotify.custom.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            @*if ('@Model.Success' != "")
+            {
+                M.toast({
+                    html: '@Model.Success'
+                });
+            }*@
+            var table = $('#Doctorlist-table').DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 1,10], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+        function deleteProvider(providerInfoId,event) {
+            event.closest('tr').remove();
+
+            $.get("/Provider/ProviderInfoDelete", { providerId: providerInfoId }).done(function (data) {
+                debugger;
+
+                    new PNotify({
+                    title: 'Success!',
+                    text: 'Record deleted successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                });
+        }
+
+    </script>
+
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m3 l2 margin-top-8">
+                <h5 class="breadcrumbs-title color-blue">Provider</h5>
+            </div>
+            <div class="col s9 m5 l6 display-block">
+                <div class="header-search-wrapper  display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" data-search type="text"  placeholder="Search">
+                    <a class="btn ml-2 search-btn">
+
+
+                        Search
+
+                    </a>
+                </div> 
+            </div>
+
+            <div class="col s12 m4 l4 ">
+
+
+
+                <a class="btn waves-effect waves-light float-right add-btn" href="@Url.Action("ProviderInfo","Provider")">
+
+
+                    Add New Provider
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown5' class='dropdown-content dropbody'>
+                    <li><a href="javascript:void(0);">Option 1</a></li>
+                    <li><a href="javascript:void(0);">Option 2</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col m12">
+        <div class="container">
+
+
+            <table id="Doctorlist-table" class="display table-option">
+                <thead>
+                    <tr class="uppercase">
+                        <th></th>
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th></th>
+                        @if (Model.ProviderListSettingDto.ProviderIdDisplay)
+                        {
+                            <th>Provider ID</th>
+                        }
+
+                        @if (Model.ProviderListSettingDto.EntityName)
+                        {
+                            <th>Entity Name</th>
+                        }
+                        @if (Model.ProviderListSettingDto.Name)
+                        {
+                            if (Model.ProviderListSettingDto.FirstName == true && Model.ProviderListSettingDto.LastName == true)
+                            {
+                                <th>Name</th>
+                            }
+                            else if (Model.ProviderListSettingDto.FirstName == true && Model.ProviderListSettingDto.LastName == false)
+                            {
+                                <th>Name</th>
+                            }
+                            else if (Model.ProviderListSettingDto.FirstName == false && Model.ProviderListSettingDto.LastName == true)
+                            {
+                                <th>Name</th>
+                            }
+                            else
+                            {
+                                <th data-orderable="false">Name</th>
+                            }
+                        }
+                        @if (Model.ProviderListSettingDto.Email)
+                        {
+                            <th>Email</th>
+                        }
+                        @if (Model.ProviderListSettingDto.LicenseNo)
+                        {
+                            <th>LICENSE No</th>
+                        }
+                        @if (Model.ProviderListSettingDto.NpiNumber)
+                        {
+                            <th>NPI No</th>
+                        }
+                        @if (Model.ProviderListSettingDto.PhoneNo)
+                        {
+                            <th>Phone No</th>
+                        }
+                        @if (Model.ProviderListSettingDto.Address)
+                        {
+                            <th>Address</th>
+                        }
+                        @if (Model.ProviderListSettingDto.AssignRoomNo)
+                        {
+                            <th>Assigned Room No</th>
+                        }
+                        @if (Model.ProviderListSettingDto.MobileNo)
+                        {
+                            <th>Mobile No</th>
+                        }
+                        @if (Model.ProviderListSettingDto.FaxNo)
+                        {
+                            <th>Fax</th>
+                        }
+                        @if (Model.ProviderListSettingDto.TaxId)
+                        {
+                            <th>Tax ID</th>
+                        }
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ProviderList != null)
+                    {
+                        @foreach (var item in Model.ProviderList)
+                        {
+                    <tr class="card">
+                        <th></th>
+                        <td>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </td>
+                        <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer">
+                            <span class="list-img">
+                                @if (item.ProviderProfilePic != null)
+                                {
+                                    <img src="/images/@item.ProviderProfilePic" alt="provider">
+                                }
+                                else
+                                {
+                                    <img src="~/app-assets/images/user/male-user.png" alt="provider">
+                                }
+                            </span>
+                        </td>
+
+                        @if (Model.ProviderListSettingDto.ProviderIdDisplay)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer">@item.ProviderInfoId</td>
+                        }
+                        @if (Model.ProviderListSettingDto.EntityName)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer">@item.EntityName</td>
+                        }
+                        @if (Model.ProviderListSettingDto.Name)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.FirstName @item.LastName</td>
+                        }
+                        @if (Model.ProviderListSettingDto.Email)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.Email</td>
+                        }
+                        @if (Model.ProviderListSettingDto.LicenseNo)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.LicenseNo</td>
+                        }
+                        @if (Model.ProviderListSettingDto.NpiNumber)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.NpiNumber</td>
+                        }
+                        @if (Model.ProviderListSettingDto.PhoneNo)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.PhoneNo</td>
+                        }
+                        @if (Model.ProviderListSettingDto.Address)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.AddressLine1</td>
+                        }
+                        @if (Model.ProviderListSettingDto.AssignRoomNo)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.AssignRoomNo</td>
+                        }
+                        @if (Model.ProviderListSettingDto.MobileNo)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.MobileNo</td>
+                        }
+                        @if (Model.ProviderListSettingDto.FaxNo)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.FaxNo</td>
+                        }
+                        @if (Model.ProviderListSettingDto.TaxId)
+                        {
+                            <td onclick="location.href='@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })'" style="cursor: pointer"> @item.TaxId</td>
+                        }
+
+                        <td class="action">
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown_@item.ProviderInfoId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown_@item.ProviderInfoId' class='dropdown-content'>
+                                <li><a href="@Url.Action("ProviderInfo", "Provider", new { providerId= @item.ProviderInfoId })" class="option-a"><i class="material-icons">remove_red_eye</i>Edit</a></li>
+                                <li><a href="javascript:void(0);" onclick="deleteProvider(@item.ProviderInfoId,this)" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                                <li><a href="@Url.Action("ProviderSummary","Provider",new { providerId= @item.ProviderInfoId })" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="javascript:void(0);" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+                        }
+
+                    }
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

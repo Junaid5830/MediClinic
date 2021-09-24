@@ -1,0 +1,147 @@
+﻿@model MediClinic.Models.PackageViewModel
+@{
+    ViewData["Title"] = "CreatePackage";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+@section scripts{ 
+    <script>
+        
+        $("input[type='radio']").click(function () {
+            var radioValue = $(this).val();
+            debugger;
+            if (radioValue == 0) {
+                $('#UserLimitForm').show();
+            }
+            else {
+                $('#UserLimitForm').hide();
+            }
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Surgery</h5>
+                </div>
+                <div class="col">
+                    @*<a href="@Url.Action("Index","SurgeryCenter")" class="waves-effect waves-light float-right">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="CreatePackage" asp-controller="SubscriptionPackages" method="post" id="SurgeryCenterForm">
+
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Name
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.PackageName" class="text-input first-name-input" placeholder="Enter Package Name">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            No Of Provider
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.ProviderNo" class="text-input mr-number-input" placeholder="Enter No Of Provider">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Data Storage
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.DataStorage" class="text-input first-name-input" placeholder="Enter Data Storage">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            User Limit
+                        </p>
+                        <div class="input-field">
+                            <div class="row">
+                                <div class="col-sm-3  col-3 col-lg-3 col-xl-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="UserYes" class="custom-control-input" name="phoneYes" value="1">
+
+                                        <label class="custom-control-label" for="UserYes">Unlimited</label>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="UserNo" class="custom-control-input" name="phoneYes" value="0">
+                                        <label class="custom-control-label" for="UserNo">No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="input-field mt-2" id="UserLimitForm" style="display:none">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="text" asp-for="subsriptionPackageDto.UserLimit" class="text-input mr-number-input" placeholder="Enter User Limit">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Additional GB
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.AdditionalGB" class="text-input first-name-input" placeholder="Enter Additional GB">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Additional TB
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.AdditionalTB" class="text-input mr-number-input" placeholder="Enter Additional TB">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Price
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.PackagePrice" class="text-input first-name-input" placeholder="Enter Price">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            Package Description
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="subsriptionPackageDto.PackageDescriptin" maxlength="127" class="text-input mr-number-input" placeholder="Enter Description">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

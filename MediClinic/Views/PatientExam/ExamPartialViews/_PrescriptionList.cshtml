@@ -1,0 +1,141 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var roleId = _sessionManager.GetRoleId();
+
+}
+
+
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Prescription</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Medication Name</th>
+                        <th>Quantity</th>
+                        <th>Frequency</th>
+                        <th>Dose</th>
+                        <th>Unit</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Medication Comments</th>
+                        <th>Visit Id</th>
+                        <th data-searchable=false data-orderable="false" class="all">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.prescriptionBasicsList != null)
+                    {
+                        var rec = Model.prescriptionBasicsList.OrderByDescending(x => x.Id).Skip(1).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card">
+
+                                <td>@rec.Medication.Name</td>
+                                <td>@rec.Quantity</td>
+                                <td>@rec.FrequencyId</td>
+                                <td>@rec.Dose</td>
+                                <td>@rec.Unit</td>
+                                <td>@rec.StartDate.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.EndDate.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.Notes</td>
+                                <td>@rec.VisitId</td>
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @if (roleId == 2)
+                                        {
+                                            <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                            <li onclick="myFillNowFunction(@rec.Id,@roleId)"><a href="javascript:void(0);" class="option-a">Edit</a></li>
+                                            <li onclick="deleteprescription(@rec.Id, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li onclick="myFillNowFunction(@rec.Id,@roleId)"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                            <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Prescription</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Medication Name</th>
+                        <th>Quantity</th>
+                        <th>Frequency</th>
+                        <th>Dose</th>
+                        <th>Unit</th>
+                        <th>Start Date</th>
+                        <th>Stop Date</th>
+                        <th>Medication Comments</th>
+                        <th>Visit Id</th>
+                        <th data-searchable=false data-orderable="false" class="all">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.prescriptionBasicsList != null)
+                    {
+                        var rec = Model.prescriptionBasicsList.OrderByDescending(x => x.Id).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card">
+
+                                <td>@rec.Medication.Name</td>
+                                <td>@rec.Quantity</td>
+                                <td>@rec.FrequencyId</td>
+                                <td>@rec.Dose</td>
+                                <td>@rec.Unit</td>
+                                <td>@rec.StartDate.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.EndDate.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.Notes</td>
+                                <td>@rec.VisitId</td>
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @if (roleId == 2)
+                                        {
+                                            <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                            <li onclick="myFillNowFunction(@rec.Id,@roleId)"><a href="javascript:void(0);" class="option-a">Edit</a></li>
+                                            <li onclick="deleteprescription(@rec.Id, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li onclick="myFillNowFunction(@rec.Id,@roleId)"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                            <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

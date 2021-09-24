@@ -1,0 +1,57 @@
+﻿@model MediClinic.Models.PatientViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+                <table id="IncomeTable" class="table dataTables_wrapper ">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                    <label class="custom-control-label" for="selectAll"></label>
+                                </div>
+
+                            </th>
+                            <th>Category Name</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+
+                            <th class="all">Action  </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.ReportIncomeList)
+                        {
+                            <tr class="card">
+
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="line2" value="check">
+                                        <label class="custom-control-label" for="line2"></label>
+                                    </div>
+
+                                </td>
+                                <td>@item.Category.CategoryName</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Amount</td>
+                                
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class='dropdown-menu Table_Drop ul_Caim'>
+                                        @*<li><a onclick="CheckIn(@item.CheckInOutId,@item.UserId)" href="javscript:Void(0);" class="option-a">Check In</a></li>
+                                        <li><a onclick="CheckOut(@item.CheckInOutId,@item.UserId)" href="javscript:Void(0);" class="option-a">Check Out</a></li>
+                                        <li><a href="javscript:Void(0);" class="option-a">Delete</a></li>*@
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+   

@@ -1,0 +1,163 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@inject ISessionManager _sessionManager
+
+
+@{
+    var empty = "N/A";
+    var userRole = _sessionManager.GetRoleId();
+}
+
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Physical Exam</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Date of Exam</th>
+                        <th>Swelling</th>
+                        <th>Burns</th>
+                        <th>Pain</th>
+                        <th>Weakness </th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th class="all">Action  </th>
+
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.ExamInfromationList is null))
+                    {
+
+                        var rec = Model.ExamInfromationList.OrderByDescending(x => x.ExamInformationId).Skip(1).FirstOrDefault();
+
+
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                @if (rec.DateOfExam != null)
+                                {
+                                    <td>@rec.DateOfExam.ToString("dd/MM/yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td>@empty</td>
+                                }
+
+                                <td>@rec.Swelling</td>
+                                <td>@rec.Burns</td>
+                                <td>@rec.Pain</td>
+                                <td>@rec.Weakness</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                        {
+
+                                            <li onclick="DeleteExam(@rec.ExamInformationId, this);"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a asp-controller="PatientSideElite" asp-action="NewExamElite" asp-route-id="@rec.ExamInformationId">Edit</a></li>
+                                        }
+                                        <li onclick="ViewExam(@rec.ExamInformationId);"><a href="javascript:void(0);">View</a></li>
+                                    </ul>
+                                </td>
+
+
+                            </tr>
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Physical Exam</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Date of Exam</th>
+                        <th>Swelling</th>
+                        <th>Burns</th>
+                        <th>Pain</th>
+                        <th>Weakness </th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th class="all">Action  </th>
+
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.ExamInfromationList is null))
+                    {
+
+                        var rec = Model.ExamInfromationList.OrderByDescending(x => x.ExamInformationId).FirstOrDefault();
+
+
+                        @if (!(rec is null))
+
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                @if (rec.DateOfExam != null)
+                                {
+                                    <td>@rec.DateOfExam.ToString("dd/MM/yyyy")</td>
+                                }
+                                else
+                                {
+                                    <td>@empty</td>
+                                }
+
+                                <td>@rec.Swelling</td>
+                                <td>@rec.Burns</td>
+                                <td>@rec.Pain</td>
+                                <td>@rec.Weakness</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                        {
+
+                                            <li onclick="DeleteExam(@rec.ExamInformationId, this);"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a asp-controller="PatientSideElite" asp-action="NewExamElite" asp-route-id="@rec.ExamInformationId">Edit</a></li>
+                                        }
+                                        <li onclick="ViewExam(@rec.ExamInformationId);"><a href="javascript:void(0);">View</a></li>
+                                    </ul>
+                                </td>
+
+
+                            </tr>
+
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

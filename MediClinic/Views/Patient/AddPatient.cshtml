@@ -1,0 +1,122 @@
+﻿
+@{
+    ViewData["Title"] = "Add Patient";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+@section styles{
+    <style>
+
+        h6 {
+            color: #03a9f4 !important
+        }
+
+        h5 {
+            color: #29b6f6 !important
+        }
+
+        .btn {
+            padding: 0 1rem !important;
+        }
+
+        .tabs {
+            min-height  : 1024px;
+            white-space: normal;
+            text-align:left !important;
+        }
+
+        .tab {
+            display: block;
+            width: 100%;
+            color:#000
+        }
+       
+        .tab-content {
+            height: auto;
+            width: 100%;
+            background: #f1f1f1;
+            border: 1px solid #f0f0f0;
+           
+        }
+        .tabs .tab{
+            text-align:left !important;
+            height:auto !important
+
+        }
+           
+        .indicator {
+            display: none;
+        }
+
+        .new-pat {
+            padding: 20px 30px !important
+        }
+    
+    </style>
+
+}
+@section scripts{
+    <script>
+
+          $(document).ready(function () {
+            $("li.patientheader").addClass("border-bottom-header-active");
+        });
+    </script>
+}
+
+<div class="row ">
+    <div class="col m3 pl-0 pr-0">
+        <ul class="tabs">
+            <li><h5 class="new-pat">New Patient +</h5></li>
+            <li class="tab"><a class="active" href="#test2">Patient Info</a></li>
+            <li class="tab"><a href="#test3">Phone Number</a></li>
+            <li class="tab"><a href="#test4">Emergency Contact</a></li>
+            <li class="tab">
+                <a href="#test5">
+                    Patient ID & Signature
+                </a>
+            </li>
+            <li class="tab"><a href="#test6">Claim Info</a></li>
+            <li class="tab"><a href="#test6">Other Vehicles/Entities Involved</a></li>
+            <li class="tab"><a href="#test6">Secondary Insurance Provider</a></li>
+            <li class="tab"><a href="#test6">Tertiary Insurance Provider</a></li>
+            <li class="tab"><a href="#test6">Legal Info</a>
+                            <ul class="tabs dropdown">
+                                <li class="tab"><a href="#">P.I (Personal Injury) Attorney Name</a></li>
+                                <li class="tab"><a href="#">Collection/Arbitration Attorney Name</a></li>
+
+                            </ul>
+            </li>
+
+        </ul>
+    </div>
+    <div class="col m9 pl-0 pr-0">
+        <div id="test1" class="col tab-content">Tab 1</div>
+        <div id="test2" class="col tab-content">Tab 2</div>
+        <div id="test3" class="col tab-content">Tab 3</div>
+        <div id="test4" class="col tab-content">Tab 4</div>
+        <div id="test5" class="col tab-content">Tab 4</div>
+        <div id="test6" class="col tab-content">Tab 4</div>
+    </div>
+</div>
+
+@*<div class="row">
+
+
+        <div class="col s12">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col s12 m12">
+                        <h4>
+                            New Patient
+                            <a class="waves-effect waves-light  btn float-right"><i class="material-icons left">add</i>Save</a>
+                            <a class="waves-effect waves-light  btn float-right"><i class="material-icons left">add</i>Edit</a>
+
+                        </h4>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>*@

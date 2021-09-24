@@ -1,0 +1,96 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+
+
+@{
+    var sr = 0;
+    if (Model.AppointmentQueue.Count > 0)
+    {
+        foreach (var item in Model.AppointmentQueue)
+        {
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row" style="margin-top:15px">
+
+                        <div class="col s12  m6 pr-0 set_ONSmallScreen">
+
+                            <div class="set_Name"><p>Dr @item.DoctorName</p></div>
+                        </div>
+                        <div class="col s12  m6 center">
+
+                            @if (item != null)
+                            {
+                                if (!(item.ProviderProfilePic is null))
+                                {
+                                    <img style="width:95px;" src="~/images/@item.ProviderProfilePic" alt="Doctor Image" />
+
+                                }
+                                else
+                                {
+                                    <img style="width:95%" scr="/app-assets/images/user/male-user.png" />
+                                }
+                            }
+                            else
+                            {
+                                <img style="width:95px;" src="~/images/avtar.png" />
+
+                            }
+
+                        </div>
+
+                    </div>
+                    @*<div class="row">
+                        <div class="s12 center">
+                            @foreach (var item in Model.AppointmentQueue.Take(1))
+                            {
+                                <h6 style="color:#177e64;">@item.Speciality</h6>
+                            }
+
+                        </div>
+                    </div>*@
+                    <hr />
+                    <div class="row" id="serving">
+                        <div class="col s12">
+
+                            @{
+                                <div class="center"> <div class="smallCap"><p>Serving</p></div></div>
+
+                                foreach (var b in item.BookAppointments.OrderBy(x=>x.StartTime))
+                                {
+                                    sr++;
+                                    <div class="set_Number tooltipped" data-toggle="tooltip" title="@b.StartTime">
+                                        <a class="set_a">
+                                            @sr
+                                            <span>@b.FirstName-@b.PatientInfoId</span>
+                                            <span onclick="completeAppointment(@b.AppointmentId)"></span>
+                                            <span class="right">@b.StartTime</span>
+                                        </a>
+
+                                    </div>
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+  
+        }
+    }
+    else
+    {
+        <div class="card">
+            <div class="row">
+                <div class="col s12">
+                    <div class="center">
+                        <b>No appointment today</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

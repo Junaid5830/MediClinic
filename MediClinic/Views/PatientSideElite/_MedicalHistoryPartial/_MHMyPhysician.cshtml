@@ -1,0 +1,92 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">MY PHYSICIANS HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="MHMyPhysicianGrid">
+                        @*<partial name="../_PatientPartialView/_ManageMHMyPhysician.cshtml" />*@
+                        <partial name="../_MedicalHistoryPartial/_ManageMHMyPhysician.cshtml" />
+
+
+                    </div>
+                    <form asp-action="SaveMHMyPhysicians" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMHMyPhysicians(data)" id="MyPhysicanForm">
+                        @Html.TextBoxFor(model => model.MHMyPhysician.PatientId, new { @class = "form-control", @Id = "", @style = "display:none" })
+                        @Html.TextBoxFor(model => model.MHMyPhysician.Id, new { @class = "form-control", @Id = "MHMyPhysicianId", @style = "display:none" })
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Name <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHMyPhysician.Name" id="MyPhysicianName" type="text" placeholder="Name">
+                                <span class="required" asp-validation-for="MHMyPhysician.Name"></span>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Location <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHMyPhysician.Location" id="MyPhysicianLocation" type="text" placeholder="Location">
+                                <span class="required" asp-validation-for="MHMyPhysician.Location"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Hospital <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHMyPhysician.Hospital" id="MyPhysicianHospital" type="text" placeholder="Hospital">
+                                <span class="required" asp-validation-for="MHMyPhysician.Hospital"></span>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Phone No
+                                </p>
+                                <input class="text-input" asp-for="MHMyPhysician.PhoneNo" id="MyPhysicianPhoneNo" type="text" placeholder="Name">
+                                <span class="required" asp-validation-for="MHMyPhysician.PhoneNo"></span>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <p>
+                                    Specialty
+                                </p>
+                                <div id="specialityId">
+                                    <select data-placeholder="select Specialty" id="providerSpeciality" class="select2" asp-for="MHMyPhysician.Specialty" asp-items="@(new SelectList(Model.PhysicianSpecialityList,"ProviderSpeciality","ProviderSpeciality"))">
+
+                                        <option selected value="" disabled></option>
+                                    </select>
+                                </div>
+                                <span class="required" asp-validation-for="MHMyPhysician.Specialty"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">Notes</p>
+                                <input class="text-input" asp-for="MHMyPhysician.Notes" type="text" placeholder="Notes" id="MyPhysicianNotes">
+                                <span class="required" asp-validation-for="MHMyPhysician.Notes"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12 m12" style="text-align:center">
+                                @*<button type="submit" class="btn add-btn physician2" style="margin:0px">Save &amp; Add More</button>*@
+                                <button class="btn add-btn physician1" id="SaveMyPhysicanForm" type="submit">Save</button>
+                                <button class="Recreate btn" type="reset">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>

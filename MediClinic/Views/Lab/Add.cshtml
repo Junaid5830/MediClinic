@@ -1,0 +1,110 @@
+﻿@model MediClinic.Models.LabViewModel
+@{
+    ViewData["Title"] = "AddRedminderElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script>
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+        $(function () {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
+}
+
+<div class="container">
+</div>
+
+<div class="page-wrapper">
+    <div class="container">
+        @*<div class="col-2">
+                <partial name="~/Views/Appointment/PartialViews/_VisitsButtons.cshtml" />
+            </div>*@
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Lab</h5>
+                </div>
+
+                <div class="col">
+                    @*<a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Lab/LabList">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                        </a>*@
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="Add" asp-controller="Lab" method="post" id="LabForm">
+                <input hidden="hidden" id="hiddenVisitId" asp-for="labDto.VisitId" />
+                <input type="hidden" asp-for="labDto.LabId">
+                <div class="row">
+                    <div class=" col ">
+                        <p>Date/Time of exam</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input datepicker" placeholder="select date" asp-for="labDto.DateTime">
+                        </div>
+                    </div>
+                    <div class=" col ">
+                        <p>Examiner</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Examiner Name" asp-for="labDto.Examiner">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col ">
+                        <p>Type of Exam</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Type of Exam" asp-for="labDto.TypeOfExam">
+                        </div>
+                    </div>
+                    <div class=" col ">
+                        <p>Reason for exam</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter reason for exam" asp-for="labDto.ReasonForExam">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col ">
+                        <p>Results</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Results" asp-for="labDto.Results">
+                        </div>
+                    </div>
+                    <div class=" col ">
+                        <p>Report</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Report" asp-for="labDto.Report">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" form="LabForm" class="waves-effect waves-light btn add-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

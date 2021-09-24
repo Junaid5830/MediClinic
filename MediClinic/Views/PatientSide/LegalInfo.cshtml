@@ -1,0 +1,622 @@
+﻿
+@{
+    ViewData["Title"] = "LegalInfo";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+        .select-wrapper input.select-dropdown {
+            border: 1px solid #cfcfcf !important;
+        }
+         .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+    </style>
+
+
+}
+
+@section scripts{
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            // INIT AUTOCOMPLETE
+            $('.state').autocomplete({
+                data: {
+                    "Falorida": null,
+                    "California": null,
+                    "Texas": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+
+            $('.Legalstatus').autocomplete({
+                data: {
+                    "Active": null,
+                    "Inactive": null,
+                    "In Court": null,
+                    "Filed": null,
+                    "Lost": null,
+                    "Partial Paid": null,
+                    "Paid": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+
+        });
+
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6">
+                <h5 class="breadcrumbs-title color-blue">Legal Info</h5>
+            </div>
+            <div class="col s6 m6">
+                <a class="waves-effect waves-light float-right" href="@Url.Action("LegalInfoList","PatientSide")">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="cotainer">
+    <div class="row">
+        <div class="col s12 m6 right">
+            <div class="container">
+                <select id="legalinfo">
+                    @*<option value="" disabled selected>select</option>*@
+                    <option value="legal1" selected="selected">P.I (Personal) Injury Attorney Name</option>
+                    <option value="legal2">Collection/Arbitration Attorney</option>
+
+                </select>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col m12">
+            <div id="legal1" class="legal" style="display:none">
+                <div class="row">
+                    <div class="content-wrapper-before blue-grey lighten-5"></div>
+                    <div class="col s12">
+                        <div class="container">
+
+                            <div class="card card-default scrollspy border-radius-6 fixed-width">
+                                <div class="card-content padding-3">
+                                    <div class="row mb-1">
+
+
+                                        <div class="col s12">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <h5 class="breadcrumbs-title color-blue">P.I (Personal) Injury Attorney Name</h5>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>From-Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>To Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>Of Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <form class="form-inline col s12">
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Firm Name<span class="required"> * </span></p>
+
+                                                                <div class="ui-widget col s12 pl-0">
+                                                                    <select class="combobox">
+
+                                                                        <option></option>
+                                                                        <option value="">Select one...</option>
+                                                                        <option value="ActionScript">ActionScript</option>
+                                                                        <option value="AppleScript">AppleScript</option>
+                                                                        <option value="Asp">Asp</option>
+                                                                    </select>
+
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Attorney Name</p>
+
+                                                                <div class="ui-widget col s12 pl-0">
+                                                                    <select id="Patient_AttoneyName" class="combobox">
+
+                                                                        <option value="">Select one...</option>
+                                                                        <option value="ActionScript">ActionScript</option>
+                                                                        <option value="AppleScript">AppleScript</option>
+                                                                        <option value="Asp">Asp</option>
+                                                                    </select>
+
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 1</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 2</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 2">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 3</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 3">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m3">
+                                                                <p>Country</p>
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling  " type="text" placeholder="Enter Country">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m3">
+                                                                <p>City</p>
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling " type="text" placeholder="Enter City">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+
+                                                                <div class=" col s6 m6 pl-0">
+                                                                    <p>State</p>
+                                                                    <div class="input-field">
+                                                                        <div class="dropdownauto">
+                                                                            <input class="text-input input-styling state" type="text" placeholder="Select State">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" col s6 m6 pl-0">
+                                                                    <p>ZIP</p>
+                                                                    <div class="input-field">
+                                                                        <input class="text-input input-styling" type="text" placeholder="Enter Zip">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Phone Number</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling " type="text" placeholder="Enter Phone Number">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Fax</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Fax Number">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Email</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="email" placeholder="Enter Email Address">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Website</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Website Name">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Name Or Initials</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Name Or Initials">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Phones</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Phone">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Extension</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Extension">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Email</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling" type="email" placeholder="Enter Leading Paralegal Email">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Fax</p>
+
+                                                                <div class="input-field pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Fax">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Legal status</p>
+
+                                                                <div class="input-field col s9 m10 pl-0">
+                                                                    <div class="dropdownauto">
+                                                                        <input class="text-input input-styling legalStatus" type="text" placeholder="Select Legal Status">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="input-field col s3 m2 pr-0">
+                                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right"><i class="material-icons ">add</i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row set_rowbtn">
+                                                            <div class="col s12 m12" style="text-align:center">
+                                                                <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="legal2" class="legal" style="display:none">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="container">
+
+                            <div class="card card-default scrollspy border-radius-6 fixed-width">
+                                <div class="card-content padding-3">
+                                    <div class="row mb-1">
+
+
+                                        <div class="col s12">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col s12">
+                                                        <h5 class="breadcrumbs-title color-blue">Collection/Arbitration Attorney</h5>
+                                                    </div>
+
+
+
+                                                </div>
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>From-Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>To Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col s4 m3">
+                                                        <p>
+                                                            <label>
+                                                                <input type="checkbox" class="filled-in" />
+                                                                <span>Of Attorney</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <form class="form-inline col s12">
+
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 1</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 2</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 2">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Address Line 3</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Address Line 3">
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m3">
+                                                                <p>Country</p>
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling  " type="text" placeholder="Enter Country">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m3">
+                                                                <p>City</p>
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling " type="text" placeholder="Enter City">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+
+                                                                <div class=" col s6 m6 pl-0">
+                                                                    <p>State</p>
+                                                                    <div class="input-field">
+                                                                        <div class="dropdownauto">
+                                                                            <input class="text-input input-styling state" type="text" placeholder="Select State">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                                    <p>ZIP</p>
+                                                                    <div class="input-field">
+                                                                        <input class="text-input input-styling" type="text" placeholder="Enter Zip">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6 ">
+                                                                <p>Phone Number</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling " type="text" placeholder="Enter Phone Number">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Fax</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Fax Number">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Email</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="email" placeholder="Enter Email Address">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Website</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Website Name">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Name Or Initials</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Name Or Initials">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Phones</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="number" placeholder="Enter Leading Paralegal Phone">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Extension</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="text" placeholder="Enter Leading Paralegal Extension">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Email</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="email" placeholder="Enter Leading Paralegal Email">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col s12 m6">
+                                                                <p>Leading Paralegal Fax</p>
+
+                                                                <div class="input-field  pl-0">
+                                                                    <input class="text-input input-styling" type="number" placeholder="Enter Leading Paralegal Fax">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col s12 m6">
+                                                                <p>Legal status</p>
+
+                                                                <div class="input-field col s9 m10 pl-0">
+                                                                    <div class="dropdownauto">
+                                                                        <input class="text-input input-styling legalStatus" type="text" placeholder="Select Legal Status">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="input-field col s3 m2 pr-0">
+                                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right"><i class="material-icons ">add</i></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row set_rowbtn">
+                                                            <div class="col s12 m12" style="text-align:center">
+                                                                <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form class="col s12">
+                            <h5 class="mb-10 blue-text">Add Legal Status </h5>
+                            <div class="input-field col s12">
+
+                                <input class="text-input mb-10" type="text" placeholder="Enter Legal Status " />
+                            </div>
+
+                            <a href="#!" class="modal-action btn add-btn right">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<script src="~/app-assets/vendors/fullcalendar/lib/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#legalinfo').change(function () {
+            $('.legal').hide();
+            $('#' + $(this).val()).show();
+
+        });
+        $('#legalinfo').find('option[value="legal1"]').attr("selected", true)
+        $('#legal1').show();
+    });
+</script>
+

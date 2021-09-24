@@ -1,0 +1,47 @@
+﻿@model MediClinic.Models.PatientIncidentViewModel
+
+
+<table id="treatment-table" class="table">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <label>
+                    <input type="checkbox" class="select-all" />
+                    <span></span>
+                </label>
+            </th>
+            <th>   Patient Role in the Incident</th>
+
+            <th class="all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.patientIncidentList)
+        {
+            <tr class="card">
+                <th>
+                    <label>
+                        <input type="checkbox" />
+                        <span></span>
+                    </label>
+                </th>
+                <td>@item.PatientRoleInIncident</td>
+
+                <td>
+                    <a class='dropdown-trigger btn action-btn option-dropdown-btn' href="javascript:void(0);" data-target='dropdown-@item.PatientIncidentRoleId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+
+                    <ul id='dropdown-@item.PatientIncidentRoleId' class='dropdown-content'>
+                        <li><a href="javascript:void(0);" class="option-a" onclick="DeleteIncident(@item.PatientIncidentRoleId);"><i class="material-icons">delete</i>Delete</a></li>
+                        <li><a href="javascript:void(0);" class="option-a" onclick="EditIncident(@item.PatientIncidentRoleId,'@item.PatientRoleInIncident');"><i class="material-icons">edit</i>Edit</a></li>
+                    </ul>
+                    
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+

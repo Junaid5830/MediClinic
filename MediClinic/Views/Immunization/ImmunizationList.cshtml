@@ -1,0 +1,614 @@
+﻿@model MediClinic.Models.ImmunizationViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+    ViewData["Title"] = "ImmunizationList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    DateTime Date = DateTime.Now;
+
+    var userRole = _sessionManager.GetRoleId();
+}
+
+@section styles
+{
+
+
+
+}
+@section scripts{
+
+    <script>
+        $(document).ready(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            var table = $('#VitalTab').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+        });
+        function ImmuPatient(ImmuId, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/Immunization/ImmunizationDelete", { Id: ImmuId }).done(function (data) {
+                debugger;
+
+
+
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+    </script>
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Immunizations
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2 search_box2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                {
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+                        <a class="btn  float-right add-btn set_smallscreen" href="/Immunization/AssignImmunization">
+                            Add New Immunizations
+                        </a>
+                    </div>
+                }
+               
+            </div>
+        </div>
+        <!--<div class="row">
+                <div class="col-sm-9 col-md-9 col-lg-9">-->
+        @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+        @*Batch Actions*@
+        @*<span class="caret"></span>*@
+        <!--</button>-->
+        @*<ul class="dropdown-menu batch">*@
+        @*<li><a href="#">Option 1</a></li>*@
+        @*<li><a href="#">Option 2</a></li> Comment batch action*@
+        <!--</ul>
+            </div>
+        </div>-->
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="VitalTab" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+                                </th>
+                                <th>Vaccine</th>
+                                <th>Abbreviations</th>
+                                <th>Age</th>
+                                <th>Dose</th>
+                                <th>Status</th>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <th data-orderable="false" class="all">ACTION  </th>
+
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Listimmunization)
+                            {
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@item.ImmunizationId" value="check">
+                                        <label class="custom-control-label" for="@item.ImmunizationId"></label>
+                                    </div>
+                                </th>
+                                <td>@item.VaccineName</td>
+                                <td>@item.VaccineAbberivation</td>
+                                <td>@item.PatientCurrentAge.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@item.DoesInRouten</td>
+
+                                @if (item.RouteOfAdministration < Date)
+                                {
+                                    <td>Past</td>
+                                }
+                                else if (item.RouteOfAdministration > Date)
+                                {
+                                    <td>Future</td>
+                                }
+                                else
+                                {
+                                    <td>Current</td>
+                                }
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="@Url.Action("AssignImmunization","Immunization",new { Id = item.ImmunizationId})">Edit</a></li>
+                                            <li><a href="javascript:void(0);">View</a></li>
+                                            <li><a onclick="ImmuPatient(@item.ImmunizationId, this);">Delete</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-sm-12">
+                    <h2>Birth to 15 Months</h2>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-schedule table-bordered">
+                    <caption class="sr-only">child vaccine schedule table 1</caption>
+                    <thead class="thead-light">
+                        <tr>
+                            <th id="vacc">Vaccine</th>
+                            <th id="birth" class="text-align-center">Birth</th>
+                            <th id="mo1" class="text-align-center">1 mo</th>
+                            <th id="mos2" class="text-align-center">2 mos</th>
+                            <th id="mos4" class="text-align-center">4 mos</th>
+                            <th id="mos6" class="text-align-center">6 mos</th>
+                            <th id="mos9" class="text-align-center">9 mos</th>
+                            <th id="mos12" class="text-align-center">12 mos</th>
+                            <th id="mos15" class="text-align-center">15 mos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <th id="hepb" headers="vacc">
+                                <a href="#note-hepb">Hepatitis B</a> <a href="/vaccines/vpd/hepb/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HepB)
+                            </th>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="hepb birth">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="hepb mo1 mos2">2<sup>nd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="hepb 4mos"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="4" headers="hepb mos6 mos9 mos12 mos15">←3<sup>rd</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="rotavirus" headers="vacc">
+                                <a href="#note-rotavirus">Rotavirus </a><a href="/vaccines/vpd/rotavirus/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (RV) RV1 (2-dose series); RV5 (3-dose series)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mo1"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="rotavirus mos2">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="rotavirus mos4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="rotavirus mos6">See <a href="#note-rotavirus">notes</a></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mos15"></td>
+                        </tr>
+                        <tr>
+                            <th id="dtap" headers="vacc">
+                                <a href="#note-dtap">Diphtheria, tetanus, &amp; acellular pertussis</a> <a href="/vaccines/vpd/dtap-tdap-td/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (DTaP: &lt;7 yrs)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="dtap birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="dtap mo1"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap mos2">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap mos4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap mos6">3<sup>rd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="2" headers="dtap mos9 mos12"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap mos15">←4<sup>th</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="hib" headers="vacc">
+                                <em><a href="#note-hib">Haemophilus influenzae</a></em><a href="#hib"> type b</a> <a href="/vaccines/vpd/hib/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (Hib)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hib birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hib mo1"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="hib mos2">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="hib mos4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="hib mos6">See <a href="#note-hib">notes</a></td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="hib mos9"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="hib mos12 mos15">
+                                ←3<sup>rd</sup> or 4<sup>th</sup> dose,<br>
+                                See <a href="#note-hib">notes</a>→
+                            </td>
+                        </tr>
+                        <tr>
+                            <th id="pneumo" headers="vacc">
+                                <a href="#note-pneumo">Pneumococcal conjugate</a> <a href="/vaccines/vpd/pneumo/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (PCV13)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo mo1"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="pneumo mos2">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="pneumo mos4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="pneumo mos6">3<sup>rd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="pneumo mos9"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="pneumo mos12 mos15">←4<sup>th</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="polio" headers="vacc">
+                                <a href="#note-polio">Inactivated poliovirus</a> <a href="/vaccines/vpd/polio/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (IPV: &lt;18 yrs)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="polio birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="polio mo1"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="polio mos2">1<sup>st</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="polio mos4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="4" headers="polio mos6 mos9 mos12 mos15">←3<sup>rd</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="iiv" headers="vacc"><a href="#note-flu">Influenza</a> (IIV) <a href="/vaccines/vpd/flu/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a></th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="iiv birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="iiv mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="iiv mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="iiv mos4"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="4" headers="iiv mos6 mos9 mos12 mos15">Annual vaccination 1 or 2 doses</td>
+                        </tr>
+
+                        <tr>
+                            <th id="laiv" class="padding-zero dotted-border-top" headers="vacc">
+                                <img src="~/Elite/images/or-icon.png" alt="more info icon."><br>
+                                <a href="#note-flu">Influenza</a> (LAIV) <a href="/vaccines/vpd/flu/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a>
+                            </th>
+                            <td class="schedule-gray dotted-border-top" title="No recommendation/Not applicable" headers="laiv birth"></td>
+                            <td class="schedule-gray dotted-border-top" title="No recommendation/Not applicable" headers="laiv mo1"></td>
+                            <td class="schedule-gray dotted-border-top" title="No recommendation/Not applicable" headers="laiv mos2"></td>
+                            <td class="schedule-gray dotted-border-top" title="No recommendation/Not applicable" headers="laiv mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos15"></td>
+                        </tr>
+                        <tr>
+                            <th id="mmr" headers="vacc">
+                                <a href="#note-mmr">Measles, mumps, rubella</a> <a href="/vaccines/vpd/mmr/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (MMR)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mmr birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mmr mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mmr mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mmr mos4"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="2" headers="mmr mos6 mos9">See <a href="#note-mmr">notes</a></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for certain high-risk groups" colspan="2" headers="mmr mos12 mos15">←1<sup>st</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="varicella" headers="vacc">
+                                <a href="#note-varicella">Varicella</a> <a href="/vaccines/vpd/varicella/hcp/index.html"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (VAR)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="varicella mos9"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="varicella mos12 mos15">←1<sup>st</sup> dose→</td>
+                        </tr>
+                        <tr>
+                            <th id="hepa" headers="vacc">
+                                <a href="#note-hepa">Hepatitis A</a> <a href="/vaccines/vpd/hepa/hcp/index.html"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HepA)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hepa birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hepa mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hepa mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hepa mos4"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="2" headers="hepa mos6 mos9">See <a href="#note-hepa">notes</a></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="hepa mos12 mos15">←2-dose series, See <a href="#note-hepa">notes</a>→</td>
+                        </tr>
+                        <tr>
+                            <th id="tdap" headers="vacc">
+                                <a href="#note-tdap">Tetanus, diphtheria, &amp; acellular pertussis</a> <a href="/vaccines/vpd/dtap-tdap-td/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (Tdap: ≥7 yrs)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="tdap mos15"></td>
+                        </tr>
+                        <tr>
+                            <th id="hpv" headers="vacc">
+                                <a href="#note-hpv">Human papillomavirus</a> <a href="/vaccines/vpd/hpv/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HPV)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="hpv mos15"></td>
+                        </tr>
+                        <tr>
+                            <th id="mening" headers="vacc">
+                                <a href="#note-mening">Meningococcal</a> <a href="/vaccines/vpd/mening/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (MenACWY-D: ≥9&nbsp;mos; MenACWY-CRM: ≥2 mos)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening mo1"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="6" headers="mening mos2 mos4 mos6 mos9 mos12 mos15">See <a href="#note-mening">notes</a></td>
+                        </tr>
+                        <tr>
+                            <th id="mening-b" headers="vacc"><a href="#note-mening-b">Meningococcal B </a><a href="/vaccines/vpd/mening/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a> (MenB)</th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b mos15"></td>
+                        </tr>
+                        <tr>
+                            <th id="pneumo-p" headers="vacc">
+                                <a href="#note-pneumo">Pneumococcal polysaccharide</a> <a href="/vaccines/vpd/pneumo/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (PPSV23)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p birth"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mo1"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos6"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos9"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos12"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos15"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2 class="mt-2">
+                        18 Months to 18 Years
+                    </h2>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-schedule table-bordered">
+                    <caption class="sr-only">child vaccine schedule table 2</caption>
+                    <thead class="thead-light">
+                        <tr>
+                            <th id="vacc">Vaccines</th>
+                            <th id="mos18" class="text-align-center">18 mos</th>
+                            <th id="mos19" class="text-align-center">19-23 mos</th>
+                            <th id="yrs2" class="text-align-center">2-3 yrs</th>
+                            <th id="yrs4" class="text-align-center">4-6 yrs</th>
+                            <th id="yrs7" class="text-align-center" colspan="2">7-10 yrs</th>
+                            <th id="yrs11" class="text-align-center">11-12 yrs</th>
+                            <th id="yrs13" class="text-align-center">13-15 yrs</th>
+                            <th id="yrs16" class="text-align-center">16 yrs</th>
+                            <th id="yrs17" class="text-align-center" colspan="3">17-18 yrs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th id="t2c1r2" headers="t2c1">
+                                <a href="#note-hepb">Hepatitis B</a> <a href="/vaccines/vpd/hepb/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HepB)
+                            </th>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="hepb mos18">←3<sup>rd</sup> dose→</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="11" headers="hepb mos19 yrs2 yrs4 yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r3" headers="t2c1">
+                                <a href="#note-rotavirus">Rotavirus</a> <a href="/vaccines/vpd/rotavirus/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (RV) RV1 (2-dose series); RV5 (3-dose series)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus mos19"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus yrs2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus yrs4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" colspan="2" headers="rotavirus yrs7"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus yrs11"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus yrs13"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="rotavirus yrs16"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" colspan="3" headers="rotavirus yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r4" headers="t2c1">
+                                <a href="#note-dtap">Diphtheria, tetanus, &amp; acellular pertussis</a> <a href="/vaccines/vpd/dtap-tdap-td/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (DTaP: &lt;7 yrs)
+                            </th>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap mos18">←4<sup>th</sup> dose→</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="dtap mos19"></td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="dtap yrs2"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="dtap yrs4">5<sup>th</sup> dose</td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" colspan="2" headers="dtap yrs7"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="dtap yrs11"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="dtap yrs13"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="dtap yrs16"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" colspan="3" headers="dtap yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r5" headers="t2c1">
+                                <em><a href="#note-hib">Haemophilus influenzae</a></em><a href="#hib"> type b</a> <a href="/vaccines/vpd/hib/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (Hib)
+                            </th>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="4" headers="hib mos18 mos19 yrs2"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="8" headers="hib yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r6" headers="t2c1">
+                                <a href="#note-pneumo">Pneumococcal conjugate</a> <a href="/vaccines/vpd/pneumo/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (PCV13)
+                            </th>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="4" headers="pneumo mos18 mos19 yrs2 yrs4"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="8" headers="pneumo yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r7" headers="t2c1">
+                                <a href="#note-polio">Inactivated poliovirus</a> <a href="/vaccines/vpd/polio/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (IPV: &lt;18 yrs)
+                            </th>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="polio mos18">←3<sup>rd</sup> dose→</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="2" headers="polio mos19 yrs2"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="polio yrs4">4<sup>th</sup> dose</td>
+                            <td class="schedule-green right-border-none" title="Range of recommended ages for catch-up immunization" colspan="6" headers="polio yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                            <td class="schedule-green left-border-none" title="Range of recommended ages for catch-up immunization" headers="polio yrs17"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="polio yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r8" headers="t2c1"><a href="#note-flu">Influenza</a> (IIV) <a href="/vaccines/vpd/flu/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a></th>
+                            <td class="schedule-yellow right-border-none" title="Range of recommended ages for all children" colspan="4" headers="iiv mos18 mos19 yrs2 yrs4">Annual vaccination 1 or 2 doses</td>
+                            <td class="schedule-yellow left-border-none" title="Range of recommended ages for all children" headers="iiv yrs7"></td>
+                            <td class="schedule-yellow right-border-none left-border-none" title="Range of recommended ages for all children" colspan="7" headers="iiv yrs7 yrs11 yrs13 yrs16 yrs17">Annual vaccination 1 dose only</td>
+                        </tr>
+                        <tr>
+                            <th id="t1c1r8" class="padding-zero dotted-border-top" headers="t1c1">
+                                <img src="~/Elite/images/or-icon.png" alt="more info icon."><br>
+                                <a href="#note-flu">Influenza</a> (LAIV) <a href="/vaccines/vpd/flu/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a>
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="laiv mos19"></td>
+                            <td class="schedule-yellow padding-zero dotted-border-top" title="Range of recommended ages for all children" colspan="3" headers="laiv yrs2 yrs4 yrs7">
+                                <span class="float-right"><img src="~/Elite/images/or-icon.png" alt="more info icon."></span><br>
+                                Annual vaccination 1 or 2 doses
+                            </td>
+                            <td class="schedule-yellow dotted-border-top" title="Range of recommended ages for all children" colspan="7" headers="laiv yrs7 yrs11 yrs13 yrs16 yrs17">Annual vaccination 1 dose only</td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r9" headers="t2c1">
+                                <a href="#note-mmr">Measles, mumps, rubella</a> <a href="/vaccines/vpd/mmr/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (MMR)
+                            </th>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="3" headers="mmr mos18 mos19 yrs2"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="mmr yrs4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="8" headers="mmr yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r10" headers="t2c1">
+                                <a href="#note-varicella">Varicella</a> <a href="/vaccines/vpd/varicella/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (VAR)
+                            </th>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="3" headers="varicella mos18 mos19 yrs2"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="varicella yrs4">2<sup>nd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="8" headers="varicella yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r11" headers="t2c1">
+                                <a href="#note-hepa">Hepatitis A</a> <a href="/vaccines/vpd/hepa/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HepA)
+                            </th>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" colspan="2" headers="hepa mos18 mos19">← 2-dose series, See <a href="#note-hepa">notes</a>→</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="10" headers="hepa yrs2 yrs4 yrs7 yrs11 yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r13" rowspan="2" headers="t2c1">
+                                <a href="#note-tdap">Tetanus, diphtheria, &amp; acellular pertussis</a> <a href="/vaccines/vpd/dtap-tdap-td/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (Tdap: ≥7 yrs)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="tdap mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="tdap mos19"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="tdap yrs2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="tdap yrs4"></td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="2" rowspan="2" headers="tdap yrs7"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" rowspan="2" headers="tdap yrs11"><span class="schedule-yellow">Tdap</span></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="5" headers="tdap yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="5" headers="tdap yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r14" rowspan="2" headers="t2c1">
+                                <a href="#note-hpv">Human papillomavirus</a> <a href="/vaccines/vpd/hpv/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (HPV)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="hpv mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="hpv mos19"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="hpv yrs2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="hpv yrs4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="hpv yrs7"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" headers="hpv yrs7"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" rowspan="2" headers="hpv yrs11">See <a href="#note-hpv">notes</a></td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="5" rowspan="2" headers="hpv yrs13 yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <td class="schedule-blue" title="Recommended based on shared clinical decision-making or *can be used in this age group" headers="hpv yrs7"><a href="#legend-blue">*</a></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r12" headers="t2c1">
+                                <a href="#note-mening">Meningococcal</a> <a href="/vaccines/vpd/mening/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (MenACWY-D: ≥9&nbsp;mos; MenACWY-CRM: ≥2 mos)
+                            </th>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="6" headers="mening mos18 mos19 yrs2 yrs4 yrs7">See <a href="#note-mening">notes</a></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="mening yrs11">1<sup>st</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" headers="mening yrs13"></td>
+                            <td class="schedule-yellow" title="Range of recommended ages for all children" headers="mening yrs16">2<sup>nd</sup> dose</td>
+                            <td class="schedule-green" title="Range of recommended ages for catch-up immunization" colspan="3" headers="mening yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r15" rowspan="2" headers="t2c1">
+                                <a href="#note-mening-b">Meningococcal B</a> <a href="/vaccines/vpd/mening/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (MenB)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="mening-b mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="mening-b mos19"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="mening-b yrs2"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" rowspan="2" headers="mening-b yrs4"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="mening-b yrs7"></td>
+                            <td class="schedule-purple right-border-none" title="Range of recommended ages for certain high-risk groups" headers="mening-b yrs7"></td>
+                            <td class="schedule-purple left-border-none" title="Range of recommended ages for certain high-risk groups" colspan="6" headers="mening-b yrs11 yrs13 yrs16 yrs17">See <a href="#note-mening-b">notes</a></td>
+                        </tr>
+                        <tr>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" colspan="2" headers="vacc yrs7"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="vacc yrs11"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="vacc yrs13"></td>
+                            <td class="schedule-blue" title="Recommended based on shared clinical decision-making or *can be used in this age group" colspan="4" headers="vacc yrs16 yrs17"></td>
+                        </tr>
+                        <tr>
+                            <th id="t2c1r16" headers="t2c1">
+                                <a href="#note-pneumo">Pneumococcal polysaccharide</a> <a href="/vaccines/vpd/pneumo/hcp/index.html" target="_blank"><img src="~/Elite/images/more-info.jpg" alt="more info icon."></a><br>
+                                (PPSV23)
+                            </th>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos18"></td>
+                            <td class="schedule-gray" title="No recommendation/Not applicable" headers="pneumo-p mos19"></td>
+                            <td class="schedule-purple" title="Range of recommended ages for certain high-risk groups" colspan="10" headers="pneumo-p yrs2 yrs4 yrs7 yrs11 yrs13 yrs16 yrs17">See <a href="#note-pneumo">notes</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>*@
+    </div>
+</div>
+

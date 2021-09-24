@@ -1,0 +1,395 @@
+﻿@model ReportsViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<form asp-action="WorkStatus" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+    <div class="row">
+        <div class="col">
+            <p>
+                Has the patient missed work because of the injury/illness?
+            </p>
+            <div class="row">
+                <div class="col-sm-2">
+                    @*<div class="custom-control custom-checkbox">
+                            <input type="radio" class="custom-control-input" name="WorkStatus.IsPatientMissedWork" value="Yes" id="IsPatientMissedWorkYes">
+                            <label class="custom-control-label" for="IsPatientMissedWorkYes"> Yes</label>
+                        </div>*@
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsPatientMissedWork" name="WorkStatus.IsPatientMissedWork" class="custom-control-input" value="Yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientMissedWork">Yes</label>
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    @*<div class="custom-control custom-checkbox">
+                            <input type="radio" class="custom-control-input" name="WorkStatus.IsPatientMissedWork" value="No" id="IsPatientMissedWorkNo">
+                            <label class="custom-control-label" for="IsPatientMissedWorkNo">No</label>
+                        </div>*@
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsPatientMissedWorkNo" name="WorkStatus.IsPatientMissedWork" class="custom-control-input" value="No" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientMissedWorkNo">No</label>
+                    </div>
+                </div>
+                <div class="col-sm-4" style="display:none" id="WorkStatusinjury">
+                    <p>If yes, date patient first missed work:</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input datepicker" placeholder="Select Date" asp-for="WorkStatus.DatePatientMissedWork" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>
+                Is the patient currently working?
+            </p>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" value="Yes" name="WorkStatus.IsPatientCurrentlyWorking" id="IsPatientCurrentlyWorkingYes" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientCurrentlyWorkingYes"> Yes</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-10">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" name="WorkStatus.IsPatientCurrentlyWorking" value="No" id="IsPatientCurrentlyWorkingNo" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientCurrentlyWorkingNo">No</label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display:none" id="WorkStatusCurrentlyWorking">
+        <div class="col">
+            <p>If yes,  did the patient return to:</p>
+            @*<div class="input-field">
+                    <input type="date" class="text-input" asp-for="WorkStatus.DatePatientReturn" />
+                </div>*@
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" value="usual work activities" asp-for="WorkStatus.IsPatientReturnToWork" id="IsPatientReturnToWorkYes" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientReturnToWorkYes"> Usual work activities </label>
+                    </div>
+
+                </div>
+                <div class="col-sm-10">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="IsPatientReturnToWorkNo" value="limited work activities " asp-for="WorkStatus.IsPatientReturnToWork" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientReturnToWorkNo">limited work activities </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <h5 class="color-blue"> Can the patient return to work?</h5>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col-12 col-sm-6">
+            <p>The patient cannot return to work because (explain)</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.PatientCannotReturn" />
+            </div>
+        </div>
+      
+    </div>
+    <div class="row">
+
+
+     
+        <div class="col-12 col-sm-6">
+            <p>The patient can return to work without limitations on</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="WorkStatus.DatePatientCanReturnWithouLimitation" placeholder="select date"/>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <p>The patient can return to work with the following limitations (check all that apply) on</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="WorkStatus.ReturnToWorkCheckAllApplyDate" placeholder="select date"/>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsBendingtwisting" id="IsBendingtwisting">
+                <label class="custom-control-label" for="IsBendingtwisting">Bending/twisting</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsLifting" id="IsLifting">
+                <label class="custom-control-label" for="IsLifting">Lifting</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsSitting" id="IsSitting">
+                <label class="custom-control-label" for="IsSitting">Sitting</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsLimbingStairsLadders" id="IsLimbingStairsLadders">
+                <label class="custom-control-label" for="IsLimbingStairsLadders">Climbing stairs/ladders</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsOperatingHeavyEquipment" id="IsOperatingHeavyEquipment">
+                <label class="custom-control-label" for="IsOperatingHeavyEquipment">Operating heavy equipment</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsStanding" id="IsStanding">
+                <label class="custom-control-label" for="IsStanding">Standing</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsEnvironmentalCondition" id="IsEnvironmentalCondition">
+                <label class="custom-control-label" for="IsEnvironmentalCondition">Environmental conditions</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsOperationOfMotorVehicles" id="IsOperationOfMotorVehicles">
+                <label class="custom-control-label" for="IsOperationOfMotorVehicles">Operation of motor vehicles</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsUsePublicTransportation" id="IsUsePublicTransportation">
+                <label class="custom-control-label" for="IsUsePublicTransportation">Use of public transportation</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsKneeling" id="IsKneeling">
+                <label class="custom-control-label" for="IsKneeling">Kneeling</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsPersonalProtectiveEquipment" id="IsPersonalProtectiveEquipment">
+                <label class="custom-control-label" for="IsPersonalProtectiveEquipment">Personal protective equipment</label>
+            </div>
+        </div>
+        <div class="col mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsUseUpperExtremities" id="IsUseUpperExtremities">
+                <label class="custom-control-label" for="IsUseUpperExtremities">Use of upper extremities</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 mt-1 mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" asp-for="WorkStatus.IsOtherLimitation" id="IsOtherLimitation">
+                <label class="custom-control-label" for="IsOtherLimitation">Other</label>
+            </div>
+        </div>
+        <div class="col-sm-10 mt-1 mb-1">
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.OtherLimitation" placeholder="Other Explain" />
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Describe/quantify the limitations:</p>
+            <div class="input-field">
+                <textarea placeholder="Enter Detail" asp-for="WorkStatus.DescribeQuantifyLimitations" class="form-control"></textarea>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-1">
+        <div class="col">
+            <p>
+                How long will these limitations apply?
+            </p>
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" value="1-2 days" asp-for="WorkStatus.HowLongLimitations" id="HowLongLimitations1" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations1">1-2 days</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" asp-for="WorkStatus.HowLongLimitations" id="HowLongLimitations2" value="3-7 days" class="custom-control-input" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations2">3-7 days</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" asp-for="WorkStatus.HowLongLimitations" id="HowLongLimitations3" value="8-14 weeks" class="custom-control-input" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations3">8-14 weeks</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" asp-for="WorkStatus.HowLongLimitations" id="HowLongLimitations4" value="15+ days" class="custom-control-input" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations4">15+ days </label>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" asp-for="WorkStatus.HowLongLimitations" id="HowLongLimitations5" value="Unknown at this time" class="custom-control-input" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations5">Unknown at this time</label>
+                    </div>
+
+                </div>
+                <div class="col-sm-2">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" asp-for="WorkStatus.HowLongLimitations" value="N/A" class="custom-control-input" id="HowLongLimitations6" autocomplete="off">
+                        <label class="custom-control-label" for="HowLongLimitations6">N/A</label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>With whom will you discuss the patient's return to work and/or limitations?</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="With Patient" asp-for="WorkStatus.DiscussPatientReturn" id="DiscussPatientReturnWithPatient" autocomplete="off">
+                <label class="custom-control-label" for="DiscussPatientReturnWithPatient">With Patient</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="With Patient's Employer" asp-for="WorkStatus.DiscussPatientReturn" id="DiscussPatientReturnEmployer" autocomplete="off">
+                <label class="custom-control-label" for="DiscussPatientReturnEmployer">With Patient's Employer</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="N/A" asp-for="WorkStatus.DiscussPatientReturn" id="DiscussPatientReturnNA" autocomplete="off">
+                <label class="custom-control-label" for="DiscussPatientReturnNA">N/A</label>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    <h4 class="color-blue">
+        This form is signed under penalty of perjury.
+    </h4>
+    <div class="row">
+        <div class="col">
+            Health Care Provider - Check one:
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="I provided the services listed above" asp-for="WorkStatus.IsHealthCareProviderCheck" id="IsHealthCareProviderCheckTrue" autocomplete="off">
+                <label class="custom-control-label" for="IsHealthCareProviderCheckTrue"> I provided the services listed above.</label>
+            </div>
+        </div>
+        <div class="col">
+            <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" value="I actively supervised the health-care provider named below who provided these services" asp-for="WorkStatus.IsHealthCareProviderCheck" id="IsHealthCareProviderCheckFalse">
+                <label class="custom-control-label" for="IsHealthCareProviderCheckFalse">I actively supervised the health-care provider named below who provided these services</label>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+
+
+        <div class="col">
+            <p>Provider's Name</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.ProviderName" placeholder="Enter Full Name" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Provider Specialty</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.ProviderSpecialty" placeholder="Enter Specialty" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Board Authorized Health Care Provider signature:</h4>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col">
+            <p>Name</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.Name" placeholder="Enter Full Name" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Signature</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.Signature" placeholder="Enter Signature" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col">
+            <p>Specialty</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="WorkStatus.Specialty" placeholder="Enter Specialty" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Date</p>
+            <div class="input-field">
+                <input type="date" asp-for="WorkStatus.Date" class="text-input" placeholder="Enter Date" />
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

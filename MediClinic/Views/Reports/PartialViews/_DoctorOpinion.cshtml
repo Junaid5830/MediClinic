@@ -1,0 +1,109 @@
+﻿@model ReportsViewModel 
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+    <form asp-action="DoctorOpinion" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+        <div class="row">
+            <div class="col">
+                <p>
+                    In your opinion, was the incident that the patient described the competent medical cause of this injury/illness?
+                </p>
+                <div class="row">
+                    <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="DoctorOpinion.IsPatientDescribedCompetent" value="Yes" id="IsPatientDescribedCompetentYes" class="custom-control-input  " autocomplete="off">
+                            <label class="custom-control-label" for="IsPatientDescribedCompetentYes">Yes</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="DoctorOpinion.IsPatientDescribedCompetent" value="No" id="IsPatientDescribedCompetentNo" class="custom-control-input " autocomplete="off">
+                            <label class="custom-control-label" for="IsPatientDescribedCompetentNo">
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p>
+                    Are the patient's complaints consistent with his/her history of the injury/illness?
+                </p>
+                <div class="row">
+                    <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="DoctorOpinion.IsComplaintConsistent" value="Yes" id="IsComplaintConsistentYes" class="custom-control-input  " autocomplete="off">
+                            <label class="custom-control-label" for="IsComplaintConsistentYes">Yes</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="IsComplaintConsistentNo" asp-for="DoctorOpinion.IsComplaintConsistent" value="No" class="custom-control-input " autocomplete="off"> 
+                            <label class="custom-control-label" for="IsComplaintConsistentNo">
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    What is the percentage (0-100%) of temporary impairment?
+                </p>
+                <div class="row">
+                    <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="IsPercentageTemporaryYes" value="Yes" asp-for="DoctorOpinion.IsPercentageTemporary" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="IsPercentageTemporaryYes">Yes</label>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="IsPercentageTemporaryNo" value="No" asp-for="DoctorOpinion.IsPercentageTemporary" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="IsPercentageTemporaryNo">
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>What is the percentage (0-100%) of temporary impairment?</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" asp-for="DoctorOpinion.PercentageTemporary" placeholder="Enter percentage %" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>Describe findings and relevant diagnostic test results:</p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="DoctorOpinion.RelevantDiagnostic" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                    @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+                </div>
+            </div>
+        </div>
+    </form>

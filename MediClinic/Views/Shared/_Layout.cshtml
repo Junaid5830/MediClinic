@@ -1,0 +1,407 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@{
+    var curUser = _sessionManager.GetUserId();
+}
+
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<!-- BEGIN: Head-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="iMedHealth">
+    <meta name="keywords" content="iMedHealth">
+    <meta name="author" content="iMedHealth">
+    <title>@ViewData["Title"] | Medi Clinic</title>
+    <link rel="apple-touch-icon" href="~/app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/vendors.min.css">
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/fullcalendar/css/fullcalendar.min.css">
+    <link href="~/app-assets/vendors/data-tables/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/data-tables/extensions/responsive/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/jquery.nestable/nestable.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/data-tables/css/select.dataTables.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />
+    <link id="linkCss" rel="stylesheet" type="text/css" href="" />
+    <link href="~/css/animate.css" rel="stylesheet" />
+    <link href="~/css/sweetalert2.min.css" rel="stylesheet" />
+
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/materialize.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/style.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/component-navbar.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-calendar.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-sidebar.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-email.css">
+    <link href="~/app-assets/css/pages/data-tables.css" rel="stylesheet" />
+
+
+    <!-- END: Page Level CSS-->
+    <!-- BEGIN: Custom CSS-->
+    @*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>*@
+    <script src="~/app-assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/custom/custom.css">
+
+    <!-- END: Custom CSS-->
+
+    @RenderSection("styles", false)
+    <style>
+        .swal2-popup .swal2-actions {
+            margin: 1.25em 1.5em !important;
+        }
+
+        .swal2-cancel {
+            background-color: #e74c3c !important;
+            color: #FFF !important;
+        }
+
+            .swal2-cancel:hover {
+                background-color: #c0392b !important;
+                color: #FFF !important;
+            }
+
+        .swal2-confirm:hover {
+            background-color: #2980b9 !important;
+            color: #FFF !important;
+        }
+
+        .badge-all {
+            font-size: .8rem;
+            font-weight: 300;
+            color: #fff;
+            border-radius: 2px;
+            background-color: #03a9f4;
+            padding: 2px 6px;
+            float: right
+        }
+
+        .push-notification {
+            background-color: #f5f5f5 !important;
+            color: #333 !important;
+        }
+
+            .push-notification a {
+                color: #333 !important;
+            }
+
+        fieldset.scheduler-border {
+            border: 1px solid #ddd !important;
+            padding: 0 1.4em 1.4em 1.4em !important;
+            margin: 0 0 1.5em 0 !important;
+            -webkit-box-shadow: 0px 0px 0px 0px #000;
+            box-shadow: 0px 0px 0px 0px #000;
+        }
+
+        legend.scheduler-border {
+            font-size: 22px !important;
+            font-weight: bold !important;
+            text-align: left !important;
+            width: auto;
+            padding: 0 10px;
+            border-bottom: none;
+            color: #000;
+        }
+
+        .scheduler-border p {
+            font-size: 18px !important;
+        }
+
+        .scheduler-border span {
+            font-size: 16px !important;
+            color: #333;
+        }
+    </style>
+</head>
+<!-- END: Head-->
+<body class="vertical-layout page-header-light vertical-menu-collapsible vertical-dark-menu 2-columns  " data-open="click" data-menu="vertical-dark-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    <partial name="_LayoutHeader" />
+    <!-- END: Header-->
+    <!-- BEGIN: SideNav-->
+    <partial name="_LayoutSideNav" />
+    <!-- END: SideNav-->
+    <!-- BEGIN: Page Main-->
+    <div class="preloader-background">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        @RenderBody()
+    </div>
+    <input type="hidden" class="#curr-user" value="@curUser" />
+    <!-- END: Page Main-->
+    <!-- BEGIN: Footer-->
+    <partial name="_LayoutFooter" />
+    <!-- END: Footer-->
+    <!-- BEGIN VENDOR JS-->
+    <script src="~/app-assets/js/vendors.min.js" type="text/javascript"></script>
+    <script src="~/app-assets/js/custom/custom-script.js"></script>
+    <script src="~/lib/pnotify.custom.min.js"></script>
+
+
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="~/app-assets/vendors/jquery.nestable/jquery.nestable.js" type="text/javascript"></script>
+
+    <script src="~/app-assets/vendors/fullcalendar/lib/jquery-ui.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/lib/moment.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/js/fullcalendar.min.js"></script>
+
+
+    <script src="~/app-assets/vendors/sortable/jquery-sortable-min.js"></script>
+    <script src="~/app-assets/vendors/tinymce/tinymce.min.js"></script>
+    <script src="~/app-assets/vendors/waypoints/jquery.waypoints.min.js"></script>
+    <script src="~/app-assets/vendors/data-tables/js/jquery.dataTables.min.js"></script>
+    <script src="~/app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/app-assets/vendors/data-tables/js/dataTables.select.min.js"></script>
+
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    <script src="~/app-assets/js/plugins.js" type="text/javascript"></script>
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    @*<script src="~/app-assets/js/scripts/extra-components-nestable.js" type="text/javascript"></script>*@
+    <script src="~/app-assets/js/scripts/app-calendar.js" type="text/javascript"></script>
+    <script src="~/app-assets/js/scripts/app-email.js" type="text/javascript"></script>
+    <script src="~/app-assets/js/scripts/data-tables.js"></script>
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/app-assets/js/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.6.7/jquery.timeago.min.js" integrity="sha512-RlGrSmkje9EE/FXpJKWf0fvOlg4UULy/blvNsviBX9LFwMj/uewXVoanRbxTIRDXy/0A3fBQppTmJ/qOboJzmA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+    @RenderSection("scripts", false)
+    <!-- END PAGE LEVEL JS-->
+
+    <script>
+        $(document).ready(function () {
+            $('.notification-badge').css('visibility', 'hidden');
+
+        });
+        var sweet3 = {
+            title: "Confirmation!",
+            text: "Do you want to delete this record?",
+            type: "errro",
+            showCloseButton: false,
+            showCancelButton: true,
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            confirmButtonText:
+                'Yes',
+            cancelButtonText:
+                'No',
+            cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            cancelButtonClass: 'btn btn-dark ml-1',
+        }
+    </script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/NotificationHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(() => {
+            connection.on("ReceiveMessage", (userId, articleContent) => {
+                 var sessionUserId = @curUser;
+                if (userId == sessionUserId) {
+                    showNotificationToUser(articleContent);
+                }
+            });
+        });
+        const startSignalRConnection = connection => connection.start().then(() => {
+            connection.on("ReceiveMessage", (articleContent) => {
+                showNotificationToUser(articleContent);
+            });
+        });
+        connection.onclose(() => setTimeout(startSignalRConnection(connection), 5000));
+    </script>
+    <script>
+
+        $(document).ready(function () {
+            $(':input').attr('autocomplete', 'off');
+            GetNotification();
+        });
+        function GetNotification() {
+                  $.ajax({
+                type: "POST",
+                url: "/Notification/GetNotifications",
+                data: { userId:@curUser},
+                success: function (data) {
+                    if (data.length > 0) {
+                        var readcount = 0;
+                        for (var notification of data) {
+                            if (notification.isRead == false) {
+                                readcount++;
+                            };
+                            $("#notifications-dropdown").append('<li class="showNotifyTs" notificationType=' + notification.notificationType + ' appointmentId=' + notification.appointmentId+'><a href="javascript:void(0);" class="grey-text text-darken-2"><span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span>' + notification.notificationInfo + '</a><time class="media-meta">' + notification.notificationTime + '</time></li>');
+                            $('.notification-badge').css('visibility', 'visible');
+
+                        }
+                        if (readcount > 0) {
+                            $('.badge-count').html(parseInt(readcount));
+                            $('.notification-badge').css('visibility', 'visible');
+                        }
+                        else {
+                            $('.badge-count').css('display', 'none');
+                            $('.notification-badge').css('visibility', 'hidden');
+                        }
+                    }
+                    else {
+                        $('.badge-all').css('visibility', 'hidden');
+                        $('.badge-count').css('visibility', 'hidden');
+                        $("#notifications-dropdown").append('<li><a href="javascript:void(0);" class="grey-text text-darken-2">No Notification</a></li>');
+                    }
+                }
+            });
+            }
+    </script>
+    <script>
+        function readNotification() {
+            $.ajax({
+                type: "POST",
+                url: "/Notification/UpdateNotifications",
+                data: { Id: @curUser },
+                success: function (data) {
+                    window.location.href = '/Notification/Notifications';
+                }
+            });
+        }
+    </script>
+    <script>
+        function showNotificationToUser(content) {
+            if (!window.Notification) {
+                console.log('Browser does not support notifications.');
+            } else {
+                if (Notification.permission === 'granted') {
+                    var notify = new Notification('Hi there!', {
+                        body: content,
+                        tag: "Mediclinic",
+                        icon: 'https://cdn1.iconfinder.com/data/icons/rounded-set-1/512/Appointment-512.png',
+                    });
+                } else {
+                    Notification.requestPermission().then(function (p) {
+                        if (p === 'granted') {
+                            var notify = new Notification('Hi there!', {
+                                body: content,
+                                tag: "Mediclinic",
+                                icon: 'https://cdn1.iconfinder.com/data/icons/rounded-set-1/512/Appointment-512.png',
+                            });
+                        }
+                        else {
+                            console.log('User blocked notifications.');
+                        }
+                    }).catch(function (err) {
+                        console.error(err);
+                    });
+                }
+            }
+        }
+        $(document).on('click', '.showNotifyTs', function () {
+            var type = $(this).attr('notificationType');
+            var id = parseInt($(this).attr('appointmentId')) || 0;
+
+            if (type === "Appointment" && id !== 0) {
+                $('#exact-appointment').css('display', 'none');
+                $('#between-appointment').css('display', 'none');
+                $.get("/Appointment/GetAppointmentDetailById", { Id: id }).done(function (data) {
+                    $('#exactAppointmentBody').html('');
+                    $('#betweenAppointmentBody').html('');
+                    $('#AppointmentDetailModal').modal('open');
+
+
+                    for (var info of data) {
+                        if (info.appointmentType == "Exact") {
+                            $('#patientName').text(info.patientFullName);
+                            $('#appointmentDate').text(moment(info.date).format('DD-MMM-YYYY'));
+                            $('#appointmentTime').text(moment(info.exactTime).format('HH.mm'));
+                            $('#exact-appointment').css('display', 'block');
+                        }
+                        else {
+                            $('#patientName').text(info.patientFullName);
+                            $('#appointDate').text(moment(info.date).format('DD-MMM-YYYY'));
+                            $('#startTime').text(moment(info.startTime).format('HH.mm'));
+                            $('#endTime').text(moment(info.endTime).format('HH.mm'));
+                            $('#between-appointment').css('display', 'block');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
+    <div id="AppointmentDetailModal" class="modal">
+        <div class="modal-content">
+            <div id="exact-appointment">
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border">Appointment Details</legend>
+
+                    <div class="row">
+                        <div class="col">
+                            <p><b>Patient Name</b> : <span id="patientName"></span></p>
+                            <p><b>Appointment Date</b> : <span id="appointmentDate"></span></p>
+                            <p><b>Appointment Time</b> : <span id="appointmentTime"></span></p>
+                            <p><b>Note</b> : <span>Your appointment has been schedule.Please make sure your schedule date and time. </span></p>
+                            <p>Thank you and have a wonderful day!</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div id="between-appointment">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class="scheduler-border">
+                                    <legend class="scheduler-border">Appointment Details</legend>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p><b>Patient Name</b> : <span id="patientName"></span></p>
+                                            <p><b>Appointment Date</b> : <span id="appointDate"></span></p>
+                                            <p><b>Start Time</b> : <span id="startTime"></span></p>
+                                            <p><b>End Time</b> : <span id="endTime"></span></p>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="right modal-close modal-action btn Recreate ml-2" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

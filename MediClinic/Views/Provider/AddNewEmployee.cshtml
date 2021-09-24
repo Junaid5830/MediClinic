@@ -1,0 +1,90 @@
+﻿
+
+@{
+    ViewData["Title"] = "AddNewEmpployee";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+  
+}
+@section scripts{
+   
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+    <script>
+	$(document).ready(function () {
+		$('.dropify').dropify();
+	});
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> New Employee</h5>
+                    </div>
+
+                    <div class="col">
+                        <a href="@Url.Action("Employees","provider")" class="waves-effect waves-light float-right" style="margin-top:-4%">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>
+
+                </div>
+        </div>
+   
+                <div class="row">
+                    <form class="col-sm-12  ">
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Select Role</p>
+                                <select id="seleciona" multiple="multiple" class="select2" data-placeholder="Select Role">
+                                    <option value="All">ICU</option>
+                                    <option value="All">Operation</option>
+                                </select>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Employee Email</p>
+
+                                <div class="input-field">
+                                    <input type="email" class="text-input" placeholder="Enter Email">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                    <a href="#" class=" btn  Recreate">
+                                        Edit
+                                    </a>
+                                    <a href="#" class="Recreate btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+        
+    </div>
+</div>
+
+
+
+
+
+
+

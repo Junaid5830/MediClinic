@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewData["Title"] = "Soap Notes Survay";
+
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles{
+    <link href="https://surveyjs.azureedge.net/1.8.4/modern.css" type="text/css" rel="stylesheet" />
+    <style>
+        .sv-container-modern__title {
+            padding-top: 2em !important;
+        }
+
+        .sv-container-modern__title {
+            margin: 0 !important;
+        }
+
+        .sv-body__page, .sv-body__footer {
+            margin: 0 !important
+        }
+
+        .sv-signaturepad canvas {
+            border: 1px solid;
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .2) !important
+        }
+    </style>
+}
+@section scripts{
+
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://surveyjs.azureedge.net/1.8.4/survey.jquery.js"></script>
+    <script type="text/javascript">
+
+
+        var DataRow = [];
+        var DataId = [];
+        var Data = @Html.Raw(Json.Serialize(ViewBag.result));
+
+
+        DataRow.push(JSON.parse(Data.surveyTest));
+     
+        Survey
+            .StylesManager
+            .applyTheme("modern");
+
+        window.survey = new Survey.Model(DataRow[0]);
+
+
+        survey
+            .onComplete
+            .add(function (result) {
+                //document
+                //    .querySelector('#surveyResult');
+                //    .textContent = "Result JSON:\n" + JSON.stringify(result.data, null, 3);
+                window.location.href = '/SoapNotes/SoapNotesList';
+            });
+        survey.showPreviewBeforeComplete = 'showAnsweredQuestions';
+
+        $("#surveyElement").Survey({ model: survey });
+
+    </script>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="surveyElement" style="display:inline-block;width:100%;"></div>
+        <div id="surveyResult"></div>
+    </div>
+</div>

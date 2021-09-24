@@ -1,0 +1,3075 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@using  MedliClinic.Utilities.Utility
+
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "PatientCalendar";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var patientName = _sessionManager.GetPatientName();
+    var roleId = _sessionManager.GetRoleId();
+    var currUserId = _sessionManager.GetUserId();
+}
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.css" rel="stylesheet" />
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+
+    <style>
+        .avoid-clicks {
+            pointer-events: none;
+        }
+
+        #AppointmentModalSlots a {
+            cursor: pointer;
+        }
+
+        #SlotsRow .col-md-3 {
+            margin: 10px 0 !important;
+        }
+
+        .Slots {
+            border: 1px solid #cfcfcf !important;
+            padding: 6px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .Slots:hover {
+                background-color: #03a9f3;
+                color: #fff !important;
+            }
+
+                .Slots:hover span {
+                    color: #fff !important;
+                }
+
+        .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+            background: #547cea !important
+        }
+
+        #SlotsRow .col-md-3 {
+            margin: 10px 0 !important;
+        }
+
+        .Slots {
+            border: 1px solid #cfcfcf !important;
+            padding: 6px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .Slots:hover {
+                background-color: #03a9f3;
+                color: #fff !important;
+            }
+
+                .Slots:hover span {
+                    color: #fff !important;
+                }
+
+        .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+            background: #547cea !important
+        }
+
+            .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover span {
+                color: #fff !important
+            }
+
+        .nav-tabs .nav-link {
+            border: 1px solid #e9ecef !important;
+        }
+
+        .modal .custom-radio {
+            margin-top: 10px !important;
+        }
+
+        @@media screen and (max-width: 768px) {
+            .modal-dialog {
+                max-width: 500px !important;
+            }
+        }
+
+        .modal-dialog {
+            max-width: 50%;
+        }
+
+        .card {
+            padding: 2%;
+        }
+
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 93px;
+            position: absolute;
+            display: block;
+            opacity: 1;
+            background-color: #fff;
+            z-index: 1;
+            text-align: center;
+        }
+
+        #loading-image {
+            position: absolute;
+            top: 100px;
+            left: 240px;
+            z-index: 100;
+        }
+
+        #loading > div {
+            margin-top: 25%;
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+
+        #loading .bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        #loading .bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+
+        @@-webkit-keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0)
+            }
+
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @@keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            40% {
+                -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+            }
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #547cea !important;
+            color: #fff !important;
+        }
+
+        .nav-link.active span {
+            color: #fff !important;
+        }
+
+        .nav-link span {
+            color: #6b6f82 !important;
+        }
+
+        .fc-day-grid-event {
+            margin: 1px 2px 0;
+        }
+
+        .calendar-event, .fc-event {
+            text-align: left !important;
+            border-radius: 4px;
+        }
+
+        .fc .fc-event {
+            padding: 4px 7px;
+            color: #fff;
+            border: none;
+            background: #2196f3;
+        }
+
+        .fc-calMonth-button {
+            margin-right: 5px !important;
+        }
+
+        .fc .fc-button {
+            border-radius: 4px;
+            color: #000 !important;
+            background: #eff1f7 !important;
+            height: 2.5em !important;
+            border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25)
+        }
+
+        button.fc-prev-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+            border-radius: 50%;
+            padding: 5px !important;
+        }
+
+        button.fc-next-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+            border-radius: 50%;
+            padding: 5px !important;
+        }
+
+        .fc-toolbar h2 {
+            line-height: 38px !important
+        }
+
+        .fc-toolbar {
+            margin-bottom: 0px !important;
+        }
+
+        .fc-basic-view .fc-body .fc-row {
+            min-height: 8rem;
+        }
+
+        @@media only screen and (max-width: 600px) {
+            .fc-basic-view .fc-body .fc-row {
+                min-height: 4rem !important;
+            }
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/lib/jquery-ui.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/js/fullcalendar.min.js"></script>
+
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            $("#Doc-calendar .fc-center h2").on('click', function () {
+                $("#Doc-calendar .fc-center").hide();
+
+                $("#Doc-calendar .fc-center").append("<select  class='Docselect2 months'></select>");
+                $("#Doc-calendar .fc-center button").hide();
+                $("#Doc-calendar .fc-center h2").hide();
+                $("#Doc-calendar .fc-center").show();
+                debugger;
+                $(".Docselect2").select2();
+                var $Docmonth = $('.months');
+                $('.months').empty();
+                var month = $('#Doc-calendar').fullCalendar('getDate');
+                var initial = month.format('YYYY-MM');
+                month.add(-1000, 'month');
+                for (var i = 0; i < 1200; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = month.format('YYYY-MM-01');
+                    opt.text = month.format('MMM YYYY');
+                    opt.selected = initial === month.format('YYYY-MM');
+                    $Docmonth.append(opt);
+                    month.add(1, 'month');
+                }
+                $('.months').on('change', function () {
+                    debugger;
+                    $('#Doc-calendar').fullCalendar('gotoDate', $(this).val());
+                    $(".Docselect2").remove();
+                    $("#Doc-calendar .fc-center .select2").remove();
+
+                    $("#Doc-calendar .fc-center button").show();
+                    $("#Doc-calendar .fc-center h2").show();
+                    $("#Doc-calendar .fc-center").show();
+                });
+            });
+        })
+        $(".time-picker").hunterTimePicker();
+
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $(".sDate")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        minDate:0
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $(".eDate").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#inBtwSDate")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        minDate:0
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#inBtwEDate").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+
+        var eventDate;
+        $('#provider_name').select2({
+
+            selectOnClose: false,
+            placeholder: "Select a Provider Name"
+        })
+        $('.docName').select2({
+            selectOnClose: false,
+            placeholder: "Search By Doctor Name"
+        });
+        $('.select2').select2({
+            selectOnClose: false,
+            placeholder: "Select a Provider Name"
+        });
+        //$('.Modelselect2').select2({
+        //    //dropdownParent: $("#AppointmentModal"),
+        //    selectOnClose: false,
+        //    placeholder: "Select a Provider Name"
+
+        //});
+
+        $('.datepicker2').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            minDate: 0
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            minDate: 0
+        });
+        var events = [];
+        var dropEvent = [];
+        var appId = 0;
+        var recursive_No;
+
+        var check_Btn = false;
+        var calendar = $('#Doc-calendar').fullCalendar({
+            loading: function (bool) {
+                $('#loading').show(); // Add your script to show loading
+            },
+            eventAfterAllRender: function (view) {
+                $('#loading').hide(); // remove your loading
+            },
+            dayClick: function (date, allDay, jsEvent, view) {
+                debugger
+                var Today = date._d.toLocaleDateString();
+                var today = new Date();
+                var end = new Date();
+                var YesTerDay = end.setDate(today.getDate() - 1);
+                //var moment2 = $('#Doc-calendar').fullCalendar('getDate',-1);
+                if (date < YesTerDay) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: "Can't booked slot for past Date!",
+                        delay: 1500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                    return false;
+
+                }
+                if (allDay) {
+                    $("#AppointmentModal").modal('open');
+
+                    $('.app_empty').val("");
+                    $('.Bulkapp_empty').val("");
+                    $('.Bulkapp_empty').removeClass('valid');
+                    $('.app_empty').removeClass('valid');
+                    $("#exact_checkbox").prop('checked', false);
+                    $("#Btw_checkbox").prop('checked', false);
+                    $("#Bulkexact_checkbox").prop('checked', false);
+                    $("#BulkBtw_checkbox").prop('checked', false);
+                    $(".cancel_btn").show();
+                    $(".Bulkcancel_btn").show();
+                    $("#EaxctAppointHide").hide();
+                    $("#BulkEaxctAppointHide").hide();
+                    $("#InBetweenAppointment").hide();
+                    $("#BulkInBetweenAppointment").hide();
+                    $("#Exactprovider_name").val('').trigger('change');
+                    var check = $("#ERecCheck");
+                    if (check.is(':checked')) {
+                        $("#ERecCheck").trigger('click');
+                    }
+                    else {
+
+                    }
+                    var check = $("#BRecCheck");
+                    if (check.is(':checked')) {
+                        $("#BRecCheck").trigger('click');
+                    }
+                    else {
+
+                    }
+
+                    $("#AppointmentModal #recSDate").val(Today);
+                }
+            },
+             defaultView: '@ViewBag.CalendarDefault',
+            viewRender: function (views, element) {
+                var view = $('#Doc-calendar').fullCalendar('getView');
+                if (view.type == 'listMonth') {
+                    $.each(element.find('.fc-widget-header'), function () {
+                        $(this).attr('colspan', 4);
+
+                    });
+                }
+            },
+            customButtons: {
+                monthViewButton: {
+                    text: 'Month View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'month');
+                    }
+
+                }, calMonth: {
+
+                    click: function () {
+                        $(".fc-month-button").trigger('click');
+                    }
+                },
+                monthListViewButton: {
+                    text: 'List View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'listMonth');
+                    }
+
+                }
+            },
+            renderEvent: function () {
+                $('.fc-list-item-time').htlm("<i class='ti-menu'>menu</i>");
+            },
+            header: {
+                left: 'agendaDay , agendaWeek,  month',
+                center: 'prev, title , next',
+                right: 'calMonth,listMonth',
+            },
+            editable: true,
+            eventDrop: function (event, delta, revertFunc) {
+                debugger;
+                var day = event.start.clone();
+                var moment2 = $('#Doc-calendar').fullCalendar('getDate');
+
+                if (day < moment2) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: "Can't booked slot for past Date!",
+                        delay: 1500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                    var DocFilter = $('#seleciona option:selected').val();
+
+                    if (DocFilter == "") {
+                        $('#Doc-calendar').fullCalendar('removeEvents');
+                        $('#Doc-calendar').fullCalendar('refetchEvents');
+                    }
+                    else {
+                        $('#Doc-calendar').fullCalendar('removeEvents');
+                        LoadAppointmentData(DocFilter);
+                    }
+                    return false;
+                }
+
+                var Date;
+                eventDate = event.start.format();
+                var Date = eventDate.split("T");
+                var recursive;
+                if (event.recursionNo == "") {
+                    recursive = '';
+                }
+                else {
+                    recursive = event.recursionNo;
+                }
+                //if (event.Name == "Exact") {
+                //    Data = {
+                //        "patientAppointmentBasicDto.AppointmentType": event.Name,
+                //        "patientAppointmentBasicDto.AppointmentId": event.appointId,
+                //        "patientAppointmentBasicDto.PatientInfoId": event.patientId,
+                //        "patientAppointmentBasicDto.ExactTime": event.ExactTime,
+                //        "patientAppointmentBasicDto.Date": Date[0],
+                //        "patientAppointmentBasicDto.ProviderInfoId": event.providerId,
+                //        "patientAppointmentBasicDto.RecursionNo": recursive
+                //    }
+                //}
+                //else {
+                    Data = {
+                        "patientAppointmentBasicDto.AppointmentType": event.Name,
+                        "patientAppointmentBasicDto.AppointmentId": event.appointId,
+                        "patientAppointmentBasicDto.PatientInfoId": event.patientId,
+                        "patientAppointmentBasicDto.StartTime": event.bSTime,
+                        "patientAppointmentBasicDto.EndTime": event.bETime,
+                        "patientAppointmentBasicDto.Date": Date[0],
+                        "patientAppointmentBasicDto.DepartmentType": event.department,
+
+                        "patientAppointmentBasicDto.ProviderInfoId": event.providerId,
+                        "patientAppointmentBasicDto.RecursionNo": recursive
+
+                    }
+
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Do you want to change date of this appointment?',
+                    buttons: {
+                        confirm: function () {
+                            DragSaveEvent(Data);
+                        },
+                        cancel: function () {
+                            debugger;
+                            var DocFilter = $('#seleciona option:selected').val();
+
+                            if (DocFilter == "") {
+                                $('#Doc-calendar').fullCalendar('removeEvents');
+                                $('#Doc-calendar').fullCalendar('refetchEvents');
+                            }
+                            else {
+                                $('#Doc-calendar').fullCalendar('removeEvents');
+                                LoadAppointmentData(DocFilter);
+                            }
+                        }
+                    }
+                });
+
+            },
+
+
+            timeFormat: 'h:mm',
+            events: function (start, end, timezone, callback)
+            {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetCalendarsList", "Appointment", new {Id= patientInfoId })',
+
+                    success: function (result) {
+                        debugger;
+                        events = [];
+
+                        $.each(result, function (i, v) {
+                            var Date = v.date.split('T');
+                            var recursive;
+                            if (v.recursionNo == "") {
+                                recursive = '';
+                            }
+                            else {
+                                recursive = v.recursionNo;
+                            }
+                            debugger;
+                            var TypeName = v.appointmentType;
+                            var DocPatName = "-Dr. " + v.docFirstName + " - " + v.patFirstName;
+                            var provideName = "Dr. " + v.docFullName
+
+                            if (TypeName == "Exact") {
+                                //var Exist = v.exactTime.split('T');
+                                events.push({
+                                    Name: v.appointmentType,
+                                    //description: v.Description,
+                                    title: DocPatName,
+                                    start: Date[0] + "T" + v.startTime,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    appointId: v.appointmentId,
+                                    providerName: provideName,
+                                    patientId: v.patientInfoId,
+                                    providerId: v.providerInfoId,
+                                    //ExactTime: Exist[1],
+                                    recursionNo: recursive,
+                                    bSTime: v.startTime,
+                                    bETime: v.endTime,
+                                    department: v.departmentType
+                                    //startStr: v.startTime,
+                                    //endStr: v.endTime,
+                                    //exactTime: v.exactTime
+                                });
+                            }
+
+                            else {
+                                var Time = v.startTime.split('T');
+                                var EndTime = v.endTime.split('T');
+
+                                events.push({
+                                    Name: v.appointmentType,
+                                    //description: v.Description,
+                                    title: DocPatName,
+                                    start: Date[0] + "T" + v.startTime,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    appointId: v.appointmentId,
+                                    providerName: provideName,
+                                    patientId: v.patientInfoId,
+                                    providerId: v.providerInfoId,
+                                    bSTime: v.startTime,
+                                    bETime: v.endTime,
+                                    recursionNo: recursive,
+                                    department: v.departmentType
+                                });
+                            }
+                        })
+                        callback(events);
+                    }
+                });
+            },
+            eventLimit: true,
+            eventClick: function (events) {
+
+                debugger;
+                if (events.Name == "Exact") {
+                    var ExactTimeDate = events.start._i.split('T');
+                    var StartTimeDate = events.start._i.split('T');
+                    var EndTime = events.endTime.split('T');
+                    $("#modal1").modal('show');
+                    $("#modal1 .modal-content  .modal-title").text(events.Name);
+                    $("#modal1 .modal-content  #start_date").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal1 .modal-content  #Exact_Time").text(moment(StartTimeDate[1], "H(:mm)").format("HH:mm"));
+                    $("#modal1 .modal-content  #end_Exact2").text(moment(EndTime[1], "H(:mm)").format("HH:mm"));
+                    $("#modal1 .modal-content  #provider").text(events.providerName);
+                    $("#AppointmentModalSlots #AppointmentId").val(events.appointId);
+                    appId = events.appointId;
+                    recursive_No = events.recursionNo;
+                    //$("#appointId").val(appointmentId);
+
+                }
+                else {
+                    var StartTimeDate = events.start._i.split('T');
+                    var EndTime = events.endTime.split('T');
+                    $("#modal2").modal('show');
+                    $("#modal2 .modal-content  .modal-title").text(events.Name);
+                    $("#modal2 .modal-content  #start_date2").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal2 .modal-content  #start_time2").text(moment(StartTimeDate[1], "H(:mm)").format("HH:mm"));
+                    $("#modal2 .modal-content  #end_time2").text(moment(EndTime[1], "H(:mm)").format("HH:mm"));
+                    $("#modal2 .modal-content  #provider_2").text(events.providerName);
+                    $("#AppointmentModalSlots #AppointmentId").val(events.appointId);
+                    appId = events.appointId;
+                    recursive_No = events.recursionNo;
+                    //$("#appointId").val(appointmentId);
+
+                }
+
+                //$("#modal1 .modal-content  .modal-title").text(event.title);
+
+
+                //$("#modal1 .modal-content  #Exact_Time").text(moment(event.end).format('DD/MM/YYYY'));
+                //$("#modal1 .modal-content  #end_time").text(moment(event.end).format('HH:mm'));
+
+            },
+            eventMouseover: function (events, jsEvent) {
+                debugger;
+                //var StartTimeDate = events.start._i.split('T');
+                //if (events.Name == "Exact") {
+                //    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">Your Appointment Schedule With ' + events.providerName + ' at ' + moment(StartTimeDate[1], "H(:mm)").format("HH:mm") + ' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                //    $(this).mouseover(function (e) {
+                //        $(this).css('z-index', 10000);
+                //        $tool.fadeIn('500');
+                //        $tool.fadeTo('10', 1.9);
+                //    }).mousemove(function (e) {
+                //        $tool.css('top', e.pageY + 10);
+                //        $tool.css('left', e.pageX + 20);
+                //    });
+
+                //}
+                //else {
+                //    var EndTime = events.endTime.split('T');
+
+                    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">Your Appointment Schedule With ' + events.providerName + ' is Between ' + moment(events.bSTime, "H(:mm)").format("HH:mm") + ' To ' + moment(events.bETime, "H(:mm)").format("HH:mm") + ' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $tool.fadeIn('500');
+                        $tool.fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $tool.css('top', e.pageY + 10);
+                        $tool.css('left', e.pageX + 20);
+                    });
+
+
+            },
+            eventMouseout: function (events, jsEvent) {
+                $(this).css('z-index', 8);
+                $('.tooltipevent').remove();
+            },
+
+        });
+
+        function DragSaveEvent(Data) {
+            debugger;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PatientAppointment", "Appointment", new {Id= patientInfoId })',
+                data: Data,
+                success: function (data) {
+                    debugger;
+                    onExactSuccess(data);
+                    if (data.status) {
+                        calendar.render();
+                    }
+                },
+                error: function () {
+                    alert('Failed');
+                }
+            })
+        }
+        function switchView() {
+            if ($('#button').html() == "Switch to list View") {
+                $('#calendar-hide').hide();
+                $('#list-hide').show();
+                $('#batch_action').show();
+                $('#button').html("Switch to Calander View");
+            }
+            else {
+                $('#calendar-hide').show();
+                $('#list-hide').hide();
+                $('#batch_action').hide();
+
+                $('#button').html("Switch to list View");
+            }
+
+        }
+
+            function deleteappointment(appointId, event) {
+
+
+                $.get("/Appointment/DeleteAppointments", { Id: appointId }).done(function (data) {
+                    if (data) {
+                        event.closest('tr').remove();
+
+                        $(".checkmark").show().fadeOut(6000);
+
+                        $('#Doc-calendar').fullCalendar('refetchEvents');
+                    }
+                    else {
+                        new PNotify({
+                            title: 'Error!',
+                            text: 'Something went wron',
+                            delay: 2500,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                    }
+
+
+                });
+        }
+        function Editappointment(appointId) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("AppointmentGetById", "Appointment")',
+                data: { appointId: appointId },
+
+                success: function (data) {
+                    debugger;
+                    $('#AppointmentUpdateModal').modal('show');
+                    $("#AppointmentUpdateModal #exist-appoint").hide();
+                    $("#AppointmentUpdateModal #frame-appoint").hide();
+                    $("#AppointmentUpdateModal #recurring").hide();
+                    debugger;
+                    if (data.appointmentType == "Exact") {
+                        $("#AppointmentUpdateModal #exist-appoint").show();
+                        $("#AppointmentUpdateModal #frame-appoint").hide();
+                        $("#AppointmentUpdateModal #recurring").hide();
+
+                        $("#AppointmentUpdateModal #appointmentType").val(data.appointmentType);
+
+                        $("#AppointmentUpdateModal #appointment_Id").val(data.appointmentId);
+                        $("#AppointmentUpdateModal #patientInfo_Id").val(data.patientInfoId);
+                        $("#AppointmentUpdateModal #exactTime1").val(moment(data.exactTime).format('hh:mm'));
+                        $("#AppointmentUpdateModal #exactDate1").val(moment(data.date).format('MM/DD/YYYY'));
+                        $('#exactProvider .custom-combobox-input').text(data.providerInfoId);
+
+                    }
+                    else if (data.appointmentType == "In Between") {
+
+                        $("#AppointmentUpdateModal #exist-appoint").hide();
+                        $("#AppointmentUpdateModal #recurring").hide();
+
+                        $("#AppointmentUpdateModal #frame-appoint").show();
+                        $("#AppointmentUpdateModal #appointmentType2").val(data.appointmentType);
+                        $("#AppointmentUpdateModal #appointment_Id2").val(data.appointmentId);
+                        $("#AppointmentUpdateModal #patientInfo_Id2").val(data.patientInfoId);
+                        $("#AppointmentUpdateModal #btwDate1").val(moment(data.date).format('MM/DD/YYYY'));
+                        $("#AppointmentUpdateModal #btwSTime1").val(moment(data.startTime).format('hh:mm A'));
+                        $("#AppointmentUpdateModal #btwETime1").val(moment(data.endTime).format('hh:mm A'));
+                        //$(".combobox").combobox({
+                        //    select: function (event, ui) {
+                        //        alert(ui.data.providerInfo);
+                        //    }
+                        //});
+                    }
+                    else {
+                        $("#AppointmentUpdateModal #exist-appoint").hide();
+                        $("#AppointmentUpdateModal #frame-appoint").hide();
+                        $("#AppointmentUpdateModal #recurring").show();
+
+                        $("#AppointmentUpdateModal #appointment_Id3").val(data.appointmentId);
+                        $("#AppointmentUpdateModal #patientInfo_Id3").val(data.patientInfoId);
+                        $("#AppointmentUpdateModal #appointmentType3").val(data.appointmentType);
+
+                        $("#AppointmentUpdateModal #recSDate1").val(moment(data.date).format('MM/DD/YYYY'));
+                        $("#AppointmentUpdateModal #recEDate1").val(moment(data.endDate).format('MM/DD/YYYY'));
+                        $("#AppointmentUpdateModal #recSTime1").val(moment(data.startTime).format('hh:mm A'));
+                        $("#AppointmentUpdateModal #recETime1").val(moment(data.endTime).format('hh:mm A'));
+                    }
+                },
+                error: function (result) {
+                    alert("Error");
+                }
+            });
+        }
+        function deleteappointmentFromModel(appId) {
+            debugger;
+            var DocFilter = $('#seleciona option:selected').val();
+            if (recursive_No == null) {
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Do you want to delete this appointment?',
+                    buttons: {
+                        confirm: function () {
+                            $.get("/Appointment/DeleteAppointments", { Id: appId }).done(function (data) {
+                                debugger;
+                                if (data) {
+                                    if (DocFilter == "") {
+                                        $(".checkmark").show().fadeOut(6000);
+                                        $('.full-calendar').fullCalendar('removeEvents');
+                                        $('#Doc-calendar').fullCalendar('refetchEvents');
+                                        event.closest('tr').remove();
+
+                                    }
+                                    else {
+                                        $(".checkmark").show().fadeOut(6000);
+                                        $('.full-calendar').fullCalendar('removeEvents');
+                                        LoadAppointmentData(DocFilter);
+                                        event.closest('tr').remove();
+                                    }
+                                }
+                                else {
+                                    new PNotify({
+                                        title: 'Error!',
+                                        text: 'Something went wron',
+                                        delay: 2500,
+                                        type: 'error',
+                                        addclass: 'pnotify-center'
+                                    });
+                                }
+
+
+                            });
+                        },
+                        cancel: function () {
+
+                        }
+                    }
+                });
+            }
+            else {
+                $.confirm({
+
+                    title: 'Confirm!',
+                    content: 'Do you want to delete all associated events or just this one?',
+                    buttons: {
+                        All: function () {
+                            $.confirm({
+                                title: 'Confirm!',
+                                content: 'Do you want to delete associated all events?',
+
+                                buttons: {
+                                    confirm: function () {
+                                        $.get("/Appointment/DeleteRecuringAppointment", { Id: recursive_No }).done(function (data) {
+                                            debugger;
+                                            if (data) {
+                                                if (DocFilter == "") {
+                                                    $(".checkmark").show().fadeOut(6000);
+                                                    $('.full-calendar').fullCalendar('removeEvents');
+                                                    $('#Doc-calendar').fullCalendar('refetchEvents');
+                                                    event.closest('tr').remove();
+
+                                                }
+                                                else {
+                                                    $(".checkmark").show().fadeOut(6000);
+                                                    $('.full-calendar').fullCalendar('removeEvents');
+                                                    LoadAppointmentData(DocFilter);
+                                                    event.closest('tr').remove();
+                                                }
+                                            }
+                                            else {
+                                                new PNotify({
+                                                    title: 'Error!',
+                                                    text: 'Something went wron',
+                                                    delay: 2500,
+                                                    type: 'error',
+                                                    addclass: 'pnotify-center'
+                                                });
+                                            }
+
+
+                                        });
+                                    },
+
+
+                                    cancel: function () {
+                                        $.alert('Canceled!');
+                                    }
+                                }
+                            });
+
+                        },
+
+                        Single: function(){
+                            $.confirm({
+                                title: 'Confirm!',
+                                content: 'Do you want to delete this appointment?',
+
+                                buttons: {
+                                    confirm: function () {
+                                        $.get("/Appointment/DeleteAppointments", { Id: appId }).done(function (data) {
+                                            debugger;
+                                            if (data) {
+                                                if (DocFilter == "") {
+                                                    $(".checkmark").show().fadeOut(6000);
+                                                    $('.full-calendar').fullCalendar('removeEvents');
+                                                    $('#Doc-calendar').fullCalendar('refetchEvents');
+                                                    event.closest('tr').remove();
+
+                                                }
+                                                else {
+                                                    $(".checkmark").show().fadeOut(6000);
+                                                    $('.full-calendar').fullCalendar('removeEvents');
+                                                    LoadAppointmentData(DocFilter);
+                                                    event.closest('tr').remove();
+                                                }
+                                            }
+                                            else {
+                                                new PNotify({
+                                                    title: 'Error!',
+                                                    text: 'Something went wron',
+                                                    delay: 2500,
+                                                    type: 'error',
+                                                    addclass: 'pnotify-center'
+                                                });
+                                            }
+
+
+                                        });
+                                    },
+
+
+                                    cancel: function () {
+                                    }
+                                }
+                            });
+
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            }
+
+            }
+        function editOrUpdateAppointment(appId) {
+
+            var DocFilter = $('#seleciona option:selected').val();
+            debugger;
+                $.ajax({
+
+                            type: "GET",
+                             url: '@Url.Action("AppointmentGetById", "Appointment")',
+                    data: { appointId: appId },
+
+                    success: function (data) {
+                         debugger;
+                        $("#AppointmentUpdateModal #exist-appoint1").hide();
+                        $("#AppointmentUpdateModal #frame-appoint1").hide();
+                        $("#AppointmentUpdateModal #recurring1").hide();
+                        debugger;
+                        if (data.appointmentType == "Exact") {
+                            $("#AppointmentUpdateModal #exist-appoint1").show();
+                            $("#AppointmentUpdateModal #frame-appoint1").hide();
+                            $("#AppointmentUpdateModal #recurring1").hide();
+
+                            $("#AppointmentUpdateModal #appointmentType1").val(data.appointmentType);
+
+                            $("#AppointmentUpdateModal #appointment_Id").val(data.appointmentId);
+                            $("#AppointmentUpdateModal #patientInfo_Id").val(data.patientInfoId);
+                            $("#AppointmentUpdateModal #exactTime1").val(moment(data.exactTime,).format('HH:mm'));
+                            $("#AppointmentUpdateModal #exactDate1").val(moment(data.date).format('MM/DD/YYYY'));
+                            $("#AppointmentUpdateModal #recursion_no").val(recursive_No);
+                            $('#provider_name').val(data.providerInfoId);
+                            $('#provider_name').trigger('change');
+
+                        }
+                        else{
+
+                            $("#AppointmentUpdateModal #exist-appoint1").hide();
+                            $("#AppointmentUpdateModal #recurring1").hide();
+
+                            $("#AppointmentUpdateModal #frame-appoint1").show();
+                            $("#AppointmentUpdateModal #appointmentType2").val(data.appointmentType);
+                            $("#AppointmentUpdateModal #appointment_Id2").val(data.appointmentId);
+                            $("#AppointmentUpdateModal #patientInfo_Id2").val(data.patientInfoId);
+                            $("#AppointmentUpdateModal #btwDate1").val(moment(data.date).format('MM/DD/YYYY'));
+                            $("#AppointmentUpdateModal #btwSTime1").val(moment(data.startTime).format('HH:mm'));
+                            $("#AppointmentUpdateModal #btwETime1").val(moment(data.endTime).format('HH:mm'));
+                            $("#AppointmentUpdateModal #recursion_no2").val(recursive_No);
+
+                            $('#btnProvider').val(data.providerInfoId);
+                            $('#btnProvider').trigger('change');
+                        }
+                            },
+                            error: function (result) {
+                             alert("Error");
+                       }
+                });
+            }
+            $('.DeleteappointBtn').click(function () {
+
+                deleteappointmentFromModel(appId);
+                $('.modal').modal('hide');
+            });
+
+        /*For Update*/
+        $(document).on('submit', '#exist-appoint1', function (e) {
+            debugger;
+
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        //StartConnection(parseInt(response.userId));
+                        //ReSendNotification(parseInt(response.userId), response.firstName, response.lastName);
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+                        onExactSuccess(xhr.responseJSON);
+
+                    }
+                });
+
+
+            }
+        });
+        $(document).on('submit', '#frame-appoint1', function (e) {
+            debugger;
+
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        //StartConnection(parseInt(response.userId));
+                        //ReSendNotification(parseInt(response.userId), response.firstName, response.lastName);
+
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+                        onExactSuccess(xhr.responseJSON);
+
+                    }
+                });
+
+            }
+        });
+        $(document).on('submit', '#recurring1', function (e) {
+            debugger;
+
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+
+
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+                        onExactSuccess(xhr.responseJSON);
+
+                    }
+                });
+            }
+        });
+         function ReSendNotification(Id, fname, lname) {
+            debugger;
+             if ($('.aapointment_Type').val('Exact')) {
+                var appointmentData = $('#exactDate1').val();
+                var date = moment(appointmentData).format('dddd, MMMM D Y')
+                var time = $('#exactTime1').val();
+            }
+            else {
+                 var appointmentData = $('#btwDate1').val();
+                var date = moment(appointmentData).format('dddd, MMMM D Y')
+                 var time = $('#btwSTime1').val();
+            }
+            docnotify = {
+                UserId: Id, NotificationType: "Appointment", NotificationText: "Appointment", NotificationInfo: '@patientName rescheduled his/her appointment on ' + date + ' at ' + time + '.', UserRoleId: @roleId, CreatedBy:@currUserId }
+            $.ajax({
+                type: "POST",
+                url: "/Notification/SaveNotification",
+                data: docnotify,
+                success: function (data) {
+                    patnotify = { UserId: @currUserId, NotificationType: "Appointment", NotificationText: "Appointment", NotificationInfo: 'Your appointment is rescheduled on ' + date + ' at ' + time + ' with Dr. ' + fname + ' ' + lname + '.', UserRoleId: @roleId, CreatedBy:@currUserId }
+                    $.ajax({
+                        type: "POST",
+                        url: "/Notification/SaveNotification",
+                        data: patnotify,
+                        success: function (data) {
+                        }
+                    });
+
+                }
+            });
+        }
+        /*Appointment Add*/
+        $(document).on('submit', '#EaxctAppointHide', function (e) {
+            debugger;
+            var ProviderName = $('#Exactprovider_name').val();
+            if (ProviderName == "") {
+                $("#ExactPro_err").html("Select Provider Name");
+            }
+            else {
+                $("#ExactPro_err").html("");
+            }
+            $("#providerInfo_Id").val(ProviderName);
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(ProviderName == "")) {
+                    $(this).ajaxSubmit({
+                        success: function (response) {
+                            debugger;
+                            StartConnection(parseInt(response.userId));
+                            SendNotification(parseInt(response.userId), response.firstName, response.lastName);
+                        },
+                        error: function (response) {
+
+                        },
+                        complete: function (xhr) {
+                            onExactSuccess(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+        $(document).on('submit', '#ExactRecurringForm', function (e) {
+            var ProviderName = $('#Exactprovider_name').val();
+            if (ProviderName == "") {
+                $("#ExactPro_err").html("Select Provider Name");
+            }
+            else {
+                $("#ExactPro_err").html("");
+            }
+            $("#ERecproviderInfo_Id").val(ProviderName);
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                if (!(ProviderName == "")) {
+                    $(this).ajaxSubmit({
+                        success: function (response) {
+                            //StartConnection(parseInt(response.userId));
+                            //SendNotification(parseInt(response.userId));
+                        },
+                        error: function (response) {
+
+                        },
+                        complete: function (xhr) {
+                            onExactSuccess(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+        function SendNotification(Id, fname, lname) {
+            debugger;
+            if ($('#exact_checkbox').is(":checked")) {
+                var appointmentData = $('#recSDate').val();
+                var date = moment(appointmentData).format('dddd, MMMM D Y')
+                var time = $('#patientAppointmentBasicDto_ExactTime').val();
+            }
+            else {
+                var appointmentData = $('#patientAppointmentBasicDto_Date').val();
+                var date = moment(appointmentData).format('dddd, MMMM D Y')
+                var time = $('#patientAppointmentBasicDto_StartTime').val();
+            }
+            docnotify = {
+                UserId: Id, NotificationType: "Appointment", NotificationText: "Appointment", NotificationInfo: '@patientName scheduled his/her appointment on ' + date + ' at ' + time + '.', UserRoleId: @roleId, CreatedBy:@currUserId }
+            $.ajax({
+                type: "POST",
+                url: "/Notification/SaveNotification",
+                data: docnotify,
+                success: function (data) {
+                    patnotify = { UserId: @currUserId, NotificationType: "Appointment", NotificationText: "Appointment", NotificationInfo: 'Your appointment is scheduled on ' + date + ' at ' + time + ' with Dr. ' + fname + ' ' + lname + '.', UserRoleId: @roleId, CreatedBy:@currUserId }
+                    $.ajax({
+                        type: "POST",
+                        url: "/Notification/SaveNotification",
+                        data: patnotify,
+                        success: function (data) {
+                        }
+                    });
+
+                }
+            });
+        }
+                function StartConnection(id) {
+            var appointmentData = $('#recSDate').val();
+            var date = moment(appointmentData).format('dddd, MMMM D Y')
+            var time = $('#patientAppointmentBasicDto_ExactTime').val();
+             var connection = new signalR.HubConnectionBuilder()
+                                .withUrl("/NotificationHub")
+                                .configureLogging(signalR.LogLevel.Information)
+                                .build();
+                            connection.start().then(() => {
+                                var userId = id;
+                                var message = '@patientName scheduled his/her appointment on ' + date + ' at ' + time + '.';
+                                connection.invoke("SendMessage", userId, message).catch(function (err) {
+                                    return console.error(err.toString());
+                                });
+                            });
+        }
+        $(document).on('submit', '#InBetweenAppointment', function (e) {
+            var ProviderName = $('#Exactprovider_name').val();
+            if (ProviderName == "") {
+                $("#ExactPro_err").html("Select Provider Name");
+            }
+            else {
+                $("#ExactPro_err").html("");
+            }
+            $("#BtwproviderInfo_Id").val(ProviderName);
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                if (!(ProviderName == "")) {
+                    $(this).ajaxSubmit({
+                        success: function (response) {
+                            StartConnection(parseInt(response.userId));
+                            SendNotification(parseInt(response.userId), response.firstName, response.lastName);
+                        },
+                        error: function (response) {
+
+                        },
+                        complete: function (xhr) {
+                            onExactSuccess(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+        $(document).on('submit', '#InBtwRecurringForm', function (e) {
+            debugger;
+            var ProviderName = $('#Exactprovider_name').val();
+            if (ProviderName == "") {
+                $("#ExactPro_err").html("Select Provider Name");
+            }
+            else {
+                $("#ExactPro_err").html("");
+            }
+            $("#BtwRecproviderInfo_Id").val(ProviderName);
+
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                if (!(ProviderName == "")) {
+                    $(this).ajaxSubmit({
+                        success: function (response) {
+                            //StartConnection(parseInt(response.userId));
+                            //SendNotification(parseInt(response.userId));
+                        },
+                        error: function (response) {
+
+                        },
+                        complete: function (xhr) {
+                            onExactSuccess(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+
+            }
+        });
+        function BulkExactCheck() {
+            debugger;
+            var check = $("#Bulkexact_checkbox").val();
+            if (check == '0') {
+                $("#BulkEaxctAppointHide").show();
+                $("#BulkInBetweenAppointment").hide();
+                $("#BulkInBtwRecurringForm").hide();
+                $(".Bulkcancel_btn").hide();
+                var check = $("#BulkERecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkExactFormButton").hide();
+                    $("#BulkxactRecurringForm").show();
+                    $("#BulkERecRangeTimeText").show();
+                    $("#BulkERecRangeTimeField").show();
+                    $("#BulkERecPatternText").show();
+                    $("#BulkERecPatternCheckBox").show();
+                    $("#BulkERecPatternCheckBoxS").show();
+                }
+            }
+            else {
+                $("#BulkInBetweenAppointment").hide();
+                $("#BulkEaxctAppointHide").hide();
+                $(".Bulkcancel_btn").hide();
+            }
+
+        }
+        function BulkBtwCheck() {
+            debugger;
+            var check2 = $("#Bulkbtw_checkbox");
+            if (check2.is(':checked')) {
+                $("#BulkInBetweenAppointment").show();
+                $("#BulkEaxctAppointHide").hide();
+                $("#BulkExactRecurringForm").show();
+                $("#BulkERecRangeTimeText").show();
+                $("#BulkERecRangeTimeField").show();
+                $("#BulkERecPatternText").show();
+                $("#BulkERecPatternCheckBox").show();
+                $("#BulkERecPatternCheckBoxS").show();
+
+
+
+            }
+            else {
+                $("#BulkInBetweenAppointment").show();
+                $("#BulkEaxctAppointHide").hide();
+                $(".Bulkcancel_btn").hide();
+                $("#BulkExactRecurringForm").hide();
+                $("#BulkERecRangeTimeText").hide();
+                $("#BulkERecRangeTimeField").hide();
+                $("#BulkERecPatternText").hide();
+                $("#BulkBulkERecPatternCheckBox").hide();
+                $("#ERecPatternCheckBoxS").hide();
+                var check = $("#BulkERecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkExactFormButton").hide();
+                    $("#BulkExactRecurringForm").hide();
+                    $("#BulkERecRangeTimeText").hide();
+                    $("#BulkERecRangeTimeField").hide();
+                    $("#BulkERecPatternText").hide();
+                    $("#BulkERecPatternCheckBox").hide();
+                    $("#BulkERecPatternCheckBoxS").hide();
+                }
+                var check = $("#BulkBRecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkBtwFormButton").hide();
+                    $("#BulkInBtwRecurringForm").show();
+                    $("#BulkBRecRangeTimeText").show();
+                    $("#BulkBRecRangeTimeField").show();
+                    $("#BulkBRecPatternText").show();
+                    $("#BulkBRecPatternCheckBox").show();
+                    $("#BulkBRecPatternCheckBoxS").show();
+                }
+                //$("#ExactRecurringForm").hide();
+
+                //$("#ERecCheck").trigger("click");
+                //$("#ERecCheck").prop("checked", false);
+            }
+        }
+        function BulkERecurrence() {
+            debugger;
+            var check = $("#BulkERecCheck");
+            if (check.is(':checked')) {
+                $("#BulkExactFormButton").hide();
+                $("#BulkEaxctAppointfield").hide();
+                $("#BulkExactRecurringForm").show();
+                $("#BulkERecRangeTimeText").show();
+                $("#BulkERecRangeTimeField").show();
+                $("#BulkERecPatternText").show();
+                $("#BulkERecPatternCheckBox").show();
+                $("#BulkERecPatternCheckBoxS").show();
+            }
+            else {
+                $("#BulkEaxctAppointfield").show();
+
+                $("#BulkExactFormButton").show();
+                $("#BulkExactRecurringForm").hide();
+
+                $("#BulkERecRangeTimeText").hide();
+                $("#BulkERecRangeTimeField").hide();
+                $("#BulkERecPatternText").hide();
+                $("#BulkERecPatternCheckBox").hide();
+                $("#BulkERecPatternCheckBoxS").hide();
+            }
+
+
+        }
+        function BulkBRecurrence() {
+            debugger;
+            var check = $("#BulkBRecCheck");
+            if (check.is(':checked')) {
+                $("#BulkBtwFormButton").hide();
+                $("#BulkInBtwField").hide();
+                $("#BulkInBtwRecurringForm").show();
+                $("#BulkBRecRangeTimeText").show();
+                $("#BulkBRecRangeTimeField").show();
+                $("#BulkBRecPatternText").show();
+                $("#BulkBRecPatternCheckBox").show();
+                $("#BulkBRecPatternCheckBoxS").show();
+            }
+            else {
+                $("#BulkInBtwField").show();
+
+                $("#BulkBtwFormButton").show();
+                $("#BulkInBtwRecurringForm").hide();
+                $("#BulkBRecRangeTimeText").hide();
+                $("#BulkBRecRangeTimeField").hide();
+                $("#BulkBRecPatternText").hide();
+                $("#BulkBRecPatternCheckBox").hide();
+                $("#BulkBRecPatternCheckBoxS").hide();
+            }
+
+
+        }
+        function ExactCheck() {
+            debugger;
+            var check = $("#exact_checkbox").val();
+            if (check == '0') {
+                $("#EaxctAppointHide").show();
+                $("#InBetweenAppointment").hide();
+                $("#InBtwRecurringForm").hide();
+                $(".cancel_btn").hide();
+                var check = $("#ERecCheck");
+                if (check.is(':checked')) {
+                    $("#ExactFormButton").hide();
+                    $("#ExactRecurringForm").show();
+                    $("#ERecRangeTimeText").show();
+                    $("#ERecRangeTimeField").show();
+                    $("#ERecPatternText").show();
+                    $("#ERecPatternCheckBox").show();
+                    $("#ERecPatternCheckBoxS").show();
+                }
+            }
+            else {
+                $("#InBetweenAppointment").hide();
+                $("#EaxctAppointHide").hide();
+                $(".cancel_btn").hide();
+            }
+
+        }
+        function BtwCheck() {
+            debugger;
+            var check2 = $("#btw_checkbox");
+            if (check2.is(':checked')) {
+                $("#InBetweenAppointment").show();
+                $("#EaxctAppointHide").hide();
+                $("#ExactRecurringForm").show();
+                $("#ERecRangeTimeText").show();
+                $("#ERecRangeTimeField").show();
+                $("#ERecPatternText").show();
+                $("#ERecPatternCheckBox").show();
+                $("#ERecPatternCheckBoxS").show();
+
+
+
+            }
+            else {
+                $("#InBetweenAppointment").show();
+                $("#EaxctAppointHide").hide();
+                $(".cancel_btn").hide();
+                $("#ExactRecurringForm").hide();
+                $("#ERecRangeTimeText").hide();
+                $("#ERecRangeTimeField").hide();
+                $("#ERecPatternText").hide();
+                $("#ERecPatternCheckBox").hide();
+                $("#ERecPatternCheckBoxS").hide();
+                var check = $("#ERecCheck");
+                if (check.is(':checked')) {
+                    $("#ExactFormButton").hide();
+                    $("#ExactRecurringForm").hide();
+                    $("#ERecRangeTimeText").hide();
+                    $("#ERecRangeTimeField").hide();
+                    $("#ERecPatternText").hide();
+                    $("#ERecPatternCheckBox").hide();
+                    $("#ERecPatternCheckBoxS").hide();
+                }
+                var check = $("#BRecCheck");
+                if (check.is(':checked')) {
+                    $("#BtwFormButton").hide();
+                    $("#InBtwRecurringForm").show();
+                    $("#BRecRangeTimeText").show();
+                    $("#BRecRangeTimeField").show();
+                    $("#BRecPatternText").show();
+                    $("#BRecPatternCheckBox").show();
+                    $("#BRecPatternCheckBoxS").show();
+                }
+                //$("#ExactRecurringForm").hide();
+
+                //$("#ERecCheck").trigger("click");
+                //$("#ERecCheck").prop("checked", false);
+            }
+        }
+        function ERecurrence() {
+            debugger;
+            var check = $("#ERecCheck");
+            if (check.is(':checked')) {
+                $("#ExactFormButton").hide();
+                $("#EaxctAppointfield").hide();
+                $("#ExactRecurringForm").show();
+                $("#ERecRangeTimeText").show();
+                $("#ERecRangeTimeField").show();
+                $("#ERecPatternText").show();
+                $("#ERecPatternCheckBox").show();
+                $("#ERecPatternCheckBoxS").show();
+            }
+            else {
+                $("#EaxctAppointfield").show();
+
+                $("#ExactFormButton").show();
+                $("#ExactRecurringForm").hide();
+
+                $("#ERecRangeTimeText").hide();
+                $("#ERecRangeTimeField").hide();
+                $("#ERecPatternText").hide();
+                $("#ERecPatternCheckBox").hide();
+                $("#ERecPatternCheckBoxS").hide();
+            }
+
+
+        }
+        function BRecurrence() {
+            debugger;
+            var check = $("#BRecCheck");
+            if (check.is(':checked')) {
+                $("#BtwFormButton").hide();
+                $("#InBtwField").hide();
+                $("#InBtwRecurringForm").show();
+                $("#BRecRangeTimeText").show();
+                $("#BRecRangeTimeField").show();
+                $("#BRecPatternText").show();
+                $("#BRecPatternCheckBox").show();
+                $("#BRecPatternCheckBoxS").show();
+            }
+            else {
+                $("#InBtwField").show();
+
+                $("#BtwFormButton").show();
+                $("#InBtwRecurringForm").hide();
+                $("#BRecRangeTimeText").hide();
+                $("#BRecRangeTimeField").hide();
+                $("#BRecPatternText").hide();
+                $("#BRecPatternCheckBox").hide();
+                $("#BRecPatternCheckBoxS").hide();
+            }
+
+
+        }
+        function LoadAppointmentData(DocFilter) {
+             $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+                //filter based on the select value
+                if (DocFilter == "All") {
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetCalendarsList", "Appointment")',
+                    data: { Id : @patientInfoId},//get events
+                        success: function (data) {
+                            dropEvent = [];
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+
+                            if (v.patientInfoId == @patientInfoId) {
+                                var Time;
+                                var ETime;
+
+                                Time = v.startTime;
+                                var DocPatName = "-Dr. " + v.docFirstName + " - " + v.patFirstName;
+                                var provideName = "Dr. " + v.docFullName;
+
+                                var Date = v.date.split('T');
+
+
+                                    ETime = v.endTime;
+
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    appointId: v.appointmentId,
+                                    providerName: provideName,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    providerId: v.providerInfoId,
+                                    ExactTime: v.startTime,
+                                    bSTime: v.startTime,
+                                    bETime: v.endTime,
+                                    department: v.departmentType
+
+                                }, true);
+                            }
+                        })
+                    }
+                });
+                }
+                else {
+                   $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FilterByDocName", "Appointment")',
+                    data: { DocId: DocFilter, PatId:@patientInfoId},//get events
+                       success: function (data) {
+                           dropEvent = [];
+                        $.each(data, function (i, v) {
+                            if (v.providerInfoId == DocFilter && v.patientInfoId == @patientInfoId) {
+                                debugger;
+                                var Time;
+                                var ETime;
+
+                                    Time = v.startTime;
+
+                                var DocPatName = "-Dr. " + v.providerInfo.firstName + " - " + v.patientInfo.firstName;
+                                var provideName = "Dr. " + v.providerInfo.firstName + " " + v.providerInfo.lastName;
+
+                                var Date = v.date.split('T');
+
+                                //if (v.appointmentType == "Exact") {
+                                //    ETime = '00:00:00'
+                                //}
+                                //else {
+                                    ETime = v.endTime.split('T');
+
+                                appId = events.appointId;
+
+                               var dropEvents = {
+                                   title: DocPatName,
+                                   start: Date[0] + 'T' + v.startTime,
+                                   Name: v.appointmentType,
+                                   appointId: v.appointmentId,
+                                   providerName: provideName,
+                                   endTime: Date[0] + "T" + v.endTime,
+                                   patientId: v.patientInfoId,
+                                   providerId: v.providerInfoId,
+                                   ExactTime: v.startTime,
+                                   bSTime: v.startTime,
+                                   bETime: v.endTime,
+                                   department: v.departmentType
+
+                                }
+                                dropEvent.push({ dropEvents})
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', dropEvents , true);
+
+                            }
+                        })
+                    }
+                });
+
+                }
+        }
+        $(document).ready(function () {
+            $('.select-all').click(function () {
+                debugger;
+                $('.table  input').prop('checked', this.checked);
+            });
+            $(".fc-calMonth-button").html('<i class="ti-layout-grid3-alt"></i>');
+            $(".fc-listMonth-button").html('<i class="ti-menu"></i>');
+            $(".createappbtn").click(function () {
+
+
+                $('.app_empty').val("");
+                $('.Bulkapp_empty').val("");
+                $('.Bulkapp_empty').removeClass('valid');
+                $('.app_empty').removeClass('valid');
+                $("#exact_checkbox").prop('checked', false);
+                $("#Btw_checkbox").prop('checked', false);
+                $("#Bulkexact_checkbox").prop('checked', false);
+                $("#BulkBtw_checkbox").prop('checked', false);
+                $(".cancel_btn").show();
+                $(".Bulkcancel_btn").show();
+                $("#EaxctAppointHide").hide();
+                $("#BulkEaxctAppointHide").hide();
+                $("#InBetweenAppointment").hide();
+                $("#BulkInBetweenAppointment").hide();
+                var check = $("#ERecCheck");
+                if (check.is(':checked')) {
+                    $("#ERecCheck").trigger('click');
+                }
+                else {
+
+                }
+                var check = $("#BRecCheck");
+                if (check.is(':checked')) {
+                    $("#BRecCheck").trigger('click');}
+                else {
+
+                }
+                $(".cancel_btn").show();
+                $("#EaxctAppointHide").hide();
+                $("#InBetweenAppointment").hide();
+                $("#ExactRecurringForm").hide();
+                $("#InBtwRecurringForm").hide();
+                $("#Exactprovider_name").val('').trigger('change');
+            });
+
+            $('#seleciona').change(function () {
+                var DocFilter = $('#seleciona option:selected').val();
+                LoadAppointmentData(DocFilter);
+
+
+            });
+
+
+            var table = $("#Appointment-table").DataTable({ "info": false, responsive: true, lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+
+            var exist = $("#exist-appoint").html();
+
+
+
+            $("#exact2_form").hide();
+            $("#inbetween2_from").hide();
+
+            $("li.calendarheader").addClass("border-bottom-header-active");
+            var appData = @TempData["AppointmentId"];
+            if (appData != 0)
+            {
+                $.get("/Appointment/GetAppointmentDetailById", { Id: appData }).done(function (data) {
+                    for (var info of data) {
+                        if (info.appointmentType == "Exact") {
+                            $('#AppointId').val(info.appointmentId);
+                            $('.modal-title').text(info.patientInfoId);
+                            $('#patient').text(info.patientFullName);
+                            $('.patient').text(info.patientFullName);
+                            $('#start_date').text(moment(info.date).format('DD-MMM-YYYY'));
+                            $('#Exact_Time').text(moment(info.exactTime).format('HH.mm'));
+                            $("#modal1").modal('show');
+                        }
+                        else {
+                            $('#AppointId').val(info.appointmentId);
+                            $('.modal-title').text(info.patientInfoId);
+                            $('#provider_2').text(info.patientFullName);
+                            $('#start_date2').text(moment(info.date).format('DD-MMM-YYYY'));
+                            $('#start_time2').text(moment(info.exactTime).format('HH.mm'));
+                            $('#end_time2').text(moment(info.exactTime).format('HH.mm'));
+                            $("#modal2").modal('show');
+                        }
+                    }
+                });
+            }
+
+        });
+
+        function onExactSuccess(data) {
+            var DocFilter = $('#seleciona option:selected').val();
+            debugger;
+            if (data != null) {
+                if (DocFilter == "") {
+                    if (data == "-4") {
+                        new PNotify({
+                            title: 'Error!',
+                            text: "Can't booked slot for past time!",
+                            delay: 2500,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                        return;
+                    }
+                    $(".checkmark").show().fadeOut(6000);
+                    $('.full-calendar').fullCalendar('removeEvents');
+
+                    $("#AppointmentModal").modal('hide');
+                    $("#AppointmentUpdateModal").modal('hide');
+                    $('#Doc-calendar').fullCalendar('refetchEvents');
+                    $(".text-input").val("");
+                    $(".text-input").removeClass("valid");
+                }
+                else {
+                    if (data == "-4") {
+                        new PNotify({
+                            title: 'Error!',
+                            text: "Can't booked slot for past time!",
+                            delay: 2500,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                        return;
+                    }
+
+                    $(".checkmark").show().fadeOut(6000);
+                    $('.full-calendar').fullCalendar('removeEvents');
+
+                    $("#AppointmentModal").modal('hide');
+                    $("#AppointmentUpdateModal").modal('hide');
+                    //$('#Doc-calendar').fullCalendar('refetchEvents');
+                    LoadAppointmentData(DocFilter);
+
+                    $(".text-input").val("");
+                    $(".text-input").removeClass("valid");
+                }
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        $(document).ready(function () {
+            $(".Modelselect2").prop("disabled", true);
+            $('#SelectDate').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                minDate: 0,
+                dateFormat: "mm/dd/yy",
+                onSelect: function (date) {
+                    debugger;
+                    $.post("/Appointment/GetProviderNameOnDate", { dateTime: date }).done(function (data) {
+                        debugger;
+                        $('#DoctorNameOnDate').html('');
+                        $('#DoctorNameOnDate').html(data);
+                        $(".Modelselect2").prop("disabled", false);
+                        $('.Modelselect2').select2();
+
+                    });
+                },
+            });
+            $("#SlotModal").on('click', function () {
+                $(".Modelselect2").val('').trigger('change');
+                $(".Modelselect2").prop("disabled", true);
+                $('#SelectDate').val('');
+                $('#AvailableSlots').hide();
+                $('.slotText').hide();
+            })
+        });
+        $('#AppointmentModalSlots').on('change','#Exactprovider_name', function () {
+            debugger;
+            var Id = $("#Exactprovider_name").select2('val');//ProviderID
+            var DateVal = $("#SelectDate").val();
+            $.post("/Appointment/GetProviderAvailableSlots", { dateTime: DateVal, ProviderId: Id}).done(function (data) {
+                $('#AvailableSlots').html('');
+                $('#AvailableSlots').html(data);
+                $('#AppointmentModalSlots .slotText').show();
+                $('#AvailableSlots').show();
+            });
+        })
+        //function ExactSlots() {
+        //    if ($('#exact_Slots').is(":checked")) {
+        //        var value = $("#exact_Slots").val();
+
+
+        //    }
+
+
+        //}
+        function SaveAvailableSlots(SlotId) {
+            $("#SlotsRow .Slots").addClass("avoid-clicks");
+            debugger;
+            var AppId =  $("#AppointmentModalSlots #AppointmentId").val();
+
+            if (AppId > 0) {
+                $.post("/Appointment/RescheduleSlots", { SlotId: SlotId, AppId: AppId }).done(function (data) {
+                    if (data.success == "Data Save successfully") {
+                        $(".checkmark").show().fadeOut(6000);
+                        $('.full-calendar').fullCalendar('removeEvents');
+                        $('#Doc-calendar').fullCalendar('refetchEvents');
+                        $("#AppointmentModalSlots").modal('hide');
+                    }
+                });
+            }
+            else {
+                $.post("/Appointment/SaveAvailableSlots", { Id: SlotId }).done(function (data) {
+                    if (data.success == "Data Save successfully") {
+
+                    }
+                    $(".checkmark").show().fadeOut(6000);
+                    $('.full-calendar').fullCalendar('removeEvents');
+                    $('#Doc-calendar').fullCalendar('refetchEvents');
+                    $("#AppointmentModalSlots").modal('hide');
+
+                });
+
+            }
+        }
+
+        $('.EditAppointment').click(function () {
+            //editOrUpdateAppointment(appId);
+            debugger;
+            var lastDate = new Date();
+            $("#SelectDate").datepicker("setDate", lastDate);
+            var selectDate = $("#SelectDate").val();
+            $.post("/Appointment/GetProviderNameOnDate", { dateTime: selectDate }).done(function (data) {
+                debugger;
+                $('#DoctorNameOnDate').html('');
+                $('#DoctorNameOnDate').html(data);
+                $(".Modelselect2").prop("disabled", false);
+                $('.Modelselect2').select2();
+
+            });
+            $('#AppointmentModalSlots').modal('show');
+
+            $('#modal1').modal('hide');
+        });
+
+    </script>
+
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-4 col-sm-3 col-md-4 col-lg-4">
+                    <h5 class="breadcrumbs-title color-blue">Appointments</h5>
+                </div>
+                <div class="col-8 col-sm-9 col-md-4 col-lg-4" display-block">
+
+                    <select id="seleciona" class="select2" data-placeholder="Search By Doctor Name"
+                            asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                        <option value="" selected disabled></option>
+                        <option value="All">All</option>
+                    </select>
+                </div>
+                <div class="col-12   col-sm-12 col-md-4 col-lg-4">
+                    <a class="btn right add-btn  modal-trigger" id="SlotModal" data-toggle="modal" data-target="#AppointmentModalSlots">Book Appointment</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-lg-6">
+                <div id="batch_action" style="display:none;">
+
+
+                    @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                        @*Batch Actions*@
+                        @*<span class="caret"></span>*@
+                    </button>
+                    @*<ul class="dropdown-menu batch">*@
+                        @*<li><a href="#">Option 1</a></li>*@
+                        @*<li><a href="#">Option 2</a></li> Comment batch action*@
+
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-6 col-lg-6">
+                <div class="btn-div">
+                    <a class="btn add-btn sidenav-trigger right" id="button" href="javascript:void(0);" onclick="switchView()">Switch to list View</a>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="calendar-hide">
+            <div class="col-xl-12">
+
+                <div class="b-l calender-sidebar">
+                    <div id='Doc-calendar'></div>
+                    <div id="loading">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="list-hide" style="display:none">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="Appointment-table" class="table display table-option">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                            <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                        </div>
+
+                                    </th>
+                                    <th>Provider Name</th>
+                                    <th>Appointment Date</th>
+                                    <th>Appointment Time</th>
+                                    <th>Status</th>
+                                    <th data-orderable="false" class="all">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.patientAppointmentBasicsList != null)
+                                {
+                                    foreach (var item in Model.patientAppointmentBasicsList)
+                                    {
+                                <tr class="card">
+                                    <td>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="@item.AppointmentId" value="check">
+                                            <label class="custom-control-label" for="@item.AppointmentId"></label>
+                                        </div>
+
+                                    </td>
+                                    <td>Dr. @item.DocFullName </td>
+
+                                    @if (item.Date is null)
+                                    {
+                                        <td>@DateTime.Today.ToString(SystemFormat.DateFormat())</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.Date.Value.ToString(SystemFormat.DateFormat())</td>
+                                    }
+                                    @if (item.AppointmentType == "Exact")
+                                    {
+                                        <td>@item.StartTime</td>
+                                    }
+                                    else
+                                    {
+                                        @*<td>@item.StartTime.Value.ToString(SystemFormat.TimeFormat())</td>*@
+                                        <td></td>
+                                    }
+
+                                    @if (item.StatusId == 2)
+                                    {
+                                        <td>Check In</td>
+                                    }
+                                    else if (item.StatusId == 10)
+                                    {
+                                        <td>Check Out</td>
+                                    }
+                                    else if (item.StatusId == 7)
+                                    {
+                                        <td>Cancelled</td>
+                                    }
+                                    else
+                                    { 
+                                        <td>NULL</td>
+                                    }
+
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class='dropdown-menu Table_Drop ul_Caim'>
+                                            <li><a href="javascript:void(0);" class="option-a">View</a></li>
+                                            <li onclick="Editappointment(@item.AppointmentId)"><a href="javascript:void(0);" class="option-a">Edit</a></li>
+                                            <li onclick="deleteappointment(@item.AppointmentId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-lg-12">
+                    <div id='Doc-calendar'></div>
+
+
+                </div>
+            </div>*@
+
+    </div>
+</div>
+
+<div id="modal1" class="modal display_modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <input id="AppointId" hidden="hidden" />
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-6">
+                        <h5>Appointment Schedule</h5>
+                    </div>
+
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6 col-md-6" id="Date_show">
+                        <h6>Doctor Name : <span id="provider"></span></h6>
+                    </div>
+                    <div class="col-sm-6 col-md-6" id="Date_show">
+                        <h6>Date : <span id="start_date"></span></h6>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col" id="ExactTime_show">
+
+                        <span style="font-size:18px;">Your Appointment With <b style="border-bottom: 1px solid" id="provider"></b> is at <b style="border-bottom:1px solid" id="Exact_Time"></b>To <b style="border-bottom:1px solid" id="end_Exact2"></b>.Please Make Sure Your Availability at Time.</span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate ml-2" data-dismiss="modal">Cancel</a>
+
+                        <a href="javascript:void(0);" class="right DeleteappointBtn modal-action btn Recreate ">Delete</a>
+
+                        <a href="javascript:void(0);" class="right modal-close modal-action EditAppointment modal-close add-btn  btn mr-2">Reschedule</a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="modal2" class="modal display_modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-6">
+                        <h5>Appointment Schedule</h5>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-6">
+                        <h6 class="right">Patient Id : <span class="modal-title2"></span></h6>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6 col-md-6" id="Date_show2">
+                        <h6>Patient Name : <span id="provider_2"></span></h6>
+
+                    </div>
+                    <div class="col-sm-6 col-md-6" id="Date_show2">
+                        <h6>Date : <span id="start_date2"></span></h6>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" id="StartTime_show">
+                        @*<h6>Start Time : <span id="start_time2"></span></h6>*@
+                        <span style="font-size:18px;">Your Appointment With <b style="border-bottom: 1px solid" id="provider_2"></b> in Between <b style="border-bottom:1px solid" id="start_time2"></b> To <b style="border-bottom:1px solid" id="end_time2"></b> Time. Please Make Sure Your Availability at Time.</span>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <input id="AppointId" hidden="hidden" />
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate ml-2" data-dismiss="modal">Cancel</a>
+
+                        <a href="javascript:void(0);" class="right modal-action DeleteappointBtn  btn Recreate ">Delete</a>
+
+                        <a href="javascript:void(0);" class="right modal-close  modal-action EditAppointment add-btn  btn mr-2">Reschedule</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="AppointmentUpdateModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <h6>Reschedule Appointment</h6>
+                    </div>
+                    @*<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-6">
+                            <h6>Patient Id : <span class="modal-title"></span></h6>
+                        </div>*@
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col m12">
+                        <form id="exist-appoint1" asp-action="PatientAppointment" asp-controller="Appointment" method="post" style="display:none">
+                            <input hidden="hidden" id="appointment_Id" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                            <input hidden="hidden" id="patientInfo_Id" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                            <input hidden="hidden" id="recursion_no" asp-for="patientAppointmentBasicDto.RecursionNo" />
+                            <input asp-for="patientAppointmentBasicDto.AppointmentType" class="aapointment_Type" value="Exact" id="appointmentType1" hidden="hidden" />
+
+                            <input asp-for="patientAppointmentBasicDto.AppointmentType" value="Exact" id="appointmentType1" hidden="hidden" />
+                            <div class="row">
+                                <div class="col-6 col-sm-6 col-md-6">
+                                    <p>Provider Name <span class="required"> * </span></p>
+                                    <select id="provider_name" class="select2" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                            asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                        <option></option>
+                                    </select>
+
+                                    <span class="required" id="combobox_ExaminerErr"></span>
+                                </div>
+
+                                <div class="col-6 col-sm-6 col-md-6">
+                                    <p>Date <span class="required"> * </span></p>
+                                    <input type="text" id="exactDate1" asp-for="patientAppointmentBasicDto.Date" class="text-input" placeholder="Select Date">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Exact Time <span class="required"> * </span></p>
+                                    <input type="text" id="exactTime1" class="time-picker text-input" asp-for="patientAppointmentBasicDto.ExactTime" placeholder="Select Exact Time">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.ExactTime"></span>
+                                </div>
+                            </div>
+
+                            <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+
+                            <a href="javascript:void(0);" class="right modal-action DeleteappointBtn  ml-2 mt-2 btn Recreate ">Delete</a>
+
+                            <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                        </form>
+                        <form id="frame-appoint1" asp-action="PatientAppointment" asp-controller="Appointment" method="post" style="display:none">
+                            <input hidden="hidden" id="appointment_Id2" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                            <input hidden="hidden" id="patientInfo_Id2" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                            <input hidden="hidden" id="recursion_no2" asp-for="patientAppointmentBasicDto.RecursionNo" />
+
+                            <input asp-for="patientAppointmentBasicDto.AppointmentType" class="aapointment_Type" value="In Between" id="appointmentType2" hidden="hidden" />
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Provider Name</p>
+                                    <select id="btnProvider" class="select2" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                            asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                        <option></option>
+                                    </select>
+                                    <span class="required" id="combobox_ExaminerErr"></span>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Date <span class="required"> * </span></p>
+                                    <input type="text" id="btwDate1" asp-for="patientAppointmentBasicDto.Date" class="datepicker text-input" placeholder="Select Date">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Start Time <span class="required"> * </span></p>
+                                    <input type="text" id="btwSTime1" class="time-picker text-input" asp-for="patientAppointmentBasicDto.StartTime" placeholder="Select Start Time">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.StartTime"></span>
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-6">
+                                    <p>End Time </p>
+                                    <input type="text" id="btwETime1" class="time-picker text-input" asp-for="patientAppointmentBasicDto.EndTime" placeholder="Select End Time">
+                                </div>
+                            </div>
+                            <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+
+                            <a href="javascript:void(0);" class="right modal-action DeleteappointBtn  ml-2 mt-2 btn Recreate ">Delete</a>
+
+                            <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="AppointmentModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+
+                <h4>Add Appointment</h4>
+                <hr />
+                @*<div class="row">
+                        <div class="col s12 pl-0">
+                            <ul class="tabs Exam-tab">
+                                <li class="tab"><a class="active" href="#test1">Single Appointment</a></li>
+                                <li class="tab"><a href="#test2">Bulk Appointment</a></li>
+                            </ul>
+                        </div>
+                    </div>*@
+                <div class="row" id="test1">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            @*<div class="col s12 m6 pl-0">
+                                    <p>Select Session</p>
+
+                                    <select id="session" class="Modelselect2" data-placeholder="Select Session"
+                                            asp-items="@(new SelectList(Model.ProviderSessionTypeList,"ProviderSessionTypeId","ProviderSessionType"))">
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="required" id="ExactPro_err"></span>
+                                </div>*@
+                            <div class="col-sm-12 col-md-6">
+                                <p class="mt-0">Provider Name <span class="required"> * </span></p>
+
+                                <select id="Exactprovider_name" class="Modelselect2" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                        asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                    <option value=""></option>
+                                </select>
+                                <span class="required" id="ExactPro_err"></span>
+                            </div>
+
+
+                        </div>
+                        <div class="row mt-1">
+                            <div class="col-sm-12 col-md-5 input-field">
+                                <h6>Appointment Type : </h6>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-3 input-field">
+                                @*<label>
+                                        <input type="radio" name="AppCheckBox" id="exact_checkbox" class="with-gap" onclick="ExactCheck()" value="0" />
+                                        <span>Exact</span>
+                                    </label>*@
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="AppCheckBox" id="exact_checkbox" onclick="ExactCheck()" value="0">
+                                    <label class="custom-control-label" for="exact_checkbox">Exact</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-6 col-md-3 input-field">
+                                @*<label>
+                                        <input type="radio" name="AppCheckBox" id="Btw_checkbox" class="with-gap" onclick="BtwCheck()" />
+                                        <span>In Between</span>
+                                    </label>*@
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" name="AppCheckBox" id="Btw_checkbox" onclick="BtwCheck()">
+                                    <label class="custom-control-label" for="Btw_checkbox">In Between</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12">
+                                <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+
+                            </div>
+                        </div>
+                        <form asp-action="PatientAppointment" asp-controller="Appointment" method="post" id="EaxctAppointHide" style="display:none">
+                            <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                            <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                            <input hidden="hidden" id="providerInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />
+                            <input asp-for="patientAppointmentBasicDto.AppointmentType" value="Exact" id="appointmentType" hidden="hidden" />
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 mt-2">
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input checkFirst-all" name="AppCheckBox" id="ERecCheck" onclick="ERecurrence()">
+                                        <label class="custom-control-label" for="ERecCheck">Make it recursive</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="EaxctAppointfield">
+                                <div class="col-6 col-sm-6 col-md-6">
+                                    <p>Date <span class="required"> * </span></p>
+                                    <input type="text" id="recSDate" asp-for="patientAppointmentBasicDto.Date" class="datepicker text-input app_empty" placeholder="Select Date">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-6">
+                                    <p>Time<span class="required"> * </span></p>
+                                    <input type="text" class=" time-picker text-input app_empty" asp-for="patientAppointmentBasicDto.ExactTime" placeholder="Select Time">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.ExactTime"></span>
+                                </div>
+                            </div>
+
+                            <div class="row" id="ExactFormButton">
+                                <div class="col-sm-12 center">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                        <form asp-action="ExactRecurringAppointment" asp-controller="Appointment" id="ExactRecurringForm" method="post" style="display:none">
+                            <input hidden="hidden" asp-for="RecurringAppoinmentDto.AppointmentId" />
+                            <input hidden="hidden" asp-for="RecurringAppoinmentDto.PatientInfoId" />
+                            <input hidden="hidden" id="ERecproviderInfo_Id" asp-for="RecurringAppoinmentDto.ProviderInfoId" />
+                            <input asp-for="RecurringAppoinmentDto.AppointmentType" value="Exact" hidden="hidden" />
+                            <div class="row" style="display:none" id="ERecRangeTimeText">
+                                <div class="col-sm-12 col-md-6">
+                                    <h6>Range of Recurrence</h6>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <h6>Appointment Time</h6>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none" id="ERecRangeTimeField">
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>Start Date <span class="required"> * </span></p>
+                                    <input type="text" asp-for="RecurringAppoinmentDto.Date" class=" sDate EinBtwSDate text-input Bulkapp_empty" placeholder="Select Start Date">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.Date"></span>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>End Date <span class="required"> * </span></p>
+                                    <input type="text" asp-for="RecurringAppoinmentDto.EndDate" class=" eDate EinBtwEDate text-input Bulkapp_empty" placeholder="Select Start Date">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.EndDate"></span>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Time <span class="required"> * </span></p>
+                                    <input type="text" asp-for="RecurringAppoinmentDto.ExactTime" class="time-picker text-input Bulkapp_empty" placeholder="Select Start Date">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.ExactTime"></span>
+                                </div>
+                            </div>
+                            <div class="row" id="ERecPatternText" style="display:none">
+                                <div class="col-sm-12 col-md-6 input-field">
+                                    <h6>Recurrence Pattern</h6>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none" id="ERecPatternCheckBox">
+                                <div class="col-4 col-sm-4 col-md-2">
+                                    @*<p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in checkFirst" asp-for="RecurringAppoinmentDto.IsMondayChecked" />
+                                                <span>Monday</span>
+                                            </label>
+                                        </p>*@
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Monday" asp-for="RecurringAppoinmentDto.IsMondayChecked">
+                                        <label class="custom-control-label" for="e_Monday">Monday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Tuesday" asp-for="RecurringAppoinmentDto.IsTuesdayChecked">
+                                        <label class="custom-control-label" for="e_Tuesday">Tuesday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Wednesday" asp-for="RecurringAppoinmentDto.IsWednesdayChecked">
+                                        <label class="custom-control-label" for="e_Wednesday">Wednesday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Thursday" asp-for="RecurringAppoinmentDto.IsThursdayChecked">
+                                        <label class="custom-control-label" for="e_Thursday">Thusday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Friday" asp-for="RecurringAppoinmentDto.IsFridayChecked">
+                                        <label class="custom-control-label" for="e_Friday">Friday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Saturday" asp-for="RecurringAppoinmentDto.IsSaturdayChecked">
+                                        <label class="custom-control-label" for="e_Saturday">Saturday</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="ERecPatternCheckBoxS" style="display:none">
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="e_Sunday" asp-for="RecurringAppoinmentDto.IsSundayChecked">
+                                        <label class="custom-control-label" for="e_Sunday">Sunday</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 ">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <form asp-action="PatientAppointment" asp-controller="Appointment" method="post" id="InBetweenAppointment" style="display:none;">
+                            <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                            <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                            <input hidden="hidden" id="BtwproviderInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />
+                            <input asp-for="patientAppointmentBasicDto.AppointmentType" value="In Between" hidden="hidden" />
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6 mt-2">
+                                    @*<p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" id="BRecCheck" onclick="BRecurrence()" class="filled-in checkFirst" />
+                                                <span>Make it recursive</span>
+                                            </label>
+                                        </p>*@
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input checkFirst" id="BRecCheck" onclick="BRecurrence()">
+                                        <label class="custom-control-label" for="BRecCheck">Make it recursive</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="InBtwField">
+                                <div class="col-6 col-sm-6 col-md-4">
+                                    <p>Date <span class="required"> * </span></p>
+                                    <input type="text" class="datepicker text-input app_empty" asp-for="patientAppointmentBasicDto.Date" placeholder="Select Date">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4">
+                                    <p>Start Time <span class="required"> * </span></p>
+                                    <input type="text" asp-for="patientAppointmentBasicDto.StartTime" class="time-picker text-input app_empty" placeholder="Select Start Time">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.StartTime"></span>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                    <p>End Time <span class="required"> * </span></p>
+                                    <input type="text" class="time-picker text-input app_empty" asp-for="patientAppointmentBasicDto.EndTime" placeholder="Select End Time">
+                                    <span class="required" asp-validation-for="patientAppointmentBasicDto.EndTime"></span>
+
+                                </div>
+                            </div>
+                            <div class="row" id="BtwFormButton">
+                                <div class="col-sm-12">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <form asp-action="RecurringAppointment" asp-controller="Appointment" method="post" id="InBtwRecurringForm" style="display:none">
+                            <input hidden="hidden" asp-for="RecurringAppoinmentDto.AppointmentId" />
+                            <input hidden="hidden" asp-for="RecurringAppoinmentDto.PatientInfoId" />
+                            <input hidden="hidden" id="BtwRecproviderInfo_Id" asp-for="RecurringAppoinmentDto.ProviderInfoId" />
+                            <input asp-for="RecurringAppoinmentDto.AppointmentType" value="In Between" hidden="hidden" />
+                            <div class="row" style="display:none" id="BRecRangeTimeText">
+                                <div class="col-sm-6 col-md-6">
+                                    <h6>Range of Recurrence</h6>
+                                </div>
+                                <div class="col-sm-6 col-md-6">
+                                    <h6>Appointment Time</h6>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none" id="BRecRangeTimeField">
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>Start Date <span class="required"> * </span></p>
+                                    <input type="text" id="inBtwSDate" asp-for="RecurringAppoinmentDto.Date" class="bsDate app_empty inBtwSDate text-input" placeholder="Select Start Date">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.Date"></span>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>End Date <span class="required"> * </span></p>
+                                    <input type="text" id="inBtwEDate" asp-for="RecurringAppoinmentDto.EndDate" class="beDate app_empty inBtwEDate text-input" placeholder="Select End Date">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.EndDate"></span>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>Start Time <span class="required"> * </span></p>
+                                    <input type="text" asp-for="RecurringAppoinmentDto.StartTime" class="time-picker text-input app_empty" placeholder="Select Start Time">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.StartTime"></span>
+
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-3">
+                                    <p>End Time <span class="required"> * </span></p>
+                                    <input type="text" asp-for="RecurringAppoinmentDto.EndTime" class="time-picker text-input app_empty" placeholder="Select End Time">
+                                    <span class="required" asp-validation-for="RecurringAppoinmentDto.EndTime"></span>
+
+                                </div>
+                            </div>
+                            <div class="row" id="BRecPatternText" style="display:none">
+                                <div class="col-sm-12 col-md-6 input-field">
+                                    <h6>Recurrence Pattern</h6>
+                                </div>
+                            </div>
+                            <div class="row" style="display:none" id="BRecPatternCheckBox">
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Monday" asp-for="RecurringAppoinmentDto.IsMondayChecked">
+                                        <label class="custom-control-label" for="b_Monday">Monday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Tuesday" asp-for="RecurringAppoinmentDto.IsTuesdayChecked">
+                                        <label class="custom-control-label" for="b_Tuesday">Tuesday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Wednesday" asp-for="RecurringAppoinmentDto.IsWednesdayChecked">
+                                        <label class="custom-control-label" for="b_Wednesday">Wednesday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Thursday" asp-for="RecurringAppoinmentDto.IsThursdayChecked">
+                                        <label class="custom-control-label" for="b_Thursday">Thursday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Friday" asp-for="RecurringAppoinmentDto.IsFridayChecked">
+                                        <label class="custom-control-label" for="b_Friday">Friday</label>
+                                    </div>
+                                </div>
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Saturday" asp-for="RecurringAppoinmentDto.IsSaturdayChecked">
+                                        <label class="custom-control-label" for="b_Saturday">Saturday</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="BRecPatternCheckBoxS" style="display:none">
+                                <div class="col-4 col-sm-4 col-md-2">
+
+                                    <div class="custom-control custom-checkbox mt-3">
+                                        <input type="checkbox" class="custom-control-input" id="b_Sunday" asp-for="RecurringAppoinmentDto.IsSundayChecked">
+                                        <label class="custom-control-label" for="b_Sunday">Sunday</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                @*<div class="row" id="test2">
+                        <div class="col s12">
+                            <div class="row">
+                                <div class="col s12 m6 pl-0">
+                                    <p>Provider Name <span class="required"> * </span></p>
+
+                                    <select class="Modelselect2" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                            asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="required" id="ExactPro_err"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Patient Name <span class="required"> * </span></p>
+                                        <select class="Modelselect2" data-placeholder="Select Patient Name"
+                                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col m3 pl-0 input-field mt-2">
+                                    <h6>Appointment Type : </h6>
+                                </div>
+                                <div class="col m3 pl-0 input-field">
+                                    <label>
+                                        <input type="radio" name="AppCheckBox" id="Bulkexact_checkbox" class="with-gap" onclick="BulkExactCheck()" value="0" />
+                                        <span>Exact</span>
+                                    </label>
+                                </div>
+                                <div class="col m3 pl-0 input-field">
+                                    <label>
+                                        <input type="radio" name="AppCheckBox" id="BulkBtw_checkbox" class="with-gap" onclick="BulkBtwCheck()" />
+                                        <span>In Between</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Bulkcancel_btn Recreate ml-2 btn mt-2 right">Cancel</a>
+
+                                </div>
+                            </div>
+                            <form asp-action="PatientAppointment" asp-controller="Appointment" method="post" id="BulkEaxctAppointHide" style="display:none">
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                                <input hidden="hidden" id="providerInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />
+                                <input asp-for="patientAppointmentBasicDto.AppointmentType" value="Exact" id="appointmentType" hidden="hidden" />
+                                <div class="row">
+                                    <div class="col col s12 m6 pl-0">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" id="BulkERecCheck" onclick="BulkERecurrence()" class="filled-in checkFirst" />
+                                                <span>Make it recursive</span>
+                                            </label>
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkEaxctAppointfield">
+                                    <div class="col s12 m6 pl-0">
+                                        <p>Date <span class="required"> * </span></p>
+                                        <input type="text" id="BulkrecSDate" asp-for="patientAppointmentBasicDto.Date" class="datepicker text-input Bulkapp_empty" placeholder="Select Date">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Time<span class="required"> * </span></p>
+                                        <input type="text" class=" time-picker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.ExactTime" placeholder="Select Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.ExactTime"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="BulkExactFormButton">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+                            </form>
+                            <form asp-action="ExactRecurringAppointment" asp-controller="Appointment" id="BulkExactRecurringForm" method="post" style="display:none">
+                                <input hidden="hidden" asp-for="RecurringAppoinmentDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="RecurringAppoinmentDto.PatientInfoId" />
+                                <input hidden="hidden" id="ERecproviderInfo_Id" asp-for="RecurringAppoinmentDto.ProviderInfoId" />
+                                <input asp-for="RecurringAppoinmentDto.AppointmentType" value="Exact" hidden="hidden" />
+                                <div class="row" style="display:none" id="ERecRangeTimeText">
+                                    <div class="col s12 m6 pl-0">
+                                        <h6>Range of Recurrence</h6>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <h6>Appointment Time</h6>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none" id="BulkERecRangeTimeField">
+                                    <div class="col s6 m3 pl-0">
+                                        <p>Start Date <span class="required"> * </span></p>
+                                        <input type="text" asp-for="RecurringAppoinmentDto.Date" class=" sDate EinBtwSDate text-input Bulkapp_empty" placeholder="Select Start Date">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.Date"></span>
+                                    </div>
+                                    <div class="col s6 m3">
+                                        <p>End Date <span class="required"> * </span></p>
+                                        <input type="text" asp-for="RecurringAppoinmentDto.EndDate" class=" eDate EinBtwEDate text-input Bulkapp_empty" placeholder="Select Start Date">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.EndDate"></span>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Time <span class="required"> * </span></p>
+                                        <input type="text" asp-for="RecurringAppoinmentDto.ExactTime" class="time-picker text-input Bulkapp_empty" placeholder="Select Start Date">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.ExactTime"></span>
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkERecPatternText" style="display:none">
+                                    <div class="col s12 m6 pl-0 input-field">
+                                        <h6>Recurrence Pattern</h6>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none" id="BulkERecPatternCheckBox">
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in checkFirst" asp-for="RecurringAppoinmentDto.IsMondayChecked" />
+                                                <span>Monday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsTuesdayChecked" />
+                                                <span>Tuesday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsWednesdayChecked" />
+                                                <span>Wednesday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsThursdayChecked" />
+                                                <span>Thursday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsFridayChecked" />
+                                                <span>Friday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsSaturdayChecked" />
+                                                <span>Saturday</span>
+                                            </label>
+
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkERecPatternCheckBoxS" style="display:none">
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsSundayChecked" />
+                                                <span>Sunday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+                            </form>
+                            <form asp-action="PatientAppointment" asp-controller="Appointment" method="post" id="BulkInBetweenAppointment" style="display:none;">
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                                <input hidden="hidden" id="BtwproviderInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />
+                                <input asp-for="patientAppointmentBasicDto.AppointmentType" value="In Between" hidden="hidden" />
+                                <div class="row">
+                                    <div class="col col s12 m6 pl-0">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" id="BulkBRecCheck" onclick="BulkBRecurrence()" class="filled-in checkFirst" />
+                                                <span>Make it recursive</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkInBtwField">
+                                    <div class="col s6 m4 pl-0">
+                                        <p>Date <span class="required"> * </span></p>
+                                        <input type="text" class="datepicker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.Date" placeholder="Select Date">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+
+                                    </div>
+                                    <div class="col s6 m4">
+                                        <p>Start Time <span class="required"> * </span></p>
+                                        <input type="text" asp-for="patientAppointmentBasicDto.StartTime" class="time-picker text-input Bulkapp_empty" placeholder="Select Start Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.StartTime"></span>
+                                    </div>
+                                    <div class="col s6 m4">
+                                        <p>End Time <span class="required"> * </span></p>
+                                        <input type="text" class="time-picker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.EndTime" placeholder="Select End Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.EndTime"></span>
+
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkBtwFormButton">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+                            </form>
+                            <form asp-action="RecurringAppointment" asp-controller="Appointment" method="post" id="BulkInBtwRecurringForm" style="display:none">
+                                <input hidden="hidden" asp-for="RecurringAppoinmentDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="RecurringAppoinmentDto.PatientInfoId" />
+                                <input hidden="hidden" id="BtwRecproviderInfo_Id" asp-for="RecurringAppoinmentDto.ProviderInfoId" />
+                                <input asp-for="RecurringAppoinmentDto.AppointmentType" value="In Between" hidden="hidden" />
+                                <div class="row" style="display:none" id="BulkBRecRangeTimeText">
+                                    <div class="col s12 m6 pl-0">
+                                        <h6>Range of Recurrence</h6>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <h6>Appointment Time</h6>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none" id="BulkBRecRangeTimeField">
+                                    <div class="col s6 m3 pl-0">
+                                        <p>Start Date <span class="required"> * </span></p>
+                                        <input type="text" id="BulkinBtwSDate" asp-for="RecurringAppoinmentDto.Date" class="bsDate Bulkapp_empty inBtwSDate text-input" placeholder="Select Start Date">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.Date"></span>
+                                    </div>
+                                    <div class="col s6 m3">
+                                        <p>End Date <span class="required"> * </span></p>
+                                        <input type="text" id="BulkinBtwEDate" asp-for="RecurringAppoinmentDto.EndDate" class="beDate Bulkapp_empty inBtwEDate text-input" placeholder="Select End Date">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.EndDate"></span>
+                                    </div>
+                                    <div class="col s6 m3">
+                                        <p>Start Time <span class="required"> * </span></p>
+                                        <input type="text" asp-for="RecurringAppoinmentDto.StartTime" class="time-picker text-input Bulkapp_empty" placeholder="Select Start Time">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.StartTime"></span>
+
+                                    </div>
+                                    <div class="col s6 m3">
+                                        <p>End Time <span class="required"> * </span></p>
+                                        <input type="text" asp-for="RecurringAppoinmentDto.EndTime" class="time-picker text-input Bulkapp_empty" placeholder="Select End Time">
+                                        <span class="required" asp-validation-for="RecurringAppoinmentDto.EndTime"></span>
+
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkBRecPatternText" style="display:none">
+                                    <div class="col s12 m6 pl-0 input-field">
+                                        <h6>Recurrence Pattern</h6>
+                                    </div>
+                                </div>
+                                <div class="row" style="display:none" id="BulkBRecPatternCheckBox">
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in checkFirst" asp-for="RecurringAppoinmentDto.IsMondayChecked" />
+                                                <span>Monday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsTuesdayChecked" />
+                                                <span>Tuesday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsWednesdayChecked" />
+                                                <span>Wednesday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsThursdayChecked" />
+                                                <span>Thursday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsFridayChecked" />
+                                                <span>Friday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsSaturdayChecked" />
+                                                <span>Saturday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkBRecPatternCheckBoxS" style="display:none">
+                                    <div class="col s2 m2">
+                                        <p class="check-btn">
+                                            <label>
+                                                <input type="checkbox" class="filled-in" asp-for="RecurringAppoinmentDto.IsSundayChecked" />
+                                                <span>Sunday</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right">Cancel</a>
+                                    <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div id="AppointmentModalSlots" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <input hidden="hidden" id="AppointmentId" />
+                <h4>Add Appointment</h4>
+                <hr />
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-6">
+
+                        <p>Date <span class="required"> * </span></p>
+                        <input type="text" id="SelectDate" class="text-input" placeholder="Select Date">
+
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <p>Provider Name <span class="required"> * </span></p>
+                        <div id="DoctorNameOnDate">
+                            <partial name="~/Views/Appointment/PartialViews/_DoctorNameOnDate.cshtml" />
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div id="AvailableSlots" style="display:none">
+
+                    <partial name="~/Views/Appointment/PartialViews/_ProviderAvailableSlots.cshtml" />
+                </div>
+                <div class="row">
+                    <div class="col s12 m12">
+                        <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+

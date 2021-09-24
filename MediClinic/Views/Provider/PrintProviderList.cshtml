@@ -1,0 +1,359 @@
+﻿@model MediClinic.Models.ProviderViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <!-- chartist CSS -->
+    <link href="~/Elite/_node_modules/morrisjs/morris.css" rel="stylesheet" />
+    <!--Toaster Popup message CSS -->
+    <link href="~/Elite/_node_modules/toast-master/css/jquery.toast.css" rel="stylesheet" />
+    @*<link href="~/Elite/_node_modules/calendar/dist/fullcalendar.css" rel="stylesheet" />*@
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="~/Elite/css/style.min.css" rel="stylesheet">
+    <link href="~/Elite/css/custom.css" rel="stylesheet">
+    <link href="~/Elite/_node_modules/morrisjs/morris.css" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="~/Elite/css/pages/timeline-vertical-horizontal.css" rel="stylesheet">
+    <link href="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/datatables.net-bs4/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <title>PrintProviderList</title>
+    <style>
+        .mdi {
+            font-size: 25px;
+        }
+        table{
+            border-spacing:0 !important
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col">
+                    <h2 class="bold color-blue">Provider List</h2>
+                </div>
+                <div class="col">
+                    <a class="waves-effect waves-light right no-print" href="@Url.Action("ProviderEliteList","provider")">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                    <a class="pr-1 no-print right" onclick="window.print()" style="cursor:pointer">
+                        <i class="mdi mdi-printer mt-2"></i>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-sm">
+                        <thead>
+                            <tr class="uppercase">
+
+                                <th></th>
+                                @if (Model.ProviderListSettingDto.ProviderIdDisplay)
+                                {
+                                    <th>Provider ID</th>
+                                }
+                                @if (Model.ProviderListSettingDto.Name)
+                                {
+                                    if (Model.ProviderListSettingDto.FirstName == true && Model.ProviderListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.ProviderListSettingDto.FirstName == true && Model.ProviderListSettingDto.LastName == false)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.ProviderListSettingDto.FirstName == false && Model.ProviderListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else
+                                    {
+                                        <th data-orderable="false">Name</th>
+                                    }
+                                }
+
+
+                                <th>Specialty</th>
+                                <th>TITLE</th>
+                                <th>Suffix</th>
+                                @*@if (Model.ProviderListSettingDto.Email)
+                                    {
+                                        <th>Email</th>
+                                    }*@
+                                @if (Model.ProviderListSettingDto.LicenseNo)
+                                {
+                                    <th>LICENSE No</th>
+                                }
+                                @if (Model.ProviderListSettingDto.NpiNumber)
+                                {
+                                    <th>NPI No</th>
+                                }
+                                @if (Model.ProviderListSettingDto.PhoneNo)
+                                {
+                                    <th>Phone No</th>
+                                }
+                                @if (Model.ProviderListSettingDto.EntityName)
+                                {
+                                    <th>PC/Entity Name</th>
+                                }
+                                @if (Model.ProviderListSettingDto.Address)
+                                {
+                                    <th>Address</th>
+                                }
+                                @if (Model.ProviderListSettingDto.TaxId)
+                                {
+                                    <th class="all">Tax ID</th>
+                                }
+                                @if (Model.ProviderListSettingDto.AssignRoomNo)
+                                {
+                                    <th>Assigned Room No</th>
+                                }
+                                <th>Balance</th>
+                                <th>Calendar</th>
+                                <th>RELATED FACILITIES</th>
+
+                                @if (Model.ProviderListSettingDto.MobileNo)
+                                {
+                                    <th class="all">Mobile No</th>
+                                }
+                                @*@if (Model.ProviderListSettingDto.FaxNo)
+                                    {
+                                        <th>Fax</th>
+                                    }*@
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.ProviderList != null)
+                            {
+                                @foreach (var item in Model.ProviderList)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            <span class="list-img">
+                                                @if (item.ProviderProfilePic != null)
+                                                {
+                                                    <img src="/images/@item.ProviderProfilePic" alt="provider">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/app-assets/images/user/male-user.png" alt="provider">
+                                                }
+                                            </span>
+                                        </td>
+
+                                        @if (Model.ProviderListSettingDto.ProviderIdDisplay)
+                                        {
+                                            <td>@item.ProviderInfoId</td>
+                                        }
+                                        @if (Model.ProviderListSettingDto.Name)
+                                        {
+                                            <td> @item.FirstName @item.LastName</td>
+                                        }
+
+                                        @if (!(@item.SpecialityNavigation is null))
+                                        {
+                                            <td>@item.SpecialityNavigation.ProviderSpeciality</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @if (item.Title == 12)
+                                        {
+                                            <td>Internal Doctor</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>Doctor</td>
+                                        }
+                                        @if (!(item.SuffixNavigation is null))
+                                        {
+                                            <td>@item.SuffixNavigation.LookupValue</td>
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @*@if (Model.ProviderListSettingDto.Email)
+                                            {
+                                                <td> @item.Email</td>
+                                            }*@
+                                        @if (Model.ProviderListSettingDto.LicenseNo)
+                                        {
+                                            if (!(item.LicenseNo is null))
+                                            {
+                                                <td> @item.LicenseNo</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @if (Model.ProviderListSettingDto.NpiNumber)
+                                        {
+                                            if (!(item.NpiNumber is null))
+                                            {
+                                                <td> @item.NpiNumber</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @if (Model.ProviderListSettingDto.PhoneNo)
+                                        {
+                                            if (!(item.PhoneNo is null))
+                                            {
+                                                <td> @item.PhoneNo</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @if (Model.ProviderListSettingDto.EntityName)
+                                        {
+                                            <td>@item.EntityName</td>
+                                        }
+                                        @if (Model.ProviderListSettingDto.Address)
+                                        {
+                                            if (!(item.AddressLine1 is null))
+                                            {
+                                                <td> @item.AddressLine1</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @if (Model.ProviderListSettingDto.TaxId)
+                                        {
+                                            if (!(item.TaxId is null))
+                                            {
+                                                <td> @item.TaxId</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @if (Model.ProviderListSettingDto.AssignRoomNo)
+                                        {
+                                            if (!(item.AssignRoomNo is null))
+                                            {
+                                                <td> @item.AssignRoomNo</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+
+                                        @if (Model.ProviderListSettingDto.MobileNo)
+                                        {
+                                            if (!(item.MobileNo is null))
+                                            {
+                                                <td> @item.MobileNo</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        @*@if (Model.ProviderListSettingDto.FaxNo)
+                                            {
+                                                if (true)
+                                                {
+
+                                                }
+                                            }*@
+                                        @if (!(item.Charges is null))
+                                        {
+                                            <td>@item.Charges</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @if (!(item.IsSchedule is null))
+                                        {
+                                            if (item.IsSchedule == true)
+                                            {
+                                                <td>Schedule</td>
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+                                        @if (!(item.RelatedFacility is null))
+                                        {
+                                            <td>@item.RelatedFacility.RelatedFacility</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>N/A</td>
+                                        }
+
+
+
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Elite/_node_modules/jquery/jquery-3.2.1.min.js"></script>
+   
+</body>
+</html>

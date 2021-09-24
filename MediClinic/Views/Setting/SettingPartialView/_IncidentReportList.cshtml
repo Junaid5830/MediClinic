@@ -1,0 +1,49 @@
+﻿@model MediClinic.Models.PatientViewModel
+    <table id="Relationship-table" class="table">
+        <thead>
+            <tr class="uppercase">
+                <th>
+                    <label>
+                        <input type="checkbox" class="select-all" />
+                        <span></span>
+                    </label>
+                </th>
+                <th>  Incident Report Status</th>
+
+                <th class="all">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.IncidentReportStatusList != null)
+            {
+                @foreach (var Data in Model.IncidentReportStatusList)
+                {
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>@Data.IncidentReportStatus1</td>
+
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown+@Data.IncidentReportId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown+@Data.IncidentReportId' class='dropdown-content'>
+                                <li><a href="@Url.Action("DeleteIncidentReportStatus","Setting",new { Id=Data.IncidentReportId})" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                                <li><a href="javascript:void(0);" class="option-a" onclick="EditIncident(@Data.IncidentReportId,'@Data.IncidentReportStatus1');"><i class="material-icons">edit</i>Edit</a></li>
+
+                            </ul>
+
+                        </td>
+                    </tr>
+                }
+            }
+
+
+
+
+        </tbody>
+
+    </table>

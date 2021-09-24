@@ -1,0 +1,175 @@
+﻿@model MediClinic.Models.EmployeeViewModal
+
+@{
+    ViewData["Title"] = "UserClient";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientId = ViewContext.RouteData.Values["id"];
+
+}
+@section scripts{ 
+    <script>
+        $(function () {
+            $('#myTableEUO').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+
+
+        });
+        function foractive(UserId,event) {
+            $.get("/SettingsElite/ClientActive", { Id: UserId }).done(function (data) {
+                debugger;
+
+                window.location.reload();
+
+            });
+        }
+        function forInactive(UserId, event) {
+            $.get("/SettingsElite/ClientInActive", { Id: UserId }).done(function (data) {
+                debugger;
+
+                window.location.reload();
+
+            });
+        }
+
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container mb-3">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        User Client
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6 mt-1" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2 search_box2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+
+                    <a href="@Url.Action("Setting","SettingsElite",new { Id= patientId})" class="waves-effect waves-light float-right" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">
+
+                @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                @*Batch Actions*@
+                @*<span class="caret"></span></button>*@
+
+                @*<ul class="dropdown-menu batch">*@
+                @*<li><a href="#">Option 1</a></li>*@
+                @*<li><a href="#">Option 2</a></li> Comment batch action</ul>*@
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="myTableEUO" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+
+                                </th>
+                                <th>NAME</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>City</th>
+                                <th>Mobile No</th>
+                                <th>Status</th>
+                                <th class="all">Action  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.EmployeesList)
+                            {
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@item.Employee_id" value="check">
+                                        <label class="custom-control-label" for="@item.Employee_id"></label>
+                                    </div>
+                                </th>
+                                <td>@item.FirstName @item.LastName</td>
+                                <td>@item.EmploymentRole.RoleType</td>
+                                <td>@item.Email</td>
+                                <td>@item.Addressline1 @item.Addressline2 @item.Addressline3</td>
+                                <td>@item.City</td>
+                                <td>@item.MobNo</td>
+                                @if (!(item.User is null))
+                                {
+                                    @if (item.User.IsActive == true)
+                                    {
+                                        <td>Active</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Inactive</td>
+                                    }
+                                }
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);" onclick="foractive(@item.User.UserId,this)">Active</a></li>
+                                        <li><a href="javascript:void(0);" onclick="forInactive(@item.User.UserId,this)">Inactive</a></li>
+                                        @*<li><a href="javascript:void(0);">Edit</a></li>*@
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+

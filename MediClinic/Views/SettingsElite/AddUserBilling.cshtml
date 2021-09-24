@@ -1,0 +1,367 @@
+﻿
+@{
+    ViewData["Title"] = "AddUserBilling";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+    <div class="page-wrapper">
+        <div class="container">
+            <div id="breadcrumbs-wrapper">
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Add User Company Bill</h5>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <form class="col-sm-12  ">
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>First Name</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter First Name">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>Last Name</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Last Name">
+                            </div>
+                        </div>
+
+
+                        @*<div class="col ">
+                           <p>
+                               Reminder by
+                            </p>
+                        <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+                        </div>*@
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>UserId</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter UserId">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>Password</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Password">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized to view records
+
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option>Select </option>
+
+                                    <option value="Pt">PT Record</option>
+                                    <option value="AllRecord">All Record</option>
+
+
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized to Order records
+
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option>Select </option>
+                                    <option value="Pt">PT Record</option>
+                                    <option value="AllRecord">All Record</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>Authorized To Send Internal Message</p>
+
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Authorized To Bill All Providers
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        @*<div class="col ">
+                           <p>
+                               Reminder by
+                            </p>
+                        <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+                        </div>*@
+
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorize To Create New Claims
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option>Select Case Type </option>
+
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Edit Bills
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Edit Bills
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                            <p>
+                                Authorize To Edit Claims
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Edit CPT/HSPC Codes
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Edit ICT Codes
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Edit Bill Due Dates
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorize To Send NF2 Forms
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Scan Documents
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized To Print Documents
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized to Add Sub Users
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized to Edit Billing Settings
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Authorized to Edit Claims Settings
+                            </p>
+                            <div class="input-field">
+                                <select class="select2   text-input" style="width: 100%;">
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+
+                        </div>
+
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="center">
+                                <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+            @section scripts{
+                <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+                <script>
+                    $('.select2').select2();
+                </script>
+            }

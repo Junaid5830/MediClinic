@@ -1,0 +1,246 @@
+﻿<div class="tab-pane  " id="test" role="tabpanel">
+    <section class="AddReminder">
+        <div class="card">
+            <div class="card-content">
+                <div class="container" style="max-width:100%;">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-8  col-7 col-lg-8 col-xl-8"> <h5 class="color-blue ">Patient ID & Signature</h5> </div><div class="col-md-4 col-sm-4  col-5 col-lg-4 col-xl-4"><div class="right setclrIcon"><a href="javascript:void(0)"><i class="mdi mdi-camera"></i></a><a href="javascript:void(0)"><i class="mdi mdi-clipboard-text"></i></a><a href="javascript:void(0)"><i class="mdi mdi-paperclip"></i></a><a href="javascript:void(0)"><i class="mdi mdi-printer"></i></a></div></div>
+                    </div>
+                    <dv class="row">
+
+
+                        <form class="col-sm-12  ">
+                            <div class="row">
+
+                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                    <p>Passport Number</p>
+                                    <div class="input-field">
+                                        <ul class="icheck-list mt-9">
+                                            <li class="yes">
+                                                <input type="radio" class="check" id="square-radio-1" name="square-radio" data-radio="iradio_square-red">
+                                                <label for="square-radio-1">Yes</label>
+                                            </li>
+                                            <li class="no">
+                                                <input type="radio" class="check" id="square-radio-1" name="square-radio" data-radio="iradio_square-red">
+                                                <label for="square-radio-2">No</label>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12  col-12 col-lg-12 col-xl-12 ">
+                                            <div class="row">
+                                                <div class="col-md-10 col-sm-10 col-10 col-lg-10 col-xl-10">
+                                                    <p>
+                                                        ID Type
+
+
+                                                    </p>
+
+                                                    <div class="input-field">
+                                                        <select class="select2 form-control  text-input" style="width: 100%;">
+                                                            <option>Select</option>
+                                                            <option value="AK">Driver's License</option>
+                                                            <option value="AK">Driver's License</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 col-sm-2 col-2 col-lg-2 col-xl-2">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout sideOutBtn" href="javascript:void(0);" data-target="slide-out-right26" disabled="disabled"><i class="mdi mdi-plus"></i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12  col-12 col-lg-12 col-xl-12 ">
+                                            <p>ID Number</p>
+
+                                            <div class="input-field">
+                                                <input type="text" class="text-input" placeholder="4444444">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                    <p> Patient Photo</p>
+
+                                    <div class="input-field">
+                                        <div class="center">
+
+                                            <div class="docs-preview clearfix">
+                                                <div class="img-preview preview-lg">
+                                                    <div id="result-wrapper">
+                                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                        <div class="middle">
+                                                            <div class="text">
+                                                                <a class=" modal-trigger showHover"  data-toggle="modal" data-target="#myModal"><i class="mdi mdi-camera"></i></a>
+                                                                <p>Upload</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <img src="~/Elite/images/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="myModal" class="modal imageModel">
+                                                    <div class="modal-content">
+
+                                                        <div class="row">
+                                                            <div id="main-cropper"></div>
+                                                            @*<a class="btn actionDone">Done</a>
+                            <a class="btn actionCancel">Cancel</a>*@
+                                                        </div>
+                                                        <div class="row">
+                                                            <a class="btn add-btn button actionUpload">
+                                                                <i class="material-icons">cloud_upload</i>
+                                                                <input type="file" class="custom-file-input" id="upload">
+                                                            </a>
+                                                            <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="material-icons">rotate_left</i></a>
+                                                            <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="material-icons">rotate_right</i></a>
+                                                            <a class="btn modal-close add-btn" disabled id="showResult">Save</a>
+                                                            @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                            <a class="btn modal-close add-btn">Cancel</a>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    @*<div class="modal-footer">
+
+                        <a href="javascript:void(0);" class="modal-action modal-close btn ">Save</a>
+                        <a href="javascript:void(0);" class="modal-action modal-close btn btn-secondary">Cancel</a>
+                    </div>*@
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                                    <p>Electronic Signature Password <span class="required">*</span></p>
+
+                                                    <div class="input-field">
+                                                        <input type="password" class="text-input" placeholder="85984983">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                                    <p>Confirm Electronic Signature Password <span class="required">*</span></p>
+
+                                                    <div class="input-field">
+                                                        <input type="password" class="text-input" placeholder="85984983">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <br />
+                                            <a href="javascript:void(0)" class="LightBlue">Forgot Signature Password?</a>
+
+                                            <div class="row">
+                                                <div class="col-md-8 col-sm-8  col-12 col-lg-8 col-xl-8 ">
+                                                    <p> Your Signature Is:</p>
+
+                                                    <div class="input-field">
+                                                        <img src="~/app-assets/images/avatar/avatar-1.png" alt="patient-img" class="Signatureimg" height="250" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-sm-4  col-12 col-lg-4 col-xl-4 ">
+                                                    <p> Your Signature Image Is:</p>
+
+                                                    <div class="input-field">
+                                                        <img src="~/app-assets/images/avatar/avatar-1.png" alt="patient-img" class="Signatureimg" height="250" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class=" col float-right">
+                                                    <input type="button" value="Update Signature" class="btn btn-lg update-sign" />
+                                                    <input type="button" value="Update Signature Image" class="btn btn-lg update-sign update-sign" />
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="checkbox" class="check" id="minimal-checkbox-1 " checked="">
+                                                            <span class="ml-2">Accept SMS Notification &amp; Reminders</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="checkbox" class="check" id="minimal-checkbox-1 " checked="">
+                                                            <span class="ml-2">Accept Email Notificatio &amp;  Reminders </span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6 ">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="checkbox" class="check" id="minimal-checkbox-1 " checked="">
+                                                            <span class="ml-2">Accept Face Recognition</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6 col-sm-6  col-12 col-lg-6 col-xl-6">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="checkbox" class="check" id="minimal-checkbox-1 " checked="">
+                                                            <span class="ml-2">Accept Biometric Recognition </span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class=" col ">
+                                                    <p>Communication Preference</p>
+                                                    <div class="input-field">
+                                                        <ul class="icheck-list">
+                                                            <li class="yes">
+                                                                <input type="checkbox" class="check" id="minimal-checkbox-1 " Checked>
+                                                                <label for="minimal-checkbox-1">SMS</label>
+                                                            </li>
+                                                            <li class="no">
+                                                                <input type="checkbox" class="check" id="minimal-checkbox-2" checked>
+                                                                <label for="minimal-checkbox-2">Phone</label>
+                                                            </li>
+                                                            <li class="no">
+                                                                <input type="checkbox" class="check" id="minimal-checkbox-2" checked>
+                                                                <label for="minimal-checkbox-2">Email</label>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+
+
+                                            <div class="row mt-5">
+                                                <div class="col s12 m12">
+                                                    <div class="center">
+                                                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+</form>
+                    </div>
+                </div>
+                </div>
+            
+    </section>
+</div>

@@ -1,0 +1,503 @@
+﻿@model ReportsViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+    <form asp-action="PlanOfCare" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+        <div class="row">
+            <div class="col">
+                <p>
+                    What is your proposed treatment?
+                </p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="PlanOfCare.ProposedTreatment" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    Medication list medications prescribed:
+                </p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="PlanOfCare.MedicationsPrescribed" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    Medication list over-the-counter medications advised:
+                </p>
+                <div class="input-field">
+                    <textarea placeholder="Enter Detail" asp-for="PlanOfCare.MedicationsAdvised" class="form-control"></textarea>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    Medication restrictions:
+                </p>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" asp-for="PlanOfCare.IsMedicationRestrictions" value="None" id="IsMedicationRestrictionsNone" name="PlanOfCare.IsMedicationRestrictions" autocomplete="off">
+                            <label class="custom-control-label" for="IsMedicationRestrictionsNone"> None</label>
+                        </div>
+                      
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" asp-for="PlanOfCare.IsMedicationRestrictions" id="IsMedicationRestrictionsYes" value="May affect patient's ability to return to work" name="PlanOfCare.IsMedicationRestrictions" autocomplete="off">
+                            <label class="custom-control-label" for="IsMedicationRestrictionsYes" > May affect patient's ability to return to work, make patient drowsy, or other issue. Explain below:</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-field">
+                            <textarea placeholder="Enter Detail" asp-for="PlanOfCare.MedicationRestrictions" class="form-control"></textarea>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+
+            <div class="col">
+                <p>Full Name</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" asp-for="PlanOfCare.FullName" placeholder="Enter Full Name" />
+                </div>
+            </div>
+            <div class="col">
+                <p>Date of injury/onset of illness:</p>
+                <div class="input-field">
+                    <input type="date" class="text-input" asp-for="PlanOfCare.DateOfInjury" placeholder="Enter" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>Does the patient need diagnostic tests or referrals?</p>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" value="Yes" asp-for="PlanOfCare.IsDiagnosticTestsReferrals" id="IsDiagnosticTestsReferralsYes" autocomplete="off">
+                            <label class="custom-control-label" for="IsDiagnosticTestsReferralsYes">
+                                Yes
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input" value="No" asp-for="PlanOfCare.IsDiagnosticTestsReferrals" id="IsDiagnosticTestsReferralsNo" autocomplete="off">
+                            <label class="custom-control-label" for="IsDiagnosticTestsReferralsNo">
+                                No
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p>Tests:</p>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <p>Referrals</p>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="PlanOfCare.IsCTScan" id="IsCTScan">
+                            <label class="custom-control-label" for="IsCTScan">
+                                CT Scan
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.CTScan" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsChiropractor" id="IsChiropractor">
+                            <label class="custom-control-label" for="IsChiropractor">Chiropractor</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.Chiropractor" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsEMGNCS" id="IsEMGNCS">
+                            <label class="custom-control-label" for="IsEMGNCS">
+                                EMG/NCS
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.EMGNCS" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  asp-for="PlanOfCare.IsInternistFamilyPhysician" class="custom-control-input" id="IsInternistFamilyPhysician">
+                            <label class="custom-control-label" for="IsInternistFamilyPhysician">Internist/Family Physician</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.InternistFamilyPhysician" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsOccupationalTherapist" id="IsOccupationalTherapist">
+                            <label class="custom-control-label" for="IsOccupationalTherapist">
+                                Occupational Therapist
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.OccupationalTherapist" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="PlanOfCare.IsMRI" id="IsMRI">
+                            <label class="custom-control-label" for="IsMRI">
+                                MRI (Specify):
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.MRI" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsLab" id="IsLab">
+                            <label class="custom-control-label" for="IsLab">
+                                Labs (Specify):
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.Lab" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control  custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsPhysicalTherapist" id="IsPhysicalTherapist">
+                            <label class="custom-control-label" for="IsPhysicalTherapist">
+                                Physical Therapist
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.PhysicalTherapist" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsXRays" id="IsXRays">
+                            <label class="custom-control-label" for="IsXRays">
+                                X-rays (Specify):
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.XRays" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsSpecialistIn" id="IsSpecialistIn">
+                            <label class="custom-control-label" for="IsSpecialistIn">
+                                Specialist in
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.SpecialistIn" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsOtherXRay" id="IsOtherXRay" >
+                            <label class="custom-control-label" for="IsOtherXRay">
+                                Other (Specify):
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.OtherXray" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox"  class="custom-control-input" asp-for="PlanOfCare.IsOtherSpecialistIn" id="IsOtherSpecialistIn" >
+                            <label class="custom-control-label" for="IsOtherSpecialistIn">
+                                Other (Specify):
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="PlanOfCare.OtherSpceialistIn" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row mt-1">
+            <div class="col">
+                <p>
+                    Assistive devices prescribed for this patient:
+                </p>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" value="true" asp-for="PlanOfCare.IsCane"  id="PlanOfCareIsCane">
+                            <label class="custom-control-label" for="PlanOfCareIsCane" >
+                                Cane
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="PlanOfCare.IsCrutches" id="IsCrutches" >
+                            <label class="custom-control-label" for="IsCrutches">Crutches</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" asp-for="PlanOfCare.IsOrthotics" id="IsOrthotics" >
+                            <label class="custom-control-label" for="IsOrthotics">Orthotics</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="PlanOfCare.IsWalker" id="IsWalker">
+                            <label class="custom-control-label" for="IsWalker">Walker</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="PlanOfCare.IsWheelChair" id="IsWheelChair">
+                            <label class="custom-control-label" for="IsWheelChair">Wheelchair</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input"  asp-for="PlanOfCare.IsOtherDevice" id="IsOtherDevice" >
+                            <label class="custom-control-label" for="IsOtherDevice">Other (specify)</label>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col">
+                <p>
+                    When is the patient's next follow-up appointment?
+
+                </p>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" value="Within a week" class="custom-control-input" id="FollowUpNextAppointmentWithin" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointmentWithin">
+                                Within a week
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment2" value="1-2 weeks" class="custom-control-input" autocomplete="off" >
+                            <label class="custom-control-label" for="FollowUpNextAppointment2" >1-2 weeks</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment3" value="3-4 weeks" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointment3" >3-4 weeks</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment4" value="5-6 weeks" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointment4" >5-6 weeks</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment5" value="7-8 weeks" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointment5" >7-8 weeks </label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment6" value="months" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointment6">months</label>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" asp-for="PlanOfCare.FollowUpNextAppointment" id="FollowUpNextAppointment7" value="Return as needed" class="custom-control-input" autocomplete="off">
+                            <label class="custom-control-label" for="FollowUpNextAppointment7">Return as needed</label>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                    @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+                </div>
+            </div>
+        </div>
+    </form>

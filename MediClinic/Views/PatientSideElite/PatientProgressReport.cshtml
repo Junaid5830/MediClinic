@@ -1,0 +1,89 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "PatientProgressReport";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    int count = 1;
+    string LastTabClass = "";
+}
+
+@section styles{ 
+<style>
+    .customtab li a.nav-link {
+        font-size: 16px;
+        margin-right: 4px !important;
+    }
+
+        .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+            color: #fff !important;
+            background-color: #547cea !important;
+        }
+
+        .customtab li a.nav-link.active {
+            border-bottom: 2px solid black !important;
+        }
+</style>
+}
+@section scripts
+
+{
+    <script>
+        $(document).ready(function () {
+            VisitDetail($('.last-tab').attr('visit-id'));
+        });
+        $('#print').click(function () {
+            window.location.href = "/Appointment/VisitsDetail?Id=" + $("#visit-id-hidden").val() + "&IsForPrint=print";
+        });
+        function VisitDetail(VisitId) {
+                $('.partial').html('');
+                $.get("@Url.Action("VisitsDetail", "Appointment")", { Id: VisitId }).done(function (data) {
+                $(".partial").html('');
+                $(".partial").html(data);
+                $("#a").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+                $("#VitalTab").DataTable({ "info": false, responsive: true, lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+                $('#Immunization').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+                });
+            });
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav nav-tabs customtab2 customtab" role="tablist">
+                        @foreach (var item in Model.GetVisitsListDto)
+                        {
+
+                            if (count == Model.GetVisitsListDto.Count)
+                            {
+                                LastTabClass = "last-tab";
+                            }
+                            <li class="nav-item"> <a class="nav-link @LastTabClass" visit-id="@item.VisitId" data-toggle="tab" onclick="VisitDetail(@item.VisitId,this)" role="tab"><span class="hidden-xs-down">@item.CreatedDate</span></a> </li>
+                            count++;
+
+                        }
+                    </ul>
+                </div>
+                <div class="col-12">
+
+
+                    <div class="tab-content ">
+                        <div class="tab-pane active partial">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a id="print" class="btn btn-success waves-effect text-left">Print</a>
+    </div>
+</div>

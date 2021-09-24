@@ -1,0 +1,71 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHMyPhysician != null && Model.GetMHMyPhysician.Count() > 0)
+{
+    <table class="table centered highlight">
+        <thead>
+            <tr>
+
+                <th class="left">Sr#</th>
+
+                <th>Physician</th>
+                <th>Location</th>
+                <th>Hospital</th>
+                <th>Phone No</th>
+                <th>Specialty</th>
+                <th>Notes</th>
+
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+
+            }
+            @foreach (var loop in Model.GetMHMyPhysician)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Name</td>
+                    <td>@loop.Location</td>
+                    <td>@loop.Hospital</td>
+                    @if (loop.PhoneNo != null)
+                    {
+                        <td>@loop.PhoneNo</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    @if (loop.Specialty != null)
+                    {
+                        <td>@loop.Specialty</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    <td>
+                        <a href="javascript:void(0)" class="EditMyPhysician" MyPhysicianId="@loop.Id"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" class="DeleteMyPhysician" MyPhysicianId="@loop.Id"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

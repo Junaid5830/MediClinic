@@ -1,0 +1,265 @@
+﻿@model MediClinic.Models.PackageViewModel
+
+@{
+    ViewData["Title"] = "SubscriptionPackage";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientId = ViewContext.RouteData.Values["id"];
+
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(document).ready(function () {/*$("#PackageList").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            var table = $('#PackageList').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+        });
+        $("input[type='radio']").click(function () {
+            var radioValue = $(this).val();
+            debugger;
+            if (radioValue == 0) {
+                $('#UserLimitForm').show();
+            }
+            else {
+                $('#UserLimitForm').hide();
+            }
+        });
+        function getRecordList() {
+            $.get("/SettingsEliteController/GetPackageList").done(function (data) {
+                debugger;
+                $('.table-responsive').html('');
+                $('.table-responsive').html(data);
+                $('#PackageList').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+                });
+            });
+        }
+        function ModelOpen() {
+            $('input').val('');
+            $('#RoleModal').modal('show');
+        }
+        function onCreateRole(data) {
+            debugger;
+
+            if (data) {
+                $(".checkmark").show().fadeOut(6000);
+
+                $('input').val('');
+                $('#RoleModal').modal('hide');
+                getRecordList()
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+        }
+
+    </script>
+}
+
+
+<!--<div id="breadcrumbs-wrapper">-->
+<!-- Search for small screen-->
+<!--<div class="container">
+        <div class="row">
+
+            <div class="col s6 m9 l9">
+                <a class="waves-effect waves-light float-right" href="@Url.Action("Setting","SettingElite",new { Id = patientId })">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>-->
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-4 col-sm-4 col-md-4 col-lg-3">
+                    <h5 class="breadcrumbs-title color-blue">Subscription Packages</h5>
+                </div>
+                <div class="col-8 col-sm-8 col-md-5 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+
+                    <a class="btn  float-right add-btn set_smallscreen" onclick="ModelOpen()">
+                        Add New Packages
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <partial name="~/Views/SettingsElite/_PartialSetting/_SubscriptionPackageList.cshtml" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="RoleModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue">Subscription Packages</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <form class="col-sm-12" asp-action="CreatePackage" asp-controller="SubscriptionPackages" method="post" id="SurgeryCenterForm" data-ajax="true" data-ajax-success="onCreateRole(data)">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Name
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.PackageName" class="text-input first-name-input" placeholder="Enter Package Name">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                No Of Provider
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.ProviderNo" class="text-input mr-number-input" placeholder="Enter No Of Provider">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Data Storage
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.DataStorage" class="text-input first-name-input" placeholder="Enter Data Storage">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                User Limit
+                            </p>
+                            <div class="input-field">
+                                <div class="row">
+                                    <div class="col-sm-3  col-3 col-lg-3 col-xl-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="UserYes" class="custom-control-input" name="phoneYes" value="1">
+
+                                            <label class="custom-control-label" for="UserYes">Unlimited</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="UserNo" class="custom-control-input" name="phoneYes" value="0">
+                                            <label class="custom-control-label" for="UserNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="input-field mt-2" id="UserLimitForm" style="display:none">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="text" asp-for="subsriptionPackageDto.UserLimit" class="text-input mr-number-input" placeholder="Enter User Limit">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Additional GB
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.AdditionalGB" class="text-input first-name-input" placeholder="Enter Additional GB">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Additional TB
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.AdditionalTB" class="text-input mr-number-input" placeholder="Enter Additional TB">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Price
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.PackagePrice" class="text-input first-name-input" placeholder="Enter Price">
+                            </div>
+                        </div>
+                        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                            <p>
+                                Package Description
+                            </p>
+                            <div class="input-field">
+                                <input type="text" asp-for="subsriptionPackageDto.PackageDescriptin" maxlength="127" class="text-input mr-number-input" placeholder="Enter Description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    <button type="button" class="btn Recreate waves-effect text-left" data-dismiss="modal">Close</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>

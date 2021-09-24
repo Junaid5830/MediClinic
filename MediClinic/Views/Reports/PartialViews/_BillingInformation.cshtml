@@ -1,0 +1,370 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model MediClinic.Models.ReportsViewModel
+@{ 
+    int unique = 0;
+    int sub_total = 0;
+}
+<form asp-action="BillingInformation" asp-controller="Reports" method="post" id="ReportBillingInformation">
+    <div class="InfoData">
+        <section class="tr">
+            <div class="row">
+                <div class="col">
+                    <p>Employer's insurance carrier <span class="required"> * </span></p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="EmployeeInsuranceCarrier" id="InsuranceCarrier" placeholder="Enter insurance carrier" />
+                        <span class="required" id="InsuranceCarrierErr"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <p>Carrier Code #:</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="CarrierCode" placeholder="Enter Carrier Code" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p>
+                        Insurance carrier's address:
+                    </p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="InsuranceCarrierAddress" placeholder="Enter Number & street" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <p>City</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="City" placeholder="Enter City" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <p>State</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="State" placeholder="Enter State" />
+
+                    </div>
+                </div>
+                <div class="col">
+                    <p>Zip</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="zip" placeholder="Enter zip" />
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <div class="ICDCode">
+        <div class="tr">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>
+                        Diagnosis or nature of disease or injury:
+                    </p>
+                </div>
+                <div class="col-sm-4">
+                    <p>
+                        Enter ICD10 Code:
+                    </p>
+                    <div class="input-field">
+                        <input class="text-input td" type="text" id="codeOne" name="ICDCode" />
+                        <span class="required" id="codeOneErr"></span>
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeTwo" />
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeThree" />
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeFour" />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <p>
+                        ICD10 Descriptor:
+                    </p>
+                    <div class="input-field">
+                        <input class="text-input td" type="text" name="ICDCodeDescriptionOne" />
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeDescriptionTwo" />
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeDescriptionThree" />
+                    </div>
+                    <div class="input-field mt-1">
+                        <input class="text-input td" type="text" name="ICDCodeDescriptionFour" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="InfoData">
+        <section class="tr">
+            <div class="row">
+
+
+                <div class="col">
+                    <p>Full Name <span class="required">*</span></p>
+                    <div class="input-field">
+                        <input type="text" class="text-input td" placeholder="Enter Patient Full Name" id="patientName" name="PatientName" />
+                        <span class="required" id="PatientNameErr"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <p>Date of injury/onset of illness:</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input datepicker td" placeholder="Enter Date" name="DateOfInjury" />
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+    @*<div class="row tablee">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="myTableEUO" class="table dataTables_wrapper ">
+                    <thead>
+                        <tr class="uppercase">
+
+                            <th>Date of Service</th>
+                            <th>Place of service</th>
+                            <th>leave Bank</th>
+                            <th>
+                                Use WCB Codes
+                               
+                            </th>
+                            <th> CPT/HCPCS</th>
+                            <th>Modifier</th>
+                            <th>Diagnosis Code</th>
+                            <th>$Charge</th>
+                            <th>Day Unit</th>
+                            <th>COB</th>
+                            <th>Zip</th>
+                            <th>option</th>
+                            <th class="all">Action  </th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="tby">
+                        
+                            <tr style="cursor: pointer">
+                                <text type="hidden" value="" />
+                                <td class=""><input  type="text" placeholder="Enter Product" class="textLine product" value="" /></td>
+                                <td class=""><input  type="text" placeholder="Enter Description" class="textLine description" value="" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Qty" type="text" placeholder="Enter Quantity"  value="" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Rate" type="text" placeholder="Enter Rate"value="" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()"  /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()"  /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()"  /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" /></td>
+                                <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()"/></td>
+                                
+                                <td>
+                                    <a class="deleteRow"> <i class="icon-trash" deleterow=""></i></a>
+                                </td>
+                            </tr>
+                         
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>*@
+    <div class="row">
+        <div class="col-sm-2">
+            <p>Date of Service</p>
+        </div>
+        <div class="col-sm-1">
+            <p>Place of service</p>
+
+        </div>
+        <div class="col-sm-1">
+            <p>leave Bank</p>
+
+        </div>
+        <div class="col-sm-3">
+            <p>
+                Use WCB Codes<br />
+                Procedures, Services or Supplies
+            </p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>CPT/HCPCS <span class="required">*</span></p>
+
+                </div>
+
+                <div class="col-sm-6">
+                    <p>Modifier</p>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <p>Diagnosis Code</p>
+
+        </div>
+        <div class="col-sm-1">
+            <p>$Charge <span class="required">*</span></p>
+
+        </div>
+        <div class="col-sm-1">
+            <p>Day Unit</p>
+
+        </div>
+        <div class="col-sm-1">
+            <p>COB</p>
+
+        </div>
+        <div class="col-sm-1">
+            <p>zip code</p>
+
+        </div>
+    </div>
+    <div id="invoiceDetail">
+        <section class="tr">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-field">
+                                <input class="datepicker text-input td" name="DateForm" id="from" type="text" placeholder="MM/DD/YYYY">
+
+                            </div>
+                        </div>
+                        To
+                        <div class="col-sm-6">
+                            <div class="input-field">
+
+                                <input class="datepicker text-input td" name="DateTo" id="to" type="text" placeholder="MM/DD/YYYY">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="PlaceOfService" />
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="LeaveBank" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="input-field">
+                                <input class="text-input td" type="text" id="icdCptCode" name="CPT">
+                                <span class="required" id="HSCPCode"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="input-field">
+
+                                <input class=" text-input td" type="text" name="Modifier">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="DisgnosisCode" />
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" id="charges" name="Charges" />
+                        <span class="required" id="CodeCharge"></span>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="DaysOrUnits" />
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="COB" />
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <div class="input-field">
+                        <input type="text" class="text-input td" name="Zip" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group-append float-right">
+                        <button class="btn btn-success " type="button" onclick="education_fields();"><i class="ti-plus"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="BillingInformation_fields"></div>
+
+        </section>
+
+    </div>
+
+    <div class="InfoData">
+        <section class="tr">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input td" name="PPO" id="PPO" autocomplete="off">
+                        <label class="custom-control-label" for="PPO"> Check here if services were provided by a WCB preferred provider organization (PPO).</label>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <p>Total Charge</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <p>Ammount Pay</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <p>Balance Due</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input" />
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

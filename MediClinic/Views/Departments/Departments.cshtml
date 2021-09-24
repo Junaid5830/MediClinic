@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewData["Title"] = "Department Create";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{ 
+<style>
+    .custom-class{
+        padding-top:36px;
+    }
+    label{
+        margin-left:10px;
+        margin-right:10px;
+        
+    }
+    .hidden{
+        display:none;
+    }
+</style>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Departments</h5>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class=" col-sm-4 col-md-4 col-xl-5 col-12 ">
+                <p>Departments</p>
+                <div class="input-field ">
+                    <input type="text" class="text-input" id="departmentName" placeholder="All departments  ">
+                </div>
+            </div>
+
+            <div class=" col-sm-4 col-md-4 col-xl-4 col-12 ">
+                <p>Room</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" id="roomsInDepartment" placeholder="Enter rooms in department">
+                </div>
+
+            </div>
+            <div class=" col-sm-4 col-md-4 col-xl-1 col-12 ">
+
+                <div class="input-field pull-right custom-class">
+                    <a id="appendRoomBtn" href="javascript:void(0);" class="waves-effect waves-light  Recreate btn  "><i class="ti-plus"></i></a>
+                </div>
+            </div>
+
+
+        </div>
+        <br />
+
+        <div class="emergencyRooms">
+
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-xl-5 col-12">
+                <p>Does the department have an Inpatient Ward ?</p>
+                <label>
+                    <input type="radio" class="with-gap " name="InpatientWard" value="Yes" />
+                    <span>Yes</span>
+                </label>
+                <label>
+                    <input type="radio" class="with-gap " name="InpatientWard" value="No" />
+                    <span>No</span>
+                </label>
+
+
+
+            </div>
+            <div class="col-xl-5 col-12">
+                <p>Does the department have an ICU ?</p>
+                <label>
+                    <input type="radio" id="secondaryYes" class="with-gap " name="ICU" value="true" />
+                    <span>Yes</span>
+                </label>
+                <label>
+                    <input type="radio" id="secondaryNo" class="with-gap " name="ICU" value="false" />
+                    <span>No</span>
+                </label>
+
+
+
+            </div>
+            
+        </div>
+        <div id="InpatientWard" class="row hidden">
+            
+            <div class="col-xl-4 col-12">
+                    <p>How many inpatient ward</p>
+                    <div class="input-field">
+                        <input type="text" class="text-input" id="inpatientInDepartment" placeholder="Enter inpatient ward in department">
+
+                    </div>
+
+             </div>
+             <div class="col-xl-1 col-12 ">
+
+                    <div class="input-field pull-right custom-class">
+                        <a id="btnInpatientWard" href="javascript:void(0);" class="waves-effect waves-light  Recreate btn  "><i class="ti-plus"></i></a>
+                    </div>
+             </div>
+        </div>
+        <div class="inPatientWardsRoom">
+
+        </div>
+            <br />
+            <div class=" row">
+                <div class="col-xl-10">
+
+
+                </div>
+                <div class="col-xl-2">
+
+                    <div class="input-field pull-right">
+                        <a href="javascript:void(0);" class="add-btn   btn">Save</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+</div>
+
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        let count = 0;
+        $('.select2').select2();
+        $("#appendRoomBtn").click(function () {
+            debugger
+           // let roomsArray = [];
+            let departmentName = $("#departmentName").val();
+            let rooms = $("#roomsInDepartment").val();
+            rooms = parseInt(rooms);
+            for (var i = 0; i < rooms; i++) {
+                count++;
+                let room = roomString(count);
+              //  roomsArray.push(room);
+                $('.emergencyRooms').append(room);
+                selectRefresh();
+
+            }
+           
+        });
+        $("#btnInpatientWard").click(function () {
+            debugger
+            let inPatientWards = $("#inpatientInDepartment").val();
+            inPatientWards = parseInt(inPatientWards);
+            for (var i = 0; i < inPatientWards; i++) {
+                count++;
+                let inPatientWard = roomString(count);
+                //  roomsArray.push(room);
+                $('.inPatientWardsRoom').append(inPatientWard);
+                selectRefresh();
+            }
+        });
+        function selectRefresh() {
+            $('.select2').select2({
+                tags: false,
+                placeholder: "Select Ward",
+                allowClear: true,
+                width: '100%'
+            });
+        }
+        function roomString(count) {
+            let roomString = "";
+            roomString += '<div class="col remove-row">';
+            roomString += '<div class="row">';
+            roomString += '<div class="col-lg-2">';
+            roomString += '<p>Room Number</p>';
+            roomString += '<div class="input-field">';
+            roomString += '<input  type="text" placeholder="Enter Room Number" class="text-input">';
+            roomString += '<span class="required"></span>';
+            roomString += '</div></div>';
+            roomString += '<div class="col-lg-3">';
+            roomString += '<p>Room Name  </p>';
+            roomString += '<div class="input-field">';
+            roomString += '<input  type="text" placeholder="Enter Room Name" class="text-input" >';
+            roomString += '<span class="required"></span>';
+            roomString += '</div></div>';
+            roomString += '<div class="col-lg-3">';
+            roomString += '<p>Room Type</p>';
+            roomString += '<select data-placeholder="Select Ward Type" class="select2">';
+            roomString += '<option value="" selected disabled></option>';
+            roomString += '<option value="General">General</option>';
+            roomString += '<option value="Private">Private</option>';
+            roomString += '<option value="Semi Private">Semi Private</option>';
+            roomString += '<option value="VIP">VIP</option>';
+            roomString += '</select>';
+            roomString += '<span class="required"></span>';
+            roomString += '</div>';
+            roomString += '<div class="col-lg-2">';
+            roomString += '<p>Rent</p>';
+            roomString += '<div class="input-field">';
+            roomString += '<input  type="text" placeholder="Enter Room Name" class="text-input" >';
+            roomString += '<span class="required"></span>';
+            roomString += '</div></div>';
+            roomString += '<div class="col-lg-2">';
+            roomString += '<div class="input-field pull-right custom-class">';
+            roomString += '<a  href="javascript:void(0);" class="waves-effect waves-light remove-parent  Recreate btn  "><i class="ti-close"></i></a>';
+            roomString += '</div></div>';
+            roomString += '</div></div>';
+            
+            return roomString;
+        }
+        $('input:radio[name="InpatientWard"]').change(function () {
+            debugger
+            if ($(this).val()=="Yes") {
+                $("#InpatientWard").removeClass("hidden");
+            }
+            else {
+                $("#InpatientWard").addClass("hidden");
+            }
+        });
+        $(document).on('click', '.remove-parent', function () {
+            debugger
+            $(this).closest('div .remove-row').remove();
+        });
+    </script>
+
+}

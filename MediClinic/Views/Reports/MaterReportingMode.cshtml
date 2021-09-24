@@ -1,0 +1,1204 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "MaterReportingMode";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+@section styles
+{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+    <style>
+        @@media screen and (max-width: 768px) {
+            #AppointmentModal .modal-dialog {
+                max-width: 500px !important;
+            }
+        }
+
+        #AppointmentModal .modal-dialog {
+            max-width: 52%;
+        }
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+            border-color: var(--bubble-color);
+        }
+
+
+
+        .custom-control-label::before {
+            border: 2px solid var(--bubble-color);
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: var(--bubble-color) !important;
+            border-color: var(--bubble-color) !important;
+        }
+
+        .custom-control-label::after {
+            position: relative !important;
+        }
+
+        [type="checkbox"]:checked + span:not(.lever)::before {
+            border-right: 2px solid var(--bubble-color);
+            border-bottom: 2px solid var(--bubble-color);
+        }
+
+        .table-responsive {
+            overflow-x: unset !important
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .disable label span:after {
+            border: 2px solid var(--bubble-color) !important;
+        }
+
+        .FLNameLetter {
+            background: #f1f1f1;
+            padding: 11px;
+            border-radius: 50%;
+            color: #547cea;
+            font-weight: bold;
+        }
+
+        .modal span {
+            color: #6b6f82 !important;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+
+
+
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+        var PatientId = 0;
+        function IncomeOption(patientId, FullName, patientDOB) {
+            debugger
+            console.log("Info ", patientId, FullName, patientDOB);
+            $("#nameForIncome").text(FullName);
+            $("#idForIncome").text(patientId);
+            $("#dobForIncome").text(patientDOB);
+            $("#pateintIdForIncome").val("");
+            
+            $("#quantityField").val("");
+            $("#pricePerUnit").val("");
+            PatientId = patientId;
+            $("#totalAmount").val("");
+            $("#pateintIdForIncome").val(patientId);
+            $.get("/Report/ReportIncomeList", { Id: patientId }).done(function (data) {
+                debugger;
+
+
+                $('#IncomeModelList .table-responsive').html('');
+                $('#IncomeModelList .table-responsive').html(data);
+                $("#IncomeTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+               
+            });
+            $("#IncomeModelList").modal('show');
+        }
+        function ExpenceOption(patientId, FullName, patientDOB) {
+            debugger
+            console.log("Info ", patientId, FullName, patientDOB);
+
+            $("#nameForExpence").text(FullName);
+            $("#idForExpence").text(patientId);
+            $("#dobForExpence").text(patientDOB);
+            $("#pateintIdForExpence").val("");
+
+            $("#quantityEx").val("");
+            $("#pricePerUnitEx").val("");
+
+            $("#totalAmountEx").val("");
+            //changeExpenceCategory
+            //   $("#changeExpenceCategory").val("0").change();
+            $("#pateintIdForExpence").val(patientId);
+            $("#ExpenceModal").modal('show');
+        }
+        var room = 1;
+
+        function IncomeFields_fields() {
+
+            room++;
+            var objTo = document.getElementById('BillingInformation_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + room);
+            var rdiv = 'removeclass' + room;
+            //'<div class="row"><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" placeholder="School name"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Major" name="Major[]" value="" placeholder="Major"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Degree" name="Degree[]" value="" placeholder="Degree"></div></div><div class="col-sm-3 nopadding"><div class="form-group"><div class="input-group"> <select class="form-control" id="educationDate" name="educationDate[]"><option value="">Date</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option> </select><div class="input-group-append"> <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i> </button></div></div></div></div><div class="clear"></div></row>';
+            divtest.innerHTML = '<section class="tr"><div class="row"><div class="col-sm-2"><div class="row"><div class="col-sm-6"><div class="input-field"><input name="DateForm" class="datepicker text-input td" id="from" type="text" placeholder="MM/DD/YYYY"></div></div>To<div class="col-sm-6"><div class="input-field"><input class="datepicker text-input td input-styling claim_tab patientClaimInfoTxtField" name="DateTo" id="to" type="text" placeholder="MM/DD/YYYY"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="PlaceOfService"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="LeaveBank"/></div></div><div class="col-sm-3"><div class="row"><div class="col-sm-6"><div class="input-field"><input class="text-input td" type="text" name="CPT"></div></div><div class="col-sm-6"><div class="input-field"><input class=" text-input td" type="text" name="Modifier"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DisgnosisCode"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Charges"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DaysOrUnits"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="COB"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Zip"/></div></div></div><div class="row"><div class="col"><div class="input-group-append float-right"><button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="ti-minus"></i> </button></div></div></div></div>'
+            objTo.appendChild(divtest)
+        }
+
+        function remove_education_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+        $("#addMoreExpence").click(function () {
+            console.log("Clicked on Add More Income");
+            ExpenceCount++;
+            var additionClassEx = "additionClassEx" + `${ExpenceCount}`;
+            var addMoreIncome = '<div class="main-row tr">'
+                + '<i class="mdi mdi-close remove-row change_size Recreate mt-2  btn"></i>'
+                + ' <input type="text" class="td" id="pateintIdForExpence" name="PatientId" hidden value="' + PatientId + '"/>'
+                + '<div class="row">'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Expence Category</p>'
+                + '<select data-placeholder="Select Category" data-val="' + `${ExpenceCount}` + '" class="select2 categoryField td" data-placeholder="Select Category" name="CategoryId" id="'
+                + additionClassEx
+                + '"'
+                + '> '
+                + '<option value="" selected disabled></option>'
+                + '</select>'
+                + '</div>'
+
+                + '<div class="col-12 col-md-6">'
+                + '<p>Quantity</p>'
+                + '<input type="text" class=" text-input app_empty quantityEx-' + ExpenceCount + '" data-val="' + `${ExpenceCount}` + '" onblur="QuantityCheck(event)" placeholder="Quantity">'
+                + '</div>'
+                + '</div>'
+                + '<div class="row">'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Quantity Per Unit</p>'
+                + '<input type="text" name="Quantity" class=" text-input app_empty td pricePerUnitEx-' + ExpenceCount + '" placeholder="Quantity Per Unit">'
+                + '</div>'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Amount</p>'
+                + '<input type="text" class=" text-input app_empty td totalAmountEx-' + ExpenceCount + '" name="Amount" placeholder="Amount">'
+                + '</div>'
+                + '</div>';
+
+            $(".MoreExpenceDiv").append(addMoreIncome);
+
+            $.get("/Reports/GetListForDropDown").done(function (data) {
+                debugger
+                //providerlistNo = data;
+                var id = ("#" + `${additionClassEx}`)
+                for (var i = 0; i < data.length; i++) {
+                    var TypeIdlist = $(id);
+                    var option = $('<option value="' + data[i].value + '">' + data[i].text + '</option>');
+                    TypeIdlist.append(option);
+                    //TypeIdlist.append($('<option></option>').val(data[i].CategoryId).text(data[i].CategoryName));
+
+                }
+
+            });
+
+            selectRefresh();
+
+            return false;
+        });
+
+
+        var incomeCount = 0;
+        var ExpenceCount = 0;
+
+        $("#addMoreIncome").click(function () {
+            console.log("Clicked on Add More Income");
+            incomeCount++;
+            var additionClass = "additionClass" + `${incomeCount}`;
+            var addMoreIncome = '<div class="main-row tr">'
+                + '<i class="mdi mdi-close remove-row change_size Recreate mt-2  btn"></i>'
+                + '<input type="text" class="td" id="pateintIdForIncome" name="ReportIncome.PatientId" hidden value="' + PatientId + '"/>'
+                + '<div class="row">'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Income Category</p>'
+                + '<select data-placeholder="Select Category" data-val="' + `${incomeCount}` + '"' + ' asp-items="Model.IncomeCategoryList" id="' + additionClass + '"'
+                + ''
+                + 'class="changeIncomeCategory td select2 categoryField" data - placeholder="Select Category" name= "CategoryId" > '
+                + '<option value="" selected disabled>--Select--</option>'
+                + '</select>'
+                + '</div>'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Quantity</p>'
+                + '<input type="text" data-val="' + `${incomeCount}` + '"' + ' onblur="QuantityCheck(event)"  class=" text-input app_empty quantityField-' + incomeCount + '" name="Quantity" placeholder="Quantity">'
+                + '</div>'
+                + '</div>'
+                + '<div class="row">'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Quantity Per Unit</p>'
+                + '<input type="text" class=" text-input td app_empty pricePerUnit-' + incomeCount + '" placeholder="Quantity Per Unit">'
+                + '</div>'
+                + '<div class="col-12 col-md-6">'
+                + '<p>Amount</p>'
+                + '<input type="text" class=" text-input td app_empty totalAmount-' + incomeCount + '" name="Amount" placeholder="Amount">'
+                + '</div>'
+                + '</div>';
+
+            $(".MoreIncomeDive").append(addMoreIncome);
+
+            $.get("/Reports/GetListForDropDown").done(function (data) {
+                debugger
+                //providerlistNo = data;
+                var id = ("#" + `${additionClass}`)
+                for (var i = 0; i < data.length; i++) {
+                    var TypeIdlist = $(id);
+                    var option = $('<option value="' + data[i].value + '">' + data[i].text + '</option>');
+                    TypeIdlist.append(option);
+                    //TypeIdlist.append($('<option></option>').val(data[i].CategoryId).text(data[i].CategoryName));
+
+                }
+
+            });
+            selectRefresh();
+            return false;
+        });
+        ////CategoryId CategoryName
+        $('.modal').on("change", ".select2", function (e) {
+            debugger;
+            var CaseValue = $(this).val();
+            var tagName = $(e.currentTarget).attr('data-val');
+            var pricePerUnit = ".pricePerUnit-" + tagName;
+            var pricePerUnitEx = ".pricePerUnitEx-" + tagName;
+
+            var idVal = $(this).val();
+            if (idVal === 0 || idVal === "0") {
+                return false;
+            } else {
+                $.ajax({
+                    url: "/reports/CategoryPrice",
+                    type: "POST",
+                    data: { id: idVal },
+                    success: function (data) {
+                        debugger
+
+                        $(pricePerUnit).val(data.categoryPricePerUnit);
+                        $(pricePerUnitEx).val(data.categoryPricePerUnit);
+                    }
+                });
+            }
+        })
+
+
+
+        $(".time-picker").hunterTimePicker();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        var ProviderId;
+        var Duration;
+        var selectedList = [];
+        var table;
+        $(document).ready(function () {
+            $('.select2').select2();
+            $('.select-all').click(function () {
+                debugger;
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $("#Patient-table").DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+                'order': [[3, 'asc']],
+                'columnDefs': [{
+                    "targets": [0],
+                    "orderable": false,
+                }]
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+
+            });
+            $('#provider_name').change(function () {
+                ProviderId = $('#provider_name option:selected').val();
+            });
+            $('#SlotDuration').change(function () {
+                Duration = $('#SlotDuration option:selected').val();
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+        });
+
+
+        $('#provider_name').change(function () {
+            ProviderId = $('#provider_name option:selected').val();
+        });
+        $('#SlotDuration').change(function () {
+            Duration = $('#SlotDuration option:selected').val();
+        });
+
+        function deletePatient(patientInfoId, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/PatientSide/PatientInfoDelete", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+
+
+
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+
+
+
+
+        $('#BulkAppointHide').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+                var tblData = "";
+                $('#listable tr:not(:first)').each(function () {
+
+                    var PatientId = $(this).find(".Pat_Id").attr("Pat_Id");
+                    var Provider_Id = ProviderId;
+                    var DurationTime = Duration;
+                    var Date = $("#AppointmentDate").val();
+                    var StartTime = $("#STime").val();
+
+                    tblData += (PatientId + "_" + Provider_Id + "_" + DurationTime + "_" + Date + "_" + StartTime + "|-|");
+                });
+
+                //$("#saveTemplate").prop('disabled', true);
+                $("#selectedData").val(tblData);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+
+                        }
+                    }
+                });
+            }
+
+        });
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Template Name already exists",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        function SuccessMsg() {
+            $(".checkmark").show().fadeOut(6000);
+
+            $("#AppointmentModal").modal('hide');
+        }
+
+
+        function selectRefresh() {
+            $('.select2').select2({
+                tags: true,
+                placeholder: "Select an Option",
+                allowClear: true,
+                width: '100%'
+            });
+
+        }
+        $(document).on('click', '.remove-row ', function () {
+            debugger
+            console.log("remove clicked");
+            $(this).closest('.main-row').remove();
+            return false;
+        });
+
+
+
+        function QuantityCheck(e) {
+            debugger;
+            var tagName = $(e.currentTarget).attr('data-val');
+            var QuantityIn = ".quantityField-" + tagName;
+            var QuantityInValue = $(QuantityIn).val();
+            var QuantityEx = ".quantityEx-" + tagName;
+            var QuantityExValue = $(QuantityEx).val();
+
+            var TotalAmmount = ".totalAmount-" + tagName;
+            var TotalAmmountEx = ".totalAmountEx-" + tagName;
+            var pricePerUnit = ".pricePerUnit-" + tagName;
+            var pricePerUnitValue = $(pricePerUnit).val();
+            var pricePerUnitEx = ".pricePerUnitEx-" + tagName;
+            var pricePerUnitExValue = $(pricePerUnitEx).val();
+
+
+            var TAmount = QuantityInValue * pricePerUnitValue;
+            var TAmountEx = QuantityExValue * pricePerUnitExValue;
+
+            $(TotalAmmount).val(TAmount);
+            $(TotalAmmountEx).val(TAmountEx);
+
+        }
+
+        function onCreateCategory(data) {
+            debugger
+
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+
+                $(".checkmark").show().fadeOut(6000);
+                var legalStatusSelectList = $('.categoryField');
+                legalStatusSelectList.append($('<option></option>').val(data.categoryValue).text(data.categoryText));
+                $(".color_Close").trigger("click");
+            }
+        }
+        function onCreateIncome(data) {
+            debugger
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save,Try Again',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            } else {
+                $(".checkmark").show().fadeOut(6000);
+                $("#IncomeModel").modal("hide");
+            }
+        }
+
+
+
+
+        function onCreateExpence(data) {
+            debugger
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save,Try Again',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            } else {
+                $(".checkmark").show().fadeOut(6000);
+                $("#ExpenceModal").modal("hide");
+            }
+        }
+
+
+        $('.changeIncomeCategory')
+            .select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+            });
+        $('.changeExpenceCategory')
+            .select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+            });
+        //function PatienAddOption(patientId, FullName, patientDOB) {
+        //    debugger
+        //    console.log("Info ", patientId, FullName, patientDOB);
+        //    $("#nameForIncome").text(FullName);
+        //    $("#idForIncome").text(patientId);
+        //    $("#dobForIncome").text(patientDOB);
+        //    $("#pateintIdForIncome").val("");
+        //    //  $("#changeIncomeCategory").val("0").change();
+        //    $("#quantityField").val("");
+        //    $("#pricePerUnit").val("");
+
+        //    $("#totalAmount").val("");
+        //    $("#pateintIdForIncome").val(patientId);
+        //    $("#IncomeModel").modal('show');
+        //}
+        //function ExpenceOption(patientId, FullName, patientDOB) {
+        //    debugger
+        //    console.log("Info ", patientId, FullName, patientDOB);
+
+        //    $("#nameForExpence").text(FullName);
+        //    $("#idForExpence").text(patientId);
+        //    $("#dobForExpence").text(patientDOB);
+        //    $("#pateintIdForExpence").val("");
+
+        //    $("#quantityEx").val("");
+        //    $("#pricePerUnitEx").val("");
+
+        //    $("#totalAmountEx").val("");
+        //    //changeExpenceCategory
+        //    //   $("#changeExpenceCategory").val("0").change();
+        //    $("#pateintIdForExpence").val(patientId);
+        //    PatientId = patientId;
+        //    $("#ExpenceModal").modal('show');
+        //}
+        $(document).on('submit', '#expenseForm', function (e) {
+            var arrText = [];
+            $("#expense .tr").each(function (index, value) {
+                var obj = {}
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        obj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        obj[$(this).attr('name')] = null;
+                    }
+                });
+                arrText.push(obj);
+            })
+            debugger;
+            var formData = ({ ReportExpenceList: arrText });
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                $(this).ajaxSubmit({
+                    data: { patientViewModel: formData },
+                    success: function (response) {
+                        debugger;
+                        if (response.success) {
+                            $(".checkmark").show().fadeOut(6000);
+                            $("input").val('');
+                            $(".modal").modal('hide');
+                        }
+                        else {
+                            new PNotify({
+                                title: 'Error!',
+                                text: 'Email is already exist',
+                                delay: 5000,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        //$('#upload').attr('disabled', false);
+                    },
+
+                    complete: function (xhr) {
+                        OnSuccessPatientInfomation();
+                    }
+                });
+
+            }
+        })
+        $(document).on('submit', '#IncomeForm', function (e) {
+            var arrText = [];
+            $("#Income .tr").each(function (index, value) {
+                var obj = {}
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        obj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        obj[$(this).attr('name')] = null;
+                    }
+                });
+                arrText.push(obj);
+            })
+            debugger;
+            var formData = ({ ReportIncomeList: arrText });
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                $(this).ajaxSubmit({
+                    data: { patientViewModel: formData },
+                    success: function (response) {
+                        debugger;
+                        if (response.success) {
+                            $(".checkmark").show().fadeOut(6000);
+                            $("input").val('');
+                            $(".modal").modal('hide');
+                        }
+                        else {
+                            new PNotify({
+                                title: 'Error!',
+                                text: 'Email is already exist',
+                                delay: 5000,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        //$('#upload').attr('disabled', false);
+                    },
+
+                    complete: function (xhr) {
+                        OnSuccessPatientInfomation();
+                    }
+                });
+
+            }
+        })
+
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Patients</h5>
+                </div>
+                <div class="col-sm-9 col-md-5 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="Patient-table" class="table">
+                        <thead>
+                            <tr class="uppercase">
+
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                    </div>
+                                    @*<label>
+                                            <input type="checkbox" data-val="all" id="selectAll" class="select-all" />
+                                            <span style="--bubble-color:#5a5a5a"></span>
+                                        </label>*@
+                                </th>
+                                <th data-orderable="false"></th>
+                                @if (Model.PatientListSettingDto.PatientId)
+                                {
+                                    <th>Patient Id</th>
+                                }
+                                @if (Model.PatientListSettingDto.Name)
+                                {
+                                    if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == false)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.PatientListSettingDto.FirstName == false && Model.PatientListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else
+                                    {
+                                        <th data-orderable="false">Name</th>
+                                    }
+                                }
+                                @if (Model.PatientListSettingDto.HomePhone)
+                                {
+                                    <th>Home Phone</th>
+                                }
+                                @if (Model.PatientListSettingDto.MobilePhone)
+                                {
+                                    <th>Cell Phone</th>
+                                }
+                                @if (Model.PatientListSettingDto.Address)
+                                {
+                                    <th>Address</th>
+                                }
+                                @if (Model.PatientListSettingDto.DOB)
+                                {
+                                    <th>DOB</th>
+                                }
+                                @if (Model.PatientListSettingDto.Gender)
+                                {
+                                    <th>Gender</th>
+                                }
+                                @if (Model.PatientListSettingDto.MartialStatus)
+                                {
+                                    <th>Marital Status</th>
+                                }
+                                @if (Model.PatientListSettingDto.Attorney)
+                                {
+                                    <th>ATTORNEY</th>
+                                }
+                                @if (Model.PatientListSettingDto.Paralegal)
+                                {
+                                    <th>Paralegal</th>
+                                }
+                                @if (Model.PatientListSettingDto.REFERRALNAME)
+                                {
+                                    <th>Ref Name</th>
+                                }
+                                @if (Model.PatientListSettingDto.Dispatch)
+                                {
+                                    <th>Dispatch</th>
+                                }
+                                @if (Model.PatientListSettingDto.AssignTransport)
+                                {
+                                    <th>Transport</th>
+                                }
+                                @if (Model.PatientListSettingDto.Route)
+                                {
+                                    <th>Route</th>
+                                }
+                                <th data-searchable=false data-orderable="false" class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.patientListWithUsers != null)
+                            {
+                                @foreach (var Data in Model.patientListWithUsers)
+                                {
+                                    <tr class="card">
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="@Data.PatientInfoId" value="check" data-val="@Data.FullName">
+                                                <label class="custom-control-label" for="@Data.PatientInfoId" style="--bubble-color:@Data.Color"></label>
+                                            </div>
+                                            @*<label>
+                                                    <input type="checkbox" id="@Data.PatientInfoId" data-val="@Data.FullName" />
+                                                    <span style="--bubble-color:@Data.Color"></span>
+                                                </label>*@
+                                        </th>
+                                        <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer;text-align: center">
+                                            @if (Data.PaitentImage != null)
+                                            {
+                                                <span class="list-img">
+                                                    <img src="~/images/@Data.PaitentImage" alt="Patient">
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <div class="FLNameLetter">
+                                                    <span>@Data.FirstNameLetter@Data.LastNameLetter</span>
+                                                </div>
+                                            }
+
+                                        </td>
+                                        @if (Model.PatientListSettingDto.PatientId)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.PatientInfoId</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Name)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.FirstName @Data.LastName</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.HomePhone)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer"> @Data.HomePhone</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.MobilePhone)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer"> @Data.MobilePhone</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Address)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.AddressLine1</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.DOB)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary", "PatientSide", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.DateOfBirth.ToString("MM/dd/yyyy")</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Gender)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.Gender</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.MartialStatus)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.MaritalStatus</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Attorney)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary", "PatientSide", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.AttorneyName</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Paralegal)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.LeadingParalegalName </td>
+                                        }
+                                        @if (Model.PatientListSettingDto.REFERRALNAME)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary", "PatientSide", new { Id = Data.PatientInfoId })'" style="cursor: pointer">@Data.ReferralName</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Dispatch)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary", "PatientSide", new { Id = Data.PatientInfoId })'" style="cursor: pointer">Dispatch</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.AssignTransport)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">Transport</td>
+                                        }
+                                        @if (Model.PatientListSettingDto.Route)
+                                        {
+                                            <td onclick="location.href='@Url.Action("PatientSummary2", "PatientSideElite", new { Id = Data.PatientInfoId })'" style="cursor: pointer">Route</td>
+                                        }
+                                        <td class="action">
+                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                Options
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                <li onclick="ExpenceOption(@Data.PatientInfoId,'  @Data.FullName  ' ,'@Data.DateOfBirth.ToString("yyyy-MM-dd")  ');"><a href="Javascript:void(0);" class="option-a">View Expense</a></li>
+                                                <li onclick="IncomeOption(@Data.PatientInfoId,'  @Data.FullName  ' ,' @Data.DateOfBirth.ToString("yyyy-MM-dd") ');"><a href="#" class="option-a">View Income</a></li>
+                                                <li><a href="javascript:void(0);" class="option-a">ADD NEW</a></li>
+                                                <li><a href="#" class="option-a">ADD Rx</a></li>
+                                                <li><a href="#" class="option-a">ASSIGN TRANSPORT</a></li>
+                                                <li><a href="#" class="option-a">CREATE REMINDER</a></li>
+                                                <li><a href="#" class="option-a">DELETE</a></li>
+                                                <li><a href="#" class="option-a">DELIVERY SLIP</a></li>
+                                                <li><a href="#" class="option-a">DISPATCH</a></li>
+                                                <li><a href="#" class="option-a">EDIT</a></li>
+                                                <li><a href="#" class="option-a">EMAIL</a></li>
+                                                <li><a href="#" class="option-a">FAX</a></li>
+                                                <li><a href="#" class="option-a">INTERNAL MESSAGE</a></li>
+                                                <li><a href="#" class="option-a">MAILING LABEL</a></li>
+                                                <li><a href="#" class="option-a">OPEN CALENDER</a></li>
+                                                <li><a href="#" class="option-a">OPTIONS</a></li>
+                                                <li><a href="#" class="option-a">PRINT</a></li>
+                                                <li><a href="#" class="option-a">PRINT BAR CODE</a></li>
+                                                <li><a href="#" class="option-a">ROUTE</a></li>
+                                                <li><a href="#" class="option-a">RUN REPORT</a></li>
+                                                <li><a href="#" class="option-a">SCAN</a></li>
+                                                <li><a href="#" class="option-a">SMS</a></li>
+                                                <li><a href="#" class="option-a">START EXAM</a></li>
+                                                <li><a href="#" class="option-a">VIEW</a></li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="IncomeModel" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="row modal-title">
+                    <div class="col-6">
+                        <h6 class="color-blue">Add Income</h6>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="color-blue">Patient Name: <span id="nameForIncome"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue">Patient Id: <span id="idForIncome"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue"> DOB: <span id="dobForIncome"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+
+            <form asp-action="CreateIncome" asp-controller="Reports" id="IncomeForm">
+                <div id="Income">
+                    <div class="modal-body tr">
+
+                        <input type="text" class="td" id="pateintIdForIncome" name="ReportIncome.PatientId" hidden />
+
+
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <p>Income Category</p>
+
+                                <select data-val="0" ata-placeholder="Select Category" id="changeIncomeCategory" class="changeIncomeCategory td select2 categoryField" data-placeholder="Select Category" name="CategoryId" asp-items="Model.IncomeCategoryList">
+                                    <option value="" selected disabled></option>
+                                </select>
+
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <p>Quantity</p>
+                                <input type="text" class="inputOnblur quantityField text-input app_empty quantityField-0" data-val="0" onblur="QuantityCheck(event)" name="Quantity" placeholder="Quantity">
+
+                            </div>
+
+                        </div>
+                        <!-- quantityField  pricePerUnit  totalAmount-->
+
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <p>Quantity Per Unit</p>
+                                <input type="text" class="pricePerUnit text-input app_empty td pricePerUnit-0" placeholder="Quantity Per Unit">
+
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <p>Amount</p>
+                                <input type="text" class="totalAmount text-input app_empty td totalAmount-0" name="Amount" placeholder="Amount">
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" id="addMoreIncome" class="modal-action mt-2 right btn add-btn center">
+                                    Add Another
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="MoreIncomeDive">
+
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" id="saveIncomeBtn" class="modal-action btn add-btn left">Save</button>
+                    <button type="button" class="btn Recreate waves-effect text-left right" data-dismiss="modal">Close</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+<div id="ExpenceModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row modal-title">
+                    <div class="col-6">
+                        <h6 class="color-blue">Add Expence</h6>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="color-blue">Patient Name: <span id="nameForExpence"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue">Patient Id: <span id="idForExpence"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue"> DOB: <span id="dobForExpence"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @*<h6 class="modal-title">
+                        <span class="col-3">Add Expence</span>
+
+                        <span class="col-3">Patient Name: <span id="nameForExpence"></span></span>
+                        <span id="" class="col-1">Patient Id: <span id="idForExpence"></span></span>
+                        <span class="col-5" id=""> DOB: <span id="dobForExpence"></span></span>
+                    </h6>*@
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <form asp-action="CreateExpence" asp-controller="Reports" method="post" id="expenseForm">
+                <div Id="expense">
+                    <div class="modal-body tr">
+
+
+
+                        <input type="text" class="td" id="pateintIdForExpence" name="PatientId" hidden />
+
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <p>Expence Category</p>
+
+                                <select data-val="0" data-placeholder="Select Category" id="changeExpenceCategory" class="changeExpenceCategory categoryField select2 td" name="CategoryId" asp-items="Model.IncomeCategoryList">
+                                    <option value="" selected disabled></option>
+                                </select>
+
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <p>Quantity</p>
+                                <input type="text" data-val="0" onblur="QuantityCheck(event)" class=" text-input app_empty quantityEx-0" placeholder="Quantity">
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <p>Quantity Per Unit</p>
+                                <input type="text" name="Quantity" class=" text-input app_empty td pricePerUnitEx-0" placeholder="Quantity Per Unit">
+
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <p>Amount</p>
+                                <input type="text" name="Amount" class=" text-input app_empty td totalAmountEx-0" placeholder="Amount">
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" id="addMoreExpence" class="modal-action m-2 float-right btn add-btn center">
+                                    Add Another
+                                </button>
+                            </div>
+
+                        </div>
+                        <div class="MoreExpenceDiv">
+
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn add-btn Check">Check</button>
+
+                        <button type="submit" class="modal-action btn add-btn left">Save</button>
+                        <button type="button" class="btn Recreate waves-effect text-left right" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+@*For List*@
+<div id="IncomeModelList" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="row modal-title">
+                    <div class="col-6">
+                        <h6 class="color-blue">Add Income</h6>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="color-blue">Patient Name: <span id="nameForIncome"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue">Patient Id: <span id="idForIncome"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p class="color-blue"> DOB: <span id="dobForIncome"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="row tablee">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <partial name="../Reports/PartialViews/_ReportIncomeList.cshtml" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" id="saveIncomeBtn" class="modal-action btn add-btn left">Save</button>
+                <button type="button" class="btn Recreate waves-effect text-left right" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<div class="right-sidebar slide-out-right">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <div class="row">
+                <form asp-action="AddCategory" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="onCreateCategory(data)" class="col s12">
+                    <div class="col-12">
+                        <h6>Add Category<span class="required"> * </span></h6>
+                        <input class="text-input employementStatus_val SignIdType" asp-for="IncomeExpenceCategory.CategoryName" type="text" placeholder="Enter Category " />
+                        <input class="text-input employementStatus_val SignIdType" asp-for="IncomeExpenceCategory.CategoryPrice" type="text" placeholder="Enter Price " />
+                        <span class="required"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

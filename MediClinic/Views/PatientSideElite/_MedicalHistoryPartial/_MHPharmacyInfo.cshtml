@@ -1,0 +1,106 @@
+﻿
+@model MediClinic.Models.PatientViewModel
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">PHARMACY INFORMATION</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12">
+                            <div id="MHPharmacyInfoGrid">
+                                @*<partial name="../_PatientPartialView/_ManageMHPharmacyInfo" />*@
+                                <partial name="../_MedicalHistoryPartial/_ManageMHPharmacyInfo.cshtml" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="SaveMHPharmacyInfo" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMHPharmacyInfoHistorySucess(data)" id="PharmacyInformationForm">
+                        <input type="hidden" asp-for="MHPharmacyInfo.Id" />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Pharmacy Name <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHPharmacyInfo.Name" type="text" placeholder="Pharmacy Name">
+                                <span class="required" asp-validation-for="MHPharmacyInfo.Name"></span>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Zip Code
+                                </p>
+                                <input class="text-input input-styling paientZipCode patientinfo_tab" maxlength="5" id="info_Zip" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.ZIP" placeholder="Enter ZIP Code">
+                                <span class="required" asp-validation-for="MHPharmacyInfo.ZipCode"></span>
+                                <span class="required" id="err_infozip"></span>
+                            </div>
+                            @*<div class="col s12 m6">
+                                    <p class="content-p">
+                                        Address
+                                    </p>
+                                    <input class="text-input" asp-for="MHPharmacyInfo.Address" type="text" placeholder="Address">
+                                    <span class="required" asp-validation-for="MHPharmacyInfo.Address"></span>
+
+                                </div>*@
+
+                        </div>
+                        <div class="row">
+                            @*<div class="col s12 m4">
+                                    <p class="mb-0">
+                                        Country
+                                    </p>
+                                    <div class="ui-widget">
+                                        <select class="combobox" asp-for="MHPharmacyInfo.CountryId">
+                                            <option value="">
+                                                Select Country
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>*@
+                            <div class=" col-sm-12 col-md-6">
+                                <p class="content-p">State</p>
+                                <input class="text-input input-styling state paientState" id="info_state" type="text" asp-for="MHPharmacyInfo.State" readonly>
+
+                            </div>
+                            <div class=" col-sm-12 col-md-6">
+                                <p class="content-p">City</p>
+                                <input class="text-input input-styling paientCountry country" id="info_country" type="text" asp-for="MHPharmacyInfo.City" readonly>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Phone Number
+                                </p>
+                                <input class="text-input" asp-for="MHPharmacyInfo.PhoneNo" type="text" placeholder=" Phone Number">
+                                <span class="required" asp-validation-for="MHPharmacyInfo.PhoneNo"></span>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Fax
+                                </p>
+                                <input class="text-input" asp-for="MHPharmacyInfo.FaxNo" type="text" placeholder="Fax">
+                                <span class="required" asp-validation-for="MHPharmacyInfo.FaxNo"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col" style="text-align:center">
+                                <button type="submit" id="SavePharmacyInformationForm" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

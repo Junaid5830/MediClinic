@@ -1,0 +1,595 @@
+﻿
+@{
+    ViewData["Title"] = "LumpSumSettlementAggreement";
+    Layout = "~/Views/Shared/_NF2Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        textarea {
+            width: 102%;
+            height: 5rem;
+            border-radius: 4px;
+            border: 1px solid #cfcfcf !important;
+        }
+
+        #instruction {
+            height: 10rem;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+
+        var wrapper1 = document.getElementById("signature-pad3"),
+    clearButton3 = wrapper1.querySelector("[data-action=clear]"),
+    saveButton3 = wrapper1.querySelector("[data-action=save]"),
+    canvas3 = wrapper1.querySelector("canvas"),
+    signaturePad3;
+
+function resizeCanvas3() {
+    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+    canvas3.width = canvas3.offsetWidth * ratio;
+    canvas3.height = canvas3.offsetHeight * ratio;
+    canvas3.getContext("2d").scale(ratio, ratio);
+}
+window.onresize = resizeCanvas3;
+resizeCanvas3();
+signaturePad3 = new SignaturePad(canvas3);
+clearButton3.addEventListener("click", function (event) {
+    signaturePad3.clear();
+    $("button[data-action=save]").html('Add Signature')
+    $("button[data-action=save]").addClass('btn-info')
+    jQuery("#signature1").val('')
+    jQuery("#signed_date1").val('')
+    jQuery("#signed_ip1").val('')
+    jQuery("#signed_date1_txt").text('')
+    jQuery("#signed_ip1_txt").text('')
+    jQuery("#signed_cont1").addClass("hidden")
+});
+saveButton3.addEventListener("click", function (event) {
+    if (signaturePad3.isEmpty()) {
+        //alert("Please provide signature first.");
+    } else {
+
+        var loading_txt = jQuery(this).data("loading");
+        var complete_txt = 'Signature Added';
+        var $this = jQuery(this);
+        $this.html(loading_txt)
+        $this.prop('disabled', true);
+
+        //jQuery.post("http://mediclinic.imedhealth.us/SignatureImages", {data: signaturePad1.toDataURL()}, function (data) {
+
+        //    data_arr = JSON.parse(data);
+
+
+        //    jQuery("#signature1").val(data_arr["signature"])
+        //    jQuery("#signed_date1").val(data_arr["signed"])
+        //    jQuery("#signed_ip1").val(data_arr["signed_ip"])
+        //    jQuery("#signed_date1_txt").text(data_arr["signed"])
+        //    jQuery("#signed_ip1_txt").text(data_arr["signed_ip"])
+        //    jQuery("#signed_cont1").removeClass("hidden")
+
+        //    $("button[data-action=save]").removeClass('btn-info') 
+        //    $("#error").addClass("hidden");
+        //    $this.html(complete_txt)
+        //    $this.prop('disabled', false);
+
+        //})
+    }
+});
+
+        
+        var wrapper1 = document.getElementById("signature-pad5"),
+    clearButton5 = wrapper1.querySelector("[data-action=clear]"),
+    saveButton5 = wrapper1.querySelector("[data-action=save]"),
+    canvas5 = wrapper1.querySelector("canvas"),
+    signaturePad5;
+
+function resizeCanvas5() {
+    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+    canvas5.width = canvas5.offsetWidth * ratio;
+    canvas5.height = canvas5.offsetHeight * ratio;
+    canvas5.getContext("2d").scale(ratio, ratio);
+}
+window.onresize = resizeCanvas5;
+resizeCanvas5();
+signaturePad5 = new SignaturePad(canvas5);
+clearButton5.addEventListener("click", function (event) {
+    signaturePad5.clear();
+    $("button[data-action=save]").html('Add Signature')
+    $("button[data-action=save]").addClass('btn-info')
+    jQuery("#signature1").val('')
+    jQuery("#signed_date1").val('')
+    jQuery("#signed_ip1").val('')
+    jQuery("#signed_date1_txt").text('')
+    jQuery("#signed_ip1_txt").text('')
+    jQuery("#signed_cont1").addClass("hidden")
+});
+saveButton5.addEventListener("click", function (event) {
+    if (signaturePad5.isEmpty()) {
+        //alert("Please provide signature first.");
+    } else {
+
+        var loading_txt = jQuery(this).data("loading");
+        var complete_txt = 'Signature Added';
+        var $this = jQuery(this);
+        $this.html(loading_txt)
+        $this.prop('disabled', true);
+
+        //jQuery.post("http://mediclinic.imedhealth.us/SignatureImages", {data: signaturePad1.toDataURL()}, function (data) {
+
+        //    data_arr = JSON.parse(data);
+
+
+        //    jQuery("#signature1").val(data_arr["signature"])
+        //    jQuery("#signed_date1").val(data_arr["signed"])
+        //    jQuery("#signed_ip1").val(data_arr["signed_ip"])
+        //    jQuery("#signed_date1_txt").text(data_arr["signed"])
+        //    jQuery("#signed_ip1_txt").text(data_arr["signed_ip"])
+        //    jQuery("#signed_cont1").removeClass("hidden")
+
+        //    $("button[data-action=save]").removeClass('btn-info') 
+        //    $("#error").addClass("hidden");
+        //    $this.html(complete_txt)
+        //    $this.prop('disabled', false);
+
+        //})
+    }
+});
+
+              var wrapper1 = document.getElementById("signature-pad6"),
+    clearButton6 = wrapper1.querySelector("[data-action=clear]"),
+    saveButton6 = wrapper1.querySelector("[data-action=save]"),
+    canvas6 = wrapper1.querySelector("canvas"),
+    signaturePad6;
+
+function resizeCanvas6() {
+    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+
+    canvas6.width = canvas6.offsetWidth * ratio;
+    canvas6.height = canvas6.offsetHeight * ratio;
+    canvas6.getContext("2d").scale(ratio, ratio);
+}
+window.onresize = resizeCanvas6;
+resizeCanvas6();
+signaturePad6 = new SignaturePad(canvas6);
+clearButton6.addEventListener("click", function (event) {
+    signaturePad6.clear();
+    $("button[data-action=save]").html('Add Signature')
+    $("button[data-action=save]").addClass('btn-info')
+    jQuery("#signature1").val('')
+    jQuery("#signed_date1").val('')
+    jQuery("#signed_ip1").val('')
+    jQuery("#signed_date1_txt").text('')
+    jQuery("#signed_ip1_txt").text('')
+    jQuery("#signed_cont1").addClass("hidden")
+});
+saveButton6.addEventListener("click", function (event) {
+    if (signaturePad6.isEmpty()) {
+        //alert("Please provide signature first.");
+    } else {
+
+        var loading_txt = jQuery(this).data("loading");
+        var complete_txt = 'Signature Added';
+        var $this = jQuery(this);
+        $this.html(loading_txt)
+        $this.prop('disabled', true);
+
+        //jQuery.post("http://mediclinic.imedhealth.us/SignatureImages", {data: signaturePad1.toDataURL()}, function (data) {
+
+        //    data_arr = JSON.parse(data);
+
+
+        //    jQuery("#signature1").val(data_arr["signature"])
+        //    jQuery("#signed_date1").val(data_arr["signed"])
+        //    jQuery("#signed_ip1").val(data_arr["signed_ip"])
+        //    jQuery("#signed_date1_txt").text(data_arr["signed"])
+        //    jQuery("#signed_ip1_txt").text(data_arr["signed_ip"])
+        //    jQuery("#signed_cont1").removeClass("hidden")
+
+        //    $("button[data-action=save]").removeClass('btn-info') 
+        //    $("#error").addClass("hidden");
+        //    $this.html(complete_txt)
+        //    $this.prop('disabled', false);
+
+        //})
+    }
+});
+    </script>
+}
+
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+
+            <div class="row mb-1">
+
+
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s6 m6  margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue">Lump Sum Settlement</h5>
+                            </div>
+
+
+                            <div class="col s6 m6 margin-top-8">
+                                <a class="waves-effect waves-light float-right mr-2 mt-2" href="javascript:void(0);">
+                                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <form class="form-inline col s12">
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer/Self Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+
+                                    <div class=" col m6 s12">
+                                        <p>Address</p>
+                                        <textarea row="10" placeholder="Enter Address"> </textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input testDate" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Policy Holder</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Policy Holder</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="number" placeholder="Enter Policy Holder">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Policy Number</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="number" placeholder="Enter Policy Number">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date of Accident</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input testDate  " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+
+                                        <p>Claim Number</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="number" placeholder="Enter Claim Number">
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Applicant</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 ">
+                                            <input class="text-input" type="number" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class=" col m6 s12">
+                                        <p>Address</p>
+                                        <textarea row="10" placeholder="Enter Address"> </textarea>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class=" col s6 m6 margin-top-8">
+                                        <h5>Insurer/Self Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+                                         <div class="input-field col  s12 ">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                       
+                                    </div>
+                                   
+                                        <div class=" col m6 s12">
+                                            <p>Address</p>
+                                            <textarea row="10" placeholder="Enter Address"> </textarea>
+                                        </div>
+                                    
+
+                                   
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6 margin-top-8">
+                                        <h5>Provider</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class=" col m6 s12">
+                                        <p>Address</p>
+                                        <textarea row="10" placeholder="Enter Address"> </textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Executed Date</p>
+                                        <div class="input-field col s12">
+                                            <input type="text" class="datepicker text-input testDate  " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class=" col s6  m6 margin-top-8">
+                                        <h5>Insurer/Self-Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field  col s12">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Years of Aggreement</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="number" placeholder="Enter Years">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Months of Aggreement</p>
+
+                                        <div class="input-field col s12">
+                                            <input class="text-input" type="number" placeholder="Enter Months">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Payment</p>
+                                        <div class="input-field col s12">
+                                            <input class="text-input" type="number" placeholder="Enter Payment in $">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6 margin-top-8">
+                                        <h5>Applicant/Authorized Representative</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12">
+                                            <input type="text" class="datepicker text-input testDate  " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Signature</p>
+
+                                        <div id="signature-pad3" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class=" col s6 m6 margin-top-8">
+                                        <h5>Representative of Insurer</h5> 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12">
+                                            <input type="text" class="datepicker text-input testDate  " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Signature</p>
+
+                                        <div id="signature-pad5" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6 margin-top-8">
+                                        <h5>Arbitrator</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 S">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12">
+                                            <input type="text" class="datepicker text-input testDate  " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Signature</p>
+
+                                        <div id="signature-pad6" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12" style="text-align:center">
+                                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

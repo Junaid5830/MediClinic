@@ -1,0 +1,229 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <div class="col s12">
+                <h5 class="color-blue">Display Raws/Fields</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 m3 l3">
+                <input type="hidden" id="hiddenDisplaySettingsUserId" asp-for="PatientSettingDto.UserId"/>
+                <p>Phone</p>
+                <input type="checkbox" id="phoneCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Phone" asp-for="PatientSettingDto.Phone" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Sms</p>
+                <input type="checkbox" id="smsCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Sms" asp-for="PatientSettingDto.Sms" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Email</p>
+                <input type="checkbox" id="emailCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Email" asp-for="PatientSettingDto.Email" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Fax</p>
+                <input type="checkbox" id="faxCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Fax" asp-for="PatientSettingDto.Fax" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Print</p>
+                <input type="checkbox" id="printCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Fax" asp-for="PatientSettingDto.Print" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>First Name</p>
+                <input type="checkbox" id="fNameCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="FirstName" asp-for="PatientSettingDto.FirstName" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Last Name</p>
+                <input type="checkbox" id="lNameCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="LastName" asp-for="PatientSettingDto.LastName" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>DOB</p>
+                <input type="checkbox" id="dobCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="DOB" asp-for="PatientSettingDto.DOB" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Age</p>
+                <input type="checkbox" id="ageCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Age" asp-for="PatientSettingDto.Age" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Address</p>
+                <input type="checkbox" id="addressSummaryCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Address" asp-for="PatientSettingDto.Address" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Gender</p>
+                <input type="checkbox" id="genderCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Gender" asp-for="PatientSettingDto.Gender" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Mobile Phone</p>
+                <input type="checkbox" id="mPhoneCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="MobilePhone" asp-for="PatientSettingDto.MobilePhone" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Home Phone</p>
+                <input type="checkbox" id="hPhoneCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="HomePhone" asp-for="PatientSettingDto.HomePhone" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Emergency Phone</p>
+                <input type="checkbox" id="emerPhoneCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="EmergencyPhone" asp-for="PatientSettingDto.EmergencyPhone" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Languages</p>
+                <input type="checkbox" id="languageCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Languages" asp-for="PatientSettingDto.Languages" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Case Type</p>
+                <input type="checkbox" id="caseTypeCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="CaseType" asp-for="PatientSettingDto.CaseType" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Claim Number</p>
+                <input type="checkbox" class="claimInfoCheckboxes" id="claimNoCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="ClaimNumber" asp-for="PatientSettingDto.ClaimNumber" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Policy Number</p>
+                <input type="checkbox" class="claimInfoCheckboxes" id="policyNoCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="PolicyNumber" asp-for="PatientSettingDto.PolicyNumber" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Insurance Info</p>
+                <input type="checkbox" class="claimInfoCheckboxes" id="insuranceInfoCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="InsuranceNumber" asp-for="PatientSettingDto.InsuranceNumber" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Full Claim Info</p>
+                <input type="checkbox" id="claimInfoCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="FullClaimInfo" asp-for="PatientSettingDto.FullClaimInfo" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Dated Created</p>
+                <input type="checkbox" id="dateCreatedCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="DateCreated" asp-for="PatientSettingDto.DateCreated" data-toggle="toggle" />
+            </div>
+
+            <div class="col s6 m3 l3">
+                <p>Primary DR</p>
+                <input type="checkbox" id="pDRCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="PrimaryDr" asp-for="PatientSettingDto.PrimaryDr" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Dispatch</p>
+                <input type="checkbox" id="dispatchCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Dispatch" asp-for="PatientSettingDto.Dispatch" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Assign Transport</p>
+                <input type="checkbox" id="assignTransCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="AssignTransport" asp-for="PatientSettingDto.AssignTransport" data-toggle="toggle" />
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3 ">
+                <p>Route Options</p>
+                <input type="checkbox" id="routeOptionCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="RouteOptions" asp-for="PatientSettingDto.RouteOptions" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>First Visit</p>
+                <input type="checkbox" id="firstVisitCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="FirstVisit" asp-for="PatientSettingDto.FirstVisit" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Last Visit</p>
+                <input type="checkbox" id="lastVisitCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="LastVisit" asp-for="PatientSettingDto.LastVisit" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>last Exam</p>
+                <input type="checkbox" id="lastExamCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="LastExam" asp-for="PatientSettingDto.LastExam" data-toggle="toggle" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s6 m3 l3 ">
+                <p>Vitals</p>
+                <input type="checkbox" id="vitalCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Vitals" asp-for="PatientSettingDto.Vitals" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Body Status</p>
+                <input type="checkbox" id="bodyStatusCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="BodyStatus" asp-for="PatientSettingDto.BodyStatus" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Tests</p>
+                <input type="checkbox" id="testsCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Tests" asp-for="PatientSettingDto.Tests" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Reminders</p>
+                <input type="checkbox" id="remindersCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Reminders" asp-for="PatientSettingDto.Reminders" data-toggle="toggle" />
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3 ">
+                <p>Missing</p>
+                <input type="checkbox" id="missingCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Missing" asp-for="PatientSettingDto.Missing" data-toggle="toggle" />
+            </div>
+
+            <div class="col s6 m3 l3">
+                <p>P.I. Attorney</p>
+                <input type="checkbox" id="pIAttroneyCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="PIAttorney" asp-for="PatientSettingDto.PIAttorney" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Paralegal</p>
+                <input type="checkbox" id="paralegalCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="Paralegal" asp-for="PatientSettingDto.Paralegal" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Collection Attorney</p>
+                <input type="checkbox" id="collectionAttorneyCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="CollectionAttorney" asp-for="PatientSettingDto.CollectionAttorney" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3 ">
+                <p>Referral Name </p>
+                <input type="checkbox" id="referralNameCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="ReferralName" asp-for="PatientSettingDto.ReferralName" data-toggle="toggle" />
+            </div>
+
+            <div class="col s6 m3 l3">
+                <p>Current location in facility</p>
+                <input type="checkbox" id="currentLocationCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="CurrentLocationInFacility" asp-for="PatientSettingDto.CurrentLocationInFacility" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Last I.M.E</p>
+                <input type="checkbox" id="lastIMECheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="LastIME" asp-for="PatientSettingDto.LastIME" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Last E.U.O</p>
+                <input type="checkbox" id="lastEUOCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="LastEUO" asp-for="PatientSettingDto.LastEUO" data-toggle="toggle" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 m3 l3 ">
+                <p>All Visits</p>
+                <input type="checkbox" id="allvisitsCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="AllVisit" asp-for="PatientSettingDto.AllVisit" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Number of visits</p>
+                <input type="checkbox" id="noOfVisitCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="NumberOfVisits" asp-for="PatientSettingDto.NumberOfVisits" data-toggle="toggle" />
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Related Patient List </p>
+                <input type="checkbox" id="relatedPatientListCheckBox" onchange="checkBoxChangeDisplaySettings(this)" data-val="RelatedPatientList" asp-for="PatientSettingDto.RelatedPatientList" data-toggle="toggle" />
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,1859 @@
+﻿@model MediClinic.Models.AssistantViewModel
+@{
+    ViewData["Title"] = "AddNewAssistant";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ProviderEliteAdd";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var Signature = ViewBag.WriteSignature;
+    var Action = ViewBag.action;
+    var ReminderBy = ViewBag.AssistantImage;
+    var AssistantSignature = ViewBag.AssistantSignatureImage;
+    var SImage = ViewBag.AssistantSignatureImage;
+    var image = ViewBag.AssistantImage;
+
+    if (image == "")
+    {
+        image = string.Empty;
+    }
+    else if (!(image is null))
+
+    {
+        image = "/images/" + ViewBag.AssistantImage;
+    }
+    if (SImage == "")
+    {
+        SImage = string.Empty;
+    }
+    else if (!(SImage is null))
+    {
+        SImage = "/images/" + ViewBag.AssistantSignatureImage;
+    }
+    else
+    {
+        SImage = string.Empty;
+    }
+}
+
+@section styles{
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+
+    <style>
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .input-group-append .form-add-btn {
+            margin-top: 0 !important
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .form-add-btn {
+            margin-top: 3.3rem !important;
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -26% !important;
+        }
+
+        .form-MiddleName {
+            margin-top: -14% !important;
+        }
+
+        .form-LastName {
+            margin-top: -3% !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 48%;
+            left: 46%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .ti-camera {
+            font-size: 22px !important;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff !important;
+            font-size: 17px;
+        }
+
+        .text p {
+            margin-top: 0px !important;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+            .remove-image:hover {
+                background: #E54E4E;
+                padding: 3px 7px 5px;
+                top: 0;
+                right: 22%;
+            }
+
+            .remove-image:active {
+                background: #E54E4E;
+                top: 0;
+                right: 22%;
+            }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+            .imageModel .modal-dialog {
+                max-width: 60% !important
+            }
+
+            .imageModel input.custom-file-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                height: 38px !important;
+                width: 5rem !important;
+                cursor: pointer !important;
+            }
+
+        .cr-slider {
+            width: 75% !important
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 0 2rem !important;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            margin-bottom: 0px;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        #my_camera {
+            margin: 0 auto
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+            color: #fff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        #cameraIcon i {
+            color: #547cea !important;
+            font-size: 22px;
+        }
+
+        .croppie-container .cr-image {
+            top: 25px !important;
+            left: 35px !important;
+        }
+
+        .imageModel .mdi {
+            font-size: 22px !important
+        }
+
+        @@media screen and (max-width:600px) {
+            .form-MiddleName {
+                margin-top: 0% !important;
+            }
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .m-signature-pad {
+            position: relative;
+            font-size: 10px;
+            width: 100%;
+            height: 270px;
+            border: 1px solid #e8e8e8;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+            border-radius: 4px;
+        }
+
+        .m-signature-pad--body {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 20px;
+            bottom: 80px;
+            border: 1px solid #f4f4f4;
+        }
+
+            .m-signature-pad--body canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 4px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+            }
+
+        .m-signature-pad--footer {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 5px;
+            height: 65px;
+        }
+
+            .m-signature-pad--footer .description {
+                color: #C3C3C3;
+                text-align: center;
+                font-size: 1.2em;
+                margin-bottom: 3px;
+            }
+
+        .btn-save {
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: .5px;
+            color: #fff;
+            background-color: #03a9f4;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/Elite/_node_modules/dff/dff.js"></script>
+    @*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>*@
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/webcamjs/webcam.js"></script>
+
+    <script>
+        var saveAction = '@ViewBag.Action';
+        var SignaturePath = '@ViewBag.Signature';
+        var IsCapturedScreen = false;
+        var IsRequiredNf2Date = false;
+
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            $("#Update").hide();
+            $('#take_snapbtn').hide();
+            $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+            $(".remove-Sigatureimage").hide();
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+            if (saveAction == "Update") {
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                $(".UploadSignature_show").on('click', function () {
+                    $(".forPatientSignatures").show();
+                    $(".signImage #dropifyimage .dropify-wrapper").show();
+                    $(".signatureimage_text").show();
+                    $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                    $("#signature-pad1").show();
+                }
+            }
+            $('#take_snapbtn').hide();
+            $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+            $(".remove-Sigatureimage").hide();
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+            if (saveAction == "Update") {
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                $(".UploadSignature_show").on('click', function () {
+                    $(".forPatientSignatures").show();
+                    $(".signImage #dropifyimage .dropify-wrapper").show();
+                    $(".signatureimage_text").show();
+                    $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                    $("#signature-pad1").show();
+                }
+            }
+        });
+        $('.select2').select2();
+        $(".time-picker").hunterTimePicker();
+
+        var doctorList = [];
+        var deptartmentList = [];
+        getLists();
+        function getLists() {
+            $.ajax({
+                type: "Get",
+                url: '/Assistant/AssisatntSchedule',
+                success: function (data) {
+                    for (var i = 0; i < data.assistantViewModel.doctor.length; i++) {
+                        var doctor = ({ doctorId: data.assistantViewModel.doctor[i].doctorInfoId, firstName: data.assistantViewModel.doctor[i].firstName });
+                        doctorList.push(doctor);
+                        console.log(doctor);
+                    }
+                    for (var j = 0; j < data.assistantViewModel.department.length; j++) {
+                        var department = ({ deptId: data.assistantViewModel.department[j].deptId, deptName: data.assistantViewModel.department[j].deptName });
+                        deptartmentList.push(department);
+                        console.log(department);
+                    }
+                    fillDropdownsByClass();
+                }
+            });
+        }
+
+        fillDropdownsByClass();
+        $(".roster-schedule-main").on('click', '.form-add-btn', function () {
+            var day = $(this).attr("data-day");
+            var count = parseInt($(this).attr("data-count")) + 1;
+            $(this).attr("data-count", count);
+            $("." + day + "-roster").append(dayString(day, count));
+            $(".time-picker").hunterTimePicker();
+            selectRefresh(day + '_doctors_' + count);
+            selectRefresh(day + '_department_' + count);
+            fillDropdownsByClass(count);
+        });
+
+        function fillDropdownsByClass(count=0) {
+            $(".doctors-" + count).html("");
+            $(".department-" + count).html("");
+            for (var i = 0; i < doctorList.length; i++) {
+                $(".doctors-" + count).append(new Option(doctorList[i].firstName, doctorList[i].doctorId));
+            }
+            for (var i = 0; i < deptartmentList.length; i++) {
+                $(".department-" + count).append(new Option(deptartmentList[i].deptName, deptartmentList[i].deptId));
+            }
+        }
+
+        function dayString(day, count, startTime = "", endTime = "", scheduleId) {
+            var dayString = "";
+            dayString += '<div class="' + day + '-default-' + count + ' row work-schedule-div">';
+            dayString += '<input type="text" hidden class="scheduleid" value="' + scheduleId +'">';
+            dayString += '	<div class="col-md-2">';
+            dayString += '	   <div hidden class="custom-control custom-checkbox">';
+            dayString += '	 <input type="checkbox" data-day="' + day+'" class="custom-control-input day-check-box day" id="customCheck1">';
+            dayString += '	  </div>';
+            dayString += '	</div>';
+            dayString += '	<div class="col-sm-2 nopadding">';
+            dayString += '		<div class="form-group">';
+            dayString += '			<input type="text" class="form-control time-picker startTime" data-day="' + day +'" placeholder="Start Time" value="'+startTime+'">';
+            dayString += '		</div>';
+            dayString += '	</div>';
+            dayString += '	<div class="col-sm-2 nopadding">';
+            dayString += '		<div class="form-group">';
+            dayString += '			<input type="text" class="form-control time-picker endTime" data-day="' + day +'" placeholder="End Time" value="' + endTime +'">';
+            dayString += '		</div>';
+            dayString += '	</div>';
+            dayString += '	<div class="col-sm-3 nopadding">';
+            dayString += '		<select class="select2 department deptId department-'+ count +'" id="' + day + '_department_' + count + '" data-placeholder="Select Department"></select>';
+            dayString += '	</div>';
+            dayString += '	<div class="col-sm-2 nopadding">';
+            dayString += '		<select class="select2 doctors doctorId doctors-'+ count +'" id="' + day + '_doctors_' + count + '" data-placeholder="Select Doc. Name">';
+            dayString += '		</select>';
+            dayString += '	</div>';
+            dayString += '	<div class="col-sm-1 nopadding">';
+            dayString += '		<div class="input-group-append " id="delete_btn">';
+            dayString += '			<button class="btn btn-danger delete-row-btn" data-day="'+ day + '" data-count="' + count + '" type="button"> <i class="ti-close"></i> </button>';
+            dayString += '		</div>';
+            dayString += '	</div>';
+            dayString += '</div>';
+            return dayString;
+        }
+
+        $("#EditBtn").click(function () {
+            $.ajax({
+                type: "Get",
+                url: '/Assistant/fillScheduleform',
+                success: function (data) {
+                    for (var k = 0; k < data.assistantViewModel.workingSchedule.length; k++) {
+                        $("." + $.trim(data.assistantViewModel.workingSchedule[k].day) + "-roster").append(dayString($.trim(data.assistantViewModel.workingSchedule[k].day), k, data.assistantViewModel.workingSchedule[k].startTime, data.assistantViewModel.workingSchedule[k].endTime, data.assistantViewModel.workingSchedule[k].scheduleId));
+                        fillDropdowns($.trim(data.assistantViewModel.workingSchedule[k].day) + '_doctors_' + k, $.trim(data.assistantViewModel.workingSchedule[k].day) + '_department_' + k);
+                        selectRefresh($.trim(data.assistantViewModel.workingSchedule[k].day) + '_doctors_' + k);
+                        selectRefresh($.trim(data.assistantViewModel.workingSchedule[k].day) + '_department_' + k);
+                        $('#' + $.trim(data.assistantViewModel.workingSchedule[k].day) + '_doctors_' + k).val(data.assistantViewModel.workingSchedule[k].doctorId).trigger('change');
+                        $('#' + $.trim(data.assistantViewModel.workingSchedule[k].day) + '_department_' + k).val(data.assistantViewModel.workingSchedule[k].deptId).trigger('change');  
+                    }
+                    $(".time-picker").hunterTimePicker();
+                    getWorkSchedule();
+                }
+            });
+            $("#Update").show();
+            $("#EditBtn").hide();
+            $("#SaveButton").hide();
+        });
+
+        function fillDropdowns(doctor, department) {
+            $("#" + doctor).html("");
+            $("#" + department).html("");
+            for (var i = 0; i < doctorList.length; i++) {
+                $("#" + doctor).append(new Option(doctorList[i].firstName, doctorList[i].doctorId));
+            }
+            for (var i = 0; i < deptartmentList.length; i++) {
+                $("#" + department).append(new Option(deptartmentList[i].deptName, deptartmentList[i].deptId));
+            }
+        }
+
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(".time-picker").hunterTimePicker();
+
+        $(".day-check-box").on('click', function () {
+            dayCheckBox($(this));
+        });
+
+        function dayCheckBox(currentThis) {
+            var day = currentThis.attr("data-day");
+            if (currentThis.is(':checked')) {
+                $("." + day + "_add_btn").show();
+            }
+            else {
+                $("." + day + "_add_btn").hide();
+                $("div[class*='" + day + "-default']").not("." + day + "-default-0").remove();
+            }
+        }
+        $(".roster-schedule-main").on('click', '.delete-row-btn', function () {
+            removerow($(this));
+        });
+        function removerow(currentThis) {
+            var day = currentThis.attr("data-day");
+            var count = currentThis.attr("data-count");
+            currentThis.closest("." + day + "-default-" + count).remove();
+        }
+
+        $("#SaveButton").click(function () {
+            var formdata = getScheduleForm();
+            $.ajax({
+                type: "POST",
+                url: '/Assistant/AssisatntSchedule',
+                data: { assistantViewModel: formdata },
+                success: function (data) {
+                    $('#ProviderInfo_UserId').val(data.providerUserId);
+                    $(".checkmark").show().fadeOut(6000);
+                    window.location.href = "/Assistant/AssistantList";
+                }
+            });
+        });
+
+        function getScheduleForm() {
+            var formData = ({ WorkingSchedule: getWorkSchedule() });
+            return formData;
+        }
+
+        $("#Update").click(function () {
+            var formdata = getScheduleForm();
+            $.ajax({
+                type: "POST",
+                url: '/Assistant/UpdateSchedule',
+                data: { assistantViewModel: formdata },
+                success: function (data) {
+                    $('#ProviderInfo_UserId').val(data.providerUserId);
+                    $(".checkmark").show().fadeOut(6000);
+                    window.location.href = "/Assistant/AssistantList";
+                }
+            });
+        });
+
+        function getWorkSchedule() {
+            var workingScheduledata = new Array();
+            $('.work-schedule-div').each(function () {
+                if ($(this).find(".startTime").val() != '' && $(this).find(".endTime").val() != '') {
+                    var daydef = $(this).find(".day").attr("data-day");
+                    var startTimedef = $(this).find(".startTime").val();
+                    var endTimedef = $(this).find(".endTime").val();
+                    var deptIddef = $(this).find(".deptId").val();
+                    var doctorIddef = $(this).find(".doctorId").val();
+                    workingScheduledata.push({ Day: daydef, StartTime: startTimedef, EndTime: endTimedef, DeptId: deptIddef, DoctorId: doctorIddef });
+                }
+            });
+            return workingScheduledata;
+        };
+
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+            Webcam.attach('#my_camera');
+        }
+
+        function take_snapshot() {
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+
+        $(function () {
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+        /*Signature Image*/
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //Signdata = e.target.result;
+                    $('#savetarget').attr('src', e.target.result);
+                    $('#savetarget').show();
+                    $('#UpdateCaseSignature').hide();
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#SignatureImageUpload").change(function () {
+            readURL(this);
+        });
+
+        $(function () {
+            $('#savetarget').hide();
+            var canvas = document.querySelector('#signature-pad1 canvas');
+            var pad = new SignaturePad(canvas);
+            $('#pad_clear').on('click', function () {
+                $('#savetarget').hide();
+                Signdata = "";
+            })
+            $('#accept').on('click', function () {
+                if (pad.isEmpty()) {
+                    Signdata = "";
+
+                    return false;
+                }
+                else {
+                    Signdata = pad.toDataURL();
+                    $('#savetarget').attr('src', Signdata);
+                    $('#UpdateCaseSignature').hide();
+                    $('#savetarget').show();
+                    pad.off();
+
+                }
+            });
+
+            //var ImageURL = Signdata;
+            //var block = ImageURL.split(";");
+            //var contentType = block[0].split(":")[1];
+            //var realData = block[1].split(",")[1];
+            ////$('#Signfiles').val(data);
+
+
+        });
+        /*End Signature Image*/
+        $(function () {
+
+            $(".fax").inputmask('(999) 999-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $(".licenseno").inputmask('999999');
+            $(".npi").inputmask('9999999999');
+            $('.taxid').inputmask('99-9999999');
+
+            $('.selectpicker').selectpicker();
+        });
+        $('#assistantform').on('submit', function (e) {
+            e.preventDefault();
+            $("#providerSpeciality option:selected").val() == "" ? $("#providerSpecialityError").text("Speciality is required.") : $("#providerSpecialityError").text("");
+            //$('input[name="Provider.Speciality"]').val($("#providerSpeciality option:selected").val());
+
+            $("#providerTitle option:selected").val() == "" ? $("#providerTitleError").text("Provider Title is required.") : $("#providerTitleError").text("");
+            //$('input[name="Provider.Title"]').val($("#providerTitle option:selected").val());
+
+            $("#providerSuffix option:selected").val() == "" ? $("#providerSuffixError").text("Provider Suffix is required.") : $("#providerSuffixError").text("");
+            //$('input[name="Provider.Suffix"]').val($("#providerSuffix option:selected").val());
+
+            $("#providerTerm option:selected").val() == "" ? $("#providerTermError").text("Provider Term is required.") : $("#providerTermError").text("");
+            //$('input[name="Provider.Term"]').val($("#providerTerm option:selected").val());
+
+            $("#providerScannedDoc option:selected").val() == "" ? $("#providerScanDocError").text("Scanned Document is required.") : $("#providerScanDocError").text("");
+            //$('input[name="Provider.ScannedDocuments"]').val($("#providerScannedDoc option:selected").val());
+
+            $("#providerRelatedFacility option:selected").val() == "" ? $("#providerRelatedFacilityError").text("Related Facility is required.") : $("#relatedFacilityError").text("");
+            //$('input[name="Provider.RelatedFacilityId"]').val($("#providerRelatedFacility option:selected").val());
+
+            $("#providerUidType option:selected").val() == "" ? $("#providerUidTypeError").text("Provider UID Type is required.") : $("#providerUidTypeError").text("");
+            //$('input[name="Provider.UidType"]').val($("#providerUidType option:selected").val());
+
+            $("#providerStatus option:selected").val() == "" ? $("#providerStatusError").text("Provider Status is required.") : $("#providerStatusError").text("");
+            //$('input[name="Provider.Status"]').val($("#providerStatus option:selected").val());
+
+
+            $("#providerRentType option:selected").val() == "" ? $("#providerRentTypeError").text("This field Provider Rent is required.") : $("#providerRentTypeError").text("");
+            //$('input[name="Provider.RentType"]').val($("#providerRentType option:selected").val());
+
+
+
+
+            $("input:radio[name='Provider.IsBilledAmountVisible']:checked").val() == undefined ? $("#isBilledAmtVisibleError").text("Please choose an option.") : $("#isBilledAmtVisibleError").text("");
+            //$('input[name="Provider.IsBilledAmountVisible"]').val($("input:radio[name='Provider.IsBilledAmountVisible']:checked").val());
+
+
+            $("input:radio[name='Provider.IsAllowToBill']:checked").val() == undefined ? $("#isAllowToBillError").text("Please choose an option.") : $("#isAllowToBillError").text("");
+            //$('input[name="Provider.IsAllowToBill"]').val($("input:radio[name='Provider.IsAllowToBill']:checked").val());
+
+            $("input:radio[name='Provider.IsAllowToAddVisits']:checked").val() == undefined ? $("#isAllowToAddVistsError").text("Please choose an option.") : $("#isAllowToAddVistsError").text("");
+            //$('input[name="Provider.IsAllowToAddVisits"]').val($("input:radio[name='Provider.IsAllowToAddVisits']:checked").val());
+
+            $("input:radio[name='Provider.IsAllowToSchedule']:checked").val() == undefined ? $("#isAllowToScheduleError").text("Please choose an option.") : $("#isAllowToScheduleError").text("");
+            //$('input[name="Provider.IsAllowToSchedule"]').val($("input:radio[name='Provider.IsAllowToSchedule']:checked").val());
+
+            $("input:radio[name='Provider.AllowSms']:checked").val() == undefined ? $("#isAllowSmsError").text("Please choose an option.") : $("#isAllowSmsError").text("");
+         
+            var speciality = $('#providerSpeciality').val();
+            var providerTitle = $('#providerTitle').val();
+            var providerSuffix = $('#providerSuffix').val();
+            var providerTerm = $('#providerTerm').val();
+            var providerScannedDoc = $('#providerScannedDoc').val();
+            var providerRelatedFacility = $('#providerRelatedFacility').val();
+            var providerUidType = $('#providerUidType').val();
+            var providerStatus = $('#providerStatus').val();
+            var ProfileSrc = $("#result").attr('src');
+
+            if ($(this).valid()) {
+                if (!(speciality == "" || providerTitle == "" || providerSuffix == "" || providerTerm == "" || providerScannedDoc == "" || providerRelatedFacility == "" || providerUidType == "" || providerStatus == "")) {
+                    $('#accept').trigger('click');
+                    $(".btn").attr("disabled", true);
+                    $(this).ajaxSubmit({
+                        data: { Signature: Signdata, profileImage: ProfileSrc },
+                        success: function (data) {
+                            var msg = data.success;
+                            if (data.isError == true) {
+                                new PNotify({
+                                    title: 'Error!',
+                                    text: msg,
+                                    delay: 5000,
+                                    type: 'error',
+                                    addclass: 'pnotify-center'
+                                });
+                                $(".btn").attr("disabled", false);
+                                return;
+                            }
+                            if (data.Success == "Data saved successfully") {
+                                $('#ProviderInfo_UserId').val(data.providerUserId);
+                                $('#Provider_ProviderInfoId').val(data.providerInfoId);
+                                var success = data.Success;
+                            }
+                            else {
+                                var success = data.success;
+                            }
+                            $(".checkmark").show().fadeOut(6000);
+                        },
+                        complete: function (xhr) {
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs customtab" id="myTab" role="tablist">
+                    <li> <h5 class="">@ViewBag.ViewHeader</h5></li>
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#AssistInfo" role="tab">  <span class="hidden-xs-down">Assistant Info</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#WorkingSchedule" role="tab"><span class="hidden-xs-down">Working Schedule</span></a> </li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col">
+                        <a href="@Url.Action("AssistantList","Assistant")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 right">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="AssistInfo" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="color-blue">Assistant Info</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <form class="col-sm-12" asp-action="Add" asp-controller="Assistant" method="post" id="assistantform" enctype="multipart/form-data">
+                                                <input type="hidden" asp-for="Assistant.AssistantInfoID">
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Company/Entity Name<span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="text" asp-for="Assistant.EntityName" class="text-input entity-name-input" placeholder="Enter Entity Name">
+                                                            <span class="required" asp-validation-for="Assistant.EntityName"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <div class="center">
+                                                            <div class="docs-preview clearfix">
+                                                                <div class="img-preview preview-lg">
+                                                                    <div id="result-wrapper">
+                                                                        @if (Action == "Update")
+                                                                        {
+                                                                            @if (image == null)
+                                                                            {
+                                                                                <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                                                <div class="middle">
+                                                                                    <div class="text">
+                                                                                        <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                                        <p>Upload</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                                            }
+                                                                            else if (image == "")
+                                                                            {
+                                                                                <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                                                <div class="middle">
+                                                                                    <div class="text">
+                                                                                        <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                                        <p>Upload</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                                                                <div class="middle">
+                                                                                    <div class="text">
+                                                                                        <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+                                                                                        <p>Upload</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @*<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">*@
+                                                                                <img src="@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                                            <div class="middle">
+                                                                                <div class="text">
+                                                                                    <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                                    <p>Upload</p>
+                                                                                </div>
+                                                                            </div>
+                                                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-body">
+                                                                            <div class="row">
+                                                                                <div id="main-cropper"></div>
+                                                                                <div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+                                                                                    <div class="panel-heading">Camera</div>
+                                                                                    <div class="panel-body">
+                                                                                        <div id="my_camera"></div>
+                                                                                        <!-- A button for taking snaps -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-12 center">
+                                                                                    <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                                                        <i class="mdi mdi-camera"></i>
+                                                                                    </a>
+                                                                                    <a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                                                    <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                                                        <i class="mdi mdi-cloud-upload"></i>
+                                                                                        <input type="file" class="custom-file-input" id="upload">
+                                                                                    </a>
+                                                                                    <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                                                    <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                                                    <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                                                    @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                                                    <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>First Name<span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" asp-for="Assistant.FirstName" class="text-input first-name-input" placeholder="Enter First Name">
+                                                            <span class="required" asp-validation-for="Assistant.FirstName"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Middle Name</p>
+                                                        <div class="input-field">
+                                                            <input type="text" asp-for="Assistant.MiddleName" class="text-input middle-name-input" placeholder="Enter Middle Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p> Last Name<span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" asp-for="Assistant.LastName" class="text-input last-name-input" placeholder="Enter Last Name">
+                                                            <span class="required" asp-validation-for="Assistant.LastName"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>
+                                                            Speciality <span class="required">*</span>
+                                                        </p>
+
+                                                        <div class="input-field">
+                                                            <select id="Speciality" data-placeholder="Select Specility" class="select2 form-control  text-input" asp-for="Assistant.SpecialityID"
+                                                                    asp-items="@(new SelectList(Model.AssistantSpeciality,"LookupId","LookupValue"))">
+
+                                                                <option value="" selected disabled></option>
+                                                            </select>
+                                                            <span class="required" id="assistantSpecialityError"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>
+                                                            Title <span class="required">*</span>
+                                                        </p>
+
+                                                        <div class="input-field">
+                                                            <select id="Tittle" data-placeholder="Select Title" class="select2 form-control  text-input" asp-for="Assistant.TittleID"
+                                                                    asp-items="@(new SelectList(Model.AssistantTitleList,"LookupId","LookupValue"))">
+                                                                <option value="" selected disabled></option>
+                                                            </select>
+                                                            <span class="required" id="providerTitleError"></span>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>
+                                                            Suffix <span class="required">*</span>
+                                                        </p>
+
+                                                        <div class="input-field">
+                                                            <select id="assistantSuffix" data-placeholder="Select Suffix" class="select2 form-control  text-input" asp-for="Assistant.Suffix"
+                                                                    asp-items="@(new SelectList(Model.AssistantSuffixList,"LookupId","LookupValue"))">
+                                                                <option value="" selected disabled></option>
+                                                            </select>
+                                                            <span class="required" id="providerSuffixError"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>License No <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input licenseno" asp-for="Assistant.LicenseNo" placeholder="Enter License No">
+                                                            <span class="required" asp-validation-for="Assistant.LicenseNo"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>NPI No <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input npi" asp-for="Assistant.NpiNumber" placeholder="Enter NPI No">
+                                                            <span class="required" asp-validation-for="Assistant.NpiNumber"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Tax ID <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input taxid" asp-for="Assistant.TaxID" placeholder="Enter Tax ID">
+                                                            <span class="required" asp-validation-for="Assistant.TaxID"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Assign Room No <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" asp-for="Assistant.AssignRoomNo" placeholder="Enter Room No">
+                                                            <span class="required" asp-validation-for="Assistant.AssignRoomNo"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Rent Fee If Any</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input" asp-for="Assistant.RentFee" type="text" placeholder="Enter Rent">
+                                                            <span class="required" asp-validation-for="Assistant.RentFee"></span>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Rent Type  <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <select id="assistantRentType" data-placeholder="Select Rent Type" class="select2 form-control  text-input" asp-for="Assistant.RentType"
+                                                                    asp-items="@(new SelectList(Model.AssistantRentTypeList,"LookupId","LookupValue"))">
+                                                                <option value="" selected disabled></option>
+                                                            </select>
+                                                            <span class="required" id="assistantRentTypeError"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Scanned Documnet <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <select id="ScannedDocument" data-placeholder="Select Document" class="select2 form-control  text-input" asp-for="Assistant.ScannedDocument"
+                                                                    asp-items="@(new SelectList(Model.AssistantScannedDocumentsList,"LookupId","LookupValue"))">
+                                                                <option value="" selected disabled></option>
+
+                                                            </select>
+                                                            <span class="required" id="assistantScanDocError"></span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Electronic Signature Password <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="password" asp-for="Assistant.ElectronicSignPassword" class="text-input" value="@ViewBag.Password" placeholder="Enter Password">
+                                                            <a href="javascript(0);">Forget Signature</a><br />
+                                                            <span class="required" asp-validation-for="Assistant.ElectronicSignPassword"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Confirm Password <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="password" class="text-input" asp-for="Assistant.ElectronicConfirmPassword" value="@ViewBag.Password" placeholder="Enter Password">
+                                                            <span class="required" asp-validation-for="Assistant.ElectronicConfirmPassword"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 12">
+                                                        @if (Action == "Update")
+                                                        {
+                                                            if (Signature == "Empty.png")
+                                                            {
+                                                                <p>Write Signature</p>
+                                                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                                    <div class="m-signature-pad--body">
+                                                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                                    </div>
+                                                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                                        <div class="description">Save Your signature before submit the form</div>
+                                                                        <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                                                            Upload Image
+                                                                        </button>
+                                                                        <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                                            Clear
+                                                                        </button>
+                                                                        <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                                            Save Signature
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <img id="savetarget" height="250" width="600" />
+                                                                <input type="file" id="SignatureImageUpload" asp-for="Assistant.SignImage" style="display:none" />
+
+                                                                <span class="WriteSignatureError required"></span>
+                                                            }
+                                                            else if (Signature == null)
+                                                            {
+                                                                <p>Write Signature</p>
+                                                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                                    <div class="m-signature-pad--body">
+                                                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                                    </div>
+                                                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                                        <div class="description">Save Your signature before submit the form</div>
+                                                                        <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                                                            Upload Image
+                                                                        </button>
+                                                                        <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                                            Clear
+                                                                        </button>
+                                                                        <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                                            Save Signature
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <img id="savetarget" height="250" width="600" />
+                                                                <input type="file" id="SignatureImageUpload" asp-for="Assistant.SignImage" style="display:none" />
+
+                                                                <span class="WriteSignatureError required"></span>
+                                                            }
+                                                            else if (Signature == "")
+                                                            {
+                                                                <p>Write Signature</p>
+                                                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                                    <div class="m-signature-pad--body">
+                                                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                                    </div>
+                                                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                                        <div class="description">Save Your signature before submit the form</div>
+                                                                        <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                                                            Upload Image
+                                                                        </button>
+                                                                        <button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                                            Clear
+                                                                        </button>
+                                                                        <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                                            Save Signature
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                                <img id="savetarget" height="250" style="width:600px" />
+                                                                <input type="file" id="SignatureImageUpload" asp-for="Assistant.SignImage" style="display:none" />
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Your Signature is :</p>
+                                                                <img id="savetarget" height="250" width="450" />
+
+                                                                <img src="/SignatureImages/@Signature" class="SignatureImageUpdate" id="UpdateCaseSignature" height="250" />
+                                                                <div class="row">
+                                                                    <div class="col s12 ">
+                                                                        <a class="Signaturepad_show btn add-btn patientSignatureTxtField">Update Signature</a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                                    <div class="m-signature-pad--body">
+                                                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                                    </div>
+                                                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                                        <div class="description">Save Your signature before submit the form</div>
+                                                                        <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+                                                                            Upload Image
+                                                                        </button>
+                                                                        <button type="button" class="btn add-btn btn-sm clear signature_pad_cancel">
+                                                                            Cancel
+                                                                        </button>
+                                                                        <button type="button" class="btn btn-sm add-btn clear signature_pad_clear" data-action="clear">
+                                                                            Clear
+                                                                        </button>
+                                                                        <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                                            Save Signature
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <span class="WriteSignatureError required"></span>
+                                                                <input type="file" id="SignatureImageUpload" asp-for="Assistant.SignImage" style="display:none" />
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <p>Write Signature Or Upload Signature Image</p>
+                                                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                                <div class="m-signature-pad--body">
+                                                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                                </div>
+                                                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                                    <div class="description">Save Your signature before submit the form</div>
+                                                                    <button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+                                                                        Upload Image
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-sm add-btn clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                                        Clear
+                                                                    </button>
+                                                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                                        Save Signature
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col m6">
+                                                                    <img id="savetarget" height="250" width="600" />
+
+                                                                </div>
+                                                            </div>
+                                                            <span class="WriteSignatureError required"></span>
+                                                            <input type="file" id="SignatureImageUpload" style="display:none" />
+                                                        }
+                                                        <input id="HidenWriteSignPic" hidden="hidden" value="@Signature" asp-for="Assistant.HiddenWriteSignImage" />
+                                                       
+                                                        <input id="HidenProfilePic" hidden="hidden" value="@ReminderBy" asp-for="Assistant.Remindimage" />
+
+                                                        @*<input type="file" id="SignatureImageUpload" style="display:none" />*@
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Phone Number <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input phoneno" asp-for="Assistant.PhoneNo" placeholder="Enter Phone Number">
+                                                            <span class="required" asp-validation-for="Assistant.PhoneNo"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Mobile Number <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input phoneno" asp-for="Assistant.MobileNo" placeholder="Enter Mobile Number">
+                                                            <span class="required" asp-validation-for="Assistant.MobileNo"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Fax Number <span class="required">*</span></p>
+
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input fax" asp-for="Assistant.FaxNo" placeholder="Enter Fax Number">
+                                                            <span class="required" asp-validation-for="Assistant.FaxNo"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Email <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="email" class="text-input" asp-for="Assistant.Email" placeholder="Enter Email">
+                                                            <span class="required" asp-validation-for="Assistant.Email"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Address Line 1 <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" asp-for="Assistant.AddressLine1" placeholder="Enter Address Line 1">
+                                                            <span class="required" asp-validation-for="Assistant.AddressLine1"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Address Line 2</p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" asp-for="Assistant.AddressLine2" placeholder="Enter Address Line 2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Address Line 3</p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" asp-for="Assistant.AddressLine3" placeholder="Enter Address Line 3">
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>City</p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" placeholder="Enter City" id="assistant_city" asp-for="Assistant.City">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>State</p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" id="provider_state" asp-for="Assistant.State">
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Zip <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="text" class="text-input" maxlength="5" asp-for="Assistant.Zip" placeholder="Enter Zip Code">
+                                                            <span class="required" asp-validation-for="Assistant.Zip"></span>
+                                                            <span class="required" id="err_zip"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>User ID <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="text" asp-for="User.UserName" class="text-input" placeholder="Enter User ID">
+                                                            <span class="required" asp-validation-for="User.UserName"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Password <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <input type="password" class="text-input" asp-for="Password" placeholder="Enter Password">
+                                                            <span class="required" asp-validation-for="Password"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                                        <p>Status <span class="required">*</span></p>
+                                                        <div class="input-field">
+                                                            <select id="providerStatus" data-placeholder="Select Status" class="select2 form-control  text-input" asp-for="Assistant.Status"
+                                                                    asp-items="@(new SelectList(Model.AssistantStatuslist,"LookupId","LookupValue"))">
+                                                                <option value="" disabled selected></option>
+                                                            </select>
+                                                            <span class="required" id="assistantStatusError"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2 mb-2">
+                                                    <div class="col s12">
+                                                        <div class="center">
+                                                            <button type="submit" id="assistantInfoBtn" class="btn add-btn">@ViewBag.BtnSubmit</button>
+                                                            @*<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>*@
+                                                            <a href="@Url.Action("AssistantList", "Assistant")" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="WorkingSchedule" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <h5 class="breadcrumbs-title color-blue">Working Schedule</h5>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" asp-for="User.UserId">
+                                                <input type="hidden" class="form-control" id="ScheduleId" value="0">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <h6>Select  available days And sessions :</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p>Start Time</p>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <p>End Time</p>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <p>Assign Department</p>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <p>Assign Doctor</p>
+                                                    </div>
+                                                </div>
+                                                <div class="roster-schedule-main">
+                                                    <div class="monday-roster roaster-schedule-day">
+                                                        <div class="monday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="monday" class="custom-control-input day-check-box day" id="customCheck1">
+                                                                    <label class="custom-control-label" for="customCheck1">Mondey:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="monday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="monday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" id="monday_department_" data-day="monday" data-placeholder="Select Department"></select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select id="monday_doctors_" class="select2 doctors doctorId doctors-0" data-day="monday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-1 nopadding">
+                                                                <div class="input-group-append monday_add_btn" style="display:none" id="mondayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="monday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Monday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tuesday-roster roaster-schedule-day">
+                                                        <div class="tuesday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="tuesday" class="custom-control-input day-check-box day" id="customCheck2">
+                                                                    <label class="custom-control-label" for="customCheck2">Tuesday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="tuesday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="tuesday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="tuesday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="tuesday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1 nopadding">
+                                                                <div class="input-group-append tuesday_add_btn" style="display:none" id="TusedayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="tuesday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Tuseday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wednesday-roster roster-schedule-day">
+                                                        <div class="wednesday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="wednesday" class="custom-control-input day-check-box day" id="customCheck4">
+                                                                    <label class="custom-control-label" for="customCheck4">Wednesday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="wednesday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="wednesday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="wednesday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="wednesday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <div class="input-group-append wednesday_add_btn" style="display:none" id="WednesdayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="wednesday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Wednesday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="thursday-roster roster-schedule-day">
+                                                        <div class="thursday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="thursday" class="custom-control-input day-check-box day" id="customCheck3">
+                                                                    <label class="custom-control-label" for="customCheck3">Thursday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="thursday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="thursday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="thursday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="thursday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <div class="input-group-append thursday_add_btn" style="display:none" id="ThursdayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="thursday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Thursday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="friday-roster roster-schedule-day">
+                                                        <div class="friday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="friday" class="custom-control-input day-check-box day" id="customCheck5">
+                                                                    <label class="custom-control-label" for="customCheck5">Friday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="friday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="friday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="friday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="friday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <div class="input-group-append friday_add_btn" style="display:none" id="FridayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="friday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Friday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="saturday-roster roster-schedule-day">
+                                                        <div class="sturday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="saturday" class="custom-control-input day-check-box day" id="customCheck6">
+                                                                    <label class="custom-control-label" for="customCheck6">Saturday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="saturday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="saturday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="saturday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="saturday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <div class="input-group-append saturday_add_btn" style="display:none" id="SaturdayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="saturday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Saturday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sunday-roster roster-schedule-day">
+                                                        <div class="sunday-default-0 row work-schedule-div">
+                                                            <input type="text" hidden class="form-control scheduleid" value="0">
+                                                            <div class="col-md-2">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" data-day="sunday" class="custom-control-input day-check-box day" id="customCheck7">
+                                                                    <label class="custom-control-label" for="customCheck7">Sunday:</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker startTime" data-day="sunday" placeholder="Start Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control time-picker endTime" data-day="sunday" placeholder="End Time">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3 nopadding">
+                                                                <select class="select2 department deptId department-0" data-day="sunday" data-placeholder="Select Dept. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-2 nopadding">
+                                                                <select class="select2 doctors doctorId doctors-0" data-day="sunday" data-placeholder="Select Doc. Name">
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <div class="input-group-append sunday_add_btn" style="display:none" id="SundayAdd_btn">
+                                                                    <button class="btn form-add-btn" data-day="sunday" data-count="0" type="button" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add another schedule for Sunday"><i class="ti-plus"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m12 mt-2" style="text-align:center">
+                                                        <button type="button" id="SaveButton" class="btn add-btn">Save</button>
+                                                        <a id="EditBtn" class="waves-effect waves-light ml-2 Recreate btn">Edit</a>
+                                                        <button type="button" id="Update" class="btn add-btn">Update</button>
+                                                        <a href="@Url.Action("AssistantList", "Assistant")" class="ml-2 Recreate btn">Cancel</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

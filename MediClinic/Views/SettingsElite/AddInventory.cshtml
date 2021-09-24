@@ -1,0 +1,183 @@
+﻿@model DmeInvetoryViewModel
+@{
+    ViewData["Title"] = "AddInventory";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <link href='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.css' rel="stylesheet">
+}
+
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Add New Inventory</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("DMESetting","SettingsElite")" class="waves-effect waves-light float-right" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-controller="SettingsElite" asp-action="AddInventory" method="post" data-ajax="true" data-ajax-success="onInventoryCreate(data)">
+               <input type="hidden" asp-for="DmeInventory.Id" />
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Item Description
+                        </p>
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.ItemDescription" type="text" class="text-input" placeholder="Enter Description">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Manufacturer</p>
+
+                        <div class="input-field">
+                            <select id="manufacture" class="select2" asp-for="DmeInventory.ManufactureId" asp-items="Model.SelectListItemForManufacture">
+                                <option selected disabled>Select Manufacturer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Make/Name</p>
+
+                        <div class="input-field">
+                            <select id="makeName" class="select2" asp-for="DmeInventory.MakeNameModelId" asp-items="Model.SelectListItemsForMakeNameModel">
+                                <option selected disabled>Select Make Name</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Model</p>
+
+                        <div class="input-field">
+                            <input id="model" asp-for="DmeInventory.Model" type="text" class="text-input" placeholder="Enter Model">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Serial Number</p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.SerialNumber" type="text" class="text-input" placeholder="Enter Serial Number">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Stock Number</p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.StockNumber" type="text" class="text-input" placeholder="Enter Stock Number">
+                        </div>
+                    </div>
+            
+
+
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Total Inventory Quantity</p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.TotalInventoryQuantity" type="text" class="text-input" placeholder="Enter Total Inventory Quantity">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Exisiting Inventory Quantity</p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.ExistingQuantity" type="text" class="text-input" placeholder="Enter Exisiting Inventory Quantity">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                            CPT Code
+                        </p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.CPTCode" type="text" id="hcpcs" class="text-input" placeholder="Enter CPT Code">
+                        </div>
+
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>
+                           Sub Group Of
+                        </p>
+
+                        <div class="input-field">
+                            <input asp-for="DmeInventory.SubGroupOf" type="text" id="hcpcs" class="text-input" placeholder="Enter Sub Group">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script src='https://clinicaltables.nlm.nih.gov/autocomplete-lhc-versions/17.0.2/autocomplete-lhc.min.js'></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        $("#makeName").select2({
+            placeholder: "Select Make Name"
+        });
+        $("#manufacture").select2({
+            placeholder: "Select Manufacture"
+        });
+        function onInventoryCreate(data) {
+            debugger
+            $(".checkmark").show().fadeOut(6000);
+        }
+
+        $("#makeName").change(function () {
+            var selectedValue = $(this).val();
+            console.log(selectedValue);
+            $.post("/SettingsElite/GetModelByMakeNameValue", { Id: selectedValue }).done(function (data) {
+                debugger;
+                $("#model").val(data.model);
+                console.log(data);
+            });
+        });
+
+
+        $("#model").keypress(function (e) {
+            debugger
+            e.preventDefault();
+        });
+
+
+    </script>
+    <script type="text/javascript">
+        new Def.Autocompleter.Search('hcpcs', 'https://clinicaltables.nlm.nih.gov/api/hcpcs/v3/search',
+            { tableFormat: true, valueCols: [0], colHeaders: ['Code', 'Description'] });
+    </script>
+}

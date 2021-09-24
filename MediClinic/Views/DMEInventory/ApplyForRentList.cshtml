@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewData["Title"] = "ApplyForRentList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        var table;
+        $(document).ready(function () {
+            table = $('#myTableDME').DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+
+                'columnDefs': [{
+                    "targets": [0],
+                    "orderable": false,
+                }]
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+
+        })
+
+
+        function DeleteEmployee(Id, event) {
+            debugger
+            event.closest('tr').remove();
+
+            $.post("SomeURLhere", { Id: Id }).done(function (done) {
+                debugger
+            });
+
+            $(".checkmark").show().fadeOut(6000);
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        DME Rent
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                    <a asp-action="ApplyForRent" class="btn  float-right add-btn set_smallscreen">
+                        Add New
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">
+
+                <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                Batch Actions
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu batch">
+                <li><a href="#">Option 1</a></li>
+                <li><a href="#">Option 2</a></li> 
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="myTableDME" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+
+                                </th>
+                                <th>Patient Name</th>
+                                <th>DOB</th>
+                                <th>Marital Status</th>
+                                <th>Address</th>
+                                <th>Provider NAME</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                                <tr class="card" style="cursor: pointer">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="ForId" value="check">
+                                            <label class="custom-control-label" for="ForId"></label>
+                                        </div>
+                                    </th>
+
+
+                                    <td>Some Name</td>
+
+                                    <td>@DateTime.Now</td>
+                                    <td>Single</td>
+                                    <td>Lahore,Pakistan</td>
+                                    <td>Some Provider</td>
+
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Delete</a></li>
+                                            <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Edit</a></li>
+
+                                        </ul>
+
+                                    </td>
+                                </tr>
+                            
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

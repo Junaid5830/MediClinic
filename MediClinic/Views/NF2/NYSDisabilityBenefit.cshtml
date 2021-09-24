@@ -1,0 +1,445 @@
+﻿
+
+@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "NYS Disability Benefit";
+    Layout = "~/Views/Shared/_NF2Layout.cshtml";
+}
+@section styles{
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        textarea {
+            width: 102%;
+            height: 5rem;
+            border-radius: 4px;
+            border: 1px solid #cfcfcf !important;
+        }
+
+        #instruction {
+            height: 10rem;
+        }
+
+        .mt15 {
+            margin-top: 1.5rem !important;
+        }
+
+        .mt3 {
+            margin-top: 3rem !important
+        }
+
+        .mt5 {
+            margin-top: 5rem !important
+        }
+
+        .mt35 {
+            margin-top: 3.5rem !important
+        }
+
+        .center {
+            text-align: center !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.treatmentyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#treatmentdiv').hide();
+                }
+            });
+            $('.treatmentno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#treatmentdiv').show();
+                }
+            });
+            $('.careyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#disablitydiv').hide();
+                    $('#carediv').show();
+                }
+            });
+            $('.careno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#carediv').hide();
+                    $('#disablitydiv').show();
+                }
+            });
+            $('.automobileyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#automobilediv').hide();
+                }
+            });
+            $('.automobileno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#automobilediv').show();
+                }
+            });
+            $('.injuryyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').show();
+                }
+            });
+            $('.injuryno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').hide();
+                }
+            });
+            $('.lossyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#lossdiv').show();
+                }
+            });
+            $('.lossno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#lossdiv').hide();
+                }
+            });
+            $('.newinneryes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#newinnerdiv').show();
+                }
+            });
+            $('.newinnerno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#newinnerdiv').hide();
+                }
+            });
+            $('.injurynono').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').hide();
+                }
+            });
+
+            $('.directpayment').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#hospitalproviderdiv').hide();
+                    $('#directpaymentdiv').show();
+                }
+            });
+            $('.hospitalprovider').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#directpaymentdiv').hide();
+                    $('#hospitalproviderdiv').show();
+                }
+            });
+
+
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+
+            <div class="row mb-1">
+
+
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m10  margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue">NYS Disability Benefit</h5>
+                            </div>
+
+
+                            <div class="col s6 m2 margin-top-8">
+                                <a class="waves-effect waves-light float-right mr-2 mt-2" href="javascript:void(0);">
+                                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <form class="form-inline col s12">
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer/Self Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer's Claim Representative</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Phone Number</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col s12 m6 form-firstName">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Policy Holder</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter policy holder">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Policy Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter policy number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Date of Accident</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Claim Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter claim number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Applicant Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6 ">
+                                        <p>Applicant Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p style="color: #547CEA">
+                                            IT IS HEREBY AGREED between the Applicant and the Insurer, as follows:
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p class="">
+                                            In the event a source of Workers' Compensation or N.Y.S. Disability benefits denies liability for  payment of benefits due on account of the above accident, in whole or in part, the Insurer agrees to process the Applicant's No-Fault claim without deducting the withheld State or Federal Workers' Compensation benefits or N.Y.S. Disability benefits under the following conditions:
+                                        </p>
+                                        <p>
+                                            FIRST:  The Applicant executes this Agreement.
+                                        </p>
+                                        <p>
+                                            SECOND: In the event such amounts are eventually paid to the Applicant, the Applicant agrees to repay the first party benefits equal to the withheld amounts of Workers' Compensation benefits or N.Y.S. Disability benefits less any attorney's fee which the Applicant paid in order to obtain the benefits.
+                                        </p>
+                                        <p>
+                                            THIRD: In the event the Applicant does not reimburse the Insurer, as provided herein, the Insurer may thereafter deduct such amounts from any future No-Fault benefits due the Applicant on the claim.
+                                        </p>
+                                        <p>
+                                            FOURTH: The Applicant agrees to diligently pursue any claim for Workers' Compensation or N.Y.S. Disability benefits.
+                                        </p>
+                                        <p>
+                                            FIFTH: In the event the Applicant fails to diligently pursue such claim for Workers' Compensation or N.Y.S. Disability benefits as set forth in Paragraph Fourth or in the event the Applicant fails to reimburse the Insurer as provided herein, the Insurer may bring an action to recover the amount paid under this agreement.
+                                        </p>
+
+                                    </div>
+                                        <div class="col s12 m12">
+                                            <p style="color: #547CEA">
+                                                ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR OTHER PERSON FILES ANAPPLICATIONFOR COMMERCIAL INSURANCEOR ASTATEMENTOF CLAIM FOR ANYCOMMERCIAL OR PERSONAL INSURANCEBENEFITS CONTAININGANYMATERIALLYFALSE INFORMATION,OR CONCEALSFOR THE PURPOSEOF MISLEADING,INFORMATIONCONCERNINGANY FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGEOR CONVERSION OF ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND SHALLALSOBE SUBJECTTO ACIVIL PENALTYNOT TO EXCEED FIVE THOUSANDDOLLARSANDTHE VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                                            </p>
+                                    </div>
+
+
+                                    <div class="col s12 m6">
+
+                                        <p>Signature of Applicant</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m6">
+
+                                        <p>Signature of Insurer</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12" style="text-align:center">
+                                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

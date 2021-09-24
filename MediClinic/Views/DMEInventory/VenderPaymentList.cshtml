@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewData["Title"] = "VenderPaymentList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section scripts{
+  
+    <script>
+        $(".select2").select2();
+        var table;
+        $(document).ready(function () {
+            table = $('#myTableEUO').DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+
+                'columnDefs': [{
+                    "targets": [0],
+                    "orderable": false,
+                }]
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+
+        })
+
+
+      
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Payments
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                    <a href="@Url.Action("VenderPaymentAdd","DMEInventory")" class="btn  float-right add-btn set_smallscreen">
+                        Add Vender Invoice
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="myTableEUO" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+
+                                </th>
+                                <th>Assignor</th>
+                                <th>Claim No</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Total Ammount</th>
+                                <th>Paid Ammount</th>
+                                <th>Service Charges</th>
+
+                                <th class="all">Action  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="abc" value="check">
+                                        <label class="custom-control-label" for="abc"></label>
+                                    </div>
+                                </th>
+
+
+                                <td>John</td>
+                                <td>03216656565656</td>
+                                <td>Rent</td>
+                                <td>08/12/2020</td>
+                                <td>$500</td>
+                                <td>$200</td>
+                                <td>$50</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @*<li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>*@
+                                        <li><a href="javascript:void(0);">Delete</a></li>
+                                        <li><a href="javascript:void(0);">Edit</a></li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="abc1" value="check">
+                                        <label class="custom-control-label" for="abc1"></label>
+                                    </div>
+                                </th>
+
+
+                                <td>John</td>
+                                <td>03216656565656</td>
+                                <td>Purchase</td>
+                                <td>08/12/2020</td>
+                                <td>$500</td>
+                                <td>$200</td>
+                                <td>$50</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        @*<li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>*@
+                                        <li><a href="javascript:void(0);">Delete</a></li>
+                                        <li><a href="javascript:void(0);">Edit</a></li>
+
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

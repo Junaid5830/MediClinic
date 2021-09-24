@@ -1,0 +1,98 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    var patientId = ViewContext.RouteData.Values["id"];
+}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">Problems History</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="ProblemsHistoryGrid">
+                                @*<partial name="../_PatientPartialView/_ManageMedicalProblems.cshtml" />*@
+                                <partial name="../_MedicalHistoryPartial/_ManageMedicalProblems.cshtml" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="SaveMedicalProblems" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMedicalProblemsHistorySucess(data)" id="MedicalProblemsForm">
+                        <input hidden asp-for="patientMedicalProblemBasicDto.MedicalProblemId" />
+                        <input hidden asp-for="patientMedicalProblemBasicDto.PatientId" />
+                        <input hidden asp-for="patientMedicalProblemBasicDto.ExaminerId" />
+
+                        <div class="row">
+
+                            <div class=" col-sm-12 col-md-6">
+                                <p>Type</p>
+                                
+                                    @*<select id="DiseaseType" class="multilangOpt" asp-for="patientMedicalProblemBasicDto.DiseaseTypeId" asp-items="@(new SelectList(Model.medicalDiseaseTypeList,"DiseaseTypeId","DiseaseTypeName") )">
+                                            <option></option>
+                                        </select>*@
+
+                                    <select data-placeholder="Select Type" class="select2 multilangOpt" id="dieaseType" asp-for="patientMedicalProblemBasicDto.DiseaseTypeId" asp-items="@(new SelectList(Model.medicalDiseaseTypeList,"DiseaseTypeId","DiseaseTypeName"))">
+
+                                        <option selected disabled value=""></option>
+                                    </select>
+
+                               
+                                @*<div class="input-field col s3 m2 pr-0">
+                                        <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right30"><i class="material-icons">add</i></a>
+                                    </div>*@
+                            </div>
+
+                            <div class=" col-sm-12 col-md-6">
+                                <p class="content-p"> Date/Year</p>
+                                <input type="text" class="datepicker text-input" asp-for="patientMedicalProblemBasicDto.DateYear" placeholder="Select Date/Year" autocomplete="off">
+
+
+                            </div>
+
+                        </div>
+                        <div class="row current">
+                            <div class=" col-sm-12 col-md-6">
+                                <p>Current Status</p>
+
+                                <select data-placeholder="Select Current Status" class="select2" id="currentStatus" asp-for="patientMedicalProblemBasicDto.CurrentStatus">
+                                    <option value="" selected disabled></option>
+                                    <option value="Remissio">Remission</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Other">Other</option>
+                                </select>
+
+                            </div>
+                            <div class="col">
+
+
+                                <p>Report/Documents</p>
+                                <div>
+                                    <select data-placeholder="Select Report/Documents" class="select2" id="documentId" asp-for="patientMedicalProblemBasicDto.DocumentReport">
+                                        <option value="" selected disabled></option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="N/A">N/A</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-2 mb-2">
+                            <div class="col" style="text-align:center">
+                                <button type="submit" id="SaveProblemsBtn" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

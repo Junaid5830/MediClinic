@@ -1,0 +1,331 @@
+﻿@model MediClinic.Models.DTOs.ProviderSessionTypeDto
+
+@{
+    ViewData["Title"] = "ProviderSessionSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+
+        label, input {
+            position: relative;
+            display: block;
+            padding-right: 76px;
+            width: 170px;
+            box-sizing: border-box;
+        }
+
+            label::after {
+                content: '.' attr(data-domain);
+                position: absolute;
+                top: 4px;
+                left: 94px;
+                font-family: arial, helvetica, sans-serif;
+                font-size: 12px;
+                display: block;
+                color: rgba(0, 0, 0, 0.6);
+                font-weight: bold;
+            }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 96% !important;
+            margin-top: 0px !important;
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+
+        .input-field {
+            margin: 0 auto
+        }
+
+        .row .col.s3 {
+            width: auto !important;
+        }
+
+        .tabs {
+            border-bottom: 1px solid #6b6f82 !important;
+            border-left: 1px solid #6b6f82 !important;
+        }
+
+            .tabs li a {
+                font-size: 16px !important;
+                color: #6b6f82 !important;
+            }
+
+        .text-danger {
+            color: #CA0B00;
+        }
+
+        .d-none-td {
+            display: none;
+        }
+
+        .checkmark {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #4bb71b;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #4bb71b;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            position: fixed;
+            top: 12%;
+            right: 2%;
+            float: right;
+            z-index: 9999;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #4bb71b;
+            fill: #fff;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @@keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @@keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @@keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4bb71b;
+            }
+        }
+    </style>
+}
+
+
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6 ">
+                <h5 class="breadcrumbs-title color-blue mt-0">Add Sessions </h5>
+            </div>
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="@Url.Action("Setting", "Setting")">
+                    <i class="material-icons  right arrow-icon">arrow_back</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="row">
+        <form class="form-inline col s12" asp-action="SaveProviderSessionSettings" method="post" asp-controller="Setting" id="SaveSessionForm">
+            <input type="hidden" id="hiddenFormId" asp-for="ProviderSessionTypeId" />
+            <div class="row">
+                <div class="col s12 m5">
+                    <div class="input-field">
+                        <p>Shift Name <span class="required"> * </span></p>
+                        <input class="text-input formValue" asp-for="ProviderSessionType" type="text" id="SessionTypeName" placeholder="Session Name">
+                        <span asp-validation-for="ProviderSessionType" class="required"></span>
+                    </div>
+                </div>
+                <div class="col s12 m5">
+                    <div class="input-field ">
+                        <p>Start Time <span class="required"> * </span></p>
+                        <input class="text-input timeField formValue" asp-for="StartTime" type="time" id="startTime">
+                        <span asp-validation-for="StartTime" class="required"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col s12 m5">
+                    <div class="input-field ">
+                        <p>End Time <span class="required"> * </span></p>
+                        <input class="text-input timeField formValue" asp-for="EndTime" type="time" id="endTime">
+                        <span asp-validation-for="EndTime" class="required"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                    <a href="javascript:void(0)" class="waves-effect waves-light Recreate btn">Cancel</a>
+                </div>
+            </div>
+        </form>
+
+        <br />
+        <div class="row" id="mediData">
+            <div class="col s12">
+                <table class="centered highlight bordered" id="prescriptionData" style="margin-bottom:30px;">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>Shift Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Delete</th>
+                            <th>Edit</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="sessionBody"></tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@*<td class='center'> <a href='javascript:void(0);' class='btn-delete'><i class='material-icons' style='color:#d9534f'>delete</i></a> </td>*@
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+    <script type="text/javascript">
+        $('.timeField').val('');
+
+        $.get("/Setting/GetProviderSessionSettings").done(function (data) {
+            debugger;
+            $('#sessionBody').html('');
+            for (var session of data) {
+
+                $('#sessionBody').append("<tr><td id='Name-" + session.providerSessionTypeId + "'> " + session.providerSessionType + " </td> <td id='startTime-" + session.providerSessionTypeId + "'> " + session.startTime + " </td> <td id='endTime-" + session.providerSessionTypeId + "'> " + session.endTime + " </td> <td class='center'><a href='javascript:void(0);' class='btn-delete' id=" + session.providerSessionTypeId + " onClick='deleteSession(" + session.providerSessionTypeId + ");'><i class='material-icons' style='color:#d9534f'>delete</i></a>  </td>  <td class='center'><a href='javascript:void(0);' class='btn-edit' id=" + session.providerSessionTypeId + " onClick='editSession(" + session.providerSessionTypeId + ");'><i class='material-icons' style='color:#d9534f'>edit</i></a>  </td></tr>")
+
+            }
+
+        });
+
+
+        $('#SaveSessionForm').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        $('.formValue').val('');
+                        $.get("/Setting/GetProviderSessionSettings").done(function (data) {
+                             $('#sessionBody').html('');
+
+                            for (var session of data) {
+
+                                $('#sessionBody').append("<tr><td id='Name-" + session.providerSessionTypeId + "'> " + session.providerSessionType + " </td> <td id='startTime-" + session.providerSessionTypeId + "'> " + session.startTime + " </td> <td id='endTime-" + session.providerSessionTypeId + "'> " + session.endTime + " </td> <td class='center'><a href='javascript:void(0);' class='btn-delete' id=" + session.providerSessionTypeId + " onClick='deleteSession(" + session.providerSessionTypeId + ");'><i class='material-icons' style='color:#d9534f'>delete</i></a>  </td>  <td class='center'><a href='javascript:void(0);' class='btn-edit' id=" + session.providerSessionTypeId + " onClick='editSession(" + session.providerSessionTypeId + ");'><i class='material-icons' style='color:#d9534f'>edit</i></a>  </td></tr>")
+
+                            }
+
+                                new PNotify({
+                                title: 'Success!',
+                                text: 'Record saved successfully',
+                                delay: 2500,
+                                type: 'success',
+                                addclass: 'pnotify-center'
+                            });
+
+                        });
+
+                    }
+                });
+            }
+        });
+
+        function deleteSession(sessionId) {
+            debugger;
+            $('#'+ sessionId).closest('tr').remove();
+
+            $.get("/Setting/DeleteSessionSettings", {providerSessionId : sessionId}).done(function (data) {
+                  new PNotify({
+                    title: 'Success!',
+                    text: 'Record deleted successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            });
+        }
+
+        function editSession(sessionId) {
+            debugger;
+            var name = $("#Name-" + sessionId).text();
+
+            var startTime =  $("#startTime-" + sessionId).text();
+            var endTime =  $("#endTime-" + sessionId).text();
+
+            //var convertedStartTime = startTime.replace(/\s+$/, '');
+            //var convertedEndTime = endTime.replace(/\s+$/, '');
+
+            $('#hiddenFormId').val(sessionId);
+            $('#SessionTypeName').val(name);
+            $('#startTime').val(startTime.trim());
+            $('#endTime').val(endTime.trim());
+        }
+
+      
+    </script>
+
+}

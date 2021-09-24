@@ -1,0 +1,54 @@
+﻿@model MediClinic.Models.PackageViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="PackageList" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+
+            <th>Package Name</th>
+            <th>No of Provider</th>
+            <th>Data Storage</th>
+            <th>Additional GB</th>
+            <th>Additional TB</th>
+            <th>Package Price</th>
+            <th>Active</th>
+
+            @*<th class="all">ACTION  </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.subsriptionPackagesList)
+        {
+            <tr class="card" style="cursor: pointer">
+                @*<th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Id_@item.MainMenuId" value="check">
+                            <label class="custom-control-label" for="Id_@item.MainMenuId"></label>
+                        </div>
+                    </th>*@
+                <td>@item.PackageName</td>
+
+                <td>@item.ProviderNo</td>
+                <td>@item.DataStorage</td>
+                <td>@item.AdditionalGB</td>
+                <td>@item.AdditionalTB</td>
+                <td>@item.PackagePrice</td>
+                <td class="action">
+                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                        Options
+                        @*<span class="caret"></span>*@
+                    </button>
+                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                        <li><a href="javascript:void(0);">View</a></li>
+                        <li onclick="deleteSurgery(@item.ProductId, this);"><a href="javascript:void(0);">Delete</a></li>
+                        @*<li><a href="/SurgeryCenter/Add?SurgeryCenterId=@loop.SurgeryCenterId">Edit</a></li>*@
+                    </ul>
+                </td>
+            </tr>
+}
+
+
+
+    </tbody>
+</table>

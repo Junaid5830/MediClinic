@@ -1,0 +1,135 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+
+@{ 
+    var userRole = _sessionManager.GetRoleId();
+
+}
+<div id="imagingList">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_ImagingList.cshtml" />
+
+</div>
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="imagingField">
+            Add New Imaging
+        </a>
+    </div>
+</div>
+<div id="imagingForm" style="display:none">
+    <form class="col-sm-12" asp-action="AddImaging" asp-controller="PatientExam" method="post" data-ajax="true" data-ajax-success="onCreateImaging(data)">
+        <input type="hidden" id="viistId" asp-for="imagingDto.VisitId" />
+        <input type="hidden" class="text-input" asp-for="imagingDto.ImagingId" placeholder="id">
+        @*<div class="row">
+                <div class="col-md-6">
+                    <p>Patient Name</p>
+                    <div class="input-field">
+                        <select id="UserId" data-placeholder="Select Patient Name" class="select2 form-control  text-input" asp-for="imagingDto.PatientId"
+                                asp-items="@(new SelectList(Model.patientInfoBasicDto, "PatientInfoId","FirstName"))">
+                        </select>
+                    </div>
+                </div>
+
+            </div>*@
+        <div class="row">
+            <div class=" col-md-6">
+                <p>Date of Imaging</p>
+                <div class="input-field">
+                    <input type="text" class="text-input datepicker" placeholder="select date" asp-for="imagingDto.DateOfImaging">
+                </div>
+            </div>
+            <div class=" col-md-6">
+                <p>Time of Imaging</p>
+                <div class="input-field">
+                    <input type="text" class="text-input time-picker" placeholder="select time" asp-for="imagingDto.TimmingOfImaging">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ">
+                <p>
+                    Reported By
+                </p>
+
+                <div class="input-field">
+                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ReportedBy">
+                        <option>Select  Reported By</option>
+                        <option value="AK">Bronx NY</option>
+                        <option value="HI">New Jersy</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6 ">
+                <p>
+                    Type of Image
+                </p>
+
+                <div class="input-field">
+                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.TypeOfImage">
+                        <option>Select  Type of Image</option>
+
+                        <option value="AK">Smart Guy, Esq</option>
+                        <option value="HI">Rosy</option>
+
+
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6 ">
+                <p>
+                    Report Status
+                </p>
+
+                <div class="input-field">
+                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ReportStatus">
+                        <option>Select Report Status</option>
+                        <option value="AK">Yes</option>
+                        <option value="AK">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6 ">
+                <p>
+                    Image Film
+                </p>
+
+                <div class="input-field">
+                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.ImageFilm">
+                        <option>Select Image Film</option>
+                        <option value="AK">N/A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 ">
+                <p>
+                    Diagnosis
+                </p>
+
+                <div class="input-field">
+                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="imagingDto.Diagnosis">
+                        <option>Select Diagnosis</option>
+                        <option value="AK">No show</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="text-right">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

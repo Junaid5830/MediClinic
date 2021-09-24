@@ -1,0 +1,42 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHPastDiseaseHistory != null && Model.GetMHPastDiseaseHistory.Count() > 0)
+{
+    <table class="table centered highlight bordered">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Disease Name</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHPastDiseaseHistory)
+            {
+
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Name</td>
+                    <td>@loop.Notes</td>
+
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHDiseasePastHistory(@loop.Id)"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" class="type-error" onclick="DeleteMHDiseasePastHistory(@loop.Id)"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+
+            }
+        </tbody>
+
+    </table>
+}
+

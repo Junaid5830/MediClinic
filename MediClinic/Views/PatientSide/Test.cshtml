@@ -1,0 +1,79 @@
+﻿@{ 
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <title>Fully control your Survey Questions Toolbox, Survey Creator Example</title>
+
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/worker-json.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/mode-json.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-debug.js"></script>
+    <script src="https://unpkg.com/survey-knockout"></script>
+    <link rel="stylesheet"
+          href="https://unpkg.com/survey-knockout/survey.css" />
+
+    <script src="https://unpkg.com/survey-creator"></script>
+    <link rel="stylesheet"
+          href="https://unpkg.com/survey-creator/survey-creator.css" />
+    <style>
+    </style>
+</head>
+<body>
+
+    <div id="surveyContainer">
+        <div id="creatorElement"></div>
+    </div>
+
+    <script type="text/javascript">
+        var creatorOptions = {
+            generateValidJSON: false,
+        };
+   
+        var surveyCreator = new SurveyCreator.SurveyCreator("creatorElement");
+        //surveyCreator.text = window.localStorage.getItem("YourStorageName") || "";
+
+        surveyCreator.saveSurveyFunc = function (saveNo, callback) {
+            debugger;
+            //Save the survey definition into a local storage
+            //window.localStorage.setItem("YourStorageName", surveyCreator.text);
+            !!callback && callback(saveNo, true);
+        };
+        surveyCreator.saveSurveyFunc = function (saveNo, callback) {
+            debugger;
+            $.ajax({
+
+                url: "Test",
+
+                type: "POST",
+                data: {
+                   
+                    surveyText: surveyCreator.text
+                },
+                success: function (data) {
+                    callback(saveNo, data.isSuccess);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    callback(saveNo, false);
+                    alert(thrownError);
+                }
+            });
+        }
+       
+    </script>
+
+</body>
+</html>

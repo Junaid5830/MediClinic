@@ -1,0 +1,613 @@
+﻿
+@{
+    ViewData["Title"] = "NewExam";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+@section styles{
+    <style>
+        .dropify-wrapper {
+            height: 120px !important;
+        }
+        .input-field {
+            margin: 0 auto
+        }
+
+        .list-img img {
+            width: 40px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+        }
+
+        @@media only screen and (max-width: 832px) {
+            .tabs {
+                height: 67px !important;
+            }
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+    </style>
+    <style>
+        .margin-top-8 {
+            margin-top: 0.8%;
+        }
+
+
+        .option-dropdown-btn {
+            margin-left: 25px !important;
+        }
+
+        .dd {
+            max-width: 800px;
+        }
+
+        .dd-handle:hover {
+            color: black !important;
+            background: inherit !important;
+            cursor: auto !important;
+        }
+
+        .dd-handle {
+            width: 760px;
+            box-shadow: unset !important;
+            border: unset !important;
+            background: #ffffff00 !important;
+        }
+
+        .dd-item {
+            width: 767px;
+            cursor: auto !important;
+        }
+
+            .dd-item > button {
+                width: 17px !important;
+                height: 19px !important;
+            }
+
+        .width-adjust {
+            margin-left: 6%;
+        }
+
+        .width-adjusth {
+            margin-left: 2%;
+        }
+
+        .width-adjusth-phy {
+            margin-left: 6%;
+        }
+
+        .width-adjusth-total {
+            margin-left: 7%;
+        }
+
+        .width-adjusth-cpt {
+            margin-left: 2%;
+        }
+
+        .width-adjust-doc {
+            margin-left: 4%;
+        }
+
+        .dd-placeholder {
+            display: none !important;
+        }
+
+        .actions-width {
+            padding-left: 1%;
+        }
+
+        .th-width {
+            width: 950px !important;
+        }
+
+        th.th-actions-width-action {
+            padding: 5px 30px !important;
+        }
+        
+        @@media screen and (min-width: 2800px) {
+            th {
+                font-size: 20px !important;
+            }
+
+            .width-adjusth-phy {
+                margin-left: 2% !important
+            }
+
+            .width-adjusth-total {
+                margin-left: 4% !important;
+            }
+
+            .width-adjusth-cpt {
+                margin-left: 1.5% !important
+            }
+
+            .action-btn {
+                height: 51px !important;
+            }
+        }
+        
+        @@media screen and (max-width:1265px) {
+            .width-adjust {
+                margin-left: 4%;
+            }
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/app-assets/js/scripts/extra-components-nestable.js" type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.Items').autocomplete({
+                data: {
+                    "CANE": null,
+                    "WHEELCHAIR": null,
+                    "BEDBOARD": null,
+                    "CERVICAL PILLOW": null,
+                    "CERVICAL COLOR": null,
+                    "CTU": null,
+                    "ELBOW SUPPORT": null,
+                    "KNEE SUPPPORT": null,
+                    "WRIST SUPPORT": null,
+                    "INFRA LAMP": null,
+                    "WIRELPOOL": null,
+                    "LSO": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.CPT').autocomplete({
+                data: {
+                    "A213": null,
+                    "B213": null,
+                    "C213": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.ICD').autocomplete({
+                data: {
+                    "A213": null,
+                    "B213": null,
+                    "C213": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Barcode').autocomplete({
+                data: {
+                    "A223113": null,
+                    "B213113": null,
+                    "C21FSE3": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Prescriber').autocomplete({
+                data: {
+                    "Dr. Twister": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.RefferenceNo').autocomplete({
+                data: {
+                    "Initial": null,
+                    "Follow Up": null,
+                    "Imaging Review": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Status').autocomplete({
+                data: {
+                    "Approved": null,
+                    "Not Approved": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Typeofservice').autocomplete({
+                data: {
+                    "Rental": null,
+                    "Service": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Form').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                    "All Bill": null,
+                    "Non-Billed Visits": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.AssistantSelect').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                    "All Bill": null,
+                    "Non-Billed Visits": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.caseType').autocomplete({
+                data: {
+                    "NF": null,
+                    "WC": null,
+                    "Private": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.feeSchedule').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                    "$125": null,
+                    "$236": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.cptCode').autocomplete({
+                data: {
+                    "C265": null,
+                    "Q236": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#CPT').autocomplete({
+                data: {
+                    "C265": null,
+                    "Q236": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.ICDCode').autocomplete({
+                data: {
+                    "A265": null,
+                    "B265": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#ICD').autocomplete({
+                data: {
+                    "A265": null,
+                    "B265": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.DiagnosisCode').autocomplete({
+                data: {
+                    "c210": null,
+                    "c203": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#Prescription').autocomplete({
+                data: {
+                    "DME": null,
+                    "Imaging": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#Exam').autocomplete({
+                data: {
+                    "Initial": null,
+                    "Follow Up": null,
+                    "Consultaion": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#Prescriber').autocomplete({
+                data: {
+                    "Yes": null,
+                    "No": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#OpenExam').autocomplete({
+                data: {
+                    "Dr. Twister Template": null,
+                    "Dr. Ruby Template": null,
+                    "Dr. Right Template": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('#Template').autocomplete({
+                data: {
+                    "Dr. Twister Template": null,
+                    "Dr. Ruby Template": null,
+                    "Dr. Right Template": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Frequency').autocomplete({
+                data: {
+                    "Once": null,
+                    "Daily": null,
+                    "Two Times a day": null,
+                    "Three Times a day": null,
+                    "Four Times a day": null,
+                    "Five Times a day": null,
+                    "Six Times a day": null
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.MedicationName').autocomplete({
+                data: {
+                    "Danazol": null,
+                    "Dantrium": null,
+                    "Dantrolene": null,
+                    "Sodium RYANODEX": null,
+                    "Daunorubicin": null,
+                    "Hydrochloride": null,
+                    "Dapsone": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Diagnosis').autocomplete({
+                data: {
+                    "Tear": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Reported').autocomplete({
+                data: {
+                    " Smart Guy, Esq": null,
+                    "Rosy": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Type').autocomplete({
+                data: {
+                    "Shoulder MRI": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Report').autocomplete({
+                data: {
+                    "Created": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.Film').autocomplete({
+                data: {
+                    "Yes": null,
+                    "No": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.HippaState').autocomplete({
+                data: {
+                    "Dr.Aibolit Template": null,
+                    "Dr.John": null,
+                    "Dr.Brown": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.PrefilledForm').autocomplete({
+                data: {
+                    "Option 1": null,
+                    "Option 2": null,
+                    "Option 3": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.BlankForm').autocomplete({
+                data: {
+                    "Option 1": null,
+                    "Option 2": null,
+                    "Option 3": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+        });
+
+
+
+        $(document).ready(function () {
+
+            $("#Exam-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#CurrentExam-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $('#PastProblemMedical-table').DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }] });
+            $('#CurrentProblemMedical-table').DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }] });
+            $("#PastPrescriptionList").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#CurrentPrescriptionList").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#PastDME-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6, 10], "orderable": false }] });
+            $("#CurrentDME-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6, 10], "orderable": false }] });
+            $("#Pastimaginglist-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#Currentimaginglist-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#Pastlablist").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+            $("#Currentlablist").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+
+        });
+        $(document).ready(function () {
+
+            $("#examform_btn").on("click", function () {
+                $("#exam_form").show();
+            });
+            $("#medicalproblem_btn").on("click", function () {
+                $("#medical_problemform").show();
+            });
+            $("#prescription_btn").on("click", function () {
+                $("#prescription_form").show();
+            });
+            $("#test_btn").on("click", function () {
+                $("#test_form").show();
+            });
+            $("#DME_btn").on("click", function () {
+                $("#DME_form").show();
+            });
+            $("#imaging_btn").on("click", function () {
+                $("#imaging_form").show();
+            });
+            $("#lab_btn").on("click", function () {
+                $("#lab_form").show();
+            });
+            $("#vital_btn").on("click", function () {
+                $("#vital_form").show();
+            });
+
+            $('.Exam-table').click(function () {
+
+            $('#Exam-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.CurrentExam-table').click(function () {
+
+            $('#CurrentExam-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.PastProblemMedical-table').click(function () {
+
+            $('#PastProblemMedical-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.CurrentProblemMedical-table').click(function () {
+
+            $('#CurrentProblemMedical-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.PastPrescriptionList').click(function () {
+
+            $('#PastPrescriptionList tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.CurrentPrescriptionList').click(function () {
+
+            $('#CurrentPrescriptionList tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.PastDME-table').click(function () {
+
+            $('#PastDME-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.CurrentDME-table').click(function () {
+
+            $('#CurrentDME-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.Pastimaginglist-table').click(function () {
+
+            $('#Pastimaginglist-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.Currentimaginglist-table').click(function () {
+
+            $('#Currentimaginglist-table tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.Currentlablist').click(function () {
+
+            $('#Currentlablist tbody tr th input').prop('checked', this.checked);
+            });
+
+            $('.Pastlablist').click(function () {
+
+            $('#Pastlablist tbody tr th input').prop('checked', this.checked);
+            });
+        });
+
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m3 l3">
+                <h5 class="breadcrumbs-title  color-blue">New Exam</h5>
+            </div>
+            <div class="col s6 m9 l9">
+                <a class="waves-effect waves-light float-right" href="@Url.Action("PatientClaimsExams","Home")">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+            <ul class="tabs Exam-tab">
+                <li class="tab"><a class="active" href="#test1">Exam</a></li>
+                <li class="tab"><a href="#test2">Medical Problem</a></li>
+
+                <li class="tab"><a href="#test4">Prescription</a></li>
+                <li class="tab"><a href="#test5">Test</a></li>
+                <li class="tab"><a href="#test6">DME Supplies</a></li>
+                <li class="tab"><a href="#test7">Imaging</a></li>
+                <li class="tab"><a href="#test8">Lab</a></li>
+                <li class="tab"><a href="#test9">Vitals</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div id="test1">
+
+        <partial name="~/Views/_PatientPartialView/_AddExam.cshtml" />
+    </div>
+    <div id="test2">
+        <partial name="~/Views/_PatientPartialView/_MedicalProblem.cshtml">
+    </div>
+
+    <div id="test4">
+        <partial name="~/Views/_PatientPartialView/_Prescription.cshtml" />
+    </div>
+    <div id="test5">
+        <partial name="~/Views/_PatientPartialView/_ProcedureTests.cshtml" />
+    </div>
+    <div id="test6">
+        <partial name="~/Views/_PatientPartialView/_DME.cshtml" />
+    </div>
+    <div id="test7">
+        <partial name="~/Views/_PatientPartialView/_Imaging.cshtml" />
+    </div>
+    <div id="test8">
+        <partial name="~/Views/_PatientPartialView/_Lab.cshtml" />
+    </div>
+    <div id="test9">
+        <partial name="~/Views/_PatientPartialView/_patientVitals.cshtml" />
+    </div>
+</div>
+

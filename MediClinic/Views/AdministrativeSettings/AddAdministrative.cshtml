@@ -1,0 +1,1262 @@
+﻿@model MediClinic.Models.DTOs.AdministrativeDto
+@{
+    ViewData["Title"] = "AdministrativeSetting";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var Action = ViewBag.Action;
+    var image = ViewBag.PatientImage;
+    var WriteSignatureImage = ViewBag.WriteSignature;
+    var HiddenimageForPatient = ViewBag.PatientImage;
+
+}
+
+
+@section styles{
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        .text-input {
+            cursor: auto !important
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e9ecef !important;
+        }
+
+        /*.page-wrapper {
+            margin: 0 18% 0 18% !important;
+            padding-top: 20px !important;
+        }*/
+        .actions {
+            display: none;
+        }
+
+        .danger {
+            color: red;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .img-preview {
+            margin: 0 auto;
+            height: 250px;
+            width: 250px;
+            border-radius: 50% !important;
+        }
+
+        .remove-image {
+            /* display: none; */
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 43%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .mdi {
+            font-size: 24px !important;
+        }
+
+        .text a, .text p {
+            color: #fff;
+            font-size: 17px;
+        }
+
+        #result {
+            cursor: pointer;
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+        }
+
+        #result-wrapper:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .add-btn {
+            padding: 0 1rem !important;
+            line-height: 36px !important;
+            height: 38px !important;
+            background: #547cea !important;
+            color: white !important;
+        }
+
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+
+        .imageModel input.custom-file-input {
+            width: 5rem;
+            right: 17px;
+            height: 38px !important;
+            top: -40px;
+            cursor: pointer !important;
+        }
+
+        .actionUpload {
+            width: 5rem;
+        }
+
+        .required {
+            color: black !important;
+        }
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .input-group-append .form-add-btn {
+            margin-top: 0 !important
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .form-add-btn {
+            margin-top: 3.3rem !important;
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+        .card {
+            padding: 2.5%;
+        }
+
+        .form-firstName {
+            margin-top: -22% !important;
+        }
+
+        .form-MiddleName {
+            margin-top: -14% !important;
+        }
+
+        .form-LastName {
+            margin-top: -3% !important;
+        }
+
+        @@media only screen and (max-width:601px) {
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .ti-camera {
+            font-size: 22px !important;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff !important;
+            font-size: 17px;
+        }
+
+        .text p {
+            margin-top: 0px !important;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+            .remove-image:hover {
+                background: #E54E4E;
+                padding: 3px 7px 5px;
+                top: 0;
+                right: 22%;
+            }
+
+            .remove-image:active {
+                background: #E54E4E;
+                top: 0;
+                right: 22%;
+            }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+            .imageModel .modal-dialog {
+                max-width: 60% !important
+            }
+
+            .imageModel input.custom-file-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                height: 38px !important;
+                width: 5rem !important;
+                cursor: pointer !important;
+            }
+
+        .cr-slider {
+            width: 75% !important
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 0 2rem !important;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            margin-bottom: 0px;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        #my_camera {
+            margin: 0 auto
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+            color: #fff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        #cameraIcon i {
+            color: #547cea !important;
+            font-size: 22px;
+        }
+
+        .croppie-container .cr-image {
+            top: 25px !important;
+            left: 35px !important;
+        }
+
+        .imageModel .mdi {
+            font-size: 22px !important
+        }
+
+        @@media screen and (max-width:600px) {
+            .form-MiddleName {
+                margin-top: 0% !important;
+            }
+        }
+    </style>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper mb-0">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Administrative
+                    </h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/SettingsElite/Setting">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <form enctype="multipart/form-data" asp-action="AddAdministrative" asp-controller="AdministrativeSettings" method="post" id="administrative">
+            <input asp-for="AdministrativeID" hidden="hidden"/>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Officer's  Name</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="OfficerName" placeholder="Enter Officer's Name">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Link a Bank Account</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="BankLink" placeholder="Enter BANK Account">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Officer's Title</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" asp-for="OfficerTitle" placeholder="Enter Officer's Title">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Bank Name</p>
+                    <div class="input-field ">
+                        <input class="text-input" type="text" placeholder="Enter Bank Name" asp-for="BankName">
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Company Name</p>
+                    <div class="input-field ">
+                        <input class="text-input" type="text" placeholder="Enter Company Name" asp-for="CompanyName">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Bank Routing Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Bank Routing Number" asp-for="BankRoutingNumber">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Tax ID</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter TAX ID" asp-for="TaxID">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Bank Account Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Bank Account Number" asp-for="BankAccountNumber">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Licence Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Licence Number" asp-for="LicenceNumber">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Paypal Account</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Paypal Account" asp-for="PaypalAccount">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>NPI Number</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter NPI Number" asp-for="NPINumber">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Billing & Subscription</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Billing & subscription" asp-for="BillingAndSubscription">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <p>Company Address</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Company Address" asp-for="CompanyAddress">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <p>Payment Method</p>
+                    <div class="input-field">
+                        <div class="dropdownauto">
+                            <input class="text-input input-styling paymentmethod" type="text" placeholder="Select Payment Method" asp-for="PaymentMethod">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Address Line 2</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Address Line 2" asp-for="AddressLine2">
+                    </div>
+                </div>
+                <div class=" col s6 m6">
+                    <p>City</p>
+                    <div class="input-field">
+                        <input class="text-input input-styling " type="text" placeholder="Enter City" asp-for="City">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>State</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter State" asp-for="State">
+                    </div>
+                </div>
+                <div class=" col s6 m6">
+                    <p>Zip</p>
+                    <div class="input-field">
+                        <input class="text-input input-styling " type="text" placeholder="Enter Zip" asp-for="State">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Company Phone</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Phone Number" asp-for="CompanyPhone">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Company Fax</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Fax" asp-for="CompanyFax">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Company Website</p>
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter Company Website" asp-for="CompanyWebsite">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Company Email</p>
+                    <div class="input-field">
+                        <input class="text-input" type="email" placeholder="Enter email" asp-for="CompanyEmail">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>User Name</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="text" placeholder="Enter User Name" asp-for="UserName">
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <p>Password</p>
+
+                    <div class="input-field">
+                        <input class="text-input" type="password" placeholder="Enter Password" asp-for="Password">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Add A Location</p>
+
+                    <div class="input-field">
+                        <div class="dropdownauto">
+                            <input class="text-input input-styling location" type="text" placeholder="Select Location" asp-for="Location">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col-12 col-lg-6 ">
+                    <p>Add Singnature</p>
+
+                    <div class="center">
+
+                        <div class="docs-preview clearfix">
+                            <div class="img-preview preview-lg">
+                                <div id="result-wrapper">
+                                    @if (Action == "Update")
+                                    {
+                                        @if (image == null)
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" href="javascript:void(0);" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else if (image == "")
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" href="javascript:void(0);" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else
+                                        {
+                                            <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger" href="javascript:void(0);" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+                                                    <p>Upload</p>
+                                                </div>
+                                            </div>
+                                            @*<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">*@
+                                            <img src="/images/@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                        <div class="middle">
+                                            <div class="text">
+                                                <a class=" modal-trigger" href="javascript:void(0);" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                <p>Upload</p>
+                                            </div>
+                                        </div>
+
+                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div id="main-cropper"></div>
+                                            <div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+                                                <div class="panel-heading">Camera</div>
+                                                <div class="panel-body">
+                                                    <div id="my_camera"></div>
+                                                    <!-- A button for taking snaps -->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 center">
+                                                <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                    <i class="mdi mdi-camera"></i>
+                                                </a>
+                                                <a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                    <i class="mdi mdi-cloud-upload"></i>
+                                                    <input type="file" class="custom-file-input" id="upload">
+                                                </a>
+                                                <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div>
+                <div class="col">
+                    @if (Action == "Update")
+                    {
+                        if (WriteSignatureImage == "Empty.png")
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+                            <img id="savetarget" height="250" width="600" />
+                            <input type="file" id="SignatureImageUpload" asp-for="Signature" style="display:none" />
+
+                            <span class="WriteSignatureError required"></span>
+                        }
+                        else if (WriteSignatureImage == null)
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+                            <img id="savetarget" height="250" width="600" />
+                            <input type="file" id="SignatureImageUpload" asp-for="Signature" style="display:none" />
+
+                            <span class="WriteSignatureError required"></span>
+                        }
+                        else if (WriteSignatureImage == "")
+                        {
+                            <p>Write Signature</p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+                            <img id="savetarget" height="250" style="width:600px" />
+                            <input type="file" id="SignatureImageUpload" asp-for="Signature" style="display:none" />
+
+                        }
+                        else
+                        {
+                            <p>Your Signature is :</p>
+                            <img id="savetarget" height="250" width="450" />
+
+                            <img src="/SignatureImages/@WriteSignatureImage" class="SignatureImageUpdate" id="UpdateCaseSignature" height="250" />
+                            <div class="row">
+                                <div class="col s12 ">
+                                    <a id="updateSignature" class="Signaturepad_show btn patientSignatureTxtField">Update Signature</a>
+
+                                </div>
+
+                            </div>
+
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn add-btn uploadImageFromSignatureBox">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn Recreate clear signature_pad_cancel">
+                                        Cancel
+                                    </button>
+                                    <button type="button" class="btn Recreate clear signature_pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+                            <span class="WriteSignatureError required"></span>
+                            @*<input type="file" id="SignatureImageUpload" asp-for="patientIdandSignature.WriteSignature" style="display:none" />*@
+
+                        }
+
+                    }
+                    else
+                    {
+                        <p>Write Signature Or Upload Signature Image</p>
+                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                            <div class="m-signature-pad--body">
+                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                            </div>
+                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                <div class="description">Save Your signature before submit the form</div>
+                                <button type="button" class="btn add-btn uploadImageFromSignatureBox">
+                                    Upload Image
+                                </button>
+                                <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                    Clear
+                                </button>
+                                <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                    Save Signature
+                                </button>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col m6">
+                                <img id="savetarget" height="250" width="600" />
+
+                            </div>
+                        </div>
+                        <span class="WriteSignatureError required"></span>
+                        <input type="file" id="SignatureImageUpload" style="display:none" />
+                    }
+                    <input id="hiddneWriteSign" hidden="hidden" value="@WriteSignatureImage" asp-for="HiddenSign">
+                    @*<input id="HidenSignaturePic" hidden="hidden" value="@HiddenSignForPatient" asp-for="patientIdandSignature.HiddenSignImg" />*@
+
+                </div>
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                        @*<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>*@
+                        <a href="@Url.Action("Index", "AdministrativeSettings")" class="waves-effect waves-light Recreate btn">Cancel</a>
+</div>
+            </div>
+        </form>
+
+
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/webcamjs/webcam.js"></script>
+
+
+    <script>
+        $(function () {
+            $('.phoneno').inputmask('1 (999) 999-9999');
+
+        })
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+            $('.signature_pad_cancel').on('click', function () {
+                $('#signature-pad1').hide();
+            })
+        });
+        var IsCapturedScreen = false;
+
+        $(".img-preview #result").on('click', function () {
+            debugger
+            $('#modal1').modal('open');
+        });
+
+
+        $(function () {
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+        var saveAction = '@ViewBag.Action';
+        function take_snapshot() {
+            debugger;
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            debugger;
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    debugger;
+                    //Signdata = e.target.result;
+                    $('#savetarget').attr('src', e.target.result);
+                    $('#savetarget').show();
+                    $('#UpdateCaseSignature').hide();
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#SignatureImageUpload").change(function () {
+            readURL(this);
+        });
+        var SignaturePath = '@ViewBag.WriteSignature';
+        $("#updateSignature").click(function () {
+            debugger
+            $("#sigCanvas").css({ "width": "717", "height": "166" });
+        });
+        $(function () {
+            $('#savetarget').hide();
+            var canvas = document.querySelector('#signature-pad1 canvas');
+            var pad = new SignaturePad(canvas);
+            $('#pad_clear').on('click', function () {
+                $('#savetarget').hide();
+                Signdata = "";
+            })
+            $('#accept').on('click', function () {
+                debugger;
+                //if (saveAction == "Update") {
+                //    if (pad.toDataURL() == "data:image/png;base64,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") {
+                //        $('#savetarget').hide();
+                //        //$(".WriteSignatureError").html("Please First Write Your Signature").show().fadeOut(2200);
+                //         Signdata = "";
+
+                //    }
+                //}
+                //else {
+                //    if (pad.toDataURL() == "data:image/png;base64,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") {
+                //    $('#savetarget').hide();
+                //    Signdata = "";
+                //                    $(".WriteSignatureError").html("Please First Write Your Signature").show().fadeOut(2200);
+
+                //    }
+                //}
+
+                if (pad.isEmpty()) {
+                    Signdata = "";
+
+                    return false;
+                }
+                else {
+                    debugger;
+                    Signdata = pad.toDataURL();
+                    $('#savetarget').attr('src', Signdata);
+                    $('#UpdateCaseSignature').hide();
+                    $('#savetarget').show();
+
+                    pad.off();
+
+                }
+
+
+            });
+
+
+
+        });
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+
+        $(document).ready(function () {
+            $(".remove-Sigatureimage").hide();
+            if (saveAction == "Update") {
+
+                $("#signature-pad1").hide();
+                $(".signImage #dropifyimage .dropify-wrapper").hide();
+
+                $(".signImage .forPatientSignatures").hide();
+                $(".Signaturepad_show").on('click', function () {
+                    $("#signature-pad1").show();
+                })
+                $(".remove-Sigatureimage").on('click', function () {
+
+                    $(".signImage .dropify-wrapper").hide();
+                    $(".remove-Sigatureimage").hide();
+                })
+                $(".UploadSignature_show").on('click', function () {
+                    $(".forPatientSignatures").show();
+                    $(".signImage #dropifyimage .dropify-wrapper").show();
+                    $(".signatureimage_text").show();
+                    $(".remove-Sigatureimage").show();
+                })
+                if (SignaturePath == "Empty.png") {
+                    $("#signature-pad1").show();
+                }
+                else if (SignaturePath == "") {
+                    $("#signature-pad1").show();
+                }
+            }
+            $('#multilanguage').select2({
+                placeholder: "Select Languages"
+            });
+            $(".img-preview #result").on('click', function () {
+                debugger;
+                $('#modal1').modal('open');
+            });
+
+        });
+        $(document).on('submit', '#administrative', function (e) {
+
+            var ProfileSrc = $("#result").attr('src');
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                $('#accept').trigger('click');
+
+                debugger;
+                isSignatureButtonClick = true;
+                //$('#upload').attr('disabled', true);
+                $(this).ajaxSubmit({
+                    data: { Signature: Signdata, profileImage: ProfileSrc },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = '@Url.Action("Index", "AdministrativeSettings")'
+                        }
+                        else {
+                            new PNotify({
+                                title: 'Error!',
+                                text: 'Please Write Correct Info',
+                                delay: 5000,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        //$('#upload').attr('disabled', false);
+                    },
+
+                    complete: function (xhr) {
+                    }
+                });
+            }
+        })
+        function onCreateSignatureForm(data) {
+            var isErrorMessage = data.isError;
+            if (isErrorMessage) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Please provide patient info first',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+    </script>
+}

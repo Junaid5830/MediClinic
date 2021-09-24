@@ -1,0 +1,148 @@
+﻿@model MediClinic.Models.PatientMissingViewModel
+
+@{
+    ViewData["Title"] = "MissingElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@{
+    var NewId = ViewContext.RouteData.Values["id"];
+    var totalCountMissingFields = 0;
+    var remainderCountMissingFields = 0;
+}
+@section scripts{
+    <script>
+        var clickfrom = null;
+        function myFillNowFunction(controller,action,patientId,tabNo) {
+            debugger;
+            // var route = "@Url.Action("PatientInfo", "PatientSideElite", new {id=NewId})";
+            var route = "/" + controller + "/" + action + "/" + patientId + "/"  + "";
+            var Tabname = tabNo;
+            var uri = route + decodeURIComponent(Tabname);
+            window.location.href = uri;
+        }
+    </script>
+}
+
+@section styles
+{
+    <style>
+        .card .card-content {
+            padding: 10px 24px !important;
+        }
+
+        .card {
+            height: 250px !important;
+            max-height: 250px !important;
+        }
+
+        .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .chip {
+            color: white;
+            background-color: #ff8376;
+        }
+
+        .chip {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 32px;
+            display: inline-block;
+            height: 32px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            padding: 0 12px;
+            border-radius: 16px;
+        }
+
+        .chip_aclr {
+            color: #03a9f4 !important;
+        }
+    </style>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col s3 m3 l2 margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Missing(Incomplete Forms)</h5>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            @if (!(Model.PatientMissingsListDto is null) && Model.PatientMissingsListDto.Count > 0)
+            {
+                foreach (var item in Model.PatientMissingsListDto)
+                {
+                    <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h6 class="card-title">@item.CardHeading</h6>
+                                    </div>
+                                    <div class="col-sm-12 chip_aclr">
+                                        @{var internalLoopCounter = 0; remainderCountMissingFields = 0;}
+                                        @{ totalCountMissingFields = item.MissingFieldsList.Count;}
+                                        @foreach (var itemm in item.MissingFieldsList)
+                                        {
+                                            remainderCountMissingFields++;
+
+                                            if (remainderCountMissingFields <= 3)
+                                            {
+                                                <div class="chip " onclick="myFillNowFunction('@item.ControllerName','@item.ActionName',@item.PatientId,'@item.TabNumber');">
+                                                    @itemm
+                                                </div>
+                                                internalLoopCounter++;
+                                            }
+                                        }
+                                        @{var moreItems = totalCountMissingFields - internalLoopCounter; }
+                                        <a>More @moreItems</a>
+                                    </div>
+                                    <div class="col-sm-12 padding-top-20">
+                                        <a class="btn add-btn" onclick="myFillNowFunction('@item.ControllerName','@item.ActionName',@item.PatientId,'@item.TabNumber');">
+                                            Complete Now
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            }
+
+            @*<div class="col-sm-6 col-md-6 col-lg-3">
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-title">Patient Info</div>
+                            </div>
+                            <div class="col-sm-12 chip_aclr">
+                                <div class="chip">
+                                    PatientColor
+                                </div>
+                                <a>More </a>
+                            </div>
+                            <div class="col-sm-12">
+                                <a class="add-btn btn">Resolve Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        </div>
+        
+    </div>
+</div>

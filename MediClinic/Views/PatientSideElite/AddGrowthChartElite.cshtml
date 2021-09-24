@@ -1,0 +1,254 @@
+﻿
+
+
+
+@{
+    ViewData["Title"] = "AddFamilyHistoryElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <style>
+        .template {
+            padding: 0 2rem !important;
+            line-height: 41px !important;
+            height: 41px !important;
+            background: #547cea !important;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+    </style>
+}
+@section scripts{
+
+
+    <script>
+        $(function () {
+
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+           
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Growth Charts</h5>
+                    </div>
+
+                    <div class="col">
+                        <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/patientsideElite/GrowthChartListElite">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>
+
+                </div>
+           
+        </div>
+    
+      
+                <div class="row">
+                    <form class="col-sm-12  ">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 col-6 col-xl-4">
+                                <p>
+                                    Today Date
+                                </p>
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-6 col-xl-4">
+                                <p>DOB</p>
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-12 col-xl-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <p>Exact Age</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-sm-3 col-xs-3  col-3 col-xl-3">
+                                        <input class="text-input" type="text" placeholder="years">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 col-3 col-xl-3">
+                                        <input class="text-input " type="text" placeholder="days">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-3 col-3 col-xl-3">
+                                        <input class="text-input " type="text" placeholder="hr">
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-3 col-xl-3">
+                                        <input class="text-input" type="text" placeholder="sec">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-4 col-xs-4 col-md-2 ">
+                                <p>
+                                    Weight
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                                <p>
+                                    Height
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                                <p>
+                                    Length
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                                <p>
+                                    Head Diameter
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                                <p>
+                                    Neck Diameter
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                                <p>
+                                    Waist Diameter
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 ">
+                                <p>
+                                    Shoulder Width
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select</option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="right">
+                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+         
+    
+
+    </div>
+</div>
+
+
+
+

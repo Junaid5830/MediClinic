@@ -1,0 +1,133 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@{
+    var userRole = _sessionManager.GetRoleId();
+    var Empty = "N/A";
+}
+<div id="gwowthList">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_GrowthList.cshtml" />
+
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="growthChartField">
+            Add New Chart
+        </a>
+    </div>
+</div>
+<div id="growthChartForm" style="display:none;">
+    <form class="col-sm-12" asp-action="GrowthChart" asp-controller="PatientExam" method="post" data-ajax="true" data-ajax-success="onCreategrowthchart(data)">
+        <input hidden="hidden" asp-for="growthChardto.GrowthId" />
+        <input hidden="hidden" id="hiddenVisitId" asp-for="growthChardto.VisitId" />
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-6 col-xl-4">
+                <p>
+                    Date
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input datepicker" placeholder="select date" asp-for="growthChardto.TodayDate">
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-6 col-xl-4">
+                <p>DOB</p>
+                <div class="input-field">
+                    <input type="text" class="text-input datepicker age Dob" id="birth_date" placeholder="select date" asp-for="growthChardto.DOB">
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-12 col-xl-4">
+                <div class="row">
+                    <div class="col">
+                        <p>Exact Age</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-3 col-xs-3  col-3 col-xl-3">
+                        <input class="text-input" type="text" placeholder="years" id="years" readonly>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 col-3 col-xl-3">
+                        <input class="text-input " type="text" placeholder="Months" id="months" readonly>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 col-3 col-xl-3">
+                        <input class="text-input " type="text" placeholder="Days" id="days" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-xs-4 col-md-2 ">
+                <p>
+                    Weight
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.Weight">
+                </div>
+            </div>
+
+            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                <p>
+                    Height
+                </p>
+
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.Height">
+                </div>
+
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                <p>
+                    Length
+                </p>
+
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.Length">
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                <p>
+                    Head Diameter
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.HeadDiameter">
+
+                </div>
+
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                <p>
+                    Neck Diameter
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.NeckDiameter">
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-4 col-xs-4 ">
+                <p>
+                    Waist Diameter
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.WaistDiameter">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 ">
+                <p>
+                    Shoulder Width
+                </p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="select date" asp-for="growthChardto.ShoulderWidth">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="right">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,645 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "AddPrescriptionElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var SaveOrUpdate = ViewBag.Action;
+    var RoleId = _sessionManager.GetRoleId();
+    var PatientId = _sessionManager.GetPatientInfoId();
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .d-medicineId-hide {
+            display: none;
+        }
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+        .tabs .tab a:hover, .tabs .tab a.active {
+            color: #fff !important;
+            background-color: #547cea !important;
+        }
+        .customtab li a.nav-link.active {
+            border-bottom: 2px solid #fb9678;
+            background-color: #547cea !important;
+            color: white !important;
+            border-bottom: 3px solid #6b6f82 !important;
+        }
+        .customtab li a.nav-link:hover {
+            color: #fff !important;
+            background-color: #547cea !important;
+        }
+    </style>
+    <link rel="stylesheet" href="~/Elite/node_modules/dropify/dist/css/dropify.min.css">
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTab a[href="' + window.location.hash + '"]').tab('show')
+        });
+        $('.select2').select2();
+        function enable() {
+            $(".prescription_select .custom-combobox-input").autocomplete("option", { disabled: false });
+            $(".infoDropDListBeforeEditDisabled").closest(".ui-widget").find("input, button").prop("disabled", false);
+            $('.prescriptionTxtFields').attr('disabled', false);
+            //$('#pre_Savebtn').attr("disabled", false);
+        }
+        function Disable() {
+            $(".prescription_select .custom-combobox-input").autocomplete("option", { disabled: true });
+            $(".infoDropDListBeforeEditDisabled").closest(".ui-widget").find("input, button").prop("disabled", true);
+            $('.prescriptionTxtFields').attr('disabled', true);
+            $('#pre_Savebtn').attr("disabled", true);
+        }
+        var saveAction = '@ViewBag.Action';
+        if (saveAction == "Update") {
+        }
+        else {
+            //$('#quantity').attr('disabled', false);
+        }
+        $("#quantity").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg_work").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+        $("#dose").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg_dose").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+        $(function () {
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate( element.value);
+                } catch (error) {
+                    date = null;
+                }
+                return date;
+            }
+        });
+        $(document).ready(function () {
+            if (saveAction == "Update") {
+                $(".prescription_select .custom-combobox-input").autocomplete("option", { disabled: true });
+                $(".infoDropDListBeforeEditDisabled").closest(".ui-widget").find("input, button").prop("disabled", true);
+                $('.prescriptionTxtFields').attr('disabled', true);
+                $('#pre_Savebtn').attr("disabled", true);
+            }
+            $('#mediData').css('display', 'none');
+            $("div").removeClass("select-wrapper");
+            $('.dropdown-trigger').remove();
+            $('.caret').remove();
+
+            //var id = getUrlParameter("visitid");
+            //$('.patient-btns').each(function () {
+            //    debugger;
+            //    var url = $(this).attr('href');
+            //    url = url + id;
+            //    $(this).attr('href', url);
+            //})
+        });
+
+
+        $('#prescrptionForm').on('submit', function (e) {
+            var medicine = $('#gender').val();
+            if (medicine == "") {
+                $("#medi_err").html("Select Medicine Name");
+            }
+            else {
+                $("#medi_err").html("");
+            }
+            e.preventDefault();
+            if ($(this).valid()) {
+                if (!(medicine == "")) {
+                    $(this).ajaxSubmit({
+                        success: function (response) {
+                            onpresrcptionSuccess(response);
+                        },
+                        error: function (response) {
+                        },
+                        complete: function (xhr) {
+                        }
+                    });
+                }
+            }
+        });
+        function onpresrcptionSuccess(data) {
+            if (data) {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        $("#from").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showAnim: 'slide',
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            minDate: new Date(),
+            onSelect: function (selected) {
+                $("#to").datepicker("option", "minDate", selected)
+            }
+        });
+        $("#to").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showAnim: 'slide',
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            onSelect: function (selected) {
+                $("#from").datepicker("option", "maxDate", selected)
+            }
+        });
+        $('#tempId').on("change", function (e) {
+            var val = $(this).val();
+            $.get("/Provider/GetTemplateMedications", { Id: val }).done(function (data) {
+                $('#medicineTemplateBody').html('');
+                $('#templateModal').modal('open');
+                for (var medicine of data) {
+                    var $tr = $('<tr class="card">').append(
+                        $('<td class="d-medicineId-hide mId">').text(medicine.medicineId).attr("mId", medicine.medicineId),
+                        $('<td>').text(medicine.name),
+                        $('<td class="qty">').text(medicine.quantity).attr("qty", medicine.quantity),
+                        $('<td class="freq">').text(medicine.frequencyId).attr("frequency", medicine.frequencyId),
+                        $('<td class="dose">').text(medicine.dose).attr("dose", medicine.dose),
+                        $('<td class="unit">').text(medicine.unit).attr("unit", medicine.unit),
+                        $('<td class="sDate">').text(moment(medicine.startDate).format('DD-MMM-YYYY')).attr("startDate", medicine.startDate),
+                        $('<td class="eDate">').text(moment(medicine.endDate).format('DD-MMM-YYYY')).attr("endDate", medicine.endDate),
+                        $('<td class="comment">').text(medicine.notes).attr("notes", medicine.notes),
+                        $('<td>').html('<a href="javascript: void (0);" class="btn-delete "><i class="mdi mdi-delete" style="color:#d9534f;font-size: 22px;"></i></a>')
+                    );
+                    if (data.length > 0) {
+                        $('#mediData').css('display', 'block');
+                    }
+                    $('#medicineTemplateBody').append($tr);
+                }
+            });
+        });
+        //$(document).on("click", "select2-selecting", function () {
+        //    debugger;
+        //    var templateId = parseInt($('#tempId').val());
+        //});
+        $("#prescriptionData").on('click', '.btn-delete', function () {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $(this).closest('tr').remove();
+                    $(".checkmark").show().fadeOut(6000);
+                    var rowCount = $('#prescriptionData tbody tr').length;
+                    if (rowCount > 0) {
+                        $('#mediData').css('display', 'block');
+                        $('#savetemplateBtn').css('display', 'block');
+                    }
+                    else {
+                        $('#mediData').css('display', 'none');
+                        $('#savetemplateBtn').css('display', 'none');
+                    }
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        });
+        $('#SaveMedicinesForm').on('submit', function (e) {
+            debugger;
+            $("#savetemplateBtn").prop('disabled', true);
+            e.preventDefault();
+            if ($(this).valid()) {
+                var tblData = "";
+                $('#prescriptionData tr:not(:first)').each(function () {
+                    var medicineId = $(this).find(".mId").attr("mId");
+                    var freq = $(this).find(".freq").attr("frequency");
+                    var qty = $(this).find(".qty").attr("qty");
+                    var dose = $(this).find(".dose").attr("dose");
+                    var sdate = $(this).find(".sDate").attr("startDate");
+                    var edate = $(this).find(".eDate").attr("endDate");
+                    var unit = $(this).find(".unit").attr("unit");
+                    var comment = $(this).find(".comment").attr("notes");
+                    tblData += (medicineId + "_" + freq + "_" + qty + "_" + dose + "_" + sdate + "_" + edate + "_" + unit + "_" + comment + "|-|");
+                });
+                $("#selectedData").val(tblData);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                            $("#savetemplateBtn").prop('disabled', false);
+                        }
+                        else {
+                            SuccessMsg();
+                            window.location.href = '../PatientSideElite/PrescriptionListElite';
+                        }
+                    }
+                });
+            }
+            else {
+                $("#savetemplateBtn").prop('disabled', true);
+            }
+        });
+        $('#SinglePrescriptionForm').on('submit', function (e) {
+            $(".sbt-btn").prop('disabled', true);
+            e.preventDefault();
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        if (response == "exist") {
+                            ExistsMsg();
+                            $(".sbt-btn").prop('disabled', true);
+                        }
+                        else {
+                            SuccessMsg();
+                            window.location.href = '@Url.Action("PrescriptionListElite", "PatientSideElite")';
+                        }
+                    }
+                });
+            }
+            else {
+                $(".sbt-btn").prop('disabled', true);
+            }
+        });
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Prescription already exist",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        function SuccessMsg() {
+            new PNotify({
+                title: 'Success!',
+                text: "Record saved succesfully",
+                delay: 2000,
+                type: 'success'
+            });
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+
+    <div class="container">
+       
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container">
+           
+                @*<div class="col-2">
+                    
+                        @Html.Partial("~/Views/Appointment/PartialViews/_VisitsButtons.cshtml")
+                    
+                </div>*@
+               
+                    <div id="breadcrumbs-wrapper">
+                        <!-- Search for small screen-->
+
+                        <div class="row">
+                            <div class=" col" margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue"> Prescription</h5>
+                            </div>
+                            <div class="col">
+                                <a class="waves-effect waves-light float-right" style="margin-top: -4%" href="@Url.Action("PrescriptionListElite", "patientSideElite", new { Id= patientInfoId})">
+                                    <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <ul class="nav nav-tabs customtab" id="myTab" role="tablist">
+                                @*<li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home2" role="tab"> <span class="hidden-xs-down">Template</span></a> </li>*@
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile2" role="tab"> <span class="hidden-xs-down">Prescription</span></a> </li>
+                                @*<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#DME" role="tab"> <span class="hidden-xs-down">DME</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Imaging" role="tab"> <span class="hidden-xs-down">Imaging</span></a> </li>*@
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane " id="home2" role="tabpanel">
+                                    <form asp-action="patientTemplate" asp-controller="PatientSideElite" method="post" id="SaveMedicinesForm">
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-md-6">
+                                                <p>Template Name<span class="required"> * </span></p>
+                                                <div class="input-field" id="templateId">
+                                                    <select class="select2 template" data-placeholder="Select Template Name" asp-for="PrescriptionTemplateDto.TemplateId" id="tempId">
+                                                        @*asp-items="@(new SelectList(Model.TemplateBasicList,"TemplateId","Name"))"*@
+                                                        <option value="" selected></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="mediData">
+                                            <div class="col-12 mt-2">
+                                                <h5 class="breadcrumbs-title color-blue mt-0">Template Medications</h5>
+                                            </div>
+                                            <div class="col-12">
+                                                <table class="table centered highlight bordered" id="prescriptionData" style="margin-bottom:30px;">
+                                                    <thead>
+                                                        <tr class="uppercase card">
+                                                            <th>Medication Name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Frequency</th>
+                                                            <th>Dose</th>
+                                                            <th>Unit</th>
+                                                            <th>Start Date</th>
+                                                            <th>Ent Date</th>
+                                                            <th>Medication Comments</th>
+                                                            <th>Option</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="medicineTemplateBody"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col-12">
+                                                <div class="center">
+                                                    <button type="submit" id="savetemplateBtn" class="waves-effect waves-light btn add-btn">Save</button>
+                                                    <a href="@Url.Action("PrescriptionListElite", "PatientSideElite",new {Id = patientInfoId })" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                                <div class="tab-pane active" id="profile2" role="tabpanel">
+                                    <form asp-action="AddPrescription" asp-controller="PatientSideElite" method="post" id="SinglePrescriptionForm">
+                                        <input hidden="hidden" type="text" id="HiddenVisitId" asp-for="prescriptionBasicDto.VisitId" />
+                                        <input hidden="hidden" asp-for="prescriptionBasicDto.Id" />
+                                        @if (RoleId == 1)
+                                        {
+                                            <input hidden="hidden" asp-for="prescriptionBasicDto.PatientInfoId" />
+                                        }
+                                        else
+                                        {
+                                            if (PatientId == 0)
+                                            {
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <p>Patient Name <span class="required">*</span></p>
+                                                        <select id="seleciona" class="select2" data-placeholder="Select Patient Name" asp-for="prescriptionBasicDto.PatientInfoId"
+                                                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <input hidden="hidden" asp-for="prescriptionBasicDto.PatientInfoId" />
+                                            }
+
+                                        }
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-md-6">
+                                                <p>
+                                                    Medication Name <span class="required">*</span>
+                                                </p>
+
+                                                <div class="input-field">
+                                                    <select data-placeholder="Select Medication Name" asp-for="prescriptionBasicDto.MedicationId" class="select2 combobox infoDropDListBeforeEditDisabled" asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))">
+                                                        @*asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))"*@
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="medi_err"></p>
+
+                                                </div>
+                                            </div>
+                                            <div class=" col-12 col-sm-12 col-md-6">
+                                                <p>Quantity <span class="required">*</span></p>
+
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling prescriptionTxtFields" asp-for="prescriptionBasicDto.Quantity" id="quantity" type="text" placeholder="Enter Quantity">
+                                                    <span class="required" id="errmsg_work"></span>
+                                                    <span class="required" asp-validation-for="prescriptionBasicDto.Quantity"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-12 col-sm-12 col-md-6 ">
+                                                <p>Frequency</p>
+                                                <div class="input-field prescription_select" id="frequencyId">
+                                                    <select data-placeholder="Select Frequency" class="select2 infoDropDListBeforeEditDisabled" asp-for="prescriptionBasicDto.FrequencyId" id="Frequency" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Once", Value="Once"},
+                                                new SelectListItem() {Text = "Daily", Value="Daily"},
+                                                new SelectListItem() {Text = "Two Times a day", Value="Two Times a day"},
+                                                new SelectListItem() {Text = "Three Times a day", Value="Three Times a day"},
+                                                new SelectListItem() {Text = "Four Times a day", Value="Four Times a day"},
+                                                new SelectListItem() {Text = "Five Times a day", Value="Five Times a day"},
+                                                new SelectListItem() {Text = "Six Times a day", Value="Six Times a day"},
+                                                new SelectListItem() {Text = "Before Bed", Value="Before Bed"},
+                                                new SelectListItem() {Text = "Before Breakfast", Value="Before Breakfast"},
+                                                new SelectListItem() {Text = "Before Lunch", Value="Before Lunch"},
+                                                new SelectListItem() {Text = "Before Dinner", Value="Before Dinner"},
+                                                new SelectListItem() {Text = "Before meals", Value="Before meals"},
+                                                new SelectListItem() {Text = "Every 1 hour", Value="Every 1 hour"},
+                                                new SelectListItem() {Text = "Every 2 hour", Value="Every 2 hour"},
+                                                new SelectListItem() {Text = "Every 3 hour", Value="Every 3 hour"},
+                                                new SelectListItem() {Text = "Every 4 hour", Value="Every 4 hour"},
+                                                new SelectListItem() {Text = "Every 5 hour", Value="Every 5 hour"},
+                                                new SelectListItem() {Text = "Every 6 hour", Value="Every 6 hour"},
+                                                new SelectListItem() {Text = "Every 7 hour", Value="Every 7 hour"},
+                                                new SelectListItem() {Text = "Every week", Value="Every week"},
+                                                new SelectListItem() {Text = "Once a month", Value="Once a month"}
+                                         })">
+                                                        <option value="" selected disabled></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class=" col-12 col-sm-12 col-md-6 ">
+                                                <p>Dose</p>
+                                                <div class="input-field">
+                                                    <input class="text-input prescriptionTxtFields" asp-for="prescriptionBasicDto.Dose" id="dose" type="text" placeholder="Enter Dose">
+                                                    <span class="required" id="errmsg_dose"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-md-6 ">
+                                                <p>Unit</p>
+                                                <div class="input-field">
+                                                    <select data-placeholder="Select Unit" class="select2 infoDropDListBeforeEditDisabled" asp-for="prescriptionBasicDto.Unit" id="Unit" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "mg", Value="mg"},
+                                                new SelectListItem() {Text = "ml", Value="ml"}
+                                         })">
+                                                        <option value="" selected disabled></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class=" col-12 col-sm-12 col-md-6 ">
+                                                <p>Start Date <span class="required">*</span></p>
+                                                <div class="input-field">
+                                                    <input type="text" id="from" class=" text-input prescriptionTxtFields" asp-for="StartDate" placeholder="Select Date">
+                                                    <span class="required" asp-validation-for="prescriptionBasicDto.StartDate"></span>
+                                                </div>
+                                            </div>
+                                            <div class=" col-12 col-sm-12 col-md-6 ">
+                                                <p>End Date <span class="required">*</span></p>
+                                                <div class="input-field">
+                                                    <input type="text" id="to" class=" text-input prescriptionTxtFields" asp-for="EndDate" placeholder="Select Date">
+                                                    <span class="required" asp-validation-for="prescriptionBasicDto.EndDate"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-sm-12 col-md-6">
+                                                <p>Medication Comment</p>
+                                                <div class="input-field">
+                                                    <input class="text-input prescriptionTxtFields" type="text" asp-for="prescriptionBasicDto.Notes" placeholder="Enter Medication Comments">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col s12">
+                                                <div class="center">
+                                                    <button type="submit" id="pre_Savebtn" from="SinglePrescriptionForm" class="waves-effect waves-light btn add-btn sbt-btn">Save</button>
+                                                    @if (ViewBag.Action == "Update")
+                                                    {
+                                                        <a href="javascript:void(0);" onclick="enable();" class="Recreate btn sbt-btn">Edit</a>
+                                                        <a onclick="Disable();" class=" Recreate btn">Cancel</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@Url.Action("PrescriptionListElite", "PatientSideElite", new {Id = patientInfoId })" class=" Recreate btn">Cancel</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--</div>-->
+                                <div class="tab-pane  p-20" id="Imaging" role="tabpanel">
+                                    <form class="col-sm-12" method="post">
+                                        <div class="row">
+                                            <div class=" col ">
+                                                <p>Date of Imaging</p>
+                                                <div class="input-field">
+                                                    <input type="date" class="text-input" placeholder="select date">
+                                                </div>
+                                            </div>
+                                            <div class=" col ">
+                                                <p>Time of Imaging</p>
+                                                <div class="input-field">
+                                                    <input type="time" class="text-input" placeholder="select time">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col ">
+                                                <p>Reported By</p>
+                                                <div class="input-field">
+                                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                                        <option>Select  Reported By</option>
+                                                        <option value="Bronx NY">Bronx NY</option>
+                                                        <option value="New Jersy">New Jersy</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col ">
+                                                <p>Type of Image</p>
+                                                <div class="input-field">
+                                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                                        <option>Select  Type of Image</option>
+                                                        <option value="Smart Guy">Smart Guy, Esq</option>
+                                                        <option value="Rosy">Rosy</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col ">
+                                                <p> Report Status</p>
+                                                <div class="input-field">
+                                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                                        <option>Select Report Status</option>
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col ">
+                                                <p>Image Film</p>
+                                                <div class="input-field">
+                                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                                        <option>Select Image Film</option>
+                                                        <option value="N/A">N/A</option>
+                                                        <option value="V/A">V/A</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 ">
+                                                <p>Diagnosis</p>
+                                                <div class="input-field">
+                                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                                        <option>Select Diagnosis</option>
+                                                        <option value="No show">No show</option>
+                                                        <option value="Show">Show</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col s12">
+                                                <div class="center">
+                                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+          
+        </div>
+    </div>

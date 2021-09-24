@@ -1,0 +1,1743 @@
+﻿@model MediClinic.Models.DTOs.UsersDto.AuthUserDto
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    Layout = null;
+    var EmailName = _sessionManager.GetEmoloyeeEmail();
+    var MobNumber = _sessionManager.GetEmoloyeeMobNo();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Auth | Medi Clinic</title>
+    <link rel="apple-touch-icon" href="~/app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+
+    <link href="~/Elite/_node_modules/wizard/steps.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/Elite/css/pages/pricing-page.css" rel="stylesheet" />
+    <link href="~/Elite/css/style.min.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link href="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+
+    <style>
+        video {
+            object-fit: cover;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .list-inline {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+            .list-inline li a {
+                font-size: 16px;
+                color: #fff;
+                padding: 0px 20px;
+                letter-spacing: 0.2px;
+                color: #fff !important
+            }
+
+        ul.list-inline li {
+            height: 50px
+        }
+        #PrivayPolicy .modal-body{
+            max-height:450px;
+            height:100%;
+            overflow:auto scroll;
+        }
+        #main1 {
+            text-align: center;
+            color: #fff !important;
+        }
+
+            #main1 h3 {
+                color: #fff;
+                font-size: 40px;
+                text-shadow: 0px 4px 3px #000;
+                margin: 1.5rem 0 !important;
+            }
+
+            #main1 h1 {
+                text-shadow: 0px 4px 3px #000;
+                font-weight: bold;
+                font-size: 65px;
+            }
+
+        #SignUp-Link2 {
+            cursor: pointer;
+            color: #03a9f4;
+        }
+
+        #SignUp-Link {
+            cursor: pointer;
+            color: #03a9f4;
+        }
+
+        button, input, optgroup, select, textarea {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        }
+
+        #Login-btn {
+            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .14), 0 1px 7px 0 rgba(0, 0, 0, .12), 0 3px 1px -1px rgba(0, 0, 0, .2);
+            color: #fff;
+            text-transform: uppercase;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important
+        }
+
+        #btn-signin {
+            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .14), 0 1px 7px 0 rgba(0, 0, 0, .12), 0 3px 1px -1px rgba(0, 0, 0, .2);
+            color: #fff;
+            text-transform: uppercase;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            background-color: #03a9f4;
+        }
+
+        .set_h1 {
+            text-shadow: 0px 4px 3px #000;
+            margin: 0 !important;
+            margin-bottom: 0px;
+            color: #fff !important;
+            letter-spacing: -.41px !important;
+            line-height: 26px !important;
+            margin-bottom: .5rem !important;
+            font-size: 2.1rem;
+            margin-top: 4% !important
+        }
+
+        .set_h6 {
+            text-shadow: 0px 4px 3px #000;
+            color: #fff !important;
+            font-size: 17px !important;
+            font-weight: 400;
+            letter-spacing: -.32px !important;
+            line-height: 24px !important;
+            margin-bottom: 15px !important;
+        }
+
+        .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+            width: 100%;
+        }
+
+        .bootstrap-select > .dropdown-toggle.bs-placeholder.btn-secondary {
+            background-color: transparent !important;
+            border-radius: 20px !important;
+            border: 1px solid #ccc;
+            border-bottom-color: rgb(204, 204, 204);
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            margin: 0 auto;
+            color: #fff !important;
+            height: 3rem;
+            font-size: 23px;
+        }
+
+        .bootstrap-select > .dropdown-toggle {
+            background-color: transparent !important;
+            border-radius: 20px !important;
+            border: 1px solid #ccc;
+            border-bottom-color: rgb(204, 204, 204);
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            margin: 0 auto;
+            color: #fff !important;
+            height: 3rem;
+            font-size: 23px;
+        }
+
+        .dropdown-menu {
+            padding: 0 !important;
+            border-radius: 10px !important;
+            background-color: #000 !important;
+            max-height: 164px !important;
+        }
+
+        .bootstrap-select .dropdown-menu li a {
+            color: #fff !important
+        }
+
+            .bootstrap-select .dropdown-menu li a:focus, .bootstrap-select .dropdown-menu li a:hover {
+                color: #fff !important;
+                background: #03a9f4 !important;
+            }
+
+        .dropdown-item.active, .dropdown-item:active {
+            background-color: #03a9f4 !important;
+        }
+        /* .bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+            text-align: center;
+        }*/
+        .btn-secondary:not(:disabled):not(.disabled).active, .btn-secondary:not(:disabled):not(.disabled):active, .show > .btn-secondary.dropdown-toggle {
+            border-radius: 20px !important;
+            border: 1px solid #ccc;
+            border-bottom-color: rgb(204, 204, 204);
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            margin: 0 auto;
+            color: #fff !important;
+            text-align-last: center !important;
+            height: 3rem;
+            font-size: 23px;
+            background-color: transparent !important;
+        }
+
+
+        .text-input {
+            height: 3rem;
+            border-radius: 28px;
+            background-color: transparent !important;
+            font-size: 1rem !important;
+            color: #fff !important
+        }
+
+            .text-input:focus {
+                border: 1px solid #fff !important
+            }
+
+        .form-control {
+            cursor: auto !important
+        }
+
+        #generic_price_table .generic_content {
+            background-color: #fff;
+        }
+
+            #generic_price_table .generic_content .generic_head_price {
+                background-color: #f6f6f6;
+            }
+
+                #generic_price_table .generic_content .generic_head_price .generic_head_content .head_bg {
+                    border-color: #e4e4e4 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #e4e4e4;
+                }
+
+                #generic_price_table .generic_content .generic_head_price .generic_head_content .head span {
+                    color: #525252;
+                }
+
+                #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .sign {
+                    color: #414141;
+                }
+
+                #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .currency {
+                    color: #414141;
+                }
+
+                #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .cent {
+                    color: #414141;
+                }
+
+                #generic_price_table .generic_content .generic_head_price .generic_price_tag .month {
+                    color: #414141;
+                }
+
+            #generic_price_table .generic_content .generic_feature_list ul li {
+                color: #a7a7a7;
+            }
+
+                #generic_price_table .generic_content .generic_feature_list ul li span {
+                    color: #414141;
+                }
+
+                #generic_price_table .generic_content .generic_feature_list ul li:hover {
+                    background-color: #E4E4E4;
+                    border-left: 5px solid #03a9f4;
+                }
+
+            #generic_price_table .generic_content .generic_price_btn a {
+                border: 1px solid #03a9f4;
+                color: #03a9f4;
+            }
+
+            #generic_price_table .generic_content.active .generic_head_price .generic_head_content .head_bg,
+            #generic_price_table .generic_content:hover .generic_head_price .generic_head_content .head_bg {
+                border-color: #03a9f4 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #03a9f4;
+                color: #fff;
+            }
+
+            #generic_price_table .generic_content:hover .generic_head_price .generic_head_content .head span,
+            #generic_price_table .generic_content.active .generic_head_price .generic_head_content .head span {
+                color: #fff;
+            }
+
+            #generic_price_table .generic_content:hover .generic_price_btn a,
+            #generic_price_table .generic_content.active .generic_price_btn a {
+                background-color: #03a9f4;
+                color: #fff;
+            }
+
+        #generic_price_table {
+            margin: 50px 0 50px 0;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .row .table {
+            padding: 28px 0;
+        }
+
+        /*PRICE BODY CODE START*/
+
+        #generic_price_table .generic_content {
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+        }
+
+            #generic_price_table .generic_content .generic_head_price {
+                margin: 0 0 20px 0;
+            }
+
+                #generic_price_table .generic_content .generic_head_price .generic_head_content {
+                    margin: 0 0 50px 0;
+                }
+
+                    #generic_price_table .generic_content .generic_head_price .generic_head_content .head_bg {
+                        border-style: solid;
+                        border-width: 90px 1411px 23px 399px;
+                        position: absolute;
+                    }
+
+                    #generic_price_table .generic_content .generic_head_price .generic_head_content .head {
+                        padding-top: 40px;
+                        position: relative;
+                        z-index: 1;
+                    }
+
+                        #generic_price_table .generic_content .generic_head_price .generic_head_content .head span {
+                            font-family: "Raleway",sans-serif;
+                            font-size: 28px;
+                            font-weight: 400;
+                            letter-spacing: 2px;
+                            margin: 0;
+                            padding: 0;
+                            text-transform: uppercase;
+                        }
+
+                #generic_price_table .generic_content .generic_head_price .generic_price_tag {
+                    padding: 0 0 20px;
+                }
+
+                    #generic_price_table .generic_content .generic_head_price .generic_price_tag .price {
+                        display: block;
+                    }
+
+                        #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .sign {
+                            display: inline-block;
+                            font-family: "Lato",sans-serif;
+                            font-size: 28px;
+                            font-weight: 400;
+                            vertical-align: middle;
+                        }
+
+                        #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .currency {
+                            font-family: "Lato",sans-serif;
+                            font-size: 60px;
+                            font-weight: 300;
+                            letter-spacing: -2px;
+                            line-height: 60px;
+                            padding: 0;
+                            vertical-align: middle;
+                        }
+
+                        #generic_price_table .generic_content .generic_head_price .generic_price_tag .price .cent {
+                            display: inline-block;
+                            font-family: "Lato",sans-serif;
+                            font-size: 24px;
+                            font-weight: 400;
+                            vertical-align: bottom;
+                        }
+
+                    #generic_price_table .generic_content .generic_head_price .generic_price_tag .month {
+                        font-family: "Lato",sans-serif;
+                        font-size: 18px;
+                        font-weight: 400;
+                        letter-spacing: 3px;
+                        vertical-align: bottom;
+                    }
+
+            #generic_price_table .generic_content .generic_feature_list ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+                #generic_price_table .generic_content .generic_feature_list ul li {
+                    font-family: "Lato",sans-serif;
+                    font-size: 18px;
+                    padding: 15px 0;
+                    transition: all 0.3s ease-in-out 0s;
+                }
+
+                    #generic_price_table .generic_content .generic_feature_list ul li:hover {
+                        transition: all 0.3s ease-in-out 0s;
+                        -moz-transition: all 0.3s ease-in-out 0s;
+                        -ms-transition: all 0.3s ease-in-out 0s;
+                        -o-transition: all 0.3s ease-in-out 0s;
+                        -webkit-transition: all 0.3s ease-in-out 0s;
+                    }
+
+                    #generic_price_table .generic_content .generic_feature_list ul li .fa {
+                        padding: 0 10px;
+                    }
+
+            #generic_price_table .generic_content .generic_price_btn {
+                margin: 20px 0 32px;
+            }
+
+                #generic_price_table .generic_content .generic_price_btn a {
+                    border-radius: 50px;
+                    -moz-border-radius: 50px;
+                    -ms-border-radius: 50px;
+                    -o-border-radius: 50px;
+                    -webkit-border-radius: 50px;
+                    display: inline-block;
+                    font-family: "Lato",sans-serif;
+                    font-size: 18px;
+                    outline: medium none;
+                    padding: 12px 30px;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                }
+
+                #generic_price_table .generic_content,
+                #generic_price_table .generic_content:hover,
+                #generic_price_table .generic_content .generic_head_price .generic_head_content .head_bg,
+                #generic_price_table .generic_content:hover .generic_head_price .generic_head_content .head_bg,
+                #generic_price_table .generic_content .generic_head_price .generic_head_content .head h2,
+                #generic_price_table .generic_content:hover .generic_head_price .generic_head_content .head h2,
+                #generic_price_table .generic_content .price,
+                #generic_price_table .generic_content:hover .price,
+                #generic_price_table .generic_content .generic_price_btn a,
+                #generic_price_table .generic_content:hover .generic_price_btn a {
+                    transition: all 0.3s ease-in-out 0s;
+                    -moz-transition: all 0.3s ease-in-out 0s;
+                    -ms-transition: all 0.3s ease-in-out 0s;
+                    -o-transition: all 0.3s ease-in-out 0s;
+                    -webkit-transition: all 0.3s ease-in-out 0s;
+                }
+
+        @@media (max-width: 767px) {
+            #generic_price_table .generic_content {
+                margin-bottom: 75px;
+            }
+        }
+
+        @@media (min-width: 768px) and (max-width: 991px) {
+            #generic_price_table .col-md-3 {
+                float: left;
+                width: 50%;
+            }
+
+            #generic_price_table .col-md-4 {
+                float: left;
+                width: 50%;
+            }
+
+            #generic_price_table .generic_content {
+                margin-bottom: 75px;
+            }
+        }
+
+        #generic_price_table_home {
+            font-family: 'Raleway', sans-serif;
+        }
+
+            #generic_price_table_home ul {
+                margin: 0 auto;
+                padding: 0;
+                list-style: none;
+                display: table;
+            }
+
+            #generic_price_table_home li {
+                float: left;
+            }
+
+                #generic_price_table_home li + li {
+                    margin-left: 10px;
+                    padding-bottom: 10px;
+                }
+
+                #generic_price_table_home li a {
+                    display: block;
+                    width: 50px;
+                    height: 50px;
+                    font-size: 0px;
+                }
+
+            #generic_price_table_home .blue {
+                background: #3498DB;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .emerald {
+                background: #2ECC71;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .grey {
+                background: #7F8C8D;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .midnight {
+                background: #34495E;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .orange {
+                background: #E67E22;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .purple {
+                background: #9B59B6;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .red {
+                background: #E74C3C;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+            #generic_price_table_home .turquoise {
+                background: #1ABC9C;
+                transition: all 0.3s ease-in-out 0s;
+            }
+
+                #generic_price_table_home .blue:hover,
+                #generic_price_table_home .emerald:hover,
+                #generic_price_table_home .grey:hover,
+                #generic_price_table_home .midnight:hover,
+                #generic_price_table_home .orange:hover,
+                #generic_price_table_home .purple:hover,
+                #generic_price_table_home .red:hover,
+                #generic_price_table_home .turquoise:hover {
+                    border-bottom-left-radius: 50px;
+                    border-bottom-right-radius: 50px;
+                    border-top-left-radius: 50px;
+                    border-top-right-radius: 50px;
+                    transition: all 0.3s ease-in-out 0s;
+                }
+
+            #generic_price_table_home .divider {
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 20px;
+                padding: 20px;
+            }
+
+                #generic_price_table_home .divider span {
+                    width: 100%;
+                    display: table;
+                    height: 2px;
+                    background: #ddd;
+                    margin: 50px auto;
+                    line-height: 2px;
+                }
+
+            #generic_price_table_home .itemname {
+                text-align: center;
+                font-size: 50px;
+                padding: 50px 0 20px;
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 40px;
+                text-decoration: none;
+                font-weight: 300;
+            }
+
+            #generic_price_table_home .itemnametext {
+                text-align: center;
+                font-size: 20px;
+                padding-top: 5px;
+                text-transform: uppercase;
+                display: inline-block;
+            }
+
+            #generic_price_table_home .footer {
+                padding: 40px 0;
+            }
+
+        #msform {
+            width: 750px;
+            margin: 0 auto;
+            margin-top: 0px;
+            position: relative;
+            margin-top: 20px;
+        }
+
+            #msform input, #msform textarea {
+                padding: 0px 8px 4px 8px;
+                border: none;
+                border-bottom-color: currentcolor;
+                border-bottom-style: none;
+                border-bottom-width: medium;
+                border-bottom: 1px solid #ccc;
+                border-radius: 0px;
+                margin-bottom: 25px;
+                margin-top: 2px;
+                width: 100%;
+                box-sizing: border-box;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+                color: #fff;
+                font-size: 16px;
+                letter-spacing: 1px;
+                background-color: transparent;
+            }
+
+        .fs-title {
+            text-shadow: 0px 4px 3px #000;
+        }
+
+        .wizard-content .wizard > .content > .body {
+            padding: 0 70px !important;
+        }
+
+        .wizard-content .wizard > .actions {
+            padding: 0 65px 20px !important;
+        }
+
+        .wizard-content .wizard > .steps > ul > li.current > a {
+            color: #fff !important
+        }
+
+        #SignIn-Link {
+            cursor: pointer;
+            color: #03a9f4;
+        }
+
+        .select-btn:focus {
+            background-color: #03a9f4;
+            color: #fff !important
+        }
+    </style>
+
+</head>
+<body class="wp-menu skin-blue-dark fixed-layout">
+    <video autoplay="autoplay" muted loop id="myVideo">
+        <source src="~/loginpage/assets/videos/medicalone.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal">About Us</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#PricingModal">Pricing</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="javascript:void(0)" data-toggle="modal" data-target="#Features">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="main" id="main1">
+                    <div class="main-content fade-in rubberBand">
+                        <h3>Welcome</h3>
+                        <h3>To</h3>
+                        <h1>MediClinic</h1>
+                        <button id="Login-btn" class="btn modal-trigger" style="background-color: #03a9f4;">Sign In</button>
+
+                        <p id="newaccount" style="color:white; margin:8px 0">New to Mediclinic? <span id="SignUp-Link">Sign Up</span></p>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="main" id="main2" style="display:none;text-align:center">
+                    <div class="main-content  rubberBand main-content2">
+                        <div class="form_side set_width">
+
+                            <form asp-action="AuthUser" asp-controller="Auth" method="post" data-ajax="true" data-ajax-success="AuthFormSubmit(data)" autocomplete="off" class="center-align">
+                                <h4 class="set_h1">
+                                    Please Choose Your Role!
+                                </h4>
+                                <h6 class="set_h6">Select your Role For Login</h6>
+
+                                <div class="row" style="width:37%;margin:auto">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <select class="selectpicker" data-style="form-control btn-secondary" asp-for="RoleTypeId"
+                                                    asp-items="@(new SelectList(Model.UserRoleTypes,"UserRoleId","RoleType"))">
+                                                <option value="">Select Role</option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" asp-for="Email" class="form-control text-input set-select" placeholder="Enter Username/Email" />
+                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="password" asp-for="Password" class="form-control text-input set-select" placeholder="Enter Password" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <span class="required" style="color:red;font-weight:bold; font-size:16px"></span>
+                                    <div class="col-md-12">
+                                        <div class="form-actions">
+
+                                            <button type="submit" id="btn-signin" class="btn add-btn">Sign In</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <p id="newaccount2" style="color:white; margin:8px 0">New to Mediclinic? <span id="SignUp-Link2">Sign Up</span></p>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row" id="validation" style="display:none">
+            <div class="col-12">
+                <div class="wizard-content">
+
+                    <form asp-action="AddClient" asp-controller="Auth" method="post" data-ajax="true" data-ajax-success="AuthClientSubmit(data)" id="msform" class="validation-wizard wizard-circle">
+                        <input type="text" asp-for="currentTab" id="CurrentTab" hidden="hidden" />
+                        <input type="text" asp-for="SubscriptionId" id="SubsciptionId" hidden="hidden" />
+
+                        <h6>Plan</h6>
+                        <section>
+                            <h2 class="fs-title text-white">Chose a Plan</h2>
+                            <div id="generic_price_table">
+
+                                <div class="row">
+                                    <div class="col s12 l6">
+
+                                        <!--PRICE CONTENT START-->
+                                        <div class="generic_content clearfix">
+
+                                            <!--HEAD PRICE DETAIL START-->
+                                            <div class="generic_head_price clearfix">
+
+                                                <!--HEAD CONTENT START-->
+                                                <div class="generic_head_content clearfix">
+
+                                                    <!--HEAD START-->
+                                                    <div class="head_bg"></div>
+                                                    <div class="head">
+                                                        <span>BASIC PLAN</span>
+                                                    </div>
+                                                    <!--//HEAD END-->
+
+                                                </div>
+                                                <!--//HEAD CONTENT END-->
+                                                <!--PRICE START-->
+                                                <div class="generic_price_tag clearfix">
+                                                    <span class="price">
+                                                        <span class="sign">$</span>
+                                                        <span class="currency">175</span>
+                                                        <span class="cent">.00</span>
+                                                        <span class="month">/Month</span>
+                                                    </span>
+                                                </div>
+                                                <!--//PRICE END-->
+
+                                            </div>
+                                            <!--//HEAD PRICE DETAIL END-->
+                                            <!--FEATURE LIST START-->
+                                            <div class="generic_feature_list">
+                                                <ul>
+                                                    <li><span>1</span> Provider</li>
+                                                    <li>Unlimited Users</li>
+                                                    <li><span>1 TB</span> Document/Image data Storage</li>
+                                                    <li>Each Additional GB $0.25/month</li>
+                                                    <li style="margin-bottom:134px !important">Each Additional TB $25.00/month</li>
+
+                                                </ul>
+                                            </div>
+                                            <!--//FEATURE LIST END-->
+                                            <!--BUTTON START-->
+                                            <div class="generic_price_btn clearfix">
+                                                <a class="select-btn" href="javascript:void(0);" onclick="selectPackage('Basic')">Select</a>
+                                            </div>
+                                            <!--//BUTTON END-->
+
+                                        </div>
+                                        <!--//PRICE CONTENT END-->
+
+                                    </div>
+                                    <div class="col s12 l6">
+
+                                        <!--PRICE CONTENT START-->
+                                        <div class="generic_content clearfix">
+
+                                            <!--HEAD PRICE DETAIL START-->
+                                            <div class="generic_head_price clearfix">
+
+                                                <!--HEAD CONTENT START-->
+                                                <div class="generic_head_content clearfix">
+
+                                                    <!--HEAD START-->
+                                                    <div class="head_bg"></div>
+                                                    <div class="head">
+                                                        <span>
+                                                            FACILITY PLAN
+
+                                                        </span>
+                                                    </div>
+                                                    <!--//HEAD END-->
+
+                                                </div>
+                                                <!--//HEAD CONTENT END-->
+                                                <!--PRICE START-->
+                                                <div class="generic_price_tag clearfix">
+                                                    <span class="price">
+                                                        <span class="sign">$</span>
+                                                        <span class="currency">600</span>
+                                                        <span class="cent">.00</span>
+                                                        <span class="month">/Month</span>
+                                                    </span>
+                                                </div>
+                                                <!--//PRICE END-->
+
+                                            </div>
+                                            <!--//HEAD PRICE DETAIL END-->
+                                            <!--FEATURE LIST START-->
+                                            <div class="generic_feature_list">
+                                                <ul>
+                                                    <li> Up to <span>4</span> Providers</li>
+                                                    <li>Each Additional Provider $50.00</li>
+                                                    <li>Negotiable for large facilities</li>
+                                                    <li>Unlimited Users</li>
+                                                    <li><span>2TB</span> Document/Image data storage</li>
+                                                    <li>Each Additional GB $0.25/month</li>
+                                                    <li>Each Additional TB $25.00/month</li>
+                                                </ul>
+                                            </div>
+                                            <!--//FEATURE LIST END-->
+                                            <!--BUTTON START-->
+                                            <div class="generic_price_btn clearfix">
+                                                <a class="select-btn" href="javascript:void(0);" onclick="selectPackage('facility')">Select</a>
+                                            </div>
+                                            <!--//BUTTON END-->
+
+                                        </div>
+                                        <!--//PRICE CONTENT END-->
+
+                                    </div>
+
+                                </div>
+                                @*<div class="row">
+                                        <div class="col s12">
+                                            <p>
+                                                <label>
+                                                    <input type="checkbox" class="filled-in" />
+                                                    <span style="color:white !important;margin:8px 0;">I agree to the <a class=" modal-trigger" href="#modal1">Privacy Policy</a></span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>*@
+
+                            </div>
+
+                        </section>
+                        <!-- Step 2 -->
+                        <h6>Personal</h6>
+                        <section>
+                            <h2 class="fs-title text-white">Personal Information</h2>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @*<label for="wfirstName2"> User Name : <span class="danger">*</span> </label>*@
+                                        <input type="text" class="form-control required" asp-for="employeeBasicDto.UserName" id="wfirstName2" placeholder="User Name">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @*<label for="wemailAddress2"> Email Address : <span class="danger">*</span> </label>*@
+                                        <input type="email" class="form-control required" asp-for="employeeBasicDto.Email" id="wemailAddress2" placeholder="Email">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @*<label for="wphoneNumber2">Phone Number :</label>*@
+                                        <input type="tel" class="form-control phoneno required" asp-for="employeeBasicDto.MobNo" id="wphoneNumber2" placeholder="Phone no">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        @*<label for="wlastName2"> Password : <span class="danger">*</span> </label>*@
+                                        <input type="password" class="form-control required" asp-for="employeeBasicDto.Password" id="wlastName2" placeholder="Password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" id="selectInit">
+                                        <label class="custom-control-label" for="selectInit" style="color:#fff">I agree to the <a class=" modal-trigger" href="javascript:Void(0);" data-toggle="modal" data-target="#PrivayPolicy" style="color: #2962FF !important;">Privacy Policy</a></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" hidden="hidden" id="Paymentbtn">save</button>
+
+                        </section>
+                        <!-- Step 3 -->
+                        <h6>Method</h6>
+                        <section>
+                            <h2 class="fs-title text-white">Payment Method</h2>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group validate">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <fieldset class="controls">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" value="1" name="styled_radio" required="" id="styled_radio1" class="custom-control-input" aria-invalid="false">
+                                                        <label class="custom-control-label" for="styled_radio1">Credit Card</label>
+                                                    </div>
+                                                    <div class="help-block"></div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <fieldset>
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" value="2" name="styled_radio" id="styled_radio2" class="custom-control-input" aria-invalid="false" onclick="PayPal();">
+                                                        <label class="custom-control-label" for="styled_radio2">PayPal</label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+
+                                <div class="col-12">
+                                    <div id="paypal-button-container" style="display:none;"></div>
+                                    <div id="paypal-button-container2" style="display:none;"></div>
+
+                                </div>
+                            </div>
+                            <button type="submit" hidden="hidden" id="infoSave">save</button>
+                            <input hidden="hidden" id="packageName" />
+
+                        </section>
+                        <!-- Step 4 -->
+                        <h6>Verification</h6>
+                        <section>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4 style="color:#fff">Select Verification Type</h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="text" hidden="hidden" asp-for="VerificationType" id="verificationType" />
+                                    <div class="form-group validate">
+                                        <div class="row">
+
+
+                                            <div class="col-md-4">
+                                                <fieldset class="controls">
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" onclick="EmailorPhoneVerification('Email');">
+                                                        <label class="custom-control-label" for="customRadio1">Email</label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <fieldset>
+
+                                                    <div class="custom-control custom-radio">
+                                                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" onclick="EmailorPhoneVerification('Phone');">
+                                                        <label class="custom-control-label" for="customRadio2">Phone</label>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" id="EmailOrPhoneVerification" style="display:none">
+                                        <p>Verification code sent on your @ViewBag.EmailOrMob</p>
+                                        <input type="text" class="form-control" placeholder="Enter Verification Code" maxlength="4" id="EmailPhoneCode">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <button type="submit" hidden="hidden" id="VerifcationSave">save</button>
+
+                        </section>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <p id="oldacc1" style="color:white;display:none;margin:8px 0;text-align:center;">Already Account ? Click On <span id="SignIn-Link">Sign In</span></p>
+
+            </div>
+        </div>
+
+    </div>
+    <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">About Us</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>At MediClinic we strive to deliver state of the art technology, which will help medical practitioners, multi-specialty facilities and hospitals to manage their Day to day operations.</p>
+                    <p>
+                        We help providers to deal with patients involved in a No-Fault related incidents, with injuries caused during course of their employment or any other health issues.
+                        We provide a solution to any type of physician out in the field.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div id="PricingModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Pricing</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body" id="generic_price_table">
+                    <div class="row">
+                        <div class="col">
+
+                            <!--PRICE CONTENT START-->
+                            <div class="generic_content clearfix">
+
+                                <!--HEAD PRICE DETAIL START-->
+                                <div class="generic_head_price clearfix">
+
+                                    <!--HEAD CONTENT START-->
+                                    <div class="generic_head_content clearfix">
+
+                                        <!--HEAD START-->
+                                        <div class="head_bg"></div>
+                                        <div class="head">
+                                            <span>BASIC PLAN</span>
+                                        </div>
+                                        <!--//HEAD END-->
+
+                                    </div>
+                                    <!--//HEAD CONTENT END-->
+                                    <!--PRICE START-->
+                                    <div class="generic_price_tag clearfix">
+                                        <span class="price">
+                                            <span class="sign">$</span>
+                                            <span class="currency">175</span>
+                                            <span class="cent">.00</span>
+                                            <span class="month">/Month</span>
+                                        </span>
+                                    </div>
+                                    <!--//PRICE END-->
+
+                                </div>
+                                <!--//HEAD PRICE DETAIL END-->
+                                <!--FEATURE LIST START-->
+                                <div class="generic_feature_list">
+                                    <ul>
+                                        <li><span>1</span> Provider</li>
+                                        <li>Unlimited Users</li>
+                                        <li><span>1 TB</span> Document/Image data Storage</li>
+                                        <li>Each Additional GB $0.25/month</li>
+                                        <li style="margin-bottom:134px !important">Each Additional TB $25.00/month</li>
+
+                                    </ul>
+                                </div>
+                                <!--//FEATURE LIST END-->
+                                <!--BUTTON START-->
+                                >
+
+                            </div>
+                            <!--//PRICE CONTENT END-->
+
+                        </div>
+                        <div class="col">
+
+                            <!--PRICE CONTENT START-->
+                            <div class="generic_content clearfix">
+
+                                <!--HEAD PRICE DETAIL START-->
+                                <div class="generic_head_price clearfix">
+
+                                    <!--HEAD CONTENT START-->
+                                    <div class="generic_head_content clearfix">
+
+                                        <!--HEAD START-->
+                                        <div class="head_bg"></div>
+                                        <div class="head">
+                                            <span>
+                                                FACILITY PLAN
+
+                                            </span>
+                                        </div>
+                                        <!--//HEAD END-->
+
+                                    </div>
+                                    <!--//HEAD CONTENT END-->
+                                    <!--PRICE START-->
+                                    <div class="generic_price_tag clearfix">
+                                        <span class="price">
+                                            <span class="sign">$</span>
+                                            <span class="currency">600</span>
+                                            <span class="cent">.00</span>
+                                            <span class="month">/Month</span>
+                                        </span>
+                                    </div>
+                                    <!--//PRICE END-->
+
+                                </div>
+                                <!--//HEAD PRICE DETAIL END-->
+                                <!--FEATURE LIST START-->
+                                <div class="generic_feature_list">
+                                    <ul>
+                                        <li> Up to <span>4</span> Providers</li>
+                                        <li>Each Additional Provider $50.00</li>
+                                        <li>Negotiable for large facilities</li>
+                                        <li>Unlimited Users</li>
+                                        <li><span>2TB</span> Document/Image data storage</li>
+                                        <li>Each Additional GB $0.25/month</li>
+                                        <li>Each Additional TB $25.00/month</li>
+                                    </ul>
+                                </div>
+                                <!--//FEATURE LIST END-->
+                                <!--BUTTON START-->
+
+
+                            </div>
+                            <!--//PRICE CONTENT END-->
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="Features" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">features</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <h5>
+                        Key features:
+                    </h5>
+                    <ul>
+                        <li>  No-Fault billi  </li>
+                        <li>  WCB Billing  </li>
+                        <li> Private Insurance Billing  </li>
+                        <li> Transportation Tracking  </li>
+                        <li> Self Programing and settings of the software  </li>
+                        <li> Inventory Tracking  </li>
+                        <li> Electronic Prescriptions  </li>
+                        <li> Tele-Medicine  </li>
+                        <li> Barcode Recognition and Scanning </li>
+                        <li> Employee Management </li>
+                        <li> Internal and External messaging </li>
+                        <li> Advanced Scheduling </li>
+                        <li> Income/Expense management </li>
+                        <li>Live overview of the practice </li>
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="PrivayPolicy" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title color-blue" id="myModalLabel">Privacy Policy</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <h4>
+                        1. Introduction To Privacy Policy And Terms Of Service For Mediclinic
+                    </h4>
+                    <p>Please note that by accepting our Terms of Service and using the website and mobile apps (combined the “Application”) or the services provided by Mediclinic web and mobile site and apps under the iMEDHealth, Pvt, Ltd  ("Company",“we”, “our” or “us”), you (a “user” or “member”) are consenting to the collection, use, and disclosure of your Personal Information (defined below) in accordance with this Privacy Policy. If you do not agree to this Privacy Policy, please do not use the Application or Company’s services. Your consent will be effective from the date you confirm acceptance (ie., the date when you register with the Application) of our Terms of Service and use this Site until the date you withdraw your consent (you can provide “request for withdrawal” by sending an email request to info@imedhealth.us. If you use any free or openly available services or information on the website or Application or any peripheral/associated online accounts/channels, you are agreeing to consent to the terms of this document.</p>
+                    <p>
+                        If you provide consent to the collection, use and disclosure of your Personal Information as described in this Privacy Policy, the Company will be able to provide you with access to a personalized experience to obtain a medical opinion or consultation services from our network of medical professionals. You may withdraw your consent at any time. However, if you choose to withdraw your consent, we will not be able to provide you with the functions or services through our Site.
+
+                    </p>   
+                    <p>
+                        USE OF OUR SERVICES IS NOT APPROPRIATE FOR EMERGENCIES. IF YOU THINK YOU HAVE A MEDICAL OR MENTAL HEALTH EMERGENCY, OR IF AT ANY TIME YOU ARE CONCERNED ABOUT YOUR CARE OR TREATMENT, CALL YOUR EMERGENCY PHONE NUMBER OR GO TO THE NEAREST OPEN CLINIC OR EMERGENCY ROOM.
+
+                    </p>
+                    <p>
+                        While the Services may provide access to certain general medical information, and also allow patients to communicate with health care providers, the Services we provide cannot and are not intended to provide medical advice. We advise seeking the advice of a physician or other qualified healthcare provider with any questions regarding personal health or medical conditions. Never disregard, avoid, or delay in obtaining medical advice from a doctor or other qualified healthcare provider because of something posted on the Site. If you have or suspect that you have a medical problem or condition, please contact a qualified healthcare professional immediately.  THE CONTENT ON THE SITE AND APPLICATION IS NOT AND SHOULD NOT BE CONSIDERED MEDICAL ADVICE OR A SUBSTITUTE FOR INDIVIDUAL MEDICAL ADVICE, DIAGNOSIS, OR TREATMENT. YOU SHOULD ALWAYS TALK TO YOUR health care providers FOR DIAGNOSIS AND TREATMENT, INCLUDING INFORMATION REGARDING WHICH DRUGS, THERAPY, OR OTHER TREATMENT MAY BE APPROPRIATE FOR YOU.  NONE OF THE INFORMATION ON THE SITE REPRESENTS OR WARRANTS THAT ANY PARTICULAR DRUG, THERAPY OR OTHER TREATMENT IS SAFE, APPROPRIATE, OR EFFECTIVE FOR YOU.  FURTHER, A HEALTH CARE PROVIDER’S ABILITY TO USE OUR SERVICES is not an endorsement or recommendation of that health care provider by iMEDHealth/Mediclinic/Company.
+
+                    </p>
+                    <p>
+                        We recognize that when you provide us with information about yourself that you trust us to act in a responsible manner with that information.
+
+                    </p>
+                    <p>
+                        Personal Information is any information that identifies you, or by which your identity can be deduced. This Privacy Policy discloses the Company’s Personal Information gathering and dissemination practices with respect to the Site and our services. Please read this Privacy Policy carefully.
+
+                    </p>
+                    <h4>
+                        2. Information collected and how it is used
+                    </h4>
+                    <p>
+                        The following describes the types of Personal Information and other information the Company may collect about you, and how the Company may use and maintain that information, including, but not limited to:
+
+                    </p>
+                    <h4>
+                        3. Registration
+                    </h4>
+                    <p>
+                        Before you can utilize certain services that we offer on the Site or otherwise, we may ask that you register with the Site and provide us with your email address, phone number, a password, your first and last name and other contact information and personal details including but not limited to your address. We request this information for identification purposes, to communicate with you regarding your account, and to facilitate the functioning of certain services. We may maintain certain Personal Information about you as long as reasonably necessary for us to complete our dealings with you, or as may be required by law. We collect educational, training and license information from clinicians and healthcare professionals to authenticate the background of service providers as much as possible.
+
+                    </p>
+                    <h4>
+                        4. Forum
+                    </h4>
+                    <p>
+                        To fully utilize the services we offer, you may be required to fill out forms that will contain Personal Information such as your name, address, telephone number, account information, health status and other information relevant to your health, diagnosis and treatment.
+                    </p>
+                    <h4>
+                        5. Medical Information
+                    </h4>
+                    <p>
+                        In order for medical professionals to give medical opinions regarding your health, you may be required to provide us with past and current medical records, description of symptoms, a pictorial representation of the issue,  a complete medical history and life-style descriptions. Once your case is submitted and closed, we endeavour to de-link /render anonymous your Personal Information like name, phone, email etc., from your medical records on a monthly basis.
+
+                    </p>
+                    <h4>
+                        6. Correspondence
+
+                    </h4>
+                    <P>
+                        If you correspond with us via email, we may gather in a file specific to you the information that you submit in order to communicate with you effectively and respond to any of your inquiries. We maintain certain Personal Information about you as long as reasonably necessary for us to complete our dealings with you, or as may be required by law.
+
+                    </P>
+                    <h4>
+                        7. URL and IP addresses
+
+                    </h4>
+                    <p>
+                        Company collects information about users’ utilization and navigation of our Site. This information helps us to design our Site to better suit our users’ needs. For example, our Site will track the URL that you visited before you came to our Site, the URL to which you next go and your Internet Protocol (IP) address. We use your IP address to help diagnose problems with our server and to administer our Site. Your IP address also is used to help identify you and to gather broad demographic information.
+
+                    </p>
+                    <h4>
+                        8. Information Collected With Cookies
+                    </h4>
+                    <p>
+                        Company uses cookies on certain pages of our Site. Cookies are small text files sent from a website to the hard drive of a user’s computer to store bits of information related to that user, making using the Internet easier by, among other things, saving your preferences for you. For example, a cookie lets the Site remember that you have registered, which allows us to speed up your future activities at our Site, and which allows you to enter your registration information less frequently while visiting our Site. We may also use cookies to deliver content tailored to your interests. Our cookies may enable us to relate your use of our Site to Personal Information that you previously submitted, such as calling you by name when you return to our Site. If your browser is set to reject cookies, or if your browser notifies you that you are about to receive a cookie and you reject it, then your use of the Site may not be as eﬃcient or as enjoyable as it would be if the cookie were enabled. The information that we collect with cookies allows us to improve our marketing and promotional efforts, to statistically analyse Site usage, to improve our content and product offerings and to customize our Site’s content, layout and services. However, we only use information collected with cookies on an aggregated basis without the use of any information that identifies you. We also have the right to use various tracking software to analyse data to improve our service. Any specific name is always anonymized automatically.
+
+                    </p>
+                    <h4>
+                        9. Information disclosure and usage
+                    </h4>
+                    <p>
+                        Company will not share, rent, sell or otherwise disclose any of the Personal Information that we collect about you, except when we have your permission or in any of the following situations:
+
+                    </p>
+                    <p>
+                        We may disclose Personal Information that we collect about you to our third-party contractors who perform services for Company in order to provide certain services or to complete or confirm a transaction that you conduct with us. We require these third-party contractors to use reasonable safeguards to protect your Personal Information in their custody or control. Please note that the Personal Information in the custody of these service providers may be subject to access by the law enforcement authorities of those jurisdictions in which the service providers are located. Our Privacy Oﬃcer/Customer Service Representative, whose contact information is below, can provide further information about our policies and practices regarding service providers and how they collect, use, disclose or store Personal Information on our behalf.
+
+                    </p>
+                    <p>
+                        We may disclose information about you as part of a merger, acquisition or other sale or transfer of the Company’s assets or business. The Company does not guarantee that any entity receiving such information in connection with one of these transactions will comply with all terms of this policy. We may disclose your Personal Information for purposes such as to provide services available on the Site; to coordinate with insurance, reinsurance and excess or stop loss insurers; to enforce our members’ rights; to protect against actual or potential fraud; to resolve member inquiries or disputes; to receive payments; to carry out our business; to protect the confidentiality or security of our records; to administer preventive health and case management programs; to perform underwriting, auditing and rate making functions; to enable our service providers to perform marketing services on our behalf and inform members about our own products or services; to comply with state laws and other applicable legal requirements. Moreover, we may be legally obligated to disclose Personal Information about you to the government or to third parties under certain circumstances, such as in connection with illegal activity on our Site or to respond to a subpoena, court order or other legal process. The Company reserves the right to release information that we collect to law enforcement or other government oﬃcials, as we, in our sole and absolute discretion, deem necessary or appropriate. The Company may use de-identified information without restriction.
+
+                    </p>
+                    <h4>
+                        10. Unauthorized Activities
+
+                    </h4>
+                    <p>
+                        When using this Site and/or the services, you agree not to:
+                        Defame, abuse, harass, stalk, threaten, or otherwise violate the legal rights (such as rights of privacy and publicity) of others.
+                        Use racially, ethnically, or otherwise offensive language.
+                        Discuss or incite illegal activity.
+                        Use explicit/obscene language or solicit/post sexually explicit images (actual or simulated).
+                        Post anything that exploits children or minors or that depicts cruelty to animals.
+                        Post any copyrighted or trademarked materials without the express permission from the owner.
+                        Disseminate any unsolicited or unauthorized advertising, promotional materials, ‘junk mail’, ‘spam’, ‘chain letters’, ‘pyramid schemes’, or any other form of such solicitation.
+                        Use any robot, spider, scraper or other automated means to access the Site.
+                        Take any action that imposes an unreasonable or disproportionately large load on our infrastructure.
+                        Alter the opinions or comments posted by others on this Site.
+                        Post anything contrary to our public image, goodwill or reputation.
+                    </p>
+                    <h4>
+                        11. Use of Services
+
+                    </h4>
+                    <p>
+                        By agreeing to use the services provided by the Company and the Application, the user agrees:
+                        you are using the services at your own risk and absolve Mediclinic/Company and its partners of any liability of any nature arising from the use of the Application and its subsidiaries
+                        opinions provided by professionals on the Application are only opinions and cannot be a substitute of an in-person patient evaluation given the inherent limitations of telemedicine and the user agrees to forward all opinions to their personal physician
+                        online consultation does not establish a patient-doctor relationship
+                        the user accepts responsibility of all risks and adverse out comes including and not limited to injury as well as death or dismemberment associated with any opinion provided
+                        health service providers are independent of the Company and the services or opinions they provide are solely their opinions
+                    </p>
+                    <h4>
+                        12. Indemnification and limitation of liability
+                    </h4>
+                    <p>
+                        You agree to defend, indemnify and hold Mediclinic/iMEDHealth/Company, its officers, directors, employees, shareholders, affiliates, third-party contractors, agents, licensors and suppliers, harmless from and against any claims, actions or demands, losses, liabilities, damages, costs, expenses and settlements (including without limitation reasonable attorney and accounting fees), resulting from or alleged to result from, directly or indirectly, your (a) violation of these Terms and Conditions; (b) access to or use of the Platform/Application and Websites; and (c) provision of other disclosure to the Company's or any other information or data and the use of same by Mediclinic/iMEDHealth/Company or other partners as contemplated hereunder. IN NO EVENT SHALL Mediclinic/iMEDHealth/Company  BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM ANY LOSS OF USE, LOSS OF PROFITS, LITIGATION, OR ANY OTHER PECUNIARY LOSS, WHETHER BASED ON BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), PRODUCT LIABILITY, OR OTHERWISE, ARISING OUT OF OR IN ANY WAY CONNECTED WITH THE WEBSITES OR PLATFORMS OR THE PROVISION OF OR FAILURE TO MAKE AVAILABLE ANY SUCH PRODUCTS, GOODS, OR SERVICES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+                    </p>
+                    <p>
+                        Mediclinic/iMEDHealth/Company shall not be liable for any failure to perform its obligations hereunder where the failure results from any cause beyond Mediclinic/iMEDHealth/Company's  reasonable control, including, without limitation, mechanical, electronic, or communications failure or degradation.
+
+                    </p>
+                    <p>
+                        The terms of these Terms and Conditions that limit liability reflect an informed voluntary allocation of risk; such allocation represents a material part of these Terms and Conditions. You agree that the limitations of liabilities set out in these Terms and Conditions are fair and reasonable in the circumstances.
+
+                    </p>
+                    <h4>
+                        13. Disclaimer
+                    </h4>
+                    <p>
+                        The Websites and Platforms are provided on an "as is" and "as available" basis and without warranties of any kind, either express or implied. To the fullest extent permissible pursuant to applicable law, Mediclinic/iMEDHealth/Company  disclaims all representations, warranties, and conditions, express or implied, including, but not limited to, implied condition or warranties of merchantability and fitness for a particular purpose. Mediclinic/iMEDHealth/Company  does not warrant that the Websites and Platforms will be uninterrupted or error-free, that defects will be corrected or that the Websites and Platforms or the server that makes it available are free of viruses or other harmful components.
+
+                    </p>
+                    <p>
+                        Mediclinic/iMEDHealth/Company makes no guarantees, and disclaims any implied warranty or representation about its accuracy, relevance, timeliness, completeness, or appropriateness of any content posted on the Website and Platforms for a particular purpose. Mediclinic/iMEDHealth/Company assumes no liability arising from or relating to the delay, failure, interruption, or corruption of any data or other information transmitted in connection with use of the Websites and/or Platforms. Applicable law may not allow the exclusion of implied warranties, so the above exclusion may not apply to you.
+
+                    </p>
+                    <h4>
+                        14. Choice of law and jurisdiction
+
+                    </h4>
+                    <p>
+                        These Terms and Conditions are governed by the laws of Pakistan. The parties irrevocably submit to the exclusive jurisdiction of the courts of the State of Delaware in respect of all matters and disputes arising hereunder, and waive any defense of lack of personal jurisdiction in that jurisdiction. These Terms and Conditions are not governed by the United Nations Convention on Contracts for the International Sale of Goods, the application of which is hereby expressly excluded. If any provision of these Terms and Conditions is found to be invalid by any court having competent jurisdiction, the invalidity of such provision shall not affect the validity of the remaining provisions of these Terms and Conditions, which shall remain in full force and effect.
+
+                    </p>
+                    <h4>
+                        15. Security of your information
+                    </h4>
+                    <p>
+                        We use industry standard physical, technical and administrative security measures and safeguards to protect the confidentiality and security of your personal information.  However, since the Internet is not a 100% secure environment, we cannot guarantee, ensure, or warrant the security of any information you transmit to us.  There is no guarantee that information may not be accessed, disclosed, altered, or destroyed by breach of any of our physical, technical, or managerial safeguards.  It is your responsibility to protect the security of your login information.  Please note that emails and other communications you send to us through our Site are not encrypted, and we strongly advise you not to communicate any confidential information through these means.
+
+                    </p>
+                    <h4>
+                        16. Consent to processing of information in the US
+                    </h4>
+                    <p>
+                        This Site is not targeted to and is not intended for use by European Union (EU) residents located in the EU. EU residents may use the Site when they are located in the US or Canada. We may store your personal information (also commonly referred to as personal data) on servers located in the US. By using and accessing our Site, users agree that their personal information can be stored and processed in the US.
+
+                    </p>
+                    <h4>
+                        17. Safeguarding Information
+                    </h4>
+                    <p>
+                        We take the security of your information seriously. We store your information in electronic format I secured servers, using computer systems with restricted access and housed in facilities using physical security measures. More generally, we have in place appropriate physical, technological, and organizational safeguards to protect Information against loss, theft, and unauthorized access, use and disclosure. As mentioned, our staff are obligated to protect Information by adhering to our policies, practices and applicable laws.
+
+                    </p>
+                    <p>
+                        You also play an important role in protecting your privacy and the confidentiality of your Information. For example:
+
+                    </p>
+                    <p>
+                        Create a strong and unique password for your User Account
+                        Do not share your User Account or password with anyone. We will never ask you for your password, including in any unsolicited communication such as letters, phone calls or email messages, so please contact us if you receive such a request.
+                        Log out of your User Account once you are finished using it, especially if you share your Device with anyone else.
+                        Have a strong and unique password on your Device, too.
+                        Choose a quiet, private location from which to receive services on the Application.
+                        We recommend that you change your password frequently.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <script src="~/Elite/_node_modules/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/Elite/_node_modules/popper/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Elite/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Elite/js/waves.js"></script>
+    <script src="~/Elite/js/sidebarmenu.js"></script>
+    <script src="~/Elite/_node_modules/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/Elite/_node_modules/sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    @*<script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+        <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>*@
+    <script src="~/Elite/js/custom.min.js"></script>
+    <script src="~/Elite/_node_modules/moment/moment.js"></script>
+    <script src="~/Elite/_node_modules/wizard/jquery.steps.min.js"></script>
+    <script src="~/Elite/_node_modules/wizard/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+
+    @*<script src="https://www.paypal.com/sdk/js?client-id=AccAMwNQ1WnKSuJ_FjXVxE1nwI5oL2yd-WYwRCwO2rP-f-R_sNl7txRdhkMWLFNzBo9OAhSukkHHYRcL&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+        <script src="https://www.paypal.com/sdk/js?client-id=AccAMwNQ1WnKSuJ_FjXVxE1nwI5oL2yd-WYwRCwO2rP-f-R_sNl7txRdhkMWLFNzBo9OAhSukkHHYRcL&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>*@
+
+    <script>
+
+        //Custom design form example
+        var PackName;
+
+        $(document).ready(function () {
+
+            $('#EmailPhoneCode').keyup(function (e) {
+                debugger;
+                $Code = $('#EmailPhoneCode').val();
+                if (e.currentTarget.value.length == 4) {
+                    debugger;
+                    $.get("/Auth/VerifyCode", { Code: $Code }).done(function (data) {
+                        debugger;
+                        if (data == "Verification Match") {
+                            Swal.fire('Thank you for being part of MediClinic, We have send you Email on your Provided Email for Further details').then((result) => {
+                                // Reload the Page
+                                location.reload();
+                            });
+
+                        }
+                        else {
+                            Swal.fire('Invalid Verificatin Code');
+
+                        }
+                    });
+                }
+            });
+            $('.selectpicker').selectpicker();
+
+            $("#Login-btn").on("click", function () {
+                $("#main2").show();
+                $("#customer-from").hide();
+                $("#newaccount").hide();
+                $("#Login-btn").hide();
+                $("#oldacc").hide();
+            });
+            $("#SignUp-Link").on("click", function () {
+                debugger;
+                $("#validation").show();
+                $("#oldacc").hide();
+                $("#newaccount").hide();
+                $("#oldacc1").show();
+                $("#Login-btn").hide();
+
+
+            });
+            $("#SignIn-Link").on("click", function () {
+                debugger;
+                $("#validation").hide();
+                $("#main2").show();
+                $("#newaccount2").show();
+                $("#oldacc1").hide();
+            });
+            $("#SignUp-Link2").on("click", function () {
+
+                $("#validation").show();
+                $("#oldacc").hide();
+                $("#newaccount").hide();
+                $("#oldacc1").show();
+                $("#Login-btn").hide();
+                $("#main2").hide();
+
+            });
+        })
+        function selectPackage(PackageName) {
+            debugger;
+            PackName = PackageName;
+            $("#packageName").val(PackageName);
+            $("#selectPackage").attr("disabled", false);
+
+        }
+
+        $(function () {
+
+            $('body').on('keydown', 'input', function (e) {
+
+                //console.log(this.value);
+
+                if (e.which === 32 && this.value === '') {
+                    return false;
+                }
+
+            });
+
+        });
+
+
+
+        function Credit() {
+            $("#paypal-button-container").hide();
+            $("#paypal-button-container2").hide();
+
+        }
+        var form = $(".validation-wizard").show();
+        $(function () {
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $('.EmailOrPhone').inputmask('9999');
+
+        })
+        $(".validation-wizard").steps({
+            headerTag: "h6",
+            bodyTag: "section",
+            transitionEffect: "fade",
+            titleTemplate: '<span class="step">#index#</span> #title#',
+            labels: {
+                finish: "Submit"
+            },
+            onStepChanging: function (event, currentIndex, newIndex) {
+                debugger;
+                if (currentIndex == 0) {
+                    //$("#CurrentTab").val(currentIndex);
+                    //if (PackName == null) {
+                    //    Swal.fire('Select Package');
+                    //    return false;
+                    //}
+
+                }
+                else if (currentIndex == 1) {
+
+                    $("#CurrentTab").val('');
+                    $("#CurrentTab").val(currentIndex);
+                    debugger;
+                    $("#infoSave").trigger('click');
+
+
+
+                }
+                else if (currentIndex == 2) {
+                    var PayPal = $("#SubsciptionId").val();
+                    debugger;
+                    if (PayPal == "") {
+                        Swal.fire('Payment Process Required');
+
+                        return false;
+                    }
+                    else {
+                        $("#CurrentTab").val('');
+                        $("#CurrentTab").val(currentIndex);
+                        $("#Paymentbtn").trigger('click');
+                    }
+
+
+                }
+                else {
+                    debugger;
+
+                }
+                return currentIndex > newIndex || !(3 === newIndex && Number($("#age-2").val()) < 18) && (currentIndex < newIndex && (form.find(".body:eq(" + newIndex + ") label.error").remove(), form.find(".body:eq(" + newIndex + ") .error").removeClass("error")), form.validate().settings.ignore = ":disabled,:hidden", form.valid())
+            },
+            onFinishing: function (event, currentIndex) {
+                debugger;
+
+                return form.validate().settings.ignore = ":disabled", form.valid()
+            },
+            onFinished: function (event, currentIndex) {
+                debugger;
+                //swal("Form Submitted!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.");
+                $('#saveBtn').trigger('click');
+            }
+        }),
+            $(".validation-wizard").validate({
+                ignore: "input[type=hidden]",
+                errorClass: "text-danger",
+                successClass: "text-success",
+                highlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass)
+                },
+                unhighlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass)
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element)
+                },
+                rules: {
+                    email: {
+                        email: !0
+                    }
+                }
+            })
+        function EmailorPhoneVerification(VerificationType) {
+
+            $("#CurrentTab").val('');
+            $("#CurrentTab").val(3);
+            $("#verificationType").val(VerificationType);
+            $("#EmailName").val();
+            $("#MobNo").val();
+            $("#VerifcationSave").trigger('click');
+            $("#EmailOrPhoneVerification").show();
+        }
+        function AuthClientSubmit(data) {
+            //if (data.success == "SuccessFully Created") {
+            //    window.location.reload();
+            //}
+            if (data.success) {
+
+                $('input').val('');
+                debugger;
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Thank you for sign up. We have sent you email for further detail.',
+                    buttons: {
+                        confirm: function () {
+                            window.location.reload();
+                        }
+
+                    }
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, User Already Exist',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+        }
+        function AuthFormSubmit(data) {
+            debugger;
+            if (data.isError) {
+                $(".required").html(data.errorMessage);
+            }
+            else {
+                var connection = new signalR.HubConnectionBuilder()
+                    .withUrl("/NotificationHub")
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+                connection.start().then(() => {
+                    debugger;
+                    $.post("/Auth/NotificationInfo", { connectionId: connection.connectionId }).done(function (data) {
+                    });
+                });
+                debugger;
+                $(".required").html("");
+                window.location.href = data;
+
+            }
+        }
+        function PayPal() {
+
+            debugger;
+            if (PackName == 'Basic') {
+                $("#paypal-button-container").show();
+                $("#paypal-button-container2").hide();
+
+            }
+            else {
+                $("#paypal-button-container2").show();
+                $("#paypal-button-container").hide();
+            }
+        }
+
+    </script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AccAMwNQ1WnKSuJ_FjXVxE1nwI5oL2yd-WYwRCwO2rP-f-R_sNl7txRdhkMWLFNzBo9OAhSukkHHYRcL&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+
+    <script>
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'white',
+                layout: 'vertical',
+                label: 'paypal'
+            },
+            createSubscription: function (data, actions) {
+                return actions.subscription.create({
+                    'plan_id': 'P-5V118037B47768346L6R7BOI'
+                    //'plan_id': 'P-0R641613R8052535DL6R7AEY'
+                });
+            },
+            onApprove: function (data, actions) {
+                //alert(data.subscriptionID);
+                $("#SubsciptionId").val(data.subscriptionID);
+            }
+        }).render('#paypal-button-container2');
+    </script>
+    <script>
+        paypal.Buttons({
+            style: {
+                shape: 'rect',
+                color: 'white',
+                layout: 'vertical',
+                label: 'subscribe'
+            },
+            createSubscription: function (data, actions) {
+                return actions.subscription.create({
+                    'plan_id': 'P-0R641613R8052535DL6R7AEY'
+                    //'plan_id': 'P-90473258VF2303812L6R45JI'
+                });
+            },
+            onApprove: function (data, actions) {
+                $("#SubsciptionId").val(data.subscriptionID);
+            }
+        }).render('#paypal-button-container');
+    </script>
+
+</body>
+</html>
+

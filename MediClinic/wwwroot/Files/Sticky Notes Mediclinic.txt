@@ -1,0 +1,107 @@
+Scaffold-DbContext -UseDatabaseNames -Connection "Server=67.225.176.164;Database=MediClinic_Staging;User Id=medi-admin; Password=b@ckp@c3_1R;" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir EntityModels -Project MediClinic.Models -Context MediClinicContext -schema dbo -force
+
+
+For bugs link
+https://docs.google.com/spreadsheets/d/1FHQXxFwKLQsV7B_Kt_0syGGaqg0OB-lk8lsLGmAt6lk/edit#gid=0
+
+int num = new Random().Next(0, 9999);
+sb-xwgbn3656348@personal.example.com
+k-U6mpFu
+
+https://www.sandbox.paypal.com/us/signin
+sb-tujvj3661188@business.example.com
+b-0[iD_E
+
+For Route Google Api
+https://jsfiddle.net/api/post/library/pure/
+
+
+medi-admin
+b@ckp@c3_1R
+
+Scaffold-DbContext -UseDatabaseNames -Connection "Server=67.225.176.164; Database=MediClinic; User Id=drive; password=@dmin123;" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir EntityModels -Project MediClinic.Models -Force
+
+Scaffold-DbContext -UseDatabaseNames -Connection "Server=67.225.176.164; Database=Mediclinic_Staging; User Id=drive; password=@dmin123;" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir EntityModels -Project MediClinic.Models -Force
+
+        public static readonly string MediClinicApp = "Data Source=DESKTOP-U29Q7QP;Initial Catalog=MediClinic_Staging;Integrated Security=True";
+
+https://zuhaibrafaqat2@dev.azure.com/zuhaibrafaqat2/Mediclinic/_git/Mediclinic
+Email: usama.dev.techinoid@gmail.com
+Pass: usama66dev
+
+https://documenter.getpostman.com/view/1238477/RzfnkSKR
+
+AT11qPyO4TfVdghUg4sC6SzDPJJCoibwrHeoc3KXdxnPoCSRrCUCqm5OY_BjAngepDfx3VtvfDCI90T3
+ELAcr_e6rB4m0bx4EQXUg58zCO9YchhJJB-9nN9JR7KtBnvahMlC2p238h3Mu0IijiIYqPXbscpQ_NI-
+
+67.225.176.164
+mediclinicftp
+b_Dd5i10
+
+imedhealthtfs@gmail.com
+!MH@2k17
+
+faizan@imedhealth.us
+unofficialaccount2
+
+var mvcBuilder = services.AddControllersWithViews();
+            mvcBuilder.AddRazorRuntimeCompilation();
+
+install-package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
+
+marked
+https://codepen.io/jaiweb/details/LXGJWg
+https://codepen.io/kuvinod5/details/WNvzazr
+https://codepen.io/bmartin97/details/yLYOKVM
+
+sketch design
+https://www.sketch.com/s/a6db07b0-c454-4ff3-983d-6eaa14828b2e/a/valv81
+
+jira
+https://mediclinicehr.atlassian.net/jira/software/projects/MEDICLINIC/boards/1
+
+google sheet
+https://drive.google.com/file/d/1wbvmkWAeA03403eZEgEobMrQ1EykmQWd/view
+
+ALTER TABLE [dbo].[PatientAppointments]  ADD  CONSTRAINT [FK_PatientAppointments_ProviderInfo] FOREIGN KEY([ProviderInfoId])
+REFERENCES [dbo].[providerinfo] ([ProviderInfoId])
+
+select *,(
+	select * from SubMenupages st where MainMenuId = mt.MainMenuId
+	FOR JSON path,INCLUDE_NULL_VALUES
+) as submenu 
+from MainMenuPages mt
+FOR JSON path,INCLUDE_NULL_VALUES
+
+Select M.MainMenuId, M.PageName,M.ActionName,M.ControllerName,M.IsActive,M.PageIconPath from  MainMenuPages M left outer join UserRolePages  U on M.MainMenuId = U.MainMenuId where U.UserRoleId = 2
+UNION
+Select M.MainMenuId, M.PageName,M.ActionName,M.ControllerName, 0 as 'IsActive',M.PageIconPath from MainMenuPages M left outer join UserRolePages  U on M.MainMenuId = U.MainMenuId where M.MainMenuId Not IN (Select M.MainMenuId from  MainMenuPages M left outer join UserRolePages  U on M.MainMenuId = U.MainMenuId where U.UserRoleId = 2)
+
+
+
+PayPal login info:
+ID: service@mediclinicehr.com
+Password: Mediclinic@123
+
+Stripe login info:
+ID: service@mediclinicehr.com
+Password: Mediclinic@123
+
+
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="~/icons/font-awesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="~/dist/css/pages/dashboard1.css" rel="stylesheet">
+    <link href="~/icons/font-awesome/css/solid.css" rel="stylesheet" />
+    <link href="~/icons/font-awesome/css/all.css" rel="stylesheet" />
+
+
+Scaffold-DbContext -UseDatabaseNames -Connection "Server=DESKTOP-U29Q7QP; Database=LearningApp;trusted_connection=true;" -Provider Microsoft.EntityFrameworkCore.SqlServer -OutputDir EntityModels -Project LearningApp.Models -Force
+
+
+ALTER TABLE [dbo].[PatientAppointments]  ADD  CONSTRAINT [FK_PatientAppointments_ProviderInfo] FOREIGN KEY([ProviderInfoId])
+REFERENCES [dbo].[providerinfo] ([ProviderInfoId])
+
+
+https://codeandcreate.co.uk/news/file-uploads-with-filepond-and-net-core/

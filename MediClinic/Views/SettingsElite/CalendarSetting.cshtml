@@ -1,0 +1,829 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "CalendarSetting";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+
+    <style>
+
+        .sp-replacer {
+            margin: 15px auto;
+            width: 45%;
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f6f6f6 !important;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1), 0 1px 1px -2px rgba(0, 0, 0, .1), 0 1px 3px 0 rgba(0, 0, 0, .2);
+        }
+
+        .sp-picker-container, .sp-palette-container {
+            background-color: #f6f6f6;
+        }
+
+        .sp-preview {
+            width: 100%;
+            height: 30px;
+        }
+
+        .sp-dd {
+            text-align: center;
+            color: #787878;
+            line-height: 27px;
+            font-size: 11px;
+        }
+
+        .sp-palette .sp-thumb-el {
+            border-radius: 50%;
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .sp-palette .sp-thumb-inner {
+            border-radius: 50%;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+
+        .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+            color: #fff !important;
+            background-color: #547cea !important;
+        }
+
+        .customtab li a.nav-link.active {
+            border-bottom: 2px solid black !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .Exams {
+            margin-top: 25px;
+        }
+
+            .Exams p {
+                margin-top: 1rem !important;
+            }
+
+        .DMeSupplies p {
+            margin-top: 1rem !important;
+        }
+
+        .AddReminder {
+            display: none;
+        }
+
+        .prescription {
+            display: none;
+        }
+
+        .Test {
+            display: none;
+        }
+
+            .Test p {
+                margin-top: 1rem !important;
+            }
+
+        .Lab {
+            display: none;
+        }
+
+        .Vitals {
+            display: none;
+        }
+
+        .DMeSupplies {
+            display: none;
+        }
+
+        .Imaging {
+            display: none;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+}
+
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="~/Color/spectrum.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        $(".select2").select2();
+
+        $('.selectpicker').selectpicker();
+
+        $(document).ready(function () {
+            $('.dropify').dropify();
+
+        });
+
+        $('input:radio[name=yes]').click(function () {
+            var ans1 = $('input:radio[name=yes]:checked').val();
+            if (ans1 == "1") {
+
+                $('#coloringtable').hide();
+            }
+            else {
+                $('#coloringtable').show();
+                $('.secondaryAddressFileds').val('');
+            }
+        });
+        $("#colortable").DataTable();
+        $("#holidaysCalendar").DataTable();
+        $("#RoleCalendar").DataTable();
+
+        var banColor = ['#ffffff', '#000000', '#F0FFF0', '#F5FFFA', '#F0FFFF', '#F0F8FF', '#F8F8FF', '#FFF5E', '#F5F5DC', '#FDF5E6', '#FFFAF0', '#FFFFF0', '#FAEBD7', '#FAF0E6', '#FFF0F5'];
+
+
+        $("#showPalette").spectrum({
+            allowEmpty: true,
+
+            showInput: true,
+            containerClassName: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            showAlpha: true,
+            maxPaletteSize: 10,
+            preferredFormat: "hex",
+            change: function (color) {
+                debugger;
+                if (color) {
+                    if ($.inArray(color.toHexString(), banColor) >= 0) {
+                        $("#color_error").text("White color is Not Allowed");
+                        // Reset your palate
+                        $("#showPalette").val('');
+                        $('.sp-clear').trigger('click');
+                    }
+                    else {
+                        $("#color_error").html("");
+                    }
+                }
+
+            },
+            move: function (color) {
+                //updateBorders(color);
+            },
+            show: function () {
+
+            },
+            beforeShow: function () {
+
+            },
+            hide: function (color) {
+                //updateBorders(color);
+            },
+
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", /*"rgb(153, 153, 153)","rgb(183, 183, 183)",*/
+                    "rgb(204, 204, 204)", "rgb(217, 217, 217)", /*"rgb(239, 239, 239)", "rgb(243, 243, 243)",*/, "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                    "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)"],
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                    "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                    "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                    "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                    "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                    "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                    "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                    "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                    /*"rgb(133, 32, 12)", "rgb(153, 0, 0)", "rgb(180, 95, 6)", "rgb(191, 144, 0)", "rgb(56, 118, 29)",
+                    "rgb(19, 79, 92)", "rgb(17, 85, 204)", "rgb(11, 83, 148)", "rgb(53, 28, 117)", "rgb(116, 27, 71)",*/
+                    "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                    "rgb(12, 52, 61)", "rgb(28, 69, 135)"]
+            ]
+        });
+        function CalanderView(event) {
+            if ($(event).attr('data-val') == "monthView") {
+                var isChecked = $(event).prop('checked');
+                if (isChecked) {
+                    $('#CalendarWeekView').prop('checked', false);
+                    $('#CalendarDayView').prop('checked', false);
+                    var data = $('#CalendarWeekView');
+                    var closestDiv = data.closest('div');
+                    closestDiv.addClass('off');
+                    var data2 = $('#CalendarDayView');
+                    var closestDiv2 = data2.closest('div');
+                    closestDiv2.addClass('off');
+                }
+            }
+            else if ($(event).attr('data-val') == "weekView") {
+                var isChecked = $(event).prop('checked');
+                if (isChecked) {
+
+                    $('#CalendarMonthView').prop('checked', false);
+                    $('#CalendarDayView').prop('checked', false);
+                    var data = $('#CalendarMonthView');
+                    var closestDiv = data.closest('div');
+                    closestDiv.addClass('off');
+                    var data2 = $('#CalendarDayView');
+                    var closestDiv2 = data2.closest('div');
+                    closestDiv2.addClass('off');
+                }
+
+            }
+            else if ($(event).attr('data-val') == "daykView") {
+                var isChecked = $(event).prop('checked');
+                if (isChecked) {
+                    $('#CalendarWeekView').prop('checked', false);
+
+                    $('#CalendarMonthView').prop('checked', false);
+                    var data = $('#CalendarWeekView');
+                    var closestDiv = data.closest('div');
+                    closestDiv.addClass('off');
+                    var data2 = $('#CalendarMonthView');
+                    var closestDiv2 = data2.closest('div');
+                    closestDiv2.addClass('off');
+                }
+            }
+            var listValues = {};
+            listValues.CalViewMonth = $('#CalendarMonthView').is(':checked');
+            listValues.CalViewWeek = $('#CalendarWeekView').is(':checked');
+            listValues.CalViewDay = $('#CalendarDayView').is(':checked');
+            debugger;
+            //$("input").prop("disabled", true);
+            submitCalendarViewSettings(listValues);
+        }
+        function submitCalendarViewSettings(listValues) {
+
+            $.post("/SettingsElite/calendarSetting", { calendarSettingDto: listValues }).done(function (data) {
+                notify();
+            });
+
+        }
+        function notify() {
+            $("input").prop("disabled", false);
+            Command: toastr["info"]("Record saved Successfully")
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "10",
+                "hideDuration": "1500",
+                "timeOut": "1500",
+                "extendedTimeOut": "100",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        }
+
+    </script>
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Calendar Setting</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("Setting","SettingsElite")" class="waves-effect waves-light float-right">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 mt-2">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home2" role="tab"> <span class="hidden-xs-down">Calendar View Settings</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile2" role="tab"><span class="hidden-xs-down">Calendar Color Settings</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages2" role="tab"> <span class="hidden-xs-down">Calendar Types</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#test" role="tab"> <span class="hidden-xs-down">Birthday Settings</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#BoxSetting" role="tab"> <span class="hidden-xs-down">Calendar Box Settings</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Duration" role="tab"> <span class="hidden-xs-down">Duration Settings</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Time" role="tab"> <span class="hidden-xs-down">Time Zone Settings</span></a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home2" role="tabpanel">
+                        <form action="/" method="post">
+
+
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                    <p>Month View</p>
+                                    <div class="switch">
+                                        <input type="checkbox" id="CalendarMonthView" data-val="monthView" onchange="CalanderView(this)" asp-for="calendarSettingDto.CalViewMonth" data-toggle="toggle" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                    <p>Week View</p>
+                                    <div class="switch">
+                                        <input type="checkbox" id="CalendarWeekView" data-val="weekView" onchange="CalanderView(this)" asp-for="calendarSettingDto.CalViewWeek" data-toggle="toggle" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                    <p>Day View</p>
+                                    <div class="switch">
+                                        <input type="checkbox" id="CalendarDayView" data-val="daykView" onchange="CalanderView(this)" asp-for="calendarSettingDto.CalViewDay" data-toggle="toggle" />
+                                    </div>
+                                </div>
+                                @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                        <p>Hourly View</p>
+                                        <div class="switch">
+                                            <input type="checkbox" id="CalendarHourView" data-toggle="toggle" />
+                                        </div>
+                                    </div>*@
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-field">
+                                    <div class="row">
+                                        <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="secondaryYes" class="custom-control-input  patientInfoTxtField" name="yes" value="1" autocomplete="off">
+                                                <label class="custom-control-label" for="secondaryYes">Default</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="secondaryNo" class="custom-control-input patientInfoTxtField" name="yes" value="0" autocomplete="off">
+                                                <label class="custom-control-label" for="secondaryNo">Custom</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="coloringtable" style="display:none">
+                            <div class="col-12">
+                                <a href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right')" class="add-btn btn right sideout">Add New Color</a>
+                            </div>
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" id="colortable">
+                                        <thead>
+                                            <tr>
+                                                <th>Color Name</th>
+                                                <th class="all">Action</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr class="card">
+                                                <td>Red</td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        @*<span class="caret"></span>*@
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li><a href="#" class="option-a">Canceled</a></li>
+                                                        <li><a href="#" class="option-a">Pending</a></li>
+                                                        <li><a href="#" class="option-a">Rescheduled</a></li>
+                                                        <li><a href="#" class="option-a">Scheduled</a></li>
+
+                                                        <li><a href="#" class="option-a">To Be Scheduleded</a></li>
+                                                        <li><a href="#" class="option-a">Unreserachble</a></li>
+
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="messages2" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Lunar</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarMonthView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Gregorian</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarWeekView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Chinses</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarDayView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Solar</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarHourView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Jewish</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarMonthView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Muslim</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarWeekView" data-toggle="toggle" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>Holidays</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" id="holidaysCalendar">
+                                        <thead>
+                                            <tr>
+                                                <th>Holiday Type</th>
+                                                <th>Notification</th>
+                                                <th>Reminders</th>
+                                                <th>Alerts</th>
+                                                <th>Secondary Alerts</th>
+                                                <th>Additional Alerts</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr class="card">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="checkbox0" value="check">
+                                                        <label class="custom-control-label" for="checkbox0">Chinese</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="Nofication" value="check">
+                                                        <label class="custom-control-label" for="Nofication">Push Notification</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="Reminders" value="check">
+                                                        <label class="custom-control-label" for="Reminders">Reminders</label>
+                                                    </div>
+                                                </td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        @*<span class="caret"></span>*@
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li><a href="#" class="option-a">1 year before</a></li>
+                                                        <li><a href="#" class="option-a">1 month before</a></li>
+                                                        <li><a href="#" class="option-a">1 week before</a></li>
+                                                        <li><a href="#" class="option-a">1 day before</a></li>
+                                                        <li><a href="#" class="option-a">12 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">6 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">3 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">2 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">1 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">30 Minuts before</a></li>
+                                                        <li><a href="#" class="option-a">15 Minuts before</a></li>
+
+                                                    </ul>
+                                                </td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        @*<span class="caret"></span>*@
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li><a href="#" class="option-a">1 year before</a></li>
+                                                        <li><a href="#" class="option-a">1 month before</a></li>
+                                                        <li><a href="#" class="option-a">1 week before</a></li>
+                                                        <li><a href="#" class="option-a">1 day before</a></li>
+                                                        <li><a href="#" class="option-a">12 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">6 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">3 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">2 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">1 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">30 Minuts before</a></li>
+                                                        <li><a href="#" class="option-a">15 Minuts before</a></li>
+
+                                                    </ul>
+                                                </td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        @*<span class="caret"></span>*@
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li><a href="#" class="option-a">1 year before</a></li>
+                                                        <li><a href="#" class="option-a">1 month before</a></li>
+                                                        <li><a href="#" class="option-a">1 week before</a></li>
+                                                        <li><a href="#" class="option-a">1 day before</a></li>
+                                                        <li><a href="#" class="option-a">12 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">6 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">3 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">2 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">1 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">30 Minuts before</a></li>
+                                                        <li><a href="#" class="option-a">15 Minuts before</a></li>
+
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="test" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>Show Birthdays</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" id="RoleCalendar">
+                                        <thead>
+                                            <tr>
+                                                <th>Role</th>
+                                                <th>Notification</th>
+                                                <th>Reminders</th>
+                                                <th>Alerts</th>
+                                                <th>Gettings</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <tr class="card">
+                                                <td>
+                                                    Employee
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="Nofication" value="check">
+                                                        <label class="custom-control-label" for="Nofication">Push Notification</label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="Reminders" value="check">
+                                                        <label class="custom-control-label" for="Reminders">Reminders</label>
+                                                    </div>
+                                                </td>
+                                                <td class="action">
+                                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                        Options
+                                                        @*<span class="caret"></span>*@
+                                                    </button>
+                                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                        <li><a href="#" class="option-a">1 year before</a></li>
+                                                        <li><a href="#" class="option-a">1 month before</a></li>
+                                                        <li><a href="#" class="option-a">1 week before</a></li>
+                                                        <li><a href="#" class="option-a">1 day before</a></li>
+                                                        <li><a href="#" class="option-a">12 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">6 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">3 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">2 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">1 Hours before</a></li>
+                                                        <li><a href="#" class="option-a">30 Minuts before</a></li>
+                                                        <li><a href="#" class="option-a">15 Minuts before</a></li>
+
+                                                    </ul>
+                                                </td>
+                                                <td class="action">
+                                                    <div class="custom-control custom-checkbox mr-sm-2 mb-3">
+                                                        <input type="checkbox" class="custom-control-input" id="Gift" value="check">
+                                                        <label class="custom-control-label" for="Gift">Send B-Day Greetings</label>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="BoxSetting" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-6 ">
+                                <p>Mouse Hovering to View</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarMonthView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-6 ">
+                                <p>Double Click to Add/Edit</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarWeekView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-6 ">
+                                <p>Drag & Drop</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarDayView" data-toggle="toggle" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="Duration" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-6 ">
+                                <p>Allow In Between Events</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarMonthView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-6 ">
+                                <p>Allow Recurring Events</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarWeekView" data-toggle="toggle" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="Time" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Adopt Automatically</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarMonthView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>Manually</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarWeekView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>U.S only</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarDayView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                                <p>World</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CalendarHourView" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="right-sidebar slide-out-right">
+
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+
+            <div class="row">
+                <div class="col-12">
+                    <h5 id="label">Add New Color</h5>
+                    <div class="input-field">
+                        <p>Color Name</p>
+                        <input type="text" id="showPalette">
+                        <span id="color_error" class="required"></span>
+                    </div>
+                    <div class="input-field">
+                        <p>Select Option</p>
+                        <select class="text-input" data-val="true" data-val-required="This field is required">
+                            <option value="">-- Select Option --</option>
+                            <option value="11">Canceled</option>
+                            <option value="12">Pending</option>
+                            <option value="13">Rescheduled</option>
+                            <option value="14">Scheduled</option>
+                            <option value="14">To Be Scheduleded</option>
+                            <option value="14">Unreserachble</option>
+                        </select>
+                    </div>
+                    <input hidden id="AllergyTypeId" type="text" />
+                    <span class="required"></span>
+                    <a href="javascript:void(0);" id="allergy_submission" data-method="AlergyType" class="modal-action btn add-btn right mb-2 allergy_submission">Save</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

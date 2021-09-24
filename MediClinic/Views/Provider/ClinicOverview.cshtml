@@ -1,0 +1,928 @@
+﻿@model MediClinic.Models.ClinicalViewModel
+@{
+    ViewData["Title"] = "ClinicOverview";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+@section styles{
+    <link href="~/Elite/_node_modules/css-chart/css-chart.css" rel="stylesheet" />
+    <link href="~/Elite/css/pages/float-chart.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/morrisjs/morris.css" rel="stylesheet" />
+    <link href="~/Elite/css/pages/google-vector-map.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"  />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+   
+    <style>
+        .background-round {
+            font-size: 24px !important;
+            padding: 15px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, .18)
+        }
+
+        .icon-set {
+            margin: 30px 0 !important
+        }
+
+        .bg_info {
+            background-color: #17a2b8 !important
+        }
+
+        .bg_danger {
+            background-color: #dc3545 !important
+        }
+
+        .bg_green {
+            background-color: #28a745 !important
+        }
+
+        .bg_orange {
+            background-color: #E67D21 !important
+        }
+
+        .over-body .card-body {
+            padding:0 1rem !important;
+        }
+
+        .flot-chart {
+            height: auto !important;
+        }
+
+
+
+
+       /*Carousel Custom CSS*/
+        .owl-carousel{
+            display:block;
+        }
+        .carousel-wrapper {
+            width: 1000px;
+            margin: auto;
+            position: relative;
+            text-align: center;
+            font-family: sans-serif;
+        }
+
+        .owl-carousel .owl-nav {
+            overflow: hidden;
+            height: 0px;
+        }
+
+        .owl-theme .owl-dots .owl-dot.active span,
+        .owl-theme .owl-dots .owl-dot:hover span {
+            background: #5110e9;
+        }
+
+
+        .owl-carousel .item {
+            text-align: center;
+        }
+
+        .owl-carousel .nav-button {
+            height: 95px;
+            width: 25px;
+            cursor: pointer;
+            position: absolute;
+            top: 100px !important;
+            margin-top: -100px !important;
+        }
+
+        .owl-carousel .owl-prev.disabled,
+        .owl-carousel .owl-next.disabled {
+            pointer-events: none;
+            opacity: 0.25;
+        }
+
+        .owl-carousel .owl-prev {
+            left: -35px;
+         
+        }
+
+        .owl-carousel .owl-next {
+            right: -35px;
+           
+        }
+
+        .owl-theme .owl-nav [class*=owl-] {
+            color: #7b7373;
+            font-size: 49px;
+            margin-left: -25px;
+            margin-right: -25px;
+            background: #ffffff;
+            border-radius: 3px;
+        }
+        .owl-theme .owl-nav [class*=owl-]:hover {
+            color: #7b7373;
+            
+         
+            background: #ffffff;
+            
+        }
+        .owl-carousel .prev-carousel:hover {
+            background-position: 0px -53px;
+        }
+
+        .owl-carousel .next-carousel:hover {
+            background-position: -24px -53px;
+        }
+        .owl-dots{
+            display:none;
+        }
+
+
+
+       /*Bill Information*/
+        .row.over-body.custom-class{
+            margin-left:35px;
+            margin-right:30px;
+        }
+
+    </style>
+   
+}
+@section scripts{
+    <script src="~/Elite/_node_modules/Chart.js/chartjs.init.js"></script>
+    <script src="~/Elite/_node_modules/Chart.js/Chart.min.js"></script>
+    <script src="~/Elite/_node_modules/flot/excanvas.js"></script>
+    <script src="~/Elite/_node_modules/flot/jquery.flot.js"></script>
+    <script src="~/Elite/_node_modules/flot/jquery.flot.pie.js"></script>
+    <script src="~/Elite/_node_modules/flot/jquery.flot.time.js"></script>
+    <script src="~/Elite/_node_modules/flot/jquery.flot.stack.js"></script>
+    <script src="~/Elite/_node_modules/flot/jquery.flot.crosshair.js"></script>
+    <script src="~/Elite/_node_modules/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Elite/js/pages/flot-data.js"></script>
+    <script src="~/Elite/_node_modules/raphael/raphael-min.js"></script>
+    <script src="~/Elite/_node_modules/morrisjs/morris.js"></script>
+    <script src="~/Elite/js/pages/morris-data.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoliAneRffQDyA7Ul9cDk3tLe7vaU4yP8"></script>
+    <script src="~/Elite/_node_modules/gmaps/gmaps.min.js"></script>
+    <script src="~/Elite/_node_modules/gmaps/jquery.gmaps.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+   
+
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                navText: ["<div class='nav-button owl-prev'>‹</div>", "<div class='nav-button owl-next'>›</div>"],
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    600: {
+                        items: 3
+                    },
+                    1000: {
+                        items: 3
+                    }
+                }
+            });
+        });
+        var browserStatsChartOptions = {
+
+            cutoutPercentage: 70,
+            legend: {
+                display: false
+            }
+        };
+        new Chart(document.getElementById("chart4"),
+            {
+
+                "type": "doughnut",
+                "options": browserStatsChartOptions,
+                "data": {
+                    "labels": ["Past Due", "Due In", "Due With", "Coming Up Oppointments", " Missing-Open Tasks", "Tasks", "Legal", "Other"],
+                    "datasets": [{
+
+                        "data": [7, 9, 1, 8, 15, 10, 8, 2],
+                        "backgroundColor": ["#4523f5", "#f5a623", "#7ed321", "#50e3c2", "#4a90e2", "#9013fe", "#fe133a", "#2df6fe"]
+                    }
+                    ]
+                }
+
+            });
+        new Chart(document.getElementById("chart5"),
+            {
+
+                "type": "doughnut",
+                "options": browserStatsChartOptions,
+                "data": {
+                    "labels": ["Past Due", "Due In", "Due With", "Coming Up Oppointments", " Missing-Open Tasks", "Tasks", "Legal", "Other"],
+                    "datasets": [{
+
+                        "data": [7, 9, 1, 8, 15, 10, 8, 2],
+                        "backgroundColor": ["#4523f5", "#f5a623", "#7ed321", "#50e3c2", "#4a90e2", "#9013fe", "#fe133a", "#2df6fe"]
+                    }
+                    ]
+                }
+
+            });
+        $(function () {
+            //some data
+            var d1 = [];
+            for (var i = 0; i <= 10; i += 1) d1.push([i, parseInt(Math.random() * 60)]);
+            var d2 = [];
+            for (var i = 0; i <= 10; i += 1) d2.push([i, parseInt(Math.random() * 40)]);
+            var d3 = [];
+            for (var i = 0; i <= 10; i += 1) d3.push([i, parseInt(Math.random() * 25)]);
+            var ds = new Array();
+            ds.push({
+                label: "Data One"
+                , data: d1
+                , bars: {
+                    order: 1
+                }
+            });
+            ds.push({
+                label: "Data Two"
+                , data: d2
+                , bars: {
+                    order: 2
+                }
+            });
+            ds.push({
+                label: "Data Three"
+                , data: d3
+                , bars: {
+                    order: 3
+                }
+            });
+            var stack = 0
+                , bars = true
+                , lines = true
+                , steps = true;
+            var options = {
+                bars: {
+                    show: true
+                    , barWidth: 0.2
+                    , fill: 1
+                }
+                , grid: {
+                    show: true
+                    , aboveData: false
+                    , labelMargin: 5
+                    , axisMargin: 0
+                    , borderWidth: 1
+                    , minBorderMargin: 5
+                    , clickable: true
+                    , hoverable: true
+                    , autoHighlight: false
+                    , mouseActiveRadius: 20
+                    , borderColor: '#f5f5f5'
+                }
+                , series: {
+                    stack: stack
+                }
+                , legend: {
+                    position: "ne"
+                    , margin: [0, 0]
+                    , noColumns: 0
+                    , labelBoxBorderColor: null
+                    , labelFormatter: function (label, series) {
+                        // just add some space to labes
+                        return '' + label + '&nbsp;&nbsp;';
+                    }
+                    , width: 30
+                    , height: 5
+                }
+                , yaxis: {
+                    tickColor: '#f5f5f5'
+                    , font: {
+                        color: '#bdbdbd'
+                    }
+                }
+                , xaxis: {
+                    tickColor: '#f5f5f5'
+                    , font: {
+                        color: '#bdbdbd'
+                    }
+                }
+                , colors: ["#4F5467", "#009efb", "#26c6da"]
+                , tooltip: true, //activate tooltip
+                tooltipOpts: {
+                    content: "%s : %y.0"
+                    , shifts: {
+                        x: -30
+                        , y: -50
+                    }
+                }
+            };
+            $.plot($(".sales-bars-chart"), ds, options);
+        });
+       
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Clinic Overview</h5>
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div class="row over-body">
+            <div class="carousel-wrapper">
+                <div class="owl-carousel owl-theme">
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <a href="@Url.Action("ProviderEliteList","Provider")">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.ProviderCount</h5>
+                                            <p>PROVIDERS</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <div class="card-body">
+                                <a href="@Url.Action("PatientList","PatientsideElite")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.ActivePatienst</h5>
+                                            <p>ACTIVE PATIENTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_orange">
+                            <div class="card-body">
+                                <a href="@Url.Action("InActivePatientsList","PatientsideElite")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-off background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.InActivePatients</h5>
+                                            <p>INACTIVE PATIENTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger ">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.TotalNurses</h5>
+                                            <p>NURSES</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-medical-bag background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.NoFaultTotal</h5>
+                                            <p>NO FAULTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <a href="@Url.Action("AssistantList","Assistant")">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-multiple background-round" style="color:white"></i>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.AssitanCount</h5>
+                                            <p>ASSISTANTS</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="card text-white bg_orange ">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index","Pharmacy")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-medical-bag background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.PharmacyCount</h5>
+                                            <p>PHARMACIES</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index","SurgeryCenter")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-plus-box background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 pl-0" style="color:white">
+                                            <h5>@Model.Clinicviewcount.SurgeryCenterCount</h5>
+                                            <p>SURGERY CENTER</p>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <div class="card-body">
+                                <a href="@Url.Action("CheckInOut","provider")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-calendar background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.CheckInCount</h5>
+                                            <p>CHECK IN</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <div class="card-body">
+                                <a href="@Url.Action("Radiology","provider")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.RadiologyCount</h5>
+                                            <p>RADIOLOGY</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_orange">
+                            <div class="card-body">
+                                <a href="@Url.Action("Reports","provider")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-pen background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.IncidentReportStatusCount</h5>
+                                            <p>REPORTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index","Tests")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-file-document background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.TestsCount</h5>
+                                            <p>TEST</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row over-body">
+            <div class="carousel-wrapper">
+                <div class="owl-carousel owl-theme">
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <a href="#">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>PROFIT & LOSS</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>PROFIT TODAY</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_orange">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-off background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>LOSS TODAY</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger ">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>TOTAL BILLED</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-medical-bag background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>0</h5>
+                                            <p>NON INSURANCE INVOICES</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <a href="#">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-multiple background-round" style="color:white"></i>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>TOTAL PAID BILLS</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="card text-white bg_orange ">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-medical-bag background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>$0.00</h5>
+                                            <p>TOTAL OUTSTANDING BILLS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-plus-box background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8 pl-0" style="color:white">
+                                            <h5>N/A</h5>
+                                            <p>MEDICLA RECORD INVOICES</p>
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_info">
+                            <div class="card-body">
+                                <a href="#">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-calendar background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>N/A</h5>
+                                            <p>REPORTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_green">
+                            <div class="card-body">
+                                <a href="@Url.Action("Radiology","provider")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-account-circle background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.RadiologyCount</h5>
+                                            <p>RADIOLOGY</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_orange">
+                            <div class="card-body">
+                                <a href="@Url.Action("Reports","provider")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-pen background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.IncidentReportStatusCount</h5>
+                                            <p>REPORTS</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <div class="card text-white bg_danger">
+                            <div class="card-body">
+                                <a href="@Url.Action("Index","Tests")">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-xs-4 col-md-4 col-4">
+                                            <div class="icon-set">
+                                                <i class="mdi mdi-file-document background-round" style="color:white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-8 col-xs-8 col-md-8 col-8" style="color:white">
+                                            <h5>@Model.Clinicviewcount.TestsCount</h5>
+                                            <p>TEST</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+        @*<div class="row over-body">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Bill</h5>
+                        <div class="wrraper_chart">
+                            <canvas id="chart4"> </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Invoices</h4>
+                        <div class="flot-chart">
+                            <div class="sales-bars-chart" style="height: 200px;"> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>*@
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Simple Basic Map</h4>
+                        <div id="gmaps-simple" class="gmaps"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Profit & Lose</h4>
+                        <ul class="list-inline text-right">
+                            <li>
+                                <h5><i class="fa fa-circle m-r-5 text-inverse"></i>Profit</h5>
+                            </li>
+                            <li>
+                                <h5><i class="fa fa-circle m-r-5 text-info"></i>Lose</h5>
+                            </li>
+                            <li>
+                                <h5><i class="fa fa-circle m-r-5 text-success"></i>Both</h5>
+                            </li>
+                        </ul>
+                        <div id="morris-area-chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Today Profit</h4>
+                        <div class="demo-container" style="height:400px;">
+                            <div id="placeholder" class="flot-chart-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>*@
+    </div>
+</div>

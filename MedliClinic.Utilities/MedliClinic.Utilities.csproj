@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Twilio" Version="5.41.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediClinic.Models\MediClinic.Models.csproj" />
+  </ItemGroup>
+
+</Project>

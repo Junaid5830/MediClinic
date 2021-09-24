@@ -1,0 +1,35 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHHobbiesHistory != null && Model.GetMHHobbiesHistory.Count() > 0)
+{
+    <table class="centered highlight bordered" style="margin-bottom:30px;">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Hobbies</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHHobbiesHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Hobbies</td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHHobbiesHistory(@loop.Id)"><i class="material-icons">mode_edit</i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHHobbiesHistory(@loop.Id)"><i class="material-icons" style="color:#d9534f">delete</i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

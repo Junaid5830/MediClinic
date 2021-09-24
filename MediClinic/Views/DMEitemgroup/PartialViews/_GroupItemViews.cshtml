@@ -1,0 +1,52 @@
+﻿@model DmeInvetoryViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row tablee">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="groupGrid" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>item#</th>
+                        <th>CPT Code</th>
+                        <th>Description</th>
+                        <th>Fee</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.groupItemList is null))
+                    {
+                        @foreach (var item in Model.groupItemList)
+                        {
+                            <tr class="card">
+
+                                <td>@item.DMEGroupItemId</td>
+                                <td>@item.CPTCode</td>
+                                <td>@item.Description</td>
+                                <td>@item.Fee</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li onclick="Delete_Groupitem(@item.DMEGroupItemId,this)"><a href="javascript:void(0)">Delete</a></li>
+                                       
+                                    </ul>
+                                </td>
+
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

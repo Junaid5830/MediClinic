@@ -1,0 +1,31 @@
+﻿@model MediClinic.Models.ProviderViewModel
+
+@using  MedliClinic.Utilities.Utility
+<h6 class="slotText" style="display:none">Available Slots:</h6>
+<div class="row" id="SlotsRow">
+    @if (!(Model.SlotsList is null))
+    {
+        @foreach (var item in Model.SlotsList)
+        {
+    <div class="col-md-3">
+        @if (item.IsBook == true)
+        {
+            <a class="Slots bg-success">
+                <span>@item.StartTime.Value.ToString(@"hh\:mm")</span>
+                -
+                <span>@item.EndTime.Value.ToString(@"hh\:mm")</span>
+            </a>
+        }
+        else
+        {
+            <a class="Slots bg-secondary">
+                <span>@item.StartTime.Value.ToString(@"hh\:mm")</span>
+                -
+                <span>@item.EndTime.Value.ToString(@"hh\:mm")</span>
+            </a>
+        }
+    </div>
+        }
+
+    }
+</div>

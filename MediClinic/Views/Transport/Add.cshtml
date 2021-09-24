@@ -1,0 +1,164 @@
+﻿@using MediClinic.Models.DTOs;
+@model TransportEmsDTO;
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+
+
+        .Bill_options {
+            margin-top: 0px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script>
+        var table;
+        $(document).ready(function () {
+
+            $('.select-all').click(function () {
+                debugger;
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+        })
+        
+    </script>
+}
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Transport & EMS</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("Index","Transport")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="Add" asp-controller="Transport" method="post" id="TransportForm">
+                <input type="hidden" class="text-input" asp-for="@Model.TransportId" placeholder="id">
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Ambulance Id</p>
+
+                        <div class="input-field">
+                            <input type="text"  class="text-input" placeholder="Enter Ambulance Id">
+                            <span class="required"></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Ambulance Model Number</p>
+
+                        <div class="input-field">
+                            <input type="text"  class="text-input" placeholder="Enter Ambulance Model Number">
+                            <span class="required" ></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Ambulance Plate No</p>
+
+                        <div class="input-field">
+                            <input type="text"  class="text-input" placeholder="Enter Ambulance Plate No">
+                            <span class="required" ></span>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Area</p>
+
+                        <div class="input-field">
+                            <input type="text"  class="text-input" placeholder="Enter Area Name">
+                            <span class="required" ></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Status Type</p>
+
+                        <div class="input-field">
+                            <select type="text"  class="select2 text-input" >
+                                <option selected disabled>--Select--</option>
+                                <option value="Type 1">Type 1</option>
+                                <option value="Type 2">Type 2</option>
+                                <option value="Type 3">Type 3</option>
+                            </select>
+                            <span class="required" ></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="@Url.Action("Index","Transport")" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

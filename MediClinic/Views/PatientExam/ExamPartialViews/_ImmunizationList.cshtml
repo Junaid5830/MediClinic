@@ -1,0 +1,149 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@{
+    DateTime Date = DateTime.Now;
+
+    var userRole = _sessionManager.GetRoleId();
+}
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Immunization</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Vaccine</th>
+                        <th>Abbreviations</th>
+                        <th>Age</th>
+                        <th>Dose</th>
+                        <th>Status</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">ACTION  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.Listimmunization is null))
+                    {
+                        var rec = Model.Listimmunization.OrderByDescending(x => x.ImmunizationId).Skip(1).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                <td>@rec.VaccineName</td>
+                                <td>@rec.VaccineAbberivation</td>
+                                <td>@rec.PatientCurrentAge.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.DoesInRouten</td>
+
+                                @if (rec.RouteOfAdministration < Date)
+                                {
+                                    <td>Past</td>
+                                }
+                                else if (rec.RouteOfAdministration > Date)
+                                {
+                                    <td>Future</td>
+                                }
+                                else
+                                {
+                                    <td>Current</td>
+                                }
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="@Url.Action("AssignImmunization","Immunization",new { Id = rec.ImmunizationId})">Edit</a></li>
+                                            <li><a href="javascript:void(0);">View</a></li>
+                                            <li><a onclick="ImmuPatient(@rec.ImmunizationId, this);">Delete</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Immunization</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Vaccine</th>
+                        <th>Abbreviations</th>
+                        <th>Age</th>
+                        <th>Dose</th>
+                        <th>Status</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">ACTION  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.Listimmunization is null))
+                    {
+                        var rec = Model.Listimmunization.OrderByDescending(x => x.ImmunizationId).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                <td>@rec.VaccineName</td>
+                                <td>@rec.VaccineAbberivation</td>
+                                <td>@rec.PatientCurrentAge.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.DoesInRouten</td>
+
+                                @if (rec.RouteOfAdministration < Date)
+                                {
+                                    <td>Past</td>
+                                }
+                                else if (rec.RouteOfAdministration > Date)
+                                {
+                                    <td>Future</td>
+                                }
+                                else
+                                {
+                                    <td>Current</td>
+                                }
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="@Url.Action("AssignImmunization","Immunization",new { Id = rec.ImmunizationId})">Edit</a></li>
+                                            <li><a href="javascript:void(0);">View</a></li>
+                                            <li><a onclick="ImmuPatient(@rec.ImmunizationId, this);">Delete</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+﻿@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager;
+@using Newtonsoft.Json;
+@using MediClinic.Models.DTOs;
+
+@{
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var EmployeeId = _sessionManager.GetEmployeeId();
+    var UserRole = _sessionManager.GetRoleId();
+    var LoginId = ViewContext.RouteData.Values["id"];
+    var userName = _sessionManager.GetUserName();
+    var roleId = _sessionManager.GetRoleId();
+    var Permision = _sessionManager.GetPermisionPage();
+    var List = JsonConvert.DeserializeObject<List<UserRolePagesBasicDto>>(Permision);
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+
+    long Id;
+    if (roleId == 2)
+    {
+        if (patientInfoId == 0)
+        {
+            Id = ProviderInfoId;
+
+        }
+        else
+        {
+            Id = patientInfoId;
+        }
+
+    }
+    else if (roleId == 1)
+    {
+        Id = patientInfoId;
+    }
+    else
+    {
+        if (patientInfoId == 0)
+        {
+            Id = EmployeeId;
+
+        }
+        else
+        {
+            Id = patientInfoId;
+        }
+
+    }
+
+
+}
+<aside class="left-sidebar left-sidebar_cust">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+            
+            @*@if (roleId == 17)
+            {
+            <ul id="sidebarnav">
+            <li>
+                <a class=" waves-effect waves-dark" href="@Url.Action("AppointmentListForReceptionist","appointment", new {Id = Id })" aria-expanded="false"><i><img src="~/Elite/images/Dashboard-icons/check-in (1).png" /></i><span class="hide-menu menu-title">Calendar </span></a>
+
+            </li>
+            </ul>
+            }*@
+          
+                <ul id="sidebarnav">
+                    @if (!(List is null))
+                    {
+                        @foreach (var item in List)
+                        {
+                    <li>
+                        @if (item.ActionName == null && item.ControllerName == null)
+                        {
+                            <a class=" waves-effect waves-dark" href="javascript:void(0);" aria-expanded="false"><i class="@item.MainIconPath"></i><span class="hide-menu menu-title">@item.PageName </span></a>
+
+                        }
+                        else
+                        {
+                            <a class=" waves-effect waves-dark" href="@Url.Action(item.ActionName,item.ControllerName, new {Id = Id })" aria-expanded="false"><i class="@item.MainIconPath"></i><span class="hide-menu menu-title">@item.PageName </span></a>
+
+                        }
+                        @if (!(item.SubMenu is null))
+                        {<ul aria-expanded="false" class="collapse icon_Radioset">
+
+                                @foreach (var SubItem in item.SubMenu)
+                                {
+                                    <li><a href="@Url.Action(SubItem.ActionName,SubItem.ControllerName, new {Id = Id })"> <i class="mdi mdi-panorama-fisheye "></i>@SubItem.PageName</a></li>
+
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+
+                        }
+
+                    </li>
+                        }
+                    }
+
+
+                </ul>
+
+         
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>

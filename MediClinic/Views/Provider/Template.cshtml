@@ -1,0 +1,224 @@
+﻿@model  MediClinic.Models.ProviderViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "Template";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+
+}
+@section styles{ 
+    <style>
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+        table.table-option tbody tr td ul.dropdown-content{
+            height:auto !important
+        }
+        .text-right{
+            float:right !important;
+        }
+        #templateModal{
+            width:70% !important;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table =  $("#PrescriptionList").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 2], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+        });
+        function deleteTemplate(TemplateId, event) {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $.get("/Provider/DeleteTemplates", { Id: TemplateId }).done(function (data) {
+
+                        if (data) {
+                            event.closest('tr').remove();
+
+                            new PNotify({
+                                title: 'Success!',
+                                text: 'Record deleted successfully',
+                                delay: 2500,
+                                type: 'success',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+                        else {
+                            new PNotify({
+                                title: 'Error!',
+                                text: 'Something went wrong',
+                                delay: 2500,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+                        }
+
+
+                    });
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+
+        }
+        function viewTemplateMedications(TemplateId) {
+            $.get("/Provider/GetTemplateMedications", { Id: TemplateId }).done(function (data) {
+                debugger;
+                $('#medicinesBody').html('');
+                $('#templateModal').modal('open');
+
+                for (var medicine of data) {
+
+                    var $tr = $('<tr class="card">').append(
+                        $('<td>').text(medicine.name),
+                        $('<td>').text(medicine.quantity),
+                        $('<td>').text(medicine.frequencyId),
+                        $('<td>').text(medicine.dose),
+                        $('<td>').text(medicine.unit),
+                        $('<td>').text(moment(medicine.startDate).format('DD-MMM-YYYY')),
+                        $('<td>').text(moment(medicine.endDate).format('DD-MMM-YYYY')),
+                        $('<td>').text(medicine.notes)
+                    ); 
+
+                    $('#medicinesBody').append($tr);
+                }
+                
+            });
+        }
+
+        function closeModal() {
+             $('#templateModal').modal('close');
+        }
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m5 l4 margin-top-8">
+                <h5 class="breadcrumbs-title color-blue">Medication Templates</h5>
+            </div>
+            <div class="col s9 m4 l5 display-block">
+                <div class="header-search-wrapper display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" data-search placeholder="Search">
+                    <a class="btn ml-2 search-btn">
+                        Search
+                    </a>
+                </div>
+            </div>
+            <div class="col s12 m3 l3">
+                <a href="@Url.Action("AddTemplate", "Provider", new {Id = ProviderInfoId })" class="btn waves-effect waves-light add-btn float-right">
+                    Add New Template
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+
+            <table id="PrescriptionList" class="display table-option">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Template Name</th>
+                        <th>Created By</th>
+                        <th data-searchable=false class="all text-right">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.TemplateBasicList != null)
+                    {
+                        foreach (var item in Model.TemplateBasicList)
+                        {
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>@item.Name</td>
+                        <td>@item.ProviderName</td>
+                        <td class="action text-right">
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown+@item.TemplateId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown+@item.TemplateId' class='dropdown-content'>
+                                <li><a href="javscript:void(0;)" onclick="viewTemplateMedications(@item.TemplateId)" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                <li><a href="@Url.Action("EditTemplate","Provider",new { Id = item.TemplateId })" class="option-a"><i class="material-icons">remove_red_eye</i>Edit</a></li>
+                                <li onclick="deleteTemplate(@item.TemplateId, this);"><a href="javscript:void(0;)" class="option-a"><i class="material-icons">share</i>Delete</a></li>
+                            </ul>
+
+                        </td>
+
+                    </tr>
+
+                        }
+                    }
+
+
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal" id="templateModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">View Medications</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col s12">
+                        <table class="centered highlight bordered" style="margin-bottom:30px;">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>Medication Name</th>
+                                    <th>Quantity</th>
+                                    <th>Frequency</th>
+                                    <th>Dose</th>
+                                    <th>Unit</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Medication Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody id="medicinesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModal();" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,593 @@
+﻿@model MediClinic.Models.DTOs.ReportExamInfromationDto
+@{
+    var anyDignosisTest = Model.AnyDiagnosticTest != null ? Model.AnyDiagnosticTest : "N/A";
+    var anyTreatment = Model.AnyTreatment != null ? Model.AnyTreatment : "N/A";
+    var progresiveForRecovery = Model.PrognosisForRecovery != null ? Model.PrognosisForRecovery : "N/A";
+    var fullName = Model.FullName != null ? Model.FullName : "N/A";
+}
+@if (!(Model is null))
+{
+
+    
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Date of Exam</span> : <span style="color: #6b6f82 !important">@Model.DateOfExam</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Date of Injury</span> : <span style="color: #6b6f82 !important">@Model.DateOfInjury</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Full Name</span> : <span style="color: #6b6f82 !important">@fullName</span></p>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.IsNumbnessTingling)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Numbness Tingling</span> : <span style="color: #6b6f82 !important">@Model.NumbnessTingling</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsSwelling)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Swelling</span> : <span style="color: #6b6f82 !important">@Model.Swelling</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPain)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Pain</span> : <span style="color: #6b6f82 !important">@Model.Pain</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsWeakness)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Weakness</span> : <span style="color: #6b6f82 !important">@Model.Weakness</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsStiffness)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Stiffness</span> : <span style="color: #6b6f82 !important">@Model.Stiffness</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsOtheinjury)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Other Injury</span> : <span style="color: #6b6f82 !important">@Model.OtherInjury</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsAbrasion)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Abrasion</span> : <span style="color: #6b6f82 !important">@Model.Abrasion</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsInfectiousDisease)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Infection Disease</span> : <span style="color: #6b6f82 !important">@Model.Infectious_Disease</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsAmputation)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Amputation</span> : <span style="color: #6b6f82 !important">@Model.Amputation</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsInhalationExposure)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Inhalation Exposure</span> : <span style="color: #6b6f82 !important">@Model.InhalationExposure</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsAvulsion)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Avulsion</span> : <span style="color: #6b6f82 !important">@Model.Avulsion</span></p>
+                    </div>
+                </div>
+            </div>
+        } @if (Model.IsLaceration)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Laceration</span> : <span style="color: #6b6f82 !important">@Model.Laceration</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsBite)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Bite</span> : <span style="color: #6b6f82 !important">@Model.Bite</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsNeedleStick)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Needle Stick</span> : <span style="color: #6b6f82 !important">@Model.NeedleStick</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsBurn)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Burn</span> : <span style="color: #6b6f82 !important">@Model.Burn</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPoisoningToxicEffects)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Poisoning Toxic Effects</span> : <span style="color: #6b6f82 !important">@Model.PoisoningToxicEffects</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsContusionHematoma)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Contusion Hematoma</span> : <span style="color: #6b6f82 !important">@Model.ContusionHematoma</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPsychological)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Psychological</span> : <span style="color: #6b6f82 !important">@Model.Psychological</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsCrushInjury)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Crush Injury</span> : <span style="color: #6b6f82 !important">@Model.CrushInjury</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPunctureWound)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Puncture Wound</span> : <span style="color: #6b6f82 !important">@Model.PunctureWound</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsDermatitis)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Dermatitis</span> : <span style="color: #6b6f82 !important">@Model.Dermatitis</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsRepetitiveStrainInjury)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Repetitive Strain Injury</span> : <span style="color: #6b6f82 !important">@Model.RepetitiveStrainInjury</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsDislocation)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Dislocation</span> : <span style="color: #6b6f82 !important">@Model.Dislocation</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsSpinalCordInjury)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Spinal Cord Injury</span> : <span style="color: #6b6f82 !important">@Model.SpinalCordInjury</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsFracture)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Fracture</span> : <span style="color: #6b6f82 !important">@Model.Fracture</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsSprainStrain)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Sprain Strain</span> : <span style="color: #6b6f82 !important">@Model.SprainStrain</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsHearingLoss)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Hearing Loss</span> : <span style="color: #6b6f82 !important">@Model.HearingLoss</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsTornLigamentTendonMuscle)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Torn Ligament tendon Muscle</span> : <span style="color: #6b6f82 !important">@Model.TornLigamentTendonMuscle</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsHernia)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Hernia</span> : <span style="color: #6b6f82 !important">@Model.Hernia</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsVisionLoss)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Vision Loss</span> : <span style="color: #6b6f82 !important">@Model.VisionLoss</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsNoneAtPresent)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Present</span> : <span style="color: #6b6f82 !important">None At Present</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsBruising)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Bruising</span> : <span style="color: #6b6f82 !important">@Model.Bruising</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsNeuromuscular)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Neuromuscular</span> : <span style="color: #6b6f82 !important">Yes</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsBurns)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Burns</span> : <span style="color: #6b6f82 !important">@Model.Burns</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsAbnormal)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Abnormal</span> : <span style="color: #6b6f82 !important">Yes</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsCrepitation)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Crepitation</span> : <span style="color: #6b6f82 !important">@Model.Crepitation</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsActiveROM)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Active ROM</span> : <span style="color: #6b6f82 !important">@Model.ActiveROM</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPassiveROM)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Pasive ROM</span> : <span style="color: #6b6f82 !important">@Model.PassiveROM</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsDeformity)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Deformity</span> : <span style="color: #6b6f82 !important">@Model.Deformity</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsEdema)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Edema</span> : <span style="color: #6b6f82 !important">@Model.Edema</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsGait)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Gait</span> : <span style="color: #6b6f82 !important">@Model.Gait</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsHematomaLumpSwelling)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Hematoma Lump Swelling</span> : <span style="color: #6b6f82 !important">@Model.HematomaLumpSwelling</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsPalpableMuscleSpasm)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Palpable Muscle Spasm</span> : <span style="color: #6b6f82 !important">@Model.PalpableMuscleSpasm</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsJointEffusion)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Joint Effusion</span> : <span style="color: #6b6f82 !important">@Model.JointEffusion</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsReflexes)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Reflexes</span> : <span style="color: #6b6f82 !important">@Model.Reflexes</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsLacerationSutures)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Laceration</span> : <span style="color: #6b6f82 !important">@Model.LacerationSutures</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsSensation)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Sensation</span> : <span style="color: #6b6f82 !important">@Model.Sensation</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsScar)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Scar</span> : <span style="color: #6b6f82 !important">@Model.Scar</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsWastingMuscleAtrophy)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Wasting Muscle Atrophy</span> : <span style="color: #6b6f82 !important">@Model.WastingMuscleAtrophy</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsOtherFindings)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Other Findings</span> : <span style="color: #6b6f82 !important">@Model.IsOtherFindings</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Any Diagnostic Test</span> : <span style="color: #6b6f82 !important">@anyDignosisTest</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Any Treatment</span> : <span style="color: #6b6f82 !important">@anyTreatment</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p><span class="color-blue">Progresive For Recovery</span> : <span style="color: #6b6f82 !important">@progresiveForRecovery</span></p>
+                </div>
+            </div>
+        </div>
+        @if (Model.IsAnyPreexistingCondition)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Any Pre Exsiting Condition</span> : <span style="color: #6b6f82 !important">Yes</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.IsOtheinjury)
+        {
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p><span class="color-blue">Other Injury</span> : <span style="color: #6b6f82 !important">@Model.OtherInjury</span></p>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <span class="center">No data available</span>
+
+        </div>
+    </div>
+}

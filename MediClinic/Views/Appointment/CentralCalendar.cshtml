@@ -1,0 +1,2842 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ProviderCalendar";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    //var patientInfoId = ViewContext.RouteData.Values["id"];
+    var ProviderID = _sessionManager.GetProviderInfoId();
+}
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.css" rel="stylesheet" />
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+
+    <style>
+        .checkcard .card {
+            padding: 7% !important
+        }
+
+        .set_names {
+            /* padding: 10px; */
+            /* overflow-y: scroll !important; */
+            overflow-x: hidden;
+            max-height: 250px;
+            margin-top: 8px;
+            position: relative !important;
+        }
+
+        .set_namespatient {
+            /* padding: 10px; */
+            /* overflow-y: scroll !important; */
+            overflow-x: hidden;
+            max-height: 325px;
+            margin-top: 8px;
+            position: relative !important;
+        }
+
+        .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+            background: #547cea !important
+        }
+
+            .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover span {
+                color: #fff !important
+            }
+
+        .nav-tabs .nav-link {
+            border: 1px solid #e9ecef !important;
+        }
+
+        .modal .custom-radio {
+            margin-top: 10px !important;
+        }
+
+        #AppointmentModal .modal-dialog {
+            max-width: 55% !important
+        }
+
+        .modal-dialog {
+            max-width: 50% !important;
+        }
+
+        .card {
+            padding: 2%;
+        }
+
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 93px;
+            position: absolute;
+            display: block;
+            opacity: 1;
+            background-color: #fff;
+            z-index: 1;
+            text-align: center;
+        }
+
+        #loading-image {
+            position: absolute;
+            top: 100px;
+            left: 240px;
+            z-index: 100;
+        }
+
+        #loading > div {
+            margin-top: 25%;
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+
+        #loading .bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        #loading .bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+
+        @@-webkit-keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0)
+            }
+
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @@keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            40% {
+                -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+            }
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #547cea !important;
+            color: #fff !important;
+        }
+
+        .nav-link.active span {
+            color: #fff !important;
+        }
+
+        .nav-link span {
+            color: #6b6f82 !important;
+        }
+
+        .fc-day-grid-event {
+            margin: 1px 2px 0;
+        }
+
+        .calendar-event, .fc-event {
+            text-align: left !important;
+            border-radius: 4px;
+        }
+
+        .fc .fc-event {
+            padding: 4px 7px;
+            color: #fff;
+            border: none;
+            background: #2196f3;
+        }
+
+        .fc-calMonth-button {
+            margin-right: 5px !important;
+        }
+
+        .fc .fc-button {
+            border-radius: 4px;
+            color: #000 !important;
+            background: #eff1f7 !important;
+            height: 2.5em !important;
+            border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25)
+        }
+
+        button.fc-prev-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+            border-radius: 50%;
+            padding: 5px !important;
+        }
+
+        button.fc-next-button.fc-button.fc-state-default.fc-corner-left.fc-corner-right {
+            border-radius: 50%;
+            padding: 5px !important;
+        }
+
+        .fc-toolbar h2 {
+            line-height: 38px !important
+        }
+
+        .fc-toolbar {
+            margin-bottom: 0px !important;
+        }
+
+        /*.fc-basic-view .fc-body .fc-row {
+            min-height: 8rem;
+        }
+
+        @@media only screen and (max-width: 600px) {
+            .fc-basic-view .fc-body .fc-row {
+                min-height: 4rem !important;
+            }
+        }*/
+    </style>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/lib/jquery-ui.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/js/fullcalendar.min.js"></script>
+
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#Doc-calendar .fc-center h2").on('click', function () {
+                $("#Doc-calendar .fc-center").hide();
+
+                $("#Doc-calendar .fc-center").append("<select  class='Docselect2 months'></select>");
+                $("#Doc-calendar .fc-center button").hide();
+                $("#Doc-calendar .fc-center h2").hide();
+                $("#Doc-calendar .fc-center").show();
+                debugger;
+                $(".Docselect2").select2();
+                var $Docmonth = $('.months');
+                $('.months').empty();
+                var month = $('#Doc-calendar').fullCalendar('getDate');
+                var initial = month.format('YYYY-MM');
+                month.add(-1000, 'month');
+                for (var i = 0; i < 1200; i++) {
+                    var opt = document.createElement('option');
+                    opt.value = month.format('YYYY-MM-01');
+                    opt.text = month.format('MMM YYYY');
+                    opt.selected = initial === month.format('YYYY-MM');
+                    $Docmonth.append(opt);
+                    month.add(1, 'month');
+                }
+                $('.months').on('change', function () {
+                    debugger;
+                    $('#Doc-calendar').fullCalendar('gotoDate', $(this).val());
+                    $(".Docselect2").remove();
+                    $("#Doc-calendar .fc-center .select2").remove();
+
+                    $("#Doc-calendar .fc-center button").show();
+                    $("#Doc-calendar .fc-center h2").show();
+                    $("#Doc-calendar .fc-center").show();
+                });
+            });
+        })
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            minDate: 0
+        });
+        $(".time-picker").hunterTimePicker();
+
+        $('.select2').select2();
+        var events = [];
+            var appId = 0;
+        var PatFilter = '';
+        var DocFilter='';
+        var check_Btn = false;
+        $('#Doc-calendar').fullCalendar({
+            loading: function (bool) {
+                $('#loading').show(); // Add your script to show loading
+            },
+            eventAfterAllRender: function (view) {
+                $('#loading').hide(); // remove your loading
+            },
+            viewRender: function (views, element) {
+                var view = $('#Doc-calendar').fullCalendar('getView');
+                if (view.type == 'listMonth') {
+                    $.each(element.find('.fc-widget-header'), function () {
+                        $(this).attr('colspan', 4);
+
+                    });
+                }
+            },
+            defaultView: '@ViewBag.CalendarDefault',
+
+            customButtons: {
+                monthViewButton: {
+                    text: 'Month View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'month');
+                    }
+
+                }, calMonth: {
+
+                    click: function () {
+                        $(".fc-month-button").trigger('click');
+                    }
+                },
+                monthListViewButton: {
+                    text: 'List View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'listMonth');
+                    }
+
+                }
+            },
+            renderEvent: function () {
+                $('.fc-list-item-time').htlm("<i class='material-icons'>menu</i>");
+            },
+            header: {
+                left: 'agendaDay , agendaWeek,  month',
+                center: 'prev, title , next',
+                right: 'calMonth,listMonth',
+            },
+            editable: true,
+            timeFormat: 'h:mm',
+            events: function (start, end, timezone, callback) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (result) {
+                        events = [];
+                        $.each(result, function (i, v) {
+                            debugger;
+                            var Date = v.date.split('T');
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var TypeName = v.appointmentType;
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+                            if (TypeName == "Exact") {
+                                //var Exist = v.exactTime.split('T');
+                                events.push({
+                                    title: DocPatName,
+                                    Name: v.appointmentType,
+                                    //description: v.Description,
+                                    start: Date[0] + "T" + v.startTime,
+                                    description: v.appointmentId,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                    //startStr: v.startTime,
+                                    //endStr: v.endTime,
+                                    //exactTime: v.exactTime
+                                });
+                            }
+                            //else if (TypeName == "In Between") {
+                            //    var Time = v.startTime.split('T');
+                            //    var EndTime = v.endTime.split('T');
+                            //    events.push({
+
+                            //        Name: v.appointmentType,
+                            //        //description: v.Description,
+                            //        start: Date[0] + "T" + Time[1],
+                            //        end: Date[0] + "T" + EndTime[1],
+                            //        description: v.appointmentId,
+                            //        providerName: provideName
+                            //    });
+                            //}
+                            else {
+                                //var Time = v.startTime.split('T');
+                                //var EndTime = v.endTime.split('T');
+
+                                events.push({
+                                    title: DocPatName,
+                                    Name: v.appointmentType,
+                                    //description: v.Description,
+                                    start: Date[0] + "T" + v.startTime,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    description: v.appointmentId,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                });
+                            }
+                        })
+                        callback(events);
+                    }
+
+                });
+            },
+            eventLimit: true,
+            eventClick: function (events) {
+
+                debugger;
+                if (events.Name == "Exact") {
+                    var ExactTimeDate = events.start._i.split('T');
+                    $("#modal1").modal('show');
+                    $("#modal1 .modal-content  .modal-title").text(events.description);
+                    $("#modal1 .modal-content  #start_date").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal1 .modal-content  #Exact_Time").text(moment(ExactTimeDate[1], "H(:mm)").format("HH:mm:ss"));
+                    $("#modal1 .modal-content  #provider").text(events.patientName);
+                    $("#modal1 .modal-content  #providerName").text(events.provider);
+                    appId = events.description;
+                    //$("#appointId").val(appointmentId);
+
+                }
+                else {
+                    var StartTimeDate = events.start._i.split('T');
+                    var EndTime = events.endTime.split('T');
+                    $("#modal2").modal('show');
+                    $("#modal2 .modal-content  .modal-title").text(events.description);
+                    $("#modal2 .modal-content  #start_date2").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal2 .modal-content  #start_time2").text(moment(StartTimeDate[1], "H(:mm)").format("HH:mm:ss"));
+                    $("#modal2 .modal-content  #end_time2").text(moment(EndTime[1], "H(:mm)").format("HH:mm:ss"));
+                    $("#modal2 .modal-content  #provider_2").text(events.patientName);
+                    $("#modal2 .modal-content  #providerName2").text(events.provider);
+
+                    appId = events.description;
+                    //$("#appointId").val(appointmentId);
+
+                }
+
+                //$("#modal1 .modal-content  .modal-title").text(event.title);
+
+
+                //$("#modal1 .modal-content  #Exact_Time").text(moment(event.end).format('DD/MM/YYYY'));
+                //$("#modal1 .modal-content  #end_time").text(moment(event.end).format('HH:mm'));
+
+            },
+            eventMouseover: function (events, jsEvent) {
+                var StartTimeDate = events.start._i.split('T');
+                if (events.Name == "Exact") {
+                    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">' + events.provider + ' Appointment Schedule With Patient Id # ' + events.patientId + ' at ' + moment(StartTimeDate[1], "H(:mm)").format("HH:mm") + ' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $tool.fadeIn('500');
+                        $tool.fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $tool.css('top', e.pageY + 10);
+                        $tool.css('left', e.pageX + 20);
+                    });
+
+                }
+                else {
+                    var EndTime = events.endTime.split('T');
+
+                    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">' + events.provider + ' Appointment Schedule With Patient Id # ' + events.patientId + ' is Between ' + moment(StartTimeDate[1], "H(:mm)").format("HH:mm") + ' To ' + moment(EndTime[1], "H(:mm)").format("HH:mm") + ' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $tool.fadeIn('500');
+                        $tool.fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $tool.css('top', e.pageY + 10);
+                        $tool.css('left', e.pageX + 20);
+                    });
+                }
+
+
+            },
+            eventMouseout: function (events, jsEvent) {
+                $(this).css('z-index', 8);
+                $('.tooltipevent').remove();
+            },
+
+        });
+        //function filter(event) {
+        //    debugger;
+        //    var vals = [];
+        //    $('input:checkbox.calFilter:checked').each(function () {
+        //        debugger;
+        //        vals.push($(this).val());
+        //    });
+        //    return vals.indexOf(event.providerInfoId) !== -1;
+        //}
+        $(document).ready(function () {
+            $(".fc-calMonth-button").html('<i class="ti-layout-grid3-alt"></i>');
+            $(".fc-listMonth-button").html('<i class="ti-menu"></i>');
+            var EventCalling = [];
+            var PatEventCalling = [];
+            //var ProviderId = EventCalling.split(':');
+            $('#OTSelectDate').datepicker();
+
+            $('.ipp').hide();
+            $('.ot').hide();
+            $("#SlotModal").on('click', function () {
+                $(".Modelselect2").val('').trigger('change');
+                $("#selectAppType").val('').trigger('change');
+                $(".Modelselect2").prop("disabled", true);
+                $('#SelectDate').val('');
+                $('#AvailableSlots').hide();
+                $('.slotText').hide();
+                $(".cancel-btn").show();
+                $('.ot').hide();
+                $('.ipp').hide();
+                $("input").val('');
+            })
+            $('#AppointmentModalSlots').on('change', '#selectAppType', function () {
+                debugger;
+                var TypeValue = $("#selectAppType").select2('val');//Appointment Type Value
+                $("#DepartmentType").val(TypeValue);
+                if (TypeValue == "1") {
+                    $('.ipp').show();
+                    $('.ot').hide();
+                    $('.cancel-btn').hide();
+
+                }
+                else {
+                    $('.ipp').hide();
+                    $('.cancel-btn').hide();
+                    $('.ot').show();
+
+                }
+            })
+            $('#AppointmentModalSlots').on('change', '#Exactprovider_name', function () {
+                debugger;
+                var Id = $("#Exactprovider_name").select2('val');//ProviderID
+                var DateVal = $("#SelectDate").val();
+                $.post("/Appointment/GetProviderAvailableSlots", { dateTime: DateVal, ProviderId: Id }).done(function (data) {
+                    $('#AvailableSlots').html('');
+                    $('#AvailableSlots').html(data);
+                    $('#AppointmentModalSlots .slotText').show();
+                    $('#AvailableSlots').show();
+                });
+            })
+
+            $('input:checkbox.calFilter').change(function () {
+                var checked = $(this).val();
+                if ($(this).is(':checked')) {
+
+                    EventCalling.push(checked);
+                    $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+                    debugger;
+                    if (PatEventCalling == "") {
+                                if (EventCalling == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime;
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+ ETime = v.endTime;
+                                                }
+                                                debugger;
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                                        data: { DocId: EventCalling },//get events
+                                        success: function (data) {
+                                            debugger;
+                                            $.each(EventCalling, function (a,b) {
+                                                $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                    if (v.providerInfoId == b) {
+                                                        var Time;
+                                                        var ETime;
+                                                        var DocFisrtName = v.docFullName.split(' ');
+                                                        var PatientFirstName = v.patientFullName.split(' ');
+                                                        var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                        var PatientName = v.patientFullName;
+                                                        var provideName = "Dr. " + v.docFullName;
+                                                        if (v.appointmentType == "Exact") {
+                                                            Time = v.startTime;
+                                                        }
+                                                        else {
+                                                            Time = v.startTime;
+                                                        }
+
+                                                        var Date = v.date.split('T');
+
+                                                        if (v.appointmentType == "Exact") {
+                                                            ETime = '00:00:00'
+                                                        }
+                                                        else {
+         ETime = v.endTime;
+                                                        }
+                                                        debugger;
+                                                        $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                            title: DocPatName,
+                                                            start: Date[0] + 'T' + v.startTime,
+                                                            Name: v.appointmentType,
+                                                            description: v.appointmentId,
+                                                            endTime: Date[0] + "T" + ETime[1],
+                                                            patientId: v.patientInfoId,
+                                                            patientName: PatientName,
+                                                            provider: provideName
+                                                        }, true);
+                                                    }
+                                                })
+                                            })
+
+                                        }
+                                    });
+
+                                }
+                            }
+                    else if (PatEventCalling == "All") {
+                        debugger;
+                                if (EventCalling == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime;
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+ ETime = v.endTime;
+                                                }
+                                                debugger;
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                                        data: { DocId: EventCalling },//get events
+                                        success: function (data) {
+                                            $.each(EventCalling, function (a, b) {
+                                                $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                    if (v.providerInfoId == b) {
+                                                        var Time;
+                                                        var ETime;
+                                                        var DocFisrtName = v.docFullName.split(' ');
+                                                        var PatientFirstName = v.patientFullName.split(' ');
+                                                        var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                        var PatientName = v.patientFullName;
+                                                        var provideName = "Dr. " + v.docFullName;
+                                                        if (v.appointmentType == "Exact") {
+                                                            Time = v.startTime;
+                                                        }
+                                                        else {
+                                                            Time = v.startTime;
+                                                        }
+
+                                                        var Date = v.date.split('T');
+
+                                                        if (v.appointmentType == "Exact") {
+                                                            ETime = '00:00:00'
+                                                        }
+                                                        else {
+         ETime = v.endTime;
+                                                        }
+                                                        debugger;
+                                                        $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                            title: DocPatName,
+                                                            start: Date[0] + 'T' + v.startTime,
+                                                            Name: v.appointmentType,
+                                                            description: v.appointmentId,
+                                                            endTime: Date[0] + "T" + ETime[1],
+                                                            patientId: v.patientInfoId,
+                                                            patientName: PatientName,
+                                                            provider: provideName
+                                                        }, true);
+                                                    }
+                                                })
+                                            })
+
+                                        }
+                                    });
+                                }
+                            }
+                            else {
+                        if (EventCalling == "All") {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                                        data: { PatId: PatEventCalling },//get events
+                                        success: function (data) {
+                                            $.each(PatEventCalling, function(a,b) {
+                                                $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                    if (v.patientInfoId == b) {
+                                                        var Time;
+                                                        var ETime;
+                                                        var DocFisrtName = v.docFullName.split(' ');
+                                                        var PatientFirstName = v.patientFullName.split(' ');
+                                                        var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                        var PatientName = v.patientFullName;
+                                                        var provideName = "Dr. " + v.docFullName;
+                                                        if (v.appointmentType == "Exact") {
+                                                            Time = v.startTime;
+                                                        }
+                                                        else {
+                                                            Time = v.startTime;
+                                                        }
+
+                                                        var Date = v.date.split('T');
+
+                                                        if (v.appointmentType == "Exact") {
+                                                            ETime = '00:00:00'
+                                                        }
+                                                        else {
+         ETime = v.endTime;
+                                                        }
+                                                        debugger;
+                                                        $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                            title: DocPatName,
+                                                            start: Date[0] + 'T' + v.startTime,
+                                                            Name: v.appointmentType,
+                                                            description: v.appointmentId,
+                                                            endTime: Date[0] + "T" + ETime[1],
+                                                            patientId: v.patientInfoId,
+                                                            patientName: PatientName,
+                                                            provider: provideName
+                                                        }, true);
+                                                    }
+                                                })
+                                            })
+
+                                        }
+                                    });
+                                }
+                                else {
+
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByDoctorPatient", "Appointment")',
+                                        data: { PatId: PatEventCalling, DocId: EventCalling,},//get events
+                                        success: function (data) {
+                                            debugger;
+                                            dropEvent = [];
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                if (v.providerInfoId == EventCalling && v.patientInfoId == PatEventCalling) {
+                                                    debugger;
+                                                    var Time;
+                                                    var ETime;
+                                                    var DocFisrtName = v.docFullName.split(' ');
+                                                    var PatientFirstName = v.patientFullName.split(' ');
+                                                    var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                    var PatientName = v.patientFullName;
+                                                    var provideName = "Dr. " + v.docFullName;
+                                                    if (v.appointmentType == "Exact") {
+                                                        Time = v.startTime;
+                                                    }
+                                                    else {
+                                                        Time = v.startTime;
+                                                    }
+
+                                                    var Date = v.date.split('T');
+
+                                                    if (v.appointmentType == "Exact") {
+                                                        ETime = '00:00:00'
+                                                    }
+                                                    else {
+     ETime = v.endTime;
+                                                    }
+                                                    debugger;
+                                                    $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                        title: DocPatName,
+                                                        start: Date[0] + 'T' + v.startTime,
+                                                        Name: v.appointmentType,
+                                                        description: v.appointmentId,
+                                                        endTime: Date[0] + "T" + ETime[1],
+                                                        patientId: v.patientInfoId,
+                                                        patientName: PatientName,
+                                                        provider: provideName
+                                                    }, true);
+
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                else {
+                    debugger;
+                    EventCalling.splice($.inArray(checked, EventCalling), 1);
+                    $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+
+                    if (PatFilter == "") {
+                                if (EventCalling == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime;
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+ ETime = v.endTime;
+                                                }
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+                                }
+                                else if (EventCalling.length == 0) {
+                                     $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime;
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+ ETime = v.endTime;
+                                                }
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                                        data: { DocId: EventCalling },//get events
+                                        success: function (data) {
+                                            debugger;
+                                            $.each(EventCalling, function (a,b) {
+                                                $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                    if (v.providerInfoId == b) {
+                                                        var Time;
+                                                        var ETime;
+                                                        var DocFisrtName = v.docFullName.split(' ');
+                                                        var PatientFirstName = v.patientFullName.split(' ');
+                                                        var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                        var PatientName = v.patientFullName;
+                                                        var provideName = "Dr. " + v.docFullName;
+                                                        if (v.appointmentType == "Exact") {
+                                                            Time = v.startTime;
+                                                        }
+                                                        else {
+                                                            Time = v.startTime;
+                                                        }
+
+                                                        var Date = v.date.split('T');
+
+                                                        if (v.appointmentType == "Exact") {
+                                                            ETime = '00:00:00'
+                                                        }
+                                                        else {
+         ETime = v.endTime;
+                                                        }
+                                                        $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                            title: DocPatName,
+                                                            start: Date[0] + 'T' + v.startTime,
+                                                            Name: v.appointmentType,
+                                                            description: v.appointmentId,
+                                                            endTime: Date[0] + "T" + ETime[1],
+                                                            patientId: v.patientInfoId,
+                                                            patientName: PatientName,
+                                                            provider: provideName
+                                                        }, true);
+                                                    }
+                                                })
+                                            })
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+
+            });
+           $('#selectPat').change(function () {
+                $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+                PatFilter = $('#selectPat option:selected').val();//filter based on the select value
+               debugger;
+               if (DocFilter == "") {
+                    if (PatFilter == "All") {
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            debugger;
+                            var Time;
+                            var ETime;
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+
+                            $("#Doc-calendar").fullCalendar('renderEvent', {
+                                title: DocPatName,
+                                start: Date[0] + 'T' + v.startTime,
+                                Name: v.appointmentType,
+                                description: v.appointmentId,
+                                endTime: Date[0] + "T" + v.endTime,
+                                patientId: v.patientInfoId,
+                                patientName: PatientName,
+                                provider: provideName
+                            }, true);
+                        })
+                    }
+                });
+                }
+                    else {
+                   $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                    data: { PatId:PatFilter},//get events
+                       success: function (data) {
+
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.patientInfoId == PatFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+
+                }
+               }
+               else if (DocFilter == "All") {
+                   if (PatFilter == "All") {
+                         $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            debugger;
+                            var Time;
+                            var ETime;
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+                            if (v.appointmentType == "Exact") {
+                                Time = v.startTime;
+                            }
+                            else {
+                                Time = v.startTime;
+                            }
+
+                            var Date = v.date.split('T');
+
+                            if (v.appointmentType == "Exact") {
+                                ETime = '00:00:00'
+                            }
+                            else {
+                                ETime = v.endTime.split('T');
+                            }
+                            debugger;
+                            $("#Doc-calendar").fullCalendar('renderEvent', {
+                                title: DocPatName,
+                                start: Date[0] + 'T' + v.startTime,
+                                Name: v.appointmentType,
+                                description: v.appointmentId,
+                                endTime: Date[0] + "T" + v.endTime,
+                                patientId: v.patientInfoId,
+                                patientName: PatientName,
+                                provider: provideName
+                            }, true);
+                        })
+                    }
+                });
+
+                   }
+                   else {
+                        $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                    data: { PatId:PatFilter},//get events
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.patientInfoId == PatFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime;
+                                }
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+                   }
+               }
+               else {
+                   if (PatFilter == "All") {
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                        data: { DocId: DocFilter},//get events
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.providerInfoId == DocFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+
+                   }
+
+                   else {
+                        $.ajax({
+                    type: "GET",
+                            url: '@Url.Action("FilterByDocName", "Appointment")',
+                            data: { DocId: DocFilter, PatId: PatFilter },//get events
+                            success: function (data) {
+                                debugger;
+                                dropEvent = [];
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.providerInfoId == DocFilter && v.patientInfoId == PatFilter) {
+                                debugger;
+                                var Time;
+                                var ETime;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+                                var DocPatName = "-Dr. " + v.providerInfo.firstName + " - " + v.patientInfo.firstName;
+                                var provideName = "Dr. " + v.providerInfo.firstName + " " + v.providerInfo.lastName;
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                appId = events.description;
+
+                               var dropEvents = {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                   providerName: provideName,
+                                   endTime: Date[0] + "T" + v.endTime,
+                                }
+                                dropEvent.push({ dropEvents})
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', dropEvents , true);
+
+                            }
+                        })
+                    }
+                });
+                   }
+               }
+
+           });
+           $('#selectDoc').change(function () {
+                $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+                DocFilter = $('#selectDoc option:selected').val();//filter based on the select value
+               debugger;
+               if (PatFilter == "") {
+                   debugger;
+                    if (DocFilter == "All") {
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            debugger;
+                            var Time;
+                            var ETime;
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+
+                            debugger;
+                            $("#Doc-calendar").fullCalendar('renderEvent', {
+                                title: DocPatName,
+                                start: Date[0] + 'T' + v.startTime,
+                                Name: v.appointmentType,
+                                description: v.appointmentId,
+                                endTime: Date[0] + "T" + v.endTime,
+                                patientId: v.patientInfoId,
+                                patientName: PatientName,
+                                provider: provideName
+                            }, true);
+                        })
+                    }
+                });
+                }
+                     else {
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                        data: { DocId: DocFilter},//get events
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.providerInfoId == DocFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+
+                }
+               }
+               else if (PatFilter == "All") {
+                   if (DocFilter == "All") {
+                       $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            debugger;
+                            var Time;
+                            var ETime;
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+                            if (v.appointmentType == "Exact") {
+                                Time = v.startTime;
+                            }
+                            else {
+                                Time = v.startTime.split('T');
+                            }
+
+                            var Date = v.date.split('T');
+
+                            if (v.appointmentType == "Exact") {
+                                ETime = '00:00:00'
+                            }
+                            else {
+                                ETime = v.endTime.split('T');
+                            }
+                            debugger;
+                            $("#Doc-calendar").fullCalendar('renderEvent', {
+                                title: DocPatName,
+                                start: Date[0] + 'T' + v.startTime,
+                                Name: v.appointmentType,
+                                description: v.appointmentId,
+                                endTime: Date[0] + "T" + v.endTime,
+                                patientId: v.patientInfoId,
+                                patientName: PatientName,
+                                provider: provideName
+                            }, true);
+                        })
+                    }
+                });
+
+                   }
+                   else {
+                       $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                        data: { DocId: DocFilter},//get events
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.providerInfoId == DocFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+                   }
+               }
+               else {
+                   if (DocFilter == "All") {
+                       $.ajax({
+                        type: "GET",
+                         url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                        data: { PatId:PatFilter},//get events
+                        success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.patientInfoId == PatFilter) {
+                                var Time;
+                                var ETime;
+                                var DocFisrtName = v.docFullName.split(' ');
+                                var PatientFirstName = v.patientFullName.split(' ');
+                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                var PatientName = v.patientFullName;
+                                var provideName = "Dr. " + v.docFullName;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                    endTime: Date[0] + "T" + v.endTime,
+                                    patientId: v.patientInfoId,
+                                    patientName: PatientName,
+                                    provider: provideName
+                                }, true);
+                            }
+                        })
+                    }
+                });
+                   }
+                   else {
+
+                        $.ajax({
+                    type: "GET",
+                            url: '@Url.Action("FilterByDocName", "Appointment")',
+                            data: { DocId: DocFilter, PatId: PatFilter },//get events
+                            success: function (data) {
+                                debugger;
+                                dropEvent = [];
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            if (v.providerInfoId == DocFilter && v.patientInfoId == PatFilter) {
+                                debugger;
+                                var Time;
+                                var ETime;
+                                if (v.appointmentType == "Exact") {
+                                    Time = v.startTime;
+                                }
+                                else {
+                                    Time = v.startTime.split('T');
+                                }
+                                var DocPatName = "-Dr. " + v.providerInfo.firstName + " - " + v.patientInfo.firstName;
+                                var provideName = "Dr. " + v.providerInfo.firstName + " " + v.providerInfo.lastName;
+
+                                var Date = v.date.split('T');
+
+                                if (v.appointmentType == "Exact") {
+                                    ETime = '00:00:00'
+                                }
+                                else {
+                                    ETime = v.endTime.split('T');
+                                }
+                                appId = events.description;
+
+                               var dropEvents = {
+                                    title: DocPatName,
+                                    start: Date[0] + 'T' + v.startTime,
+                                    Name: v.appointmentType,
+                                    description: v.appointmentId,
+                                   providerName: provideName,
+                                   endTime: Date[0] + "T" + v.endTime,
+                                }
+                                dropEvent.push({ dropEvents})
+                                debugger;
+                                $("#Doc-calendar").fullCalendar('renderEvent', dropEvents , true);
+
+                            }
+                        })
+                    }
+                });
+                   }
+               }
+           });
+            $('input:checkbox.calPatFilter').change(function () {
+                var checked = $(this).val();
+                if ($(this).is(':checked')) {
+
+                    PatEventCalling.push(checked);
+                    $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+                    debugger;
+                    if (EventCalling == "") {
+                                if (PatEventCalling == "All") {
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                    success: function (data) {
+                        $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                            debugger;
+                            var Time;
+                            var ETime;
+                            var DocFisrtName = v.docFullName.split(' ');
+                            var PatientFirstName = v.patientFullName.split(' ');
+                            var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                            var PatientName = v.patientFullName;
+                            var provideName = "Dr. " + v.docFullName;
+                            if (v.appointmentType == "Exact") {
+                                Time = v.startTime;
+                            }
+                            else {
+                                Time = v.startTime.split('T');
+                            }
+
+                            var Date = v.date.split('T');
+
+                            if (v.appointmentType == "Exact") {
+                                ETime = '00:00:00'
+                            }
+                            else {
+                                ETime = v.endTime.split('T');
+                            }
+                            debugger;
+                            $("#Doc-calendar").fullCalendar('renderEvent', {
+                                title: DocPatName,
+                                start: Date[0] + 'T' + v.startTime,
+                                Name: v.appointmentType,
+                                description: v.appointmentId,
+                                endTime: Date[0] + "T" + ETime[1],
+                                patientId: v.patientInfoId,
+                                patientName: PatientName,
+                                provider: provideName
+                            }, true);
+                        })
+                    }
+                });
+                }
+                    else {
+                   $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                       data: { PatId: PatEventCalling},//get events
+                       success: function (data) {
+                           $.each(PatEventCalling, function (a,b) {
+                               $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                   if (v.patientInfoId == b) {
+                                       var Time;
+                                       var ETime;
+                                       var DocFisrtName = v.docFullName.split(' ');
+                                       var PatientFirstName = v.patientFullName.split(' ');
+                                       var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                       var PatientName = v.patientFullName;
+                                       var provideName = "Dr. " + v.docFullName;
+                                       if (v.appointmentType == "Exact") {
+                                           Time = v.startTime;
+                                       }
+                                       else {
+                                           Time = v.startTime.split('T');
+                                       }
+
+                                       var Date = v.date.split('T');
+
+                                       if (v.appointmentType == "Exact") {
+                                           ETime = '00:00:00'
+                                       }
+                                       else {
+                                           ETime = v.endTime.split('T');
+                                       }
+                                       debugger;
+                                       $("#Doc-calendar").fullCalendar('renderEvent', {
+                                           title: DocPatName,
+                                           start: Date[0] + 'T' + v.startTime,
+                                           Name: v.appointmentType,
+                                           description: v.appointmentId,
+                                           endTime: Date[0] + "T" + ETime[1],
+                                           patientId: v.patientInfoId,
+                                           patientName: PatientName,
+                                           provider: provideName
+                                       }, true);
+                                   }
+                               })
+
+                           })
+                    }
+                });
+
+                }
+                     }
+                    else if (EventCalling == "All") {
+                        debugger;
+                        if (PatEventCalling == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime.split('T');
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+                                                        ETime = v.endTime;
+                                                }
+                                                debugger;
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+
+                                }
+                                else {
+                                   $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                       data: { PatId: PatEventCalling},//get events
+                       success: function (data) {
+                           $.each(PatEventCalling, function (a,b) {
+                               $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                   if (v.patientInfoId == b) {
+                                       var Time;
+                                       var ETime;
+                                       var DocFisrtName = v.docFullName.split(' ');
+                                       var PatientFirstName = v.patientFullName.split(' ');
+                                       var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                       var PatientName = v.patientFullName;
+                                       var provideName = "Dr. " + v.docFullName;
+                                       if (v.appointmentType == "Exact") {
+                                           Time = v.startTime;
+                                       }
+                                       else {
+                                           Time = v.startTime.split('T');
+                                       }
+
+                                       var Date = v.date.split('T');
+
+                                       if (v.appointmentType == "Exact") {
+                                           ETime = '00:00:00'
+                                       }
+                                       else {
+                                           ETime = v.endTime.split('T');
+                                       }
+                                       debugger;
+                                       $("#Doc-calendar").fullCalendar('renderEvent', {
+                                           title: DocPatName,
+                                           start: Date[0] + 'T' + v.startTime,
+                                           Name: v.appointmentType,
+                                           description: v.appointmentId,
+                                           endTime: Date[0] + "T" + ETime[1],
+                                           patientId: v.patientInfoId,
+                                           patientName: PatientName,
+                                           provider: provideName
+                                       }, true);
+                                   }
+                               })
+
+                           })
+                    }
+                });
+                                }
+                            }
+                            @*else {
+                                if (DocFilter == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("FilterCentralCalendarByPatient", "Appointment")',
+                                        data: { PatId: PatFilter },//get events
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                if (v.patientInfoId == PatFilter) {
+                                                    var Time;
+                                                    var ETime;
+                                                    var DocFisrtName = v.docFullName.split(' ');
+                                                    var PatientFirstName = v.patientFullName.split(' ');
+                                                    var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                    var PatientName = v.patientFullName;
+                                                    var provideName = "Dr. " + v.docFullName;
+                                                    if (v.appointmentType == "Exact") {
+                                                        Time = v.startTime;
+                                                    }
+                                                    else {
+                                                        Time = v.startTime.split('T');
+                                                    }
+
+                                                    var Date = v.date.split('T');
+
+                                                    if (v.appointmentType == "Exact") {
+                                                        ETime = '00:00:00'
+                                                    }
+                                                    else {
+                                                            ETime = v.endTime;
+                                                    }
+                                                    debugger;
+                                                    $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                        title: DocPatName,
+                                                        start: Date[0] + 'T' + v.startTime,
+                                                        Name: v.appointmentType,
+                                                        description: v.appointmentId,
+                                                        endTime: Date[0] + "T" + ETime[1],
+                                                        patientId: v.patientInfoId,
+                                                        patientName: PatientName,
+                                                        provider: provideName
+                                                    }, true);
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                                else {
+
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("FilterByDocName", "Appointment")',
+                                        data: { DocId: DocFilter, PatId: PatFilter },//get events
+                                        success: function (data) {
+                                            debugger;
+                                            dropEvent = [];
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                if (v.providerInfoId == DocFilter && v.patientInfoId == PatFilter) {
+                                                    debugger;
+                                                    var Time;
+                                                    var ETime;
+                                                    if (v.appointmentType == "Exact") {
+                                                        Time = v.startTime;
+                                                    }
+                                                    else {
+                                                        Time = v.startTime.split('T');
+                                                    }
+                                                    var DocPatName = "-Dr. " + v.providerInfo.firstName + " - " + v.patientInfo.firstName;
+                                                    var provideName = "Dr. " + v.providerInfo.firstName + " " + v.providerInfo.lastName;
+
+                                                    var Date = v.date.split('T');
+
+                                                    if (v.appointmentType == "Exact") {
+                                                        ETime = '00:00:00'
+                                                    }
+                                                    else {
+                                                                ETime = v.endTime;
+                                                    }
+                                                    appId = events.description;
+
+                                                    var dropEvents = {
+                                                        title: DocPatName,
+                                                        start: Date[0] + 'T' + v.startTime,
+                                                        Name: v.appointmentType,
+                                                        description: v.appointmentId,
+                                                        providerName: provideName,
+                                                        endTime: Date[0] + "T" + ETime[1],
+                                                    }
+                                                    dropEvent.push({ dropEvents })
+                                                    debugger;
+                                                    $("#Doc-calendar").fullCalendar('renderEvent', dropEvents, true);
+
+                                                }
+                                            })
+                                        }
+                                    });
+                                }
+                            }*@
+                        }
+                else {
+                    debugger;
+                    PatEventCalling.splice($.inArray(checked, PatEventCalling), 1);
+                    $("#Doc-calendar").fullCalendar('removeEvents');//remove the old filtered events
+
+                    if (EventCalling == "") {
+                        if (PatEventCalling == "All") {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime.split('T');
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+                                                        ETime = v.endTime;
+                                                }
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+                                }
+                        else if (PatEventCalling.length == 0) {
+                                     $.ajax({
+                                        type: "GET",
+                                        url: '@Url.Action("CentralCalendarsList", "Appointment")',
+
+                                        success: function (data) {
+                                            $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                debugger;
+                                                var Time;
+                                                var ETime;
+                                                var DocFisrtName = v.docFullName.split(' ');
+                                                var PatientFirstName = v.patientFullName.split(' ');
+                                                var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                var PatientName = v.patientFullName;
+                                                var provideName = "Dr. " + v.docFullName;
+                                                if (v.appointmentType == "Exact") {
+                                                    Time = v.startTime;
+                                                }
+                                                else {
+                                                    Time = v.startTime.split('T');
+                                                }
+
+                                                var Date = v.date.split('T');
+
+                                                if (v.appointmentType == "Exact") {
+                                                    ETime = '00:00:00'
+                                                }
+                                                else {
+                                                         ETime = v.endTime;
+                                                }
+                                                $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                    title: DocPatName,
+                                                    start: Date[0] + 'T' + v.startTime,
+                                                    Name: v.appointmentType,
+                                                    description: v.appointmentId,
+                                                    endTime: Date[0] + "T" + ETime[1],
+                                                    patientId: v.patientInfoId,
+                                                    patientName: PatientName,
+                                                    provider: provideName
+                                                }, true);
+                                            })
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '@Url.Action("FilterCentralCalendarByDoctor", "Appointment")',
+                                        data: { DocId: PatEventCalling },//get events
+                                        success: function (data) {
+                                            debugger;
+                                            $.each(PatEventCalling, function (a,b) {
+                                                $.each(data, function (i, v) {//for each event, I will compare the value with the filter, if true, render it.
+                                                    if (v.patientInfoId == b) {
+                                                        var Time;
+                                                        var ETime;
+                                                        var DocFisrtName = v.docFullName.split(' ');
+                                                        var PatientFirstName = v.patientFullName.split(' ');
+                                                        var DocPatName = "-Dr. " + DocFisrtName[0] + " - " + PatientFirstName[0];
+
+                                                        var PatientName = v.patientFullName;
+                                                        var provideName = "Dr. " + v.docFullName;
+                                                        if (v.appointmentType == "Exact") {
+                                                            Time = v.startTime;
+                                                        }
+                                                        else {
+                                                            Time = v.startTime.split('T');
+                                                        }
+
+                                                        var Date = v.date.split('T');
+
+                                                        if (v.appointmentType == "Exact") {
+                                                            ETime = '00:00:00'
+                                                        }
+                                                        else {
+                                                            ETime = v.endTime;
+                                                        }
+                                                        $("#Doc-calendar").fullCalendar('renderEvent', {
+                                                            title: DocPatName,
+                                                            start: Date[0] + 'T' + v.startTime,
+                                                            Name: v.appointmentType,
+                                                            description: v.appointmentId,
+                                                            endTime: Date[0] + "T" + ETime[1],
+                                                            patientId: v.patientInfoId,
+                                                            patientName: PatientName,
+                                                            provider: provideName
+                                                        }, true);
+                                                    }
+                                                })
+                                            })
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+
+            });
+
+            $(".createappbtn").click(function () {
+
+
+                $('.app_empty').val("");
+                $('.Bulkapp_empty').val("");
+                $('.Bulkapp_empty').removeClass('valid');
+                $('.app_empty').removeClass('valid');
+                $("#exact_checkbox").prop('checked', false);
+                $("#Btw_checkbox").prop('checked', false);
+                $("#Bulkexact_checkbox").prop('checked', false);
+                $("#BulkBtw_checkbox").prop('checked', false);
+                $(".cancel_btn").show();
+                $(".Bulkcancel_btn").show();
+                $("#EaxctAppointHide").hide();
+                $("#BulkEaxctAppointHide").hide();
+                $("#InBetweenAppointment").hide();
+                $("#BulkInBetweenAppointment").hide();
+                var check = $("#BulkERecCheck");
+                if (check.is(':checked')) {
+                    $("#ERecCheck").trigger('click');
+                }
+                else {
+
+                }
+                var check = $("#BulkERecCheck2");
+                if (check.is(':checked')) {
+                    $("#BulkERecCheck2").trigger('click');
+                }
+                else {
+
+                }
+                var check = $("#BulkBRecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkBRecCheck").trigger('click');
+                }
+                else {
+
+                }
+                var check = $("#BulkBRecCheck2");
+                if (check.is(':checked')) {
+                    $("#BulkBRecCheck2").trigger('click');
+                }
+                else {
+
+                }
+                $(".cancel_btn").show();
+                $("#EaxctAppointHide").hide();
+                $("#InBetweenAppointment").hide();
+                $("#ExactRecurringForm").hide();
+                $("#InBtwRecurringForm").hide();
+                $(".select2").val('').trigger('change');
+                $('#Doc-calendar').fullCalendar('refetchEvents');
+            });
+
+        });
+        function BulkExactCheck() {
+            debugger;
+            var check = $("#Bulkexact_checkbox").val();
+            if (check == '0') {
+                $("#BulkInBetweenAppointment").hide();
+                $("#BulkInBtwRecurringForm").hide();
+                $("#BulkEaxctAppointHide").show();
+                $(".Bulkcancel_btn").hide();
+                var check = $("#BulkERecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkExactFormButton").hide();
+                    $("#BulkexactRecurringForm").show();
+                    $("#BulkERecRangeTimeText").show();
+                    $("#BulkERecRangeTimeField").show();
+                    $("#BulkERecPatternText").show();
+                    $("#BulkERecPatternCheckBox").show();
+                    $("#BulkERecPatternCheckBoxS").show();
+                    $("#BulkERecCheck2").prop("checked", true);
+                }
+
+            }
+            else {
+                $("#BulkInBetweenAppointment").hide();
+                $("#BulkEaxctAppointHide").hide();
+                $(".Bulkcancel_btn").hide();
+            }
+
+        }
+        function BulkBtwCheck() {
+            debugger;
+            var check2 = $("#Bulkbtw_checkbox");
+            if (check2.is(':checked')) {
+                $("#BulkInBetweenAppointment").show();
+                $("#BulkEaxctAppointHide").hide();
+                $("#BulkExactRecurringForm").show();
+                $("#BulkERecRangeTimeText").show();
+                $("#BulkERecRangeTimeField").show();
+                $("#BulkERecPatternText").show();
+                $("#BulkERecPatternCheckBox").show();
+                $("#BulkERecPatternCheckBoxS").show();
+
+
+
+            }
+            else {
+                $("#BulkInBetweenAppointment").show();
+                $("#BulkEaxctAppointHide").hide();
+                $(".Bulkcancel_btn").hide();
+                $("#BulkExactRecurringForm").hide();
+                $("#BulkERecRangeTimeText").hide();
+                $("#BulkERecRangeTimeField").hide();
+                $("#BulkERecPatternText").hide();
+                $("#BulkBulkERecPatternCheckBox").hide();
+                $("#ERecPatternCheckBoxS").hide();
+                var check = $("#BulkERecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkExactFormButton").hide();
+                    $("#BulkExactRecurringForm").hide();
+                    $("#BulkERecRangeTimeText").hide();
+                    $("#BulkERecRangeTimeField").hide();
+                    $("#BulkERecPatternText").hide();
+                    $("#BulkERecPatternCheckBox").hide();
+                    $("#BulkERecPatternCheckBoxS").hide();
+                    $("#exactMakeRec").hide();
+                    $("#RecMakeRec").show();
+
+                }
+                var check = $("#BulkBRecCheck");
+                if (check.is(':checked')) {
+                    $("#BulkBtwFormButton").hide();
+                    $("#BulkInBtwRecurringForm").show();
+                    $("#BulkBRecRangeTimeText").show();
+                    $("#BulkBRecRangeTimeField").show();
+                    $("#BulkBRecPatternText").show();
+                    $("#BulkBRecPatternCheckBox").show();
+                    $("#BulkBRecPatternCheckBoxS").show();
+                }
+
+                //$("#ExactRecurringForm").hide();
+
+                //$("#ERecCheck").trigger("click");
+                //$("#ERecCheck").prop("checked", false);
+            }
+        }
+        $('#BulkEaxctAppointHide').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+
+                        }
+                    }
+
+                });
+
+            }
+
+        });
+        $('#BulkInBetweenAppointment').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+
+                        }
+                    }
+
+                });
+
+            }
+
+        });
+        function SuccessMsg() {
+
+            $(".checkmark").show().fadeOut(6000);
+
+            $('#Doc-calendar').fullCalendar('removeEvents');
+
+            $("#AppointmentModal").modal('hide');
+            $("#AppointmentUpdateModal").modal('hide');
+            $('#Doc-calendar').fullCalendar('refetchEvents');
+            $(".text-input").val("");
+            $(".text-input").removeClass("valid");
+        }
+        function onExactSuccess(data) {
+            var PatFilter = $('#seleciona option:selected').val();
+            debugger;
+            if (data != null) {
+                if (PatFilter == "") {
+
+                    $(".checkmark").show().fadeOut(6000);
+
+                    $('#Doc-calendar').fullCalendar('removeEvents');
+
+                    $("#AppointmentModal").modal('hide');
+                    $("#AppointmentUpdateModal").modal('hide');
+                    $('#Doc-calendar').fullCalendar('refetchEvents');
+                    $(".text-input").val("");
+                    $(".text-input").removeClass("valid");
+                }
+                else {
+
+                    $(".checkmark").show().fadeOut(6000);
+
+                    $('#Doc-calendar').fullCalendar('removeEvents');
+
+                    $("#AppointmentModal").modal('hide');
+                    $("#AppointmentUpdateModal").modal('hide');
+                    //$('#Doc-calendar').fullCalendar('refetchEvents');
+                    LoadAppointmentData(PatFilter);
+
+                    $(".text-input").val("");
+                    $(".text-input").removeClass("valid");
+                }
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        function onExactSuccess(data) {
+            debugger;
+            $("#AppointmentModalSlots").modal('hide');
+            $(".checkmark").show().fadeOut(6000);
+            $('#Doc-calendar').fullCalendar('removeEvents');
+            $('#Doc-calendar').fullCalendar('refetchEvents');
+
+
+        }
+
+    </script>
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">Central Calendar</h5>
+                </div>
+                @*<div class="col-sm-9 col-md-5 col-lg-3">
+
+                        <select id="selectPat" class="select2" data-placeholder="Search By Patient Name"
+                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                            <option value="" selected disabled></option>
+                            <option value="All">All</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-9 col-md-5 col-lg-4">
+                        <select id="selectDoc" class="select2" data-placeholder="Search By Doctor Name"
+                                asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                            <option value="" selected disabled></option>
+                            <option value="All">All</option>
+                        </select>
+                    </div>*@
+                <div class="col">
+                    @*<a class="btn right add-btn  modal-trigger" id="SlotModal" data-toggle="modal" data-target="#AppointmentModalSlots">Add New Appointment</a>*@
+                    <a class="btn right add-btn createappbtn modal-trigger" data-toggle="modal" data-target="#AppointmentModal">Add Appointment</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-sm-12">
+
+
+                @*<div id="basic-calendar"></div>*@
+                <div id='Doc-calendar'></div>
+                <div id="loading">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+
+            <!--<div class="col-sm-12 col-md-3 checkcard">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Providers</span>
+                                <div>
+                                    <div class="header-search-wrapper  display-flex position-relative">
+                                        <i class="ti-search position-absolute  search-icons"></i>
+                                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="set_names">
+                                    <div class="row">
+
+                                        <div class="col-sm-12 d-inline-flex">
+                                            <p>
+                                                    <label>
+                                                        <input type="checkbox" class="calFilter" data-val="provider" value="All" />
+                                                        <span>All</span>
+                                                    </label>
+                                                </p>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" id="All" class="custom-control-input calFilter" data-val="provider" value="All">
+                                                <label class="custom-control-label" for="All">All</label>
+                                            </div>
+                                        </div>
+                                    </div>-->
+            @*@if (Model.ProviderList != null)
+                {
+                    @foreach (var item in Model.ProviderList)
+                    {
+
+                        <div class="row mt-2">
+
+                            <div class="col s12 d-inline-flex">
+                                <p>
+                                        <label>
+                                            <input type="checkbox" class="calFilter" id="DocValue-@item.ProviderInfoId" data-val="provider" value="@item.ProviderInfoId" />
+                                            <span>@item.FullName</span>
+                                        </label>
+                                    </p>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="DocValue-@item.ProviderInfoId" class="custom-control-input calFilter" data-val="provider" value="@item.ProviderInfoId">
+                                    <label class="custom-control-label" for="DocValue-@item.ProviderInfoId">@item.FullName</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }*@
+
+
+
+            <!--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m12">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">Patients</span>
+
+                            <div class="header-search-wrapper  display-flex position-relative">
+                                <i class="ti-search position-absolute  search-icons"></i>
+                                <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+
+                            </div>
+
+
+                            <div class="set_namespatient">
+                                <div class="row mt-2">
+
+                                    <div class="col s12 d-inline-flex">
+                                        <p>
+                                                <label>
+                                                    <input type="checkbox" data-val="patients" class="calPatFilter" value="All" />
+                                                    <span>All</span>
+                                                </label>
+                                            </p>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="PAll" class="custom-control-input calPatFilter" data-val="patients" value="All">
+                                            <label class="custom-control-label" for="PAll">All</label>
+                                        </div>
+                                    </div>
+                                </div>-->
+            @*@if (Model.patientListWithUsers != null)
+                {
+                    @foreach (var item in Model.patientListWithUsers)
+                    {
+                        <div class="row mt-2">
+
+                            <div class="col s12 d-inline-flex">
+                                <p>
+                                        <label>
+                                            <input type="checkbox" id="PatValue-@item.PatientInfoId" data-val="patients" class="calPatFilter" value="@item.PatientInfoId" />
+                                            <span>@item.FullName</span>
+                                        </label>
+                                    </p>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" id="PatValue-@item.PatientInfoId" class="custom-control-input calPatFilter" data-val="patients" value="@item.PatientInfoId">
+                                    <label class="custom-control-label" for="PatValue-@item.PatientInfoId">@item.FullName</label>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }*@
+
+            <!--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            @*</div>*@
+            <!--</div>-->
+
+        </div>
+    </div>
+    <div id="modal1" class="modal display_modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <h6>Appointment Schedule</h6>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <h6>Appointment No : <span class="modal-title"></span></h6>
+                        </div>
+                    </div>
+                    <input id="AppointId" hidden="hidden" />
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6" id="Date_show">
+                            <h6>Provider Name : <span id="providerName"></span></h6>
+                        </div>
+                        <div class="col-sm-12 col-md-6" id="Date_show">
+                            <h6>Patient Name : <span id="provider"></span></h6>
+                        </div>
+                        <div class="col-sm-12 col-md-6" id="Date_show">
+                            <h6>Date : <span id="start_date"></span></h6>
+                        </div>
+                        <div class="col-sm-12" id="ExactTime_show">
+                            <span style="font-size:18px;"><b style="border-bottom: 1px solid" id="providerName"></b> Appointment With <b style="border-bottom: 1px solid" id="provider"></b>  at <b style="border-bottom:1px solid" id="Exact_Time"></b> Time.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 mt-2">
+                            <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate" data-dismiss="modal">Cancel</a>
+
+                            @*<a href="javascript:void(0);" class="right DeleteappointBtn modal-action btn Recreate ">Delete</a>*@
+
+                            @*<a href="javascript:void(0);" class="right modal-close modal-action EditAppointment modal-close add-btn  btn mr-2">Update</a>*@
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div id="modal2" class="modal display_modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <h6>Appointment Schedule</h6>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <h6>Appointment No : <span class="modal-title"></span></h6>
+                        </div>
+                    </div>
+                    <input id="AppointId" hidden="hidden" />
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6" id="Date_show">
+                            <h6>Provider Name : <span id="providerName2"></span></h6>
+                        </div>
+                        <div class="col-sm-12 col-md-6" id="Date_show2">
+                            <h6>Patient Name : <span id="provider_2"></span></h6>
+
+                        </div>
+                        <div class="col-sm-12 col-md-6" id="Date_show2">
+                            <h6>Date : <span id="start_date2"></span></h6>
+
+                        </div>
+                        <div class="col-sm-12 col-md-12" id="StartTime_show">
+                            @*<h6>Start Time : <span id="start_time2"></span></h6>*@
+                            <span style="font-size:18px;"><b style="border-bottom: 1px solid" id="providerName2"></b> Appointment With <b style="border-bottom: 1px solid" id="provider_2"></b> in Between <b style="border-bottom:1px solid" id="start_time2"></b> To <b style="border-bottom:1px solid" id="end_time2"></b> Time.</span>
+
+                        </div>
+                        @*<div class="col s6 m12 pl-0" id="EndTime_show">
+                                <h6>End Time : <span id="end_time2"></span></h6>
+                            </div>*@
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-sm-12">
+                            <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate" data-dismiss="modal">Cancel</a>
+
+                            @*<a href="javascript:void(0);" class="right modal-action DeleteappointBtn  btn Recreate ">Delete</a>*@
+
+                            @*<a href="javascript:void(0);" class="right modal-close  modal-action EditAppointment add-btn  btn mr-2">Update</a>*@
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="AppointmentModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Add New Appointment</h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row" id="test2">
+                        <div class="col-sm-12">
+
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <h6>Appointment Type : </h6>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    @*<label>
+                                            <input type="radio" name="AppCheckBox" id="Bulkexact_checkbox" class="with-gap" onclick="BulkExactCheck()" value="0" />
+                                            <span>Exact</span>
+                                        </label>*@
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" name="AppCheckBox" id="Bulkexact_checkbox" onclick="BulkExactCheck()" value="0">
+                                        <label class="custom-control-label" for="Bulkexact_checkbox">Exact</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    @*<label>
+                                            <input type="radio" name="AppCheckBox" id="BulkBtw_checkbox" class="with-gap" onclick="BulkBtwCheck()" />
+                                            <span>In Between</span>
+                                        </label>*@
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" name="AppCheckBox" id="BulkBtw_checkbox" onclick="BulkBtwCheck()">
+                                        <label class="custom-control-label" for="BulkBtw_checkbox">In Between</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a href="javascript:void(0);" class="modal-action modal-close Bulkcancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+
+                                </div>
+                            </div>
+                            <form asp-action="BulkExactAppointment" asp-controller="Appointment" method="post" id="BulkEaxctAppointHide" style="display:none">
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" id="PatientIdVal" />
+                                @*<input hidden="hidden" id="providerInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />*@
+                                <input asp-for="patientAppointmentBasicDto.AppointmentType" value="Exact" id="appointmentType" hidden="hidden" />
+                                <div class="row" id="exactSelect">
+                                    <div class="col-sm-12 col-md-6">
+                                        <p>Patient Name <span class="required"> * </span></p>
+                                        <select multiple="multiple" class="select2" id="ExactSimple" asp-for="patientAppointmentBasicDto.PatientId" data-placeholder="Select Patient Name"
+                                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <p>Doctor Name <span class="required"> * </span></p>
+
+                                        <select id="ExactDoc" class="select2" data-placeholder="Select Doctor Name" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                                asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="BulkEaxctAppointfield">
+                                    <div class="col-sm-4 col-md-4">
+                                        <p>Date <span class="required"> * </span></p>
+                                        <input type="text" id="BulkrecSDate" asp-for="patientAppointmentBasicDto.Date" class="datepicker text-input Bulkapp_empty" placeholder="Select Date">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+
+                                    </div>
+                                    <div class="col-sm-4 col-md-4">
+                                        <p>Time<span class="required"> * </span></p>
+                                        <input type="text" class=" time-picker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.StartTime" placeholder="Select Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.ExactTime"></span>
+                                    </div>
+                                    <div class="col-sm-4 col-md-4">
+                                        <p>Duration<span class="required"> * </span></p>
+                                        <select id="SlotDuration" asp-for="patientAppointmentBasicDto.Duration" class="select2" data-placeholder="Select Duration" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "", Value=""},
+                                                                 new SelectListItem() {Text = "5 Min", Value="5"},
+                                                                    new SelectListItem() {Text = "10 Min", Value="10"},
+                                                                    new SelectListItem() {Text = "15 Min", Value="15"},
+                                                                    new SelectListItem() {Text = "20 Min", Value="20"},
+                                                                    new SelectListItem() {Text = "25 Min", Value="25"},
+                                                                    new SelectListItem() {Text = "30 Min", Value="30"},
+                                                                    new SelectListItem() {Text = "35 Min", Value="35"},
+                                                                    new SelectListItem() {Text = "40 Min", Value="40"},
+                                                                    new SelectListItem() {Text = "45 Min", Value="45"},
+                                                                    new SelectListItem() {Text = "50 Min", Value="50"},
+                                                                    new SelectListItem() {Text = "55 Min", Value="55"},
+                                                                    new SelectListItem() {Text = "60 Min", Value="60"},
+                                                                    new SelectListItem() {Text = "65 Min", Value="65"},
+                                                                    new SelectListItem() {Text = "70 Min", Value="70"},
+                                                                    new SelectListItem() {Text = "75 Min", Value="75"},
+                                                                    new SelectListItem() {Text = "80 Min", Value="80"},
+                                                                    new SelectListItem() {Text = "85 Min", Value="85"},
+                                                                    new SelectListItem() {Text = "90 Min", Value="90"},
+                                                                    new SelectListItem() {Text = "100 Min", Value="100"},
+                                                                    new SelectListItem() {Text = "105 Min", Value="105"},
+                                                                    new SelectListItem() {Text = "110 Min", Value="110"},
+                                                                    new SelectListItem() {Text = "115 Min", Value="115"},
+                                                                    new SelectListItem() {Text = "120 Min", Value="120"}
+                                         })">
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="BulkExactFormButton">
+                                    <div class="col-sm-12">
+                                        <a href="javascript:void(0);" class="right modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                        <button type="submit" class="right modal-action btn mt-2 add-btn right">Save</button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                            <form asp-action="BulkBtwAppointment" asp-controller="Appointment" method="post" id="BulkInBetweenAppointment" style="display:none;">
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.AppointmentId" />
+                                <input hidden="hidden" asp-for="patientAppointmentBasicDto.PatientInfoId" />
+                                @*<input hidden="hidden" id="BtwproviderInfo_Id" asp-for="patientAppointmentBasicDto.ProviderInfoId" />*@
+                                <input asp-for="patientAppointmentBasicDto.AppointmentType" value="In Between" hidden="hidden" />
+                                <div class="row" id="InBtwSelect">
+                                    <div class="col-sm-12 col-md-6">
+                                        <p>Patient Name <span class="required"> * </span></p>
+                                        <select multiple="multiple" class="select2" id="BtwExact" asp-for="patientAppointmentBasicDto.PatientId" data-placeholder="Select Patient Name"
+                                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <p>Doctor Name <span class="required"> * </span></p>
+
+                                        <select id="ExactBtwDoc" class="select2" data-placeholder="Select Doctor Name" asp-for="patientAppointmentBasicDto.ProviderInfoId"
+                                                asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @*<div class="row" id="InBtwMake">
+                                        <div class="col-sm-12 col-md-6">
+
+                                            <div class="custom-control custom-checkbox mt-3">
+                                                <input type="checkbox" class="custom-control-input" id="BulkBRecCheck" onclick="BulkBRecurrence()">
+                                                <label class="custom-control-label" for="BulkBRecCheck">Make it recursive</label>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="row" id="BulkInBtwField">
+                                    <div class="col-sm-6 col-md-3">
+                                        <p>Date <span class="required"> * </span></p>
+                                        <input type="text" class="datepicker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.Date" placeholder="Select Date">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.Date"></span>
+
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <p>Start Time <span class="required"> * </span></p>
+                                        <input type="text" asp-for="patientAppointmentBasicDto.StartTime" class="time-picker text-input Bulkapp_empty" placeholder="Select Start Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.StartTime"></span>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <p>End Time <span class="required"> * </span></p>
+                                        <input type="text" class="time-picker text-input Bulkapp_empty" asp-for="patientAppointmentBasicDto.EndTime" placeholder="Select End Time">
+                                        <span class="required" asp-validation-for="patientAppointmentBasicDto.EndTime"></span>
+
+                                    </div>
+                                    <div class="col-sm-6 col-md-3">
+                                        <p>Duration<span class="required"> * </span></p>
+                                        <select class="select2" id="betweenSelec2" asp-for="patientAppointmentBasicDto.Duration" data-placeholder="Select Duration" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "", Value=""},
+                                                                 new SelectListItem() {Text = "5 Min", Value="5"},
+                                                                    new SelectListItem() {Text = "10 Min", Value="10"},
+                                                                    new SelectListItem() {Text = "15 Min", Value="15"},
+                                                                    new SelectListItem() {Text = "20 Min", Value="20"},
+                                                                    new SelectListItem() {Text = "25 Min", Value="25"},
+                                                                    new SelectListItem() {Text = "30 Min", Value="30"},
+                                                                    new SelectListItem() {Text = "35 Min", Value="35"},
+                                                                    new SelectListItem() {Text = "40 Min", Value="40"},
+                                                                    new SelectListItem() {Text = "45 Min", Value="45"},
+                                                                    new SelectListItem() {Text = "50 Min", Value="50"},
+                                                                    new SelectListItem() {Text = "55 Min", Value="55"},
+                                                                    new SelectListItem() {Text = "60 Min", Value="60"},
+                                                                    new SelectListItem() {Text = "65 Min", Value="65"},
+                                                                    new SelectListItem() {Text = "70 Min", Value="70"},
+                                                                    new SelectListItem() {Text = "75 Min", Value="75"},
+                                                                    new SelectListItem() {Text = "80 Min", Value="80"},
+                                                                    new SelectListItem() {Text = "85 Min", Value="85"},
+                                                                    new SelectListItem() {Text = "90 Min", Value="90"},
+                                                                    new SelectListItem() {Text = "100 Min", Value="100"},
+                                                                    new SelectListItem() {Text = "105 Min", Value="105"},
+                                                                    new SelectListItem() {Text = "110 Min", Value="110"},
+                                                                    new SelectListItem() {Text = "115 Min", Value="115"},
+                                                                    new SelectListItem() {Text = "120 Min", Value="120"}
+                                         })">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="BulkBtwFormButton">
+                                    <div class="col-sm-12">
+                                        <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                                        <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div id="AppointmentModalSlots" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+
+                <h4>Add Appointment</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <select id="selectAppType" class="select2" data-placeholder="Select Appointment Type">
+                            <option value="" selected disabled></option>
+                            <option value="1">Inpatient Appointment (IPP)</option>
+                            <option value="2">Operation Theater (OT)</option>
+                            <option value="3">Out-patient Deparatment(OPD)</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <section class="ipp">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <select id="seleciona" class="select2" data-placeholder="Search By Patient Name"
+                                    asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-6">
+
+                            <p>Date <span class="required"> * </span></p>
+                            <input type="text" id="SelectDate" class="text-input" placeholder="Select Date">
+
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <p>Provider Name <span class="required"> * </span></p>
+                            <div id="DoctorNameOnDate">
+                                <partial name="~/Views/Appointment/PartialViews/_DoctorNameOnDate.cshtml" />
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div id="AvailableSlots" style="display:none">
+
+                        <partial name="~/Views/Appointment/PartialViews/_ProviderAvailableSlots.cshtml" />
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m12">
+                            <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                </section>
+                <section class="ot">
+                    <form asp-action="OTAppointmentAdd" asp-controller="Appointment" method="post" data-ajax="true" data-ajax-success="onExactSuccess(data)">
+                        <input hidden="hidden" asp-for="patientAppointmentBasicDto.DepartmentType" id="DepartmentType" />
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <p>Patient Name</p>
+                                <select class="select2" asp-for="patientAppointmentBasicDto.PatientInfoId" data-placeholder="Search By Patient Name"
+                                        asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <p>Doctor Name</p>
+                                <select data-placeholder="Select Provider Name" asp-for="patientAppointmentBasicDto.ProviderInfoId" class="select2"
+                                        asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <p>Date <span class="required"> * </span></p>
+                                <input type="text" id="OTSelectDate" asp-for="patientAppointmentBasicDto.Date" class="text-input" placeholder="Select Date">
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <p>Start Time <span class="required"> * </span></p>
+                                <input type="text" class="text-input time-picker" asp-for="patientAppointmentBasicDto.StartTime" placeholder="Select Start Time">
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <p>End Time <span class="required"> * </span></p>
+                                <input type="text" id="" class="text-input time-picker" asp-for="patientAppointmentBasicDto.EndTime" placeholder="Select Start End">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12">
+                                <button type="submit" class="btn mt-2 add-btn right">Save</button>
+                                <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate mr-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <div class="row cancel-btn">
+                    <div class="col-md-12 col-lg-12">
+                        <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

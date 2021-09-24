@@ -1,0 +1,464 @@
+﻿@model MediClinic.Models.SurgeryCenterViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs customtab" role="tablist">
+    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home2" role="tab"> <span class="hidden-xs-down">Patient Profile</span></a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile2" role="tab"><span class="hidden-xs-down">Procedures</span></a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages2" role="tab"> <span class="hidden-xs-down">Images</span></a> </li>
+    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#test" role="tab"> <span class="hidden-xs-down">Reports/Notes</span></a> </li>
+
+</ul>
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="home2" role="tabpanel">
+        <div class="row center">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xl-2">
+                @if (Model.patientCompleteInfo.PaitentImage != null)
+                {
+                    <img src="~/images/@Model.patientCompleteInfo.PaitentImage" alt="patient" class=" patient-image circle" style="border:2px solid @Model.patientCompleteInfo.Color">
+                }
+                else
+                {
+                    <div class="circle FLName" style="border:2px solid @Model.patientCompleteInfo.Color">
+                        <h3 class="color-blue">@Model.patientCompleteInfo.FirstNameLetter@Model.patientCompleteInfo.LastNameLetter</h3>
+                    </div>
+                    @*<img src="~/app-assets/images/user/male-user.png" alt="patient" class=" patient-image circle" style="border:2px solid @Model.patientCompleteInfo.Color">*@
+
+                }
+                @*<div class="center" style="width:100px;height:20px;background-color:@Model.patientCompleteInfo.Color;margin-left:24px;border:1px solid #5a5a5a;">
+                        <span style=""></span>
+                    </div>*@
+            </div>
+
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xl-10 patientdataheight">
+                <div class="row">
+                    <div class="col-4 col-sm-3 col-md-3">
+                        <p class=" mb-0">Patient ID</p>
+                        <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PatientInfoId </p>
+                    </div>
+                  
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Name</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.FirstName  @Model.patientCompleteInfo.LastName</p>
+                            </div>
+                       
+                          
+                       
+                          
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class="mb-0">Birthday</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")</p>
+                            </div>
+                     
+                      
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class="mb-0">Address</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.AddressLine1</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Gender</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.Gender</p>
+                            </div>
+                    
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class="mb-0">Mobile Phone</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.MobilePhone</p>
+                                @if (!Model.patientCompleteInfo.MobilePhone.Equals("N/A"))
+                                {
+                                    <input type="hidden" id="phoneNo" value="@Model.patientCompleteInfo.MobilePhone" />
+                                }
+                            </div>
+                       
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class="mb-0">Home Phone</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.HomePhone</p>
+
+                            </div>
+                       
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Emergency Phone</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.EmergencyPhone</p>
+                            </div>
+                        
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class="mb-0">Language</p>
+                                <p class="mt-0 black-text font-weight-600" style="word-wrap:break-word;">@Model.patientCompleteInfo.LanguageName</p>
+                            </div>
+                        
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Case Type</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CaseTypeName </p>
+                            </div>
+                      
+                        <input type="hidden" id="PatientEmail" value="@Model.patientCompleteInfo.Email" />
+                        
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Claim  No</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PatientClaimID</p>
+                            </div>
+                        
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Policy Number</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PolicyNumber</p>
+                            </div>
+                    
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">P.I. Attorney</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.AttorneyName</p>
+                            </div>
+                      
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Paralegal</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.LeadingParalegalName</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Collection Attorney</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CollectionAttorney</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Referral Name</p>
+                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.ReferralName</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Current Location In facility</p>
+                                <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                            </div>
+                      
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">I.M.E</p>
+                                <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                            </div>
+                      
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">E.U.O</p>
+                                <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Primary Dr</p>
+                                <p class=" mt-0 font-weight-600 black-text">John SMith MD</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Dispatch</p>
+                                <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Assign Transport</p>
+                                <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                            </div>
+                       
+                            <div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0">Route Options</p>
+                                <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                            </div>
+                     
+                            @*<div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0" style="color: #f04f85 !important;">Last Visit</p>
+                                <p class="mt-0 font-weight-600 black-text">  1/22/2018</p>
+                            </div>*@
+                      
+                            <div class="col-4 col-sm-3 col-md-3">
+
+                                <p class=" mb-0" style="color: #f04f85 !important;">Date Created</p>
+                                <p class="mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.CreatedDate.ToString("MM/dd/yyyy") </p>
+                            </div>
+                        
+                            @*<div class="col-4 col-sm-3 col-md-3">
+                                <p class=" mb-0" style="color: #f04f85 !important;">Last Exam</p>
+                                <p class="mt-0 font-weight-600 black-text">  1/22/2018</p>
+                            </div>*@
+                   
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive" id="Proceduretable">
+                    <partial name="~/Views/SurgeryCenter/_SurgeryProcedureList.cshtml" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <button class="add-btn btn right mt-1" id="AddProcedure_btn">Add New Procedure</button>
+            </div>
+        </div>
+        <section Id="ProcedureSection" style="display:none">
+            <div class="row">
+                <form class="col-sm-12" asp-action="SurgeryProcedure" asp-controller="SurgeryCenter" method="post" data-ajax="true" data-ajax-success="onExactSuccess(data)">
+                    <input type="text" hidden="hidden" asp-for="Procedures.PatientId" value="@Model.patientCompleteInfo.PatientInfoId"/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                Name
+                            </p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" value="@Model.patientCompleteInfo.FirstName  @Model.patientCompleteInfo.LastName" disabled="disabled" />
+                            </div>
+
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>DOB</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" value="@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")" disabled="disabled">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6 ">
+                            <p>
+                                Gender
+                            </p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" value="@Model.patientCompleteInfo.Gender" disabled="disabled">
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 ">
+                            <p>
+                                Procedure Type
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" asp-for="Procedures.ProcedureType" data-placeholder="Select Procedure Type" style="width: 100%;">
+                                    <option value="" disabled selected></option>
+
+                                    <option value="Knee Surgery">Knee Surgery</option>
+                                    <option value="PMNR">PMNR</option>
+                                    <option value="ENG">ENG</option>
+
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6 ">
+                            <p>
+                                Date Of Procedure
+                            </p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input datepicker" placeholder="Select Date" asp-for="Procedures.DateofProcedure">
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 ">
+                            <p>
+                                Scan Image
+                            </p>
+
+                            <div class="input-field">
+                                <input type="file" asp-for="Procedures.ScanImage" id="input-file-now-custom-2" class="dropify" data-height="100" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6 ">
+                            <p>
+                                Scan Report
+                            </p>
+
+                            <div class="input-field">
+                                <input type="file" asp-for="Procedures.ScanImportant" id="input-file-now-custom-2" class="dropify" data-height="100" />
+
+                            </div>
+
+                        </div>
+                        
+
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="center">
+                                <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+    </div>
+    <div class="tab-pane  p-20" id="messages2" role="tabpanel">
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive" id="ImagingTable">
+                    <partial name="~/Views/SurgeryCenter/_SurgeryImagingList.cshtml" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <button class="add-btn btn right mt-1" id="AddImaging_btn">Add New Imaging</button>
+            </div>
+        </div>
+        <section id="imagingSection" style="display:none;">
+            <div class="row">
+                <form class="col-sm-12" asp-action="SurgeryImage" asp-controller="SurgeryCenter" method="post" data-ajax="true" data-ajax-success="onExactSuccessImage(data)">
+                    <input type="hidden" class="text-input" asp-for="imagingDto.ImagingId" placeholder="id">
+                    <input type="hidden" class="text-input" asp-for="imagingDto.PatientId" value="@Model.patientCompleteInfo.PatientInfoId">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                Name
+                            </p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" value="@Model.patientCompleteInfo.FirstName  @Model.patientCompleteInfo.LastName" disabled="disabled" />
+                            </div>
+
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>DOB</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" value="@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")" disabled="disabled">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6">
+                            <p>Date of Imaging</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input datepicker" placeholder="select date" asp-for="imagingDto.DateOfImaging">
+                            </div>
+                        </div>
+                        <div class=" col-md-6">
+                            <p>Time of Imaging</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input time-picker" placeholder="select time" asp-for="imagingDto.TimmingOfImaging">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <p>
+                                Reported By
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" data-placeholder="Select Reported By" style="width: 100%;" asp-for="imagingDto.ReportedBy">
+                                    <option selected disabled value=""></option>
+                                    <option value="AK">Bronx NY</option>
+                                    <option value="HI">New Jersy</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ">
+                            <p>
+                                Type of Image
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" data-placeholder="Select Type of Image" style="width: 100%;" asp-for="imagingDto.TypeOfImage">
+                                    <option value="" selected disabled></option>
+
+                                    <option value="AK">Smart Guy, Esq</option>
+                                    <option value="HI">Rosy</option>
+
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <p>
+                                Report Status
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" data-placeholder="Select Report Status" style="width: 100%;" asp-for="imagingDto.ReportStatus">
+                                    <option value="" selected disabled></option>
+                                    <option value="AK">Yes</option>
+                                    <option value="AK">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ">
+                            <p>
+                                Image Film
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" data-placeholder="Select Image Film" style="width: 100%;" asp-for="imagingDto.ImageFilm">
+                                    <option disabled selected value="">Select Image Film</option>
+                                    <option value="AK">N/A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <p>
+                                Diagnosis
+                            </p>
+
+                            <div class="input-field">
+                                <select class="select2 form-control  text-input" data-placeholder="Select Diagnosis" style="width: 100%;" asp-for="imagingDto.Diagnosis">
+                                    <option disabled selected value=""></option>
+                                    <option value="AK">No show</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="text-right">
+                                <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+    <div class="tab-pane  p-20" id="test" role="tabpanel">
+        <p>Added</p>
+
+    </div>
+
+</div>

@@ -1,0 +1,453 @@
+﻿
+
+@{
+    ViewData["Title"] = "AddNewContractors";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+
+    <style>
+
+        .container {
+            padding: 0 20px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .m-signature-pad {
+            position: relative;
+            font-size: 10px;
+            width: 100%;
+            height: 270px;
+            border: 1px solid #e8e8e8;
+            background-color: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+            border-radius: 4px;
+        }
+
+        .m-signature-pad--body {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 20px;
+            bottom: 80px;
+            border: 1px solid #f4f4f4;
+        }
+
+            .m-signature-pad--body canvas {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 4px;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+            }
+
+        .m-signature-pad--footer {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 5px;
+            height: 65px;
+        }
+
+            .m-signature-pad--footer .description {
+                color: #C3C3C3;
+                text-align: center;
+                font-size: 1.2em;
+                margin-bottom: 3px;
+            }
+
+        .btn-save {
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: .5px;
+            color: #fff;
+            background-color: #03a9f4;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.dropify').dropify();
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Sub Contractor</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("Subcontractors","provider")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12  ">
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Company/Entity Name</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Entity Name">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Reminder by
+                        </p>
+                        <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>First Name</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter First Name">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Middle Name</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Middle Name">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Last Name</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Last Name">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Speciality
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Speciality</option>
+
+                                <option value="AK">Dr Aibolt</option>
+                                <option value="HI">Dr Jack</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Title
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Title</option>
+
+                                <option value="AK">Dr Aibolt</option>
+                                <option value="HI">Dr Jack</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Suffix
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Suffix</option>
+
+                                <option value="AK">Dr Aibolt</option>
+                                <option value="HI">Dr Jack</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>License No</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter License No">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>NPI No</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter NPI No">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Tax ID</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Tax ID">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Assign Room No</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Room No">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Rent Fee If Any</p>
+                        <div class="input-field">
+                            <input class="text-input" type="text" placeholder="Enter Rent">
+
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Rent Type</p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Rent Type</option>
+                                <option value="AK">Dr Aibolt</option>
+                                <option value="HI">Dr Jack</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Scanned Documnet</p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Enter Rent Type</option>
+                                <option value="AK">Monthly</option>
+                                <option value="HI">Daily</option>
+                                <option value="HI">Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Electronic Signature Password</p>
+
+                        <div class="input-field">
+                            <input type="password" class="text-input" placeholder="Enter Password">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Confirm Password</p>
+
+                        <div class="input-field">
+                            <input type="password" class="text-input" placeholder="Enter Password">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col">
+                        <p>Write Signature Or Upload Signature Image</p>
+                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2 ml-0">
+                            <div class="m-signature-pad--body">
+                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                            </div>
+                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                <div class="description">Save Your signature before submit the form</div>
+                                <button type="button" class="btn btn-sm uploadImageFromSignatureBox">
+                                    Upload Image
+                                </button>
+                                <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                    Clear
+                                </button>
+                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                    Save Signature
+                                </button>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Phone Number</p>
+
+                        <div class="input-field">
+                            <input type="number" class="text-input" placeholder="Enter Phone Number">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Mobile Number</p>
+                        <div class="input-field">
+                            <input type="number" class="text-input" placeholder="Enter Mobile Number">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Fax Number</p>
+
+                        <div class="input-field">
+                            <input type="number" class="text-input" placeholder="Enter Fax Number">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Email</p>
+                        <div class="input-field">
+                            <input type="email" class="text-input" placeholder="Enter Email">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 1</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Address Line 1">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 2</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Address Line 2">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Address Line 3</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Address Line 3">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>city</p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select City</option>
+                                <option value="AK">Monthly</option>
+                                <option value="HI">Daily</option>
+                                <option value="HI">Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>State</p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select State</option>
+                                <option value="AK">Monthly</option>
+                                <option value="HI">Daily</option>
+                                <option value="HI">Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Zip</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Zip Code">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>User ID</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter User ID">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Password</p>
+
+                        <div class="input-field">
+                            <input type="password" class="text-input" placeholder="Enter Password">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Status</p>
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Status</option>
+                                <option value="AK">Monthly</option>
+                                <option value="HI">Daily</option>
+                                <option value="HI">Weekly</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+

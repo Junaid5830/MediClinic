@@ -1,0 +1,466 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="tab-pane" id="test9" role="tabpanel">
+    <div class="card">
+        <div class="card-content">
+           
+                <h5 class="color-blue">P.I. Attorney</h5>
+                <form asp-action="PatientPersonalInjury" asp-controller="PatientSideElite" id="patientPersonalInjuryForm" method="post">
+                    <input class="text-input input-styling" asp-for="patientPersonalInjury.UserId" hidden="hidden">
+                    <input hidden="hidden" asp-for="patientPersonalInjury.PersonalInjuryId" />
+                    <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+                    <div class="row">
+                        <div class="col">
+                            <div class="input-field">
+                                <div class="row">
+                                    <div class="col-sm-4  col-4 col-lg-3 col-xl-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio11" class="custom-control-input patientPITxtField" asp-for="patientPersonalInjury.AttorneyFields" value="From"checked>
+                                            <label class="custom-control-label" for="customRadio11">From Attorney</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4  col-4 col-lg-3 col-xl-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio12" class="custom-control-input patientPITxtField" asp-for="patientPersonalInjury.AttorneyFields" value="To">
+                                            <label class="custom-control-label" for="customRadio12">To Attorney</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-4 col-lg-3 col-xl-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="customRadio13" class="custom-control-input patientPITxtField" asp-for="patientPersonalInjury.AttorneyFields" value="OF">
+                                            <label class="custom-control-label" for="customRadio13">Of Attorney</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                            <p>
+                                Firm Name<span class="required"> * </span>
+
+                            </p>
+
+                            <div class="input-field piSelect_tab">
+                                <select id="PIFirmName" class="select2 FirmNameCombo genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientPersonalInjury.FirmId" data-placeholder="Select Firm Name"
+                                        asp-items="@(new SelectList(Model.legalInfoFirmNameList,"FirmId","FirmName"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                                <p class="required" id="PIFirmName_err"></p>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right21')"><i class="ti ti-plus"></i></a>
+
+                        </div>
+                        <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                            <p>
+                                Attorney Name
+
+                            </p>
+
+                            <div class="input-field piSelect_tab">
+                                <select id="PI_AttoneyName" class="select2 attorneyNameCombo genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientPersonalInjury.AttorneyID" data-placeholder="Select Attorney Name"
+                                        asp-items="@(new SelectList(Model.legalInfoAttorneyNameList,"AttorneyId","AttorneyName"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right22')"><i class="ti ti-plus"></i></a>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                            <p>
+                                Leading Attorney Name
+                            </p>
+
+                            <div class="input-field piSelect_tab">
+                               
+                                <select id="PI_leadingAttorneyName" data-placeholder="Select Attorney Name" class="select2 leadingAttorneyName genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientPersonalInjury.LeadingAttorneyId"
+                                        asp-items="@(new SelectList(Model.legalInfoLeadingAttorneysList,"LeadingAttorneyId","LeadingAttorneyName"))">
+                                    <option value="" selected disabled></option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right23')"><i class="ti ti-plus"></i></a>
+
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                Leading Attorney Phone
+                            </p>
+
+                            <div class="input-field numberModalDiv phoneDiv">
+                                <input class="text-input input-styling phoneno pi_tab patientPITxtField" asp-for="patientPersonalInjury.LeadingAttorneyPhone" type="text" placeholder="Enter Address Line 2">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <p>
+                                Leading Attorney Extension
+                            </p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling pi_tab patientPITxtField" asp-for="patientPersonalInjury.LeadingAttorneyExtension" type="text" placeholder="Enter Address Line 1">
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6 ">
+                            <p>
+                                Leading Attorney Fax
+                            </p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling fax pi_tab patientPITxtField" asp-for="patientPersonalInjury.LeadingAttorneyFax" type="text" placeholder="Enter Address Line 2">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                            <p>
+                                Leading Attorney Email
+                            </p>
+
+                            <div class="input-field importEmailToModal EmailDiv">
+                                <input class="text-input input-styling pi_tab patientPITxtField" onkeypress="return AvoidSpace(event)" asp-for="patientPersonalInjury.LeadingAttorneyEmail" type="text" placeholder="Enter Address Line 1">
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class=" col-md-6 ">
+                            <p>Address Line 1<span class="required"> * </span></p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling PIAddressLine1 pi_tab patientPITxtField" asp-for="patientPersonalInjury.AddressLine1" type="text" placeholder="Enter Address Line 1">
+                                <span class="required" asp-validation-for="patientPersonalInjury.AddressLine1"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Address Line 2</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling pi_tab patientPITxtField" asp-for="patientPersonalInjury.AddressLine2" type="text" placeholder="Enter Address Line 2">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6">
+                            <p>Address Line 3</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling pi_tab patientPITxtField" asp-for="patientPersonalInjury.AddressLine3" type="text" placeholder="Enter Address Line 3">
+                            </div>
+                        </div>
+                        <div class=" col-md-3 ">
+                            <p>Zip Code <span class="required"> * </span></p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling PIZipCode pi_tab patientPITxtField" maxlength="5" id="pi_Zip" onkeypress="return AvoidSpace(event)" asp-for="patientPersonalInjury.Zip" type="text" placeholder="Enter ZIP Code">
+                                <span class="required" asp-validation-for="patientPersonalInjury.Zip"></span>
+                                <span class="required" id="err_piZip"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-3 ">
+                            <p>City</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling PICity city patientPITxtField" id="pi_city" asp-for="patientPersonalInjury.City" type="text" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-3 ">
+                            <p>State</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling state PIState state patientPITxtField" id="pi_state" asp-for="patientPersonalInjury.State" type="text" readonly>
+                            </div>
+                        </div>
+                        <div class=" col-md-3 ">
+                            <p>Country</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling PICountry country patientPITxtField" id="pi_country" type="text" asp-for="patientPersonalInjury.Country" readonly>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Phone Number</p>
+
+                            <div class="input-field numberModalDiv phoneDiv">
+                                <input class="text-input input-styling phoneno pi_tab patientPITxtField" type="text" id="legalInfo_phone" asp-for="patientPersonalInjury.PhoneNumber" placeholder="Enter Phone Number">
+                                <span class="required" id="errmsg_legalInfo_phone"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6 ">
+                            <p>Fax</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling fax pi_tab patientPITxtField" id="legalInfo_fax" type="text" asp-for="patientPersonalInjury.Fax" placeholder="Enter Fax Number">
+                                <span class="required" id="errmsg_legalInfo_fax"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Email<span class="required"> * </span></p>
+
+                            <div class="input-field importEmailToModal EmailDiv">
+                                <input class="text-input input-styling PIEmail pi_tab patientPITxtField" onkeypress="return AvoidSpace(event)" type="email" asp-for="patientPersonalInjury.Email" placeholder="Enter Email Address">
+                                <span class="required" asp-validation-for="patientPersonalInjury.Email"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6 ">
+                            <p>Website</p>
+
+                            <div class="input-field webUrlDiv">
+                                <input class="text-input input-styling PiwebPageUrl pi_tab patientPITxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientPersonalInjury.Website" placeholder="Enter Website">
+                                <span class="required" id="Piweb_err"></span>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                            <p>Leading Paralegal Name Or Initials<span class="required"> * </span></p>
+                            <div class="input-field piSelect_tab">
+                                <select id="PI_leadingParalegalName" class="select2 leadingParalegalNameCombo genericClassForDD PIDropDListBeforeEditDisabled" data-placeholder="Select Paralegal Name" asp-for="patientPersonalInjury.LeadingParalegalId"
+                                        asp-items="@(new SelectList(Model.LegalInfoLeadingParalegallist,"LeadingParalegalId","LeadingParalegalName"))">
+                                    <option selected disabled value=""></option>
+                                </select>
+                                <p class="required" id="PileadingParalegalName_err"></p>
+                            </div>
+                            @*<div class="input-field piSelect_tab">
+            <select id="PI_leadingParalegalName" data-placeholder="Select Leading Paralegal Name" class="Select2 leadingParalegalNameCombo genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientPersonalInjury.LeadingParalegalId"
+                    asp-items="@(new SelectList(Model.LegalInfoLeadingParalegallist,"LeadingParalegalId","LeadingParalegalName"))">
+                <option selected disabled value=""></option>
+            </select>
+            <p class="required" id="PileadingParalegalName_err"></p>
+        </div>*@
+                        </div>
+                        <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right24')"><i class="ti ti-plus"></i></a>
+
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Leading Paralegal Phone<span class="required"> * </span></p>
+
+                            <div class="input-field numberModalDiv phoneDiv">
+                                <input class="text-input input-styling phoneno pi_tab patientPITxtField" type="text" id="LeadingParalegalPhone" asp-for="patientPersonalInjury.LeadingParalegalPhone" placeholder="Enter Leading Paralegal Phone">
+                                <span class="required" asp-validation-for="patientPersonalInjury.LeadingParalegalPhone"></span>
+                                <span class="required" id="errmsg_LeadingParalegalPhone"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6 ">
+                            <p>Leading Paralegal Extension</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling pi_tab patientPITxtField" type="text" asp-for="patientPersonalInjury.LeadingParalegalExtension" placeholder="Enter Leading Paralegal Extension">
+                            </div>
+                        </div>
+
+                        <div class=" col-md-6 ">
+                            <p>Leading Paralegal Email<span class="required"> * </span></p>
+
+                            <div class="input-field importEmailToModal EmailDiv">
+                                <input class="text-input input-styling pi_tab patientPITxtField" onkeypress="return AvoidSpace(event)" type="email" asp-for="patientPersonalInjury.LeadingParalegalEmail" placeholder="Enter Leading Paralegal Email">
+                                <span class="required" asp-validation-for="patientPersonalInjury.LeadingParalegalEmail"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6">
+                            <p>Leading Paralegal Fax</p>
+
+                            <div class="input-field">
+                                <input class="text-input input-styling fax pi_tab patientPITxtField" id="LeadingParalegalfax" type="text" asp-for="patientPersonalInjury.LeadingParalegalFax" placeholder="Enter Leading Paralegal Fax">
+                                <span class="required" id="errmsg_LeadingParalegalfax"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                            <p>Legal status<span class="required"> * </span></p>
+
+                            <div class="input-field piSelect_tab">
+                             
+                                <select id="PI_legalStatus" data-placeholder="Select Legal Status" class="select2 PatientLegalStatusCombo genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientPersonalInjury.LegalStatus"
+                                        asp-items="@(new SelectList(Model.legalInfoLegalStatusList,"legalStatusId","LegalStatus"))">
+                                    <option value="" selected></option>
+                                </select>
+                                <p class="required" id="pilegal_err"></p>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right25')"><i class="ti ti-plus"></i></a>
+
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col s12 m12">
+                            <div class="center">
+                                <button type="submit" id="btnPatientPI" class="btn add-btn">Save</button>
+
+                                @if (ViewBag.Action == "Update")
+                                {
+                                    <button type="button" data-val="PIForm" id="piEdit_Btn" class="btn Recreate patientEditBtn">Edit</button>
+                                    <button type="button" data-val="PIForm" id="piCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                }
+                                else
+                                {
+                                    @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                    <a href="javascript:void(0);" data-val="NewForm" id="piCancel_btn" onclick="emptyPatientPIFields();" class="Recreate btn">Cancel</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        
+    </div>
+
+</div>
+
+<div class="right-sidebar slide-out-right21">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="FirmName" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreatePatientInfoLegalStatus(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Firm Name</h6>
+                        <input class="text-input Firm_name addlegalStatus" asp-for="LegalInfoFirmNameBasicDto.FirmName" type="text" placeholder="Enter Firm Name" />
+                        <span class="required" asp-validation-for="LegalInfoFirmNameBasicDto.FirmName"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right22">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="AttorneyName" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreateAttorneyName(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Attorney Name</h6>
+                        <input class="text-input attorney_name addlegalStatus" asp-for="LegalInfoAttorneyNameBasicDto.AttorneyName" type="text" placeholder="Enter Attorney Name" />
+                        <span class="required" asp-validation-for="LegalInfoAttorneyNameBasicDto.AttorneyName"></span>
+                    </div>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right23">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="PatientLeadingAttorney" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreateLeadingAttorney(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Add New Leading Attorney Name</h5>
+                        <input class="text-input leadingAttoney_name addlegalStatus" asp-for="legalInfoLeadingAttorneyBasicDto.LeadingAttorneyName" type="text" placeholder="Enter Leading Attorney Name " />
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right24">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="LeadingParalegal" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreateLeadingParalegal(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Add New Leading Paralegal  Name</h5>
+                        <input class="text-input leadingParalegal_name addlegalStatus" asp-for="LegalInfoLeadingParalegalBasicDto.LeadingParalegalName" type="text" placeholder="Enter Leading Paralegal Name " />
+                        <span class="required" asp-validation-for="LegalInfoLeadingParalegalBasicDto.LeadingParalegalName"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right25">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="LegalInfoLegalStatus" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreatePILegalInfo(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Legal Status<span class="required"> * </span></h6>
+                        <input class="text-input pi_Legal adLegalStatus" asp-for="LegalInfoLegalStatus.LegalStatus" type="text" placeholder="Enter Legal Status " />
+                        <span class="required" asp-validation-for="LegalInfoLegalStatus.LegalStatus"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

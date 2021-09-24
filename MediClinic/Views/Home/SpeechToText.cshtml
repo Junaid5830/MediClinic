@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "SpeechToText";
+    Layout = null;
+}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+        debugger;
+        var speechRecognition = window.webkitSpeechRecognition;
+        var recognition = new speechRecognition();
+
+        var textbox = $("#textbox");
+        var instructions = $("#instructions");
+
+        var content = '';
+        recognition.continuous = true;
+
+        recognition.onstart = function () {
+            $("#instructions").html("Voice Recogintion is on");
+        }
+
+        recognition.onspeechend = function () {
+             $("#instructions").html("No activity");
+        }
+
+        recognition.onerror = function () {
+             $("#instructions").html("Try again");
+        }
+
+        recognition.onresult = function (event) {
+            debugger;
+            var current = event.resultIndex;
+
+            var transcript = event.results[current][0].transcript;
+
+            content += transcript;
+            $("#textbox").val(content);
+        }
+
+        function openConnection() {
+            debugger;
+            if (content.length) {
+                content += '';
+            }
+            recognition.start();
+        }
+
+
+</script>
+
+
+<h1>Speech To Text</h1>
+
+<div class="form-group">
+    <div class="col-md-6">
+        <textarea rows="6" cols="6" id="textbox" class="form-control"></textarea>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-6">
+        <button class="btn btn-danger btn-block" id="start-btn" onclick="openConnection();">Start</button>
+    </div>
+
+    <p id="instructions">Press the start button</p>
+</div>
+
+

@@ -1,0 +1,49 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@{
+    var patientId = ViewContext.RouteData.Values["id"];
+}
+
+@if (Model.patientMedicalProblemsList != null && Model.patientMedicalProblemsList.Count() > 0)
+{
+    <table class="table centered highlight ">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Type</th>
+                <th>Date/Year</th>
+                <th>Current Status</th>
+                <th>Report/Documents</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var item in Model.patientMedicalProblemsList)
+            {
+
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@item.DieaseName</td>
+                    <td>@item.DateYear.Value.ToString("MM/dd/yyyy")</td>
+                    <td>@item.CurrentStatus</td>
+                    <td>@item.DocumentReport</td>
+
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMedicalProblems(@item.MedicalProblemId);"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMedicalProblems(@item.MedicalProblemId);"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+
+            }
+        </tbody>
+
+    </table>
+}
+

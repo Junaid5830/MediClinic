@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewData["Title"] = "I.M.E";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            $("#Imelist-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }] });
+
+        });
+    </script>
+
+}
+@section styles{
+
+    <style>
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .margin-top-8 {
+            margin-top: 0.8%;
+        }
+
+        th {
+            padding: 5px 0px !important;
+            text-transform: uppercase;
+        }
+    </style>
+}
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m3 l3">
+                <h5 class="breadcrumbs-title color-blue">I.M.E</h5>
+            </div>
+            <div class="col s9 m5 l5 display-block">
+                <div class="header-search-wrapper display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" name="Search" placeholder="Search">
+                    <button class="btn ml-3 search-btn">
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <div class="col s12 m4 l4">
+                <a href="@Url.Action("PatientHippaReleaseEdit", "Home")" class="btn mb-1 waves-effect waves-light add-btn float-right">
+                    <span>
+                        Add New IME
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown5' class='dropdown-content dropbody'>
+                    <li><a href="javascript:void(0);">Option 1</a></li>
+                    <li><a href="javascript:void(0);">Option 2</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col m12">
+
+            <table id="Imelist-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Date of IME</th>
+                        <th>Time of IME</th>
+                        <th>Place of IME</th>
+                        <th>Represented By </th>
+                        <th>Status of ime </th>
+                        <th>Reason </th>
+                        <th>Transcripts </th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>07/07/2020 </td>
+                        <td>11:20pm</td>
+                        <td>Bronx NY</td>
+                        <td>Smart Guy, Esq</td>
+                        <td>No Show</td>
+                        <td>YES</td>
+                        <td>No</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>07/07/2020 </td>
+                        <td>11:20pm</td>
+                        <td>Bronx NY</td>
+                        <td>Smart Guy, Esq</td>
+                        <td>No Show</td>
+                        <td>YES</td>
+                        <td>No</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>07/07/2020 </td>
+                        <td>11:20pm</td>
+                        <td>Bronx NY</td>
+                        <td>Smart Guy, Esq</td>
+                        <td>No Show</td>
+                        <td>YES</td>
+                        <td>No</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown3'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown3' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+

@@ -1,0 +1,214 @@
+﻿@model MediClinic.Models.DTOs.DMESuppliesDto.DMESupplieDto
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "DMESuppliesEdit";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+    <style>
+        .current {
+            width: 100%;
+        }
+
+        .dropify-wrapper {
+            height: 120px !important;
+        }
+
+        .input-field {
+            margin: 0 auto
+        }
+
+        label, input {
+            position: relative;
+            display: block;
+            padding-right: 76px;
+            width: 170px;
+            box-sizing: border-box;
+        }
+
+            label::after {
+                content: '.' attr(data-domain);
+                position: absolute;
+                top: 4px;
+                left: 94px;
+                font-family: arial, helvetica, sans-serif;
+                font-size: 12px;
+                display: block;
+                color: rgba(0, 0, 0, 0.6);
+                font-weight: bold;
+            }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 100% !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/Elite/_node_modules/dropify/dist/js/dropify.min.js"></script>
+    <script src="~/js/qrcode.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = getUrlParameter("DMESupplyId");
+            $("#visitId").val(id);
+            $('.patient-btns').each(function () {
+                debugger;
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+        });
+        $('.dropify').dropify();
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "MM/dd/yy"
+        });
+
+        $('.DDownDive').click(function () {
+            var itemVal = $('#comboboxItems').val();
+            var cptVal = $('#cptCodeCombo').val();
+            var icdVal = $('#icdCodeCombo').val();
+
+            if (itemVal) {
+                $('#combobox_ItemErr').html("");
+            }
+            if (cptVal) {
+                $('#combobox_CptErr').html("");
+            }
+            if (icdVal) {
+                $('#combobox_ICDErr').html("");
+            }
+
+        })
+
+        $('#DMEform').on('submit', function (e) {
+            var itemVal = $('#comboboxItems').val();
+            var cptVal = $('#cptCodeCombo').val();
+            var icdVal = $('#icdCodeCombo').val();
+            var isValid = true;
+
+            if (!itemVal) {
+                isValid = false;
+                $('#combobox_ItemErr').html("Please Select Item");
+            }
+            else {
+                $('#combobox_ItemErr').html("");
+            }
+            if (!cptVal) {
+                isValid = false;
+                $('#combobox_CptErr').html("Please Select CPT Code");
+            }
+            else {
+                $('#combobox_CptErr').html("");
+            }
+            if (!icdVal) {
+                isValid = false;
+                $('#combobox_ICDErr').html("Please Select ICD Code");
+            }
+            else {
+                $('#combobox_ICDErr').html("");
+            }
+
+
+            if (!isValid) {
+                return false;
+                e.preventDefault();
+            }
+
+        })
+        $(".combobox").select2();
+        $('.generate-qr-code').click(function () {
+            debugger;
+            $('#qrcode').empty();
+            $('#qrcode').qrcode({ width: '150', height: '150', text: $('#cptCodeCombo').val() + '' + $('#icdCodeCombo').val() + '' + $("#visitId").val() + '' + $("#dmeEquipSupId").val()  });
+            var canvas = $('#qrcode canvas');
+            console.log(canvas);
+            var img = canvas.get(0).toDataURL("image/jpeg");
+            $("#qrcode").replaceWith('<img  src="' + img + '" />');
+            $("#qr-code-image-path").val(img);
+
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            @*<div class="col-2">
+                <partial name="~/Views/Appointment/PartialViews/_VisitsButtons.cshtml" />
+            </div>*@
+            <div class="col-12">
+                <div id="breadcrumbs-wrapper">
+                    <!-- Search for small screen-->
+
+                    <div class="row">
+                        <div class="col-sm-9 col-md-6 ">
+                            <h5 class="breadcrumbs-title color-blue">DME Supplies/Equipment</h5>
+                        </div>
+
+                        <div class="col-sm-3 col-md-6 ">
+                            @*<a class="waves-effect waves-light float-right mr-2" style="margin-top: -5%;" href="@Url.Action("DMESupplies","DME",new {Id = patientInfoId })">
+                                <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                            </a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <partial name="~/Views/DME/_DMESupplies.cshtml" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

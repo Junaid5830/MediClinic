@@ -1,0 +1,158 @@
+﻿@model MediClinic.Models.TemplateViewModal
+
+@section styles{
+
+
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+
+    </script>
+}
+<style>
+    .checkbox-style{
+        margin-top: -29px !important;
+    }
+</style>
+<div class="row">
+    @if (Model.GetComponentList != null && Model.GetComponentList.Count > 0)
+    {
+        foreach (var loop in Model.GetComponentList)
+        {
+            if (loop.ComponentType == "Heading")
+            {
+    <div class="col-12 col-md-12">
+        <p>
+            @loop.ComponentLabel
+            <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="input" class="control-click"><i class="mdi mdi-pencil"></i></a>
+            <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+        </p>
+        <div class="input-field">
+            <h2   id="@loop.ComponentId" name="@loop.ComponentName" >@loop.ComponentPlaceholder</h2>
+        </div>
+    </div>
+            }
+            if (loop.ComponentType == "input")
+            {
+                <div class="col-12 col-md-6">
+                    <p>
+                        @loop.ComponentLabel
+                        <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="input" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                        <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    </p>
+
+                    <div class="input-field">
+                        <input type="text" class="text-input" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                    </div>
+                </div>
+            }
+            if (loop.ComponentType == "textarea")
+            {
+                <div class="col-12 col-md-6">
+                    <p>
+                        @loop.ComponentLabel
+                        <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="textarea" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                        <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    </p>
+                    <div class="input-field">
+                        <textarea class="text-input" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder"></textarea>
+                    </div>
+                </div>
+            }
+            if (loop.ComponentType == "select")
+            {
+                <div class="col-12 col-md-6">
+                    <p>
+                        @loop.ComponentLabel
+                        <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="select" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                        <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    </p>
+                    <div class="input-field">
+                        <select class="text-input" id="@loop.ComponentId" name="@loop.ComponentName">
+                            <option value="">-- @loop.ComponentPlaceholder --</option>
+                            @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                            {
+                                foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                                {
+                                    <option value="@loop1.Value">@loop1.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+            if (loop.ComponentType == "checkbox")
+            {
+                <div class="col-12 col-md-6">
+                    <p>
+                        @loop.ComponentLabel
+                        <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="checkbox" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                        <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    </p>
+                    <div class="input-field">
+                        <input class="text-input" type="checkbox" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                    </div>
+                </div>
+            }
+            if (loop.ComponentType == "radio")
+            {
+                @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                {
+                    <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="radio" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                    <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                    {
+                        <div class="col-12 col-md-6">
+                            <p>
+                                @loop1.Text
+                            </p>
+                            <div class="input-field">
+                                <input class="text-input" type="radio" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                            </div>
+                        </div>
+                    }
+                }
+                @*<div class="col-md-3">
+                        <p>@loop.ComponentLabel</p>
+                        <div class="input-field">
+                            <input class="text-input" type="radio" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                        </div>
+                    </div>*@
+            }
+            if (loop.ComponentType == "ICD 10")
+            {
+                <div class="col-12 col-md-6">
+                    <p>
+                        @loop.ComponentLabel
+                        <a id="@loop.Id" templateid="@loop.TemplateId" isEdit="Y" custom-type="select" class="control-click"><i class="mdi mdi-pencil"></i></a>
+                        <a onclick="DeleteControl(@loop.Id, @loop.TemplateId)"><i class="mdi mdi-delete"></i></a>
+                    </p>
+                    <div class="input-field">
+                        <select class="text-input" id="@loop.ComponentId" name="@loop.ComponentName">
+                            <option value="">-- @loop.ComponentPlaceholder --</option>
+                            @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                            {
+                                foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                                {
+                                    <option value="@loop1.Value">@loop1.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>        
+<script>
+    $(document).ready(function () {
+        $(".input-field > input[type='checkbox']").closest('.input-field').addClass('checkbox-style');
+    });
+</script>

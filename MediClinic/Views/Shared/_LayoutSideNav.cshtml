@@ -1,0 +1,192 @@
+﻿
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var UserRole = _sessionManager.GetRoleId();
+    var LoginId = ViewContext.RouteData.Values["id"];
+    var userName = _sessionManager.GetUserName();   
+}
+<aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded">
+    <div class="brand-sidebar"> 
+        <h1 class="logo-wrapper">
+            <a class="brand-logo brand-logo2 darken-1" href="@Url.Action("Index","Home", new {Id = ProviderInfoId })"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a>
+            <a class="navbar-toggler" href="javascript:void(0);"><i class="material-icons sideBarCollapseIcon">subject</i></a>
+        </h1>
+    </div>
+    <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+
+        <li class="bold" id="@ViewBag.patientlist">
+            <a class="waves-effect waves-cyan nav-dropdown-trigger" data-target='nav-dropdown' href="@Url.Action("patientlist","PatientSide", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/patients.png"></i><span class="menu-title" data-i18n="">Patients</span> </a>
+            <ul id='nav-dropdown' class='dropdown-content'>
+                <li><a href="@Url.Action("PatientList","PatientSide" , new {Id = ProviderInfoId })"><i class="material-icons dropdown-circle">radio_button_unchecked</i><span>Patients List</span></a></li>
+                <li><a href="@Url.Action("PatientInfo","PatientSide")"><i class="material-icons dropdown-circle">radio_button_unchecked</i><span>Add New Patient</span></a></li>
+
+            </ul>
+
+        </li>
+        <li class="bold" id="@ViewBag.DoctorList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ProviderList","Provider", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/provider.png"></i><span class="menu-title" data-i18n="">Providers</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DoctorCalendar">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ProviderCalendar","Appointment", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/provider.png"></i><span class="menu-title" data-i18n="">Calendar</span></a>
+        </li>
+
+        <li class="bold" id="@ViewBag.AppointmentQueue">
+            <a class="waves-effect waves-cyan " href="@Url.Action("CurrentAppointments","Appointment")"><i><img src="~/app-assets/images/Dashboard-icons/provider.png"></i><span class="menu-title" data-i18n="">Appointment Queue</span></a>
+        </li>
+
+        <li class="bold" id="@ViewBag.SubContractor">
+            <a class="waves-effect waves-cyan " href="@Url.Action("SubContractor","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/sub-contractor.png"></i><span class="menu-title" data-i18n="">Sub-Contractors</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.ProviderAssistent">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ProviderAssistent","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/assistants.png"></i><span class="menu-title" data-i18n="">Assistants</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.RadiologyList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("RadiologyList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/hippa.png"></i><span class="menu-title" data-i18n="">Radiology</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocDMEList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocDMEList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/dme.png"></i><span class="menu-title" data-i18n="">DME</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.Pharmacy">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Pharmacy","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/pharmacy.png"></i><span class="menu-title" data-i18n="">Pharmacy</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.Template">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Template","Provider", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/assistants.png"></i><span class="menu-title" data-i18n="">Medication Templates</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.SurgeryCenter">
+            <a class="waves-effect waves-cyan " href="@Url.Action("SurgeryCenter","Home", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/surgey-center.png"></i><span class="menu-title" data-i18n="">Surgery Center</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocTestsList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocTestsList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/tests.png"></i><span class="menu-title" data-i18n="">Tests</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocReports">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocReports","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/reports.png"></i><span class="menu-title" data-i18n="">Reports</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocClaimsList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocClaimsList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/claims.png"></i><span class="menu-title" data-i18n="">Claims</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.DocBillList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocBillList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/billing.png"></i><span class="menu-title" data-i18n="">Billing</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocIMEList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocIMEList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/ime.png"></i><span class="menu-title" data-i18n="">IME</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocEUOList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocEUOList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/euo.png"></i><span class="menu-title" data-i18n="">EUO</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.CheckInOut">
+            <a class="waves-effect waves-cyan " href="@Url.Action("CheckInOut","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/check-in (1).png"></i><span class="menu-title" data-i18n="">Check In/Out</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.TransportList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("TransportList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/claims.png"></i><span class="menu-title" data-i18n="">Transport/EMS</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DocEmployeesList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocEmployeesList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/employees.png"></i><span class="menu-title" data-i18n="">Employees</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.DocHippaList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DocHippaList","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/hippa.png"></i><span class="menu-title" data-i18n="">HIPAA</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.Invoice">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Invoice","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/invoices.png"></i><span class="menu-title" data-i18n="">Invoices</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.CliniOverView">
+            <a class="waves-effect waves-cyan " href="@Url.Action("CliniOverView","Doctor", new {Id = ProviderInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/clinick-overview.png"></i><span class="menu-title" data-i18n="">Clinic Overview</span></a>
+        </li>
+        @*<li class="">
+        <a class="waves-effect waves-cyan "><span class="menu-title" data-i18n="">Patient Menu</span></a>
+        </li>
+
+
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/PatientAllergy"><i class="material-icons">polymer</i><span class="menu-title" data-i18n="">Allergies</span> </a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/PatientCalendar"><i class="material-icons">event</i><span class="menu-title" data-i18n="">Calendar</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("patientCaregiver","home")"><i class="material-icons">face</i><span class="menu-title" data-i18n="">Care Givers</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("patientClaiminfo","home")"><i class="material-icons">check</i><span class="menu-title" data-i18n="">Claim Info</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("clinicalnotes","home")"><i class="material-icons">featured_video</i><span class="menu-title" data-i18n="">Clinical Notes</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("clinicalreminder","home")"><i class="material-icons">link</i><span class="menu-title" data-i18n="">Clinical Reminders</span> </a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("currentlocationinfacility","home")"><i class="material-icons">location_on</i><span class="menu-title" data-i18n="">Current Location in Facility</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("DMEsupplies","Home")"><i class="material-icons">child_friendly</i><span class="menu-title" data-i18n="">DME supllies/Equipment</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/PatientClaims"><i class="material-icons">local_library</i><span class="menu-title" data-i18n="">Documents/Records</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/EUO"><i class="material-icons">local_play</i><span class="menu-title" data-i18n="">E.U.O</span></a>
+        </li>
+        <li class="bold">
+
+        <a class="waves-effect waves-cyan " href="~/Home/PatientClaimsExams"><i class="material-icons">mode_edit</i><span class="menu-title" data-i18n="">Exams</span> </a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("FamilyHistory","Home")"><i class="material-icons">history</i><span class="menu-title" data-i18n="">Family History</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("GrowthCharts","Home")"><i class="material-icons">trending_up</i><span class="menu-title" data-i18n="">Growth Charts</span> </a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("HipperRelease","Home")"><i class="material-icons">tune</i><span class="menu-title" data-i18n="">Hipaa Release</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/PatientHippaRelease"><i class="material-icons">translate</i><span class="menu-title" data-i18n="">I.M.E</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="~/Home/PatientHippaReleaseImaging"><i class="material-icons">image</i><span class="menu-title" data-i18n="">Imaging</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">grain</i><span class="menu-title" data-i18n="">Immunizations</span> </a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">local_pharmacy</i><span class="menu-title" data-i18n="">Labs</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">leak_add</i><span class="menu-title" data-i18n="">Legal Info</span></a>
+        </li>
+        <li class="bold">
+        <a class="waves-effect waves-cyan " href="@Url.Action("MedicalHistory","Patient")"><i class="material-icons">history</i><span class="menu-title" data-i18n="">Medical History</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">hot_tub</i><span class="menu-title" data-i18n="">Medical Problems</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">iso</i><span class="menu-title" data-i18n="">Medications</span> </a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">location_disabled</i><span class="menu-title" data-i18n="">Missing</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">nfc</i><span class="menu-title" data-i18n="">Patient Summary</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">gradient</i><span class="menu-title" data-i18n="">Procedures/Tests</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">message</i><span class="menu-title" data-i18n="">Reminders/Messages</span> </a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">payment</i><span class="menu-title" data-i18n="">Reports</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">people</i><span class="menu-title" data-i18n="">Visits</span></a>
+        </li>
+        <li class="bold">
+        <a onclick="FeatureNotImplemented()" class="waves-effect waves-cyan " href="javascript:void(0);"><i class="material-icons">warning</i><span class="menu-title" data-i18n="">Vitals</span></a>
+        </li>*@
+    </ul>
+    <div class="navigation-background"></div><a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="javascript:void(0);" data-target="slide-out"><i class="material-icons">menu</i></a>
+</aside>

@@ -1,0 +1,555 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+
+    var Action = ViewBag.Action;
+    var WriteSignatureImage = ViewBag.WriteSignature;
+    var HiddenimageForPatient = ViewBag.PatientImage;
+    var image = ViewBag.PatientImage;
+    var SignImage = ViewBag.SignImage;
+    var HiddenSignForPatient = ViewBag.SignImage;
+    var patientId = ViewBag.PatientId;
+
+
+
+    //if (!(image is null))
+    //{
+    //    image = "/images/" + ViewBag.PatientImage;
+    //}
+    //else
+    //{
+    //    image = string.Empty;
+    //}
+    if (SignImage == "")
+    {
+        SignImage = string.Empty;
+    }
+    else if (!(SignImage is null))
+    {
+        SignImage = "/images/" + ViewBag.SignImage;
+    }
+    else
+    {
+        SignImage = string.Empty;
+    }
+}
+<div class="tab-pane" id="test4" role="tabpanel">
+    <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+                <h5 class="color-blue pl-2">Patient ID and Signature</h5>
+                <form class="col-sm-12" enctype="multipart/form-data" asp-action="PatientIdandSignature" asp-controller="PatientSideElite" id="signatureform" method="post">
+                    <input hidden="hidden" type="text" asp-for="patientIdandSignature.UserId" />
+                    <input hidden="hidden" type="text" asp-for="patientIdandSignature.PatientSignatureId" />
+                    <input hidden="hidden" class="patientinfobasichiddenUserId" asp-for="patientInfoBasicDto.UserId" />
+                    <div class="row">
+                        <div class=" col-6">
+                            <p>Passport Number</p>
+                            <div class="input-field">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="PassportNumberYes" class="custom-control-input patientSignatureTxtField" name="passportYes" value="1">
+                                            <label class="custom-control-label" for="PassportNumberYes">Yes</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="PassportNumberno" class="custom-control-input patientSignatureTxtField" name="passportYes" value="0">
+                                            <label class="custom-control-label" for="PassportNumberno">No</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="input-field pl-0" id="Passport_HideShow" style="display:none">
+                                            <p>Passport Number</p>
+
+                                            <input class="text-input mt-2 signaturePassportNumber signatureandId_tab patientSignatureTxtField" asp-for="patientIdandSignature.PassportNumber" type="text" placeholder="Enter Passport Number">
+                                            @*<span class="required" asp-validation-for="patientIdandSignature.PassportNumber"></span>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <p>
+                                            ID Type
+                                        </p>
+
+                                        <div class="input-field signatueSelect_tab">
+                                            <select id="SignatureIdType" class="select2 SignatureTypeId genericClassForDD signatureDropDListBeforeEditDisable" data-placeholder="Select Id Type"
+                                                    asp-items="@(new SelectList(Model.PatientSignatureIdTypeList,"TypeId","TypeName"))">
+                                                <option disabled selected value=""></option>
+
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-field">
+                                            <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right7')"><i class="ti ti-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p>ID Number</p>
+
+                                        <div class="input-field">
+                                            <input class="text-input mt-2 SignatureIdNumber signatureandId_tab patientSignatureTxtField" asp-for="patientIdandSignature.IdNumber" type="text" placeholder="Enter ID Number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class=" col-6 ">
+                            <p>
+                                Patient Photo
+                            </p>
+
+                            <div class="input-field">
+                                <div class="center">
+
+                                    <div class="docs-preview clearfix">
+                                        <div class="img-preview preview-lg">
+                                            <div id="result-wrapper">
+                                                @if (Action == "Update")
+                                                {
+                                                    @if (image == null)
+                                                    {
+                                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                        <div class="middle">
+                                                            <div class="text">
+                                                                <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                <p>Upload</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                                    }
+                                                    else if (image == "")
+                                                    {
+                                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                        <div class="middle">
+                                                            <div class="text">
+                                                                <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                <p>Upload</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                                        <div class="middle">
+                                                            <div class="text">
+                                                                <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+                                                                <p>Upload</p>
+                                                            </div>
+                                                        </div>
+                                                        <img src="/images/@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                    <div class="middle">
+                                                        <div class="text">
+                                                            <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                            <p>Upload</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                                }
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                                <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div id="main-cropper"></div>
+                                                    <div class="panel panel-default" id="captureImageFromCam">
+                                                        <div class="panel-heading center mb-2">Camera</div>
+                                                        <div class="panel-body">
+                                                            <div id="my_camera"></div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 center">
+                                                        @*<a class=" float-right ml-3 imageSection" >
+
+                                            </a>*@
+                                                        <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                            <i class="mdi mdi-camera"></i>
+                                                        </a>
+                                                        <a class="btn  add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                        <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                            <i class="mdi mdi-cloud-upload"></i>
+                                                            <input type="file" class="custom-file-input" id="upload">
+                                                        </a>
+                                                        <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                        <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                        <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                        @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                        <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                @*<input type="file" id="filess" asp-for="patientIdandSignature.PaitentImage" class="dropify forPatient mt-2" data-default-file="@image" />*@
+                                <input id="HidenProfilePic" hidden="hidden" value="@HiddenimageForPatient" asp-for="patientIdandSignature.HiddenimagePath" />
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class=" col-md-6 ">
+                            <p>Electronic Signature Password<span class="required"> * </span></p>
+
+                            <input autocomplete="off" id="signaturePassword" class="text-input mt-2 signatureandId_tab patientSignatureTxtField SignaturePasswordFeild" asp-for="patientIdandSignature.ElectronicSignature" value="@ViewBag.SignaturePassword" type="password" placeholder="Enter Electronic Signature">
+                            <span class="required" asp-validation-for="patientIdandSignature.ElectronicSignature"></span>
+                            <br />
+                            <input type="checkbox" id="showPassword" onclick="myFunction()" />
+                            <label for="showPassword">Show Password</label>
+                            @* <a href="javascript:void(0);">Forgot Signature Password?</a>*@
+                        </div>
+                        @*<div class=" col-md-6 ">
+                <p>Confirm Electronic Signature Password<span class="required"> * </span></p>
+
+                <div class="input-field">
+                    <input autocomplete="off" class="text-input mt-2 signatureandId_tab patientSignatureTxtField SignatureConfirmPasswordFeild" type="password" asp-for="patientIdandSignature.ConfirmElectronicSignature" value="@ViewBag.SignaturePassword" placeholder="Password">
+                    <span class="required" asp-validation-for="patientIdandSignature.ConfirmElectronicSignature"></span>
+                </div>
+            </div>*@
+
+                    </div>
+                    <div class="row">
+                        <input type="hidden" asp-for="patientIdandSignature.IdFrontPictureUrl"/>
+                        <input type="hidden" asp-for="patientIdandSignature.IdBackPictureUrl"/>
+                        <div class=" col-md-6 ">
+                            <p>Id Front Picture <span class="required"> * </span></p>
+
+                            <input autocomplete="off"  class="text-input mt-2 signatureandId_tab  dropify" asp-for="patientIdandSignature.FrontPicture"  type="file" >
+                            <span class="required" ></span>
+                            <br />
+                           
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Id Back Picture <span class="required"> * </span></p>
+
+                            <input autocomplete="off"  class="text-input mt-2 signatureandId_tab dropify" asp-for="patientIdandSignature. BackPicture"  type="file" >
+                            <span class="required"></span>
+                            <br />
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            @if (Action == "Update")
+                            {
+                                if (WriteSignatureImage == "Empty.png")
+                                {
+                                    <p>Write Signature</p>
+                                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                        <div class="m-signature-pad--body">
+                                            <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                        </div>
+                                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                            <div class="description">Save Your signature before submit the form</div>
+                                            <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                                Upload Image
+                                            </button>
+                                            <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                Clear
+                                            </button>
+                                            <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                                Save Signature
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                    <img id="savetarget" height="250" width="600" />
+                                    <input type="file" id="SignatureImageUpload" asp-for="patientIdandSignature.WriteSignature" style="display:none" />
+
+                                    <span class="WriteSignatureError required"></span>
+                                }
+                                else if (WriteSignatureImage == null)
+                                {
+                                    <p>Write Signature</p>
+                                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                        <div class="m-signature-pad--body">
+                                            <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                        </div>
+                                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                            <div class="description">Save Your signature before submit the form</div>
+                                            <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                                Upload Image
+                                            </button>
+                                            <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                Clear
+                                            </button>
+                                            <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                                Save Signature
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                    <img id="savetarget" height="250" width="600" />
+                                    <input type="file" id="SignatureImageUpload" asp-for="patientIdandSignature.WriteSignature" style="display:none" />
+
+                                    <span class="WriteSignatureError required"></span>
+                                }
+                                else if (WriteSignatureImage == "")
+                                {
+                                    <p>Write Signature</p>
+                                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                        <div class="m-signature-pad--body">
+                                            <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                        </div>
+                                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                            <div class="description">Save Your signature before submit the form</div>
+                                            <button type="button" class="btn add-btn uploadImageFromSignatureBox" id="pad_clear">
+                                                Upload Image
+                                            </button>
+                                            <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                Clear
+                                            </button>
+                                            <button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+                                                Save Signature
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <img id="savetarget" height="250" style="width:600px" />
+                                    <input type="file" id="SignatureImageUpload" asp-for="patientIdandSignature.WriteSignature" style="display:none" />
+
+                                }
+                                else
+                                {
+                                    <p>Your Signature is :</p>
+                                    <img id="savetarget" height="250" width="450" />
+
+                                    <img src="/SignatureImages/@WriteSignatureImage" class="SignatureImageUpdate" id="UpdateCaseSignature" height="250" />
+                                    <div class="row">
+                                        <div class="col s12 ">
+                                            <a id="updateSignature" class="Signaturepad_show btn patientSignatureTxtField">Update Signature</a>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                        <div class="m-signature-pad--body">
+                                            <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                        </div>
+                                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                            <div class="description">Save Your signature before submit the form</div>
+                                            <button type="button" class="btn add-btn uploadImageFromSignatureBox">
+                                                Upload Image
+                                            </button>
+                                            <button type="button" class="btn Recreate clear signature_pad_cancel">
+                                                Cancel
+                                            </button>
+                                            <button type="button" class="btn Recreate clear signature_pad_clear" data-action="clear">
+                                                Clear
+                                            </button>
+                                            <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                                Save Signature
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                    <span class="WriteSignatureError required"></span>
+                                    <input type="file" id="SignatureImageUpload" asp-for="patientIdandSignature.WriteSignature" style="display:none" />
+
+                                }
+
+                            }
+                            else
+                            {
+                                <p>Write Signature Or Upload Signature Image</p>
+                                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                    <div class="m-signature-pad--body">
+                                        <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                    </div>
+                                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                        <div class="description">Save Your signature before submit the form</div>
+                                        <button type="button" class="btn add-btn uploadImageFromSignatureBox">
+                                            Upload Image
+                                        </button>
+                                        <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                            Clear
+                                        </button>
+                                        <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                            Save Signature
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m6">
+                                        <img id="savetarget" height="250" width="600" />
+
+                                    </div>
+                                </div>
+                                <span class="WriteSignatureError required"></span>
+                                <input type="file" id="SignatureImageUpload" style="display:none" />
+                            }
+                            <input id="hiddneWriteSign" hidden="hidden" value="@WriteSignatureImage" asp-for="patientIdandSignature.HidddentWriteSigniamge">
+                            <input id="HidenSignaturePic" hidden="hidden" value="@HiddenSignForPatient" asp-for="patientIdandSignature.HiddenSignImg" />
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+
+                        <div class=" col-sm-6  col-6 col-lg-6 col-xl-6  ">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsSMSNotified" id="customCheck11" checked>
+                                <label class="custom-control-label" for="customCheck11">Accept SMS Notification & Reminders</label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6 ">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsEmailNotified" id="customCheck12" checked>
+                                <label class="custom-control-label" for="customCheck12">Accept Email Notification & Reminders</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6 ">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsFaceRecognition" id="customCheck13" checked>
+                                <label class="custom-control-label" for="customCheck13">Accept Face Recognition</label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsBiometricRecognition" id="customCheck14" checked>
+                                <label class="custom-control-label" for="customCheck14">Accept Biometric Recognition</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col">
+                            <p>Communication Preference</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsComunicationSMS" id="customCheck15" checked>
+                                    <label class="custom-control-label" for="customCheck15">SMS</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsComunicationPhone" id="customCheck16" checked>
+                                    <label class="custom-control-label" for="customCheck16">Phone</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientSignatureTxtField" asp-for="patientIdandSignature.IsComunicationEmail" id="customCheck17" checked>
+                                    <label class="custom-control-label" for="customCheck17">Email</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mt-5">
+                        <div class="col s12 m12">
+                            <div class="center">
+                                <button type="submit" id="upload" class="btn add-btn patientSigFormSub">Save</button>
+                                @*<button type="submit" id="SignEdit_Btn" class="btn Recreate">Edit</button>
+
+                    <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>*@
+                                @if (ViewBag.Action == "Update")
+                                {
+                                    <button type="button" data-val="signatureForm" id="signatureEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                    <button type="button" data-val="signatureForm" id="signatureCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                }
+                                else
+                                {
+                                    @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                    <a href="javascript:void(0);" data-val="NewForm" id="emergenyCancel_btn" onclick="emptyPatientSignatureFields();" class="Recreate btn">Cancel</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right7">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="PatientSignatureIdType" asp-controller="PatientSide" data-ajax-begin="AjaxBegin()" method="post" data-ajax="true" data-ajax-success="onCreateIdTpye(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h5>Add New ID Type</h5>
+
+                        <input class="text-input sign_IdType SignIdType" type="text" asp-for="PatientSignatureIdTypeBasicDto.TypeName" placeholder="Enter Id Type " />
+                        <span class="required" asp-validation-for="PatientSignatureIdTypeBasicDto.TypeName"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+﻿@model MediClinic.Models.MessageViewModel
+@{
+    ViewData["Title"] = "AddMessage";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{ 
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+
+    var RoleId = _sessionManager.GetRoleId();
+    var FromName = "";
+    if (RoleId == 1)
+    {
+        FromName = _sessionManager.GetPatientName();
+    }
+    else if (RoleId == 2)
+    {
+        FromName = _sessionManager.GetProviderName();
+
+    }
+    else
+    {
+        FromName = _sessionManager.GetEmployeeName();
+    }
+
+}
+@section styles{
+
+    <style>
+
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+    </style>
+}
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            debugger;
+            var Location = window.location.search;
+            
+            var id = getUrlParameter("VisitId");
+            var LocationValue = "?VisitId=" + id;
+            debugger;
+            if (LocationValue == Location) {
+                $("#VisitButton").show();
+            }
+            else {
+                $("#VisitButton").hide();
+            }
+            $("#visitId").val(id);
+            $('.patient-btns').each(function () {
+                debugger;
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+        });
+        $(".select2").select2();
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row" >
+                <div class="col-md-2" style="display:none" id="VisitButton">
+                    @Html.Partial("~/Views/Appointment/PartialViews/_VisitsButtons.cshtml")
+                </div>
+                <div class="col-md-10">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Message</h5>
+                    </div>
+                    <form class="col-sm-12" asp-action="Add" asp-controller="Messages" method="post">
+                        <input type="text" id="visitId" asp-for="message.VisitId" hidden="hidden" />
+                        <div class="row">
+                            <div class=" col ">
+                                <p>From</p>
+                                <input type="hidden" class="text-input" asp-for="message.MessageId" placeholder="id">
+                                <input type="hidden" asp-for="user.UserId">
+
+                                <div class="input-field">
+                                    <div class="form-group">
+                                        <input type="text" value="@FromName" disabled class="text-input" />
+                                    </div>
+                                    @*<select id="UserId" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="message.FromId"
+                                asp-items="@(new SelectList(Model.userList,"UserId","UserName"))" >
+                            <option value="" selected disabled></option>
+                        </select>*@
+                                    @*<span class="required" asp-validation-for="user.UserName"></span>*@
+                                </div>
+                            </div>
+                            <div class=" col ">
+                                <p>To</p>
+
+                                <div class="input-field">
+                                    @if (RoleId == 1)
+                                    {
+
+                                        <select data-placeholder="Select Doctor Name" class="select2" asp-for="message.ToId"
+                                                asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    }
+                                    else if (RoleId == 2)
+                                    {
+                                        <select class="select2" data-placeholder="Select Patient Name" asp-for="message.ToId"
+                                                asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select class="select2" data-placeholder="Select Facilty Name" asp-for="message.ToId"
+                                                asp-items="@(new SelectList(Model.Faciltylist,"UserID","FacilityName"))">
+                                            <option value="" selected disabled></option>
+
+                                        </select>
+                                    }
+                                    @*<select id="UserId" data-placeholder="Select Doctor Name" class="select2 form-control  text-input" asp-for="message.ToId"
+                                asp-items="@(new SelectList(Model.userList,"UserId","UserName"))">
+                            <option value="" selected disabled></option>
+                        </select>*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                        <div class="row">
+                            <div class=" col ">
+                                <p>Message</p>
+
+                                <div class="input-field">
+                                    <textarea type="text" asp-for="message.Message" class="text-input" placeholder="Enter Message"></textarea>
+                                </div>
+                            </div>
+                            <div class=" col ">
+
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <button type="submit" class="waves-effect waves-light btn add-btn">Send</button>
+                                    @*<a href="javascript:void(0);" class="Recreate btn">Edit</a>*@
+                                    <a href="@Url.Action("Index","Messages")" class="Recreate btn">Cancel</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+          
+                @*<div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Messages/Index">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>*@
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+

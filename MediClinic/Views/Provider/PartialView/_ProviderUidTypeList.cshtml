@@ -1,0 +1,25 @@
+﻿@model MediClinic.Models.ProviderViewModel
+
+@foreach (var item in Model.ProviderUidTypeDetail)
+{
+    <tr class="card">
+        <th>
+            <label>
+                <input type="checkbox" />
+                <span></span>
+            </label>
+        </th>
+        <td>@item.ProviderUIDType</td>
+
+        <td>
+            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1_@item.ProviderUIDTypeId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1_@item.ProviderUIDTypeId' class='dropdown-content'>
+                <li><a href="#!" onclick="deleteProviderUidType(@item.ProviderUIDTypeId)" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                <li><a href="#!" onclick="editProviderUidType(@item.ProviderUIDTypeId)" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+
+            </ul>
+
+        </td>
+    </tr>
+}

@@ -1,0 +1,65 @@
+﻿@model MediClinic.Models.TransportViewModel
+
+
+<div class="row">
+    <div class="col">
+        <div class="row ">
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-3 center">
+                @if (Model.profileWithTransport.DriverImage != null)
+                {
+                    <img src="@Model.profileWithTransport.DriverImage" class=" patient-image circle responsive-img lighten-3 padding-4"/>
+                }
+                
+                @*<img src="~/app-assets/images/avatar/avatar-1.png" class=" patient-image circle responsive-img grey lighten-3 padding-4" />*@
+            </div>
+
+            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-9">
+
+
+                <div class="row">
+                    <div class="col">
+                        <p>First Name: <span>@Model.profileWithTransport.FirstName</span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>Middle Name: <span>@Model.profileWithTransport.MiddleName</span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>Last Name: <span>@Model.profileWithTransport.LastName</span></p>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Address :<span>@Model.profileWithTransport.Address @Model.profileWithTransport.AddressLine2 </span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>Licence No :<span>@Model.profileWithTransport.DriverLicence </span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>Licence licenseClass :<span>@Model.profileWithTransport.LicenseClass </span></p>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Mobile Phone :<span>@Model.profileWithTransport.MobilePhone</span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>OtherPhone No :<span>@Model.profileWithTransport.OtherPhone </span></p>
+
+                    </div>
+                    <div class="col">
+                        <p>City/State :<span>@Model.profileWithTransport.City @Model.profileWithTransport.State  </span></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

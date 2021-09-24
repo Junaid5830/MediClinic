@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewData["Title"] = "Listing";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles
+{
+    <style>
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+
+}
+@section scripts{
+    <script>
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            var table = $('#myTableClaim').DataTable({
+
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 10], "orderable": false }],
+
+            });
+            $(document).ready(function () {
+                $('#example').DataTable();
+            });
+
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+        $('.select-all').click(function () {
+            debugger;
+            $('.table  input').prop('checked', this.checked);
+        });
+
+        function deleteSubctractor(subcontractorId, event) {
+            debugger
+            event.closest('tr').remove();
+            $.get("/SubContractor/SubContractorInfoDelete", { subcontractorInfoId: subcontractorId }).done(function (data) {
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+
+    </script>
+}
+
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <div id="example_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row"><div class="col-sm-12 col-md-6"></div><div class="col-sm-12 col-md-6"><div id="myTableClaim_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="myTableClaim" autocomplete="off"></label></div></div></div><div class="row">
+                            <div class="col-sm-12">
+                                <table id="example" class="table dataTables_wrapper">
+                                    <thead>
+                                        <tr class="uppercase" role="row">
+                                            <th class="sorting_disabled" rowspan="1" colspan="1" style="width: 24px;" aria-label="">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll" autocomplete="off">
+                                                    <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                                </div>
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="myTableClaim" rowspan="1" colspan="1" style="width: 50px;" aria-label="NAME: activate to sort column ascending">STAFF NURSE</th>
+                                            <th class="sorting_desc" tabindex="0" aria-controls="myTableClaim" rowspan="1" colspan="1" style="width: 77px;" aria-label="SPECIALITY: activate to sort column ascending" aria-sort="descending">DEPARTMENT</th>
+                                            <th class="sorting" tabindex="0" aria-controls="myTableClaim" rowspan="1" colspan="1" style="width: 37px;" aria-label="TITLE: activate to sort column ascending">START TIME</th>
+                                            <th class="sorting" tabindex="0" aria-controls="myTableClaim" rowspan="1" colspan="1" style="width: 82px;" aria-label="PC/ENTITY NAME: activate to sort column ascending">END TIME</th>
+                                            <th class="sorting" tabindex="0" aria-controls="myTableClaim" rowspan="1" colspan="1" style="width: 61px;" aria-label="LICENSE NO: activate to sort column ascending">DAYS</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card odd" style="cursor: pointer" role="row">
+                                            <th tabindex="0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="3" value="check" autocomplete="off">
+                                                    <label class="custom-control-label" for="3"></label>
+                                                </div>
+                                            </th>
+
+                                            <td> Mary Eliza</td>
+                                            <td class="sorting_1">OPD</td>
+                                            <td class="">06:00:00</td>
+                                            <td>07:00:00</td>
+                                            <td>Monday</td>
+
+                                        </tr>
+                                        <tr class="card odd" style="cursor: pointer" role="row">
+                                            <th tabindex="0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="3" value="check" autocomplete="off">
+                                                    <label class="custom-control-label" for="3"></label>
+                                                </div>
+                                            </th>
+
+                                            <td> Mary Seacole.</td>
+                                            <td class="sorting_1">ENT</td>
+                                            <td class="">08:00:00</td>
+                                            <td>05:00:00</td>
+                                            <td>Tuesday</td>
+
+                                        </tr>
+                                        <tr class="card odd" style="cursor: pointer" role="row">
+                                            <th tabindex="0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="3" value="check" autocomplete="off">
+                                                    <label class="custom-control-label" for="3"></label>
+                                                </div>
+                                            </th>
+
+                                            <td> Mary Elizebth</td>
+                                            <td class="sorting_1">OPD</td>
+                                            <td class="">06:00:00</td>
+                                            <td>07:00:00</td>
+                                            <td>Monday</td>
+
+                                        </tr>
+                                        <tr class="card odd" style="cursor: pointer" role="row">
+                                            <th tabindex="0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="3" value="check" autocomplete="off">
+                                                    <label class="custom-control-label" for="3"></label>
+                                                </div>
+                                            </th>
+
+                                            <td> Mary Eliza</td>
+                                            <td class="sorting_1">RADILOGY</td>
+                                            <td class="">08:00:00</td>
+                                            <td>10:00:00</td>
+                                            <td>Tuesday</td>
+
+                                        </tr>
+                                        <tr class="card odd" style="cursor: pointer" role="row">
+                                            <th tabindex="0">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="3" value="check" autocomplete="off">
+                                                    <label class="custom-control-label" for="3"></label>
+                                                </div>
+                                            </th>
+
+                                            <td> Mary Eliza</td>
+                                            <td class="sorting_1">OPD</td>
+                                            <td class="">09:00:00</td>
+                                            <td>05:00:00</td>
+                                            <td>Friday</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

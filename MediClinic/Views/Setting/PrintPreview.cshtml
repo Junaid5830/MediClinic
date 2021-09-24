@@ -1,0 +1,838 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using MedliClinic.Utilities.Utility.Enum;
+@{
+    ViewData["Title"] = "Print Preview";
+    var remainderCountMissingFields = 0;
+    var totalCountMissingFields = 0;
+    Layout = null;
+
+}
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+
+
+
+<style>
+    .fa{
+        font-size:35px;
+    }
+    .card {
+        padding: 22px 15px;
+        margin: 10px 0;
+        box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+    }
+
+        .card p {
+            font-weight: 600;
+            font-size: 13px;
+            color: #03a9f4;
+            margin-bottom: 0 !important;
+        }
+
+        .card img {
+            width: 30px;
+            height: 30px;
+            margin: 7px 20px 0 20px;
+        }
+
+    .FLName {
+        width: 150px;
+        padding: 55px !important;
+        background-color: #f1f1f1 !important;
+        border-radius: 50% !important;
+        height: 150px !important;
+        margin: auto !important;
+    }
+
+    p.mb-0 {
+        color: #6b6f82;
+    }
+
+    p.text-dark {
+        font-weight: 600 !important;
+    }
+
+    .patient-image {
+        width: 200px;
+        height: 200px;
+        margin: 0 75px;
+    }
+
+    hr {
+        overflow: hidden;
+        height: 1px;
+        background-color: #e0e0e0;
+        width: 100%;
+    }
+
+    ul {
+        list-style: none;
+    }
+
+        ul img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+    .relatedcard {
+        margin: 5px 11px !important;
+    }
+
+    .FLNameLetter {
+        width: 40px;
+        height: 40px;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+        padding: 8px 10px;
+    }
+
+    .warning {
+        padding: 10px !important;
+        border-radius: 4px;
+    }
+</style>
+<div class="container mt-5 mb-5" id="main-div-Print">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="text-primary">Patient Info</h2>
+        </div>
+        <div class="col-md-6">
+            <a class="waves-effect waves-light float-right" style="margin-top: -1px;cursor:pointer;" onclick="goBack()">
+                <i class="fa fa-arrow-left"></i>
+
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md-4">
+            @if (Model.patientCompleteInfo.PaitentImage != null)
+            {
+                <img src="~/images/@Model.patientCompleteInfo.PaitentImage" alt="patient" class=" patient-image rounded-circle" style="border:2px solid @Model.patientCompleteInfo.Color">
+            }
+            else
+            {
+                <div class="rounded-circle FLName" style="border:2px solid @Model.patientCompleteInfo.Color">
+                    <h3 class="color-blue">@Model.patientCompleteInfo.FirstNameLetter@Model.patientCompleteInfo.LastNameLetter</h3>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-8">
+            <div class="row">
+                @if (Model.PatientPrintSettingDto.FIrstName)
+                {
+                    <div class="col-md-3">
+                        <p class=" mb-0">Name</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.FullName</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.DOB)
+                {
+                    <div class="col-md-3 mt-6">
+                        <p class="mb-0">Birthday</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.Age)
+                {
+                    <div class="col-md-3 mt-6">
+                        <p class="mb-0">Age</p>
+                        <p class="mt-0 text-dark "> @Model.patientCompleteInfo.Age</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.Address)
+                {
+                    <div class="col-md-3 mt-6">
+                        <p class="mb-0">Address</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.AddressLine1</p>
+                    </div>
+                }
+
+                <!--Here Changes-->
+                @if (Model.PatientPrintSettingDto.SSNumber)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class="mb-0">SSN</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.SSN</p>
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.Gender)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Gender</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.Gender</p>
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.MaritalStatus)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Marital Status</p>
+                        <p class=" mt-0  text-dark">@Model.patientCompleteInfo.MaritalStatus</p>
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.MobilePhone)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class="mb-0">Mobile Phone</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.MobilePhone</p>
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.HomePhone)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class="mb-0">Home Phone</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.HomePhone</p>
+                        <input type="hidden" id="phoneNo" value="@Model.patientCompleteInfo.HomePhone" />
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.EmergencyPhone)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class="mb-0">Emergency Phone</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.EmergencyPhone</p>
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.languages)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class="mb-0">Language</p>
+                        <p class="mt-0 text-dark ">@Model.patientCompleteInfo.LanguageName</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.CaseType)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Case Type</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.CaseTypeName </p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.ClaimNumber)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Claim  No</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.PatientClaimID</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.PolicyNumber)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Policy Number</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.PolicyNumber</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.WCBNumber)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">WCB Number</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.WCBNumber</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.CarrierCaseNumber)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Carrier Case Number</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.CarrierCaseNumber</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.PolicyHolderName)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Policy Holder Name</p>
+                        <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.PolicyHolderName</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.EmployerInfo)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Employer Info</p>
+                        <p class=" mt-0  text-dark"> N/A</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.DOA)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">DOA</p>
+                        <p class=" mt-0  text-dark"> N/A</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.PlaceTimeOfAccident)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">
+                           Time Of Incident
+                        </p>
+                        @if (@Model.patientCompleteInfo.PlaceTimeOfAccident != null)
+                        {
+                             <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.PlaceTimeOfAccident.ToString("hh:mm:ss")</p>
+                        }
+                        else
+                        {
+                           <p class=" mt-0  text-dark"> N/A</p>
+                        }
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.FullInsuranceInfo)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">
+                            Full Insurance Info
+                        </p>
+                        <p class=" mt-0  text-dark"> N/A</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.FullClaimInfo)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">
+                            Full Claim Info
+                        </p>
+                        <p class=" mt-0  text-dark"> N/A</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.Nf2fillingDate)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">
+                            Nf2 Filling Date
+                        </p>
+                        @if (@Model.patientCompleteInfo.Nf2fillingDate != null)
+                        {
+                             <p class=" mt-0  text-dark"> @Model.patientCompleteInfo.Nf2fillingDate.ToString("dd/MM/yyyy")</p>
+                        }
+                        else
+                        {
+                           <p class=" mt-0  text-dark"> N/A</p>
+                        }
+                    </div>
+                }
+
+                @if (Model.PatientPrintSettingDto.PrimaryDr)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Primary Dr</p>
+                        <p class=" mt-0  text-dark">John SMith MD</p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.FirstVisit)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">First Visit</p>
+                        <p class="mt-0  text-dark">  N/A</p>
+                    </div>
+                }
+
+
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.NumberOfVisits)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Number Of Visits</p>
+                        <p class="mt-0  text-dark"> N/A </p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.AllVisits)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">All Visits</p>
+                        <p class="mt-0  text-dark"> N/A </p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.LastEUO)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Last E.U.O</p>
+                        <p class="mt-0  text-dark"> N/A </p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.LastIME)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Last I.M.E</p>
+                        <p class="mt-0  text-dark"> N/A </p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.CurrentLocationInFacility)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Current Location In Facility</p>
+                        <p class="mt-0  text-dark"> N/A </p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.ReferralName)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Referral Name</p>
+                        <p class="mt-0  text-dark"> @Model.patientCompleteInfo.ReferralName </p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.CollectionAttorney)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Collection Attorney</p>
+                        <p class="mt-0  text-dark"> @Model.patientCompleteInfo.CollectionAttorney </p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.Paralegal)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Paralegal</p>
+                        <p class="mt-0  text-dark"> @Model.patientCompleteInfo.LeadingParalegalName </p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.FullPIAttorneyinfo)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0">Full P.I. Attorney</p>
+                        <p class="mt-0  text-dark"> @Model.patientCompleteInfo.AttorneyName </p>
+                    </div>
+                }
+
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.LastVisit)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0" style="color: #f04f85 !important;">Last Visit</p>
+                        <p class="mt-0  text-dark">  N/A</p>
+                    </div>
+                }
+                @if (Model.PatientPrintSettingDto.DateCreated)
+                {
+                    <div class="col-md-3 mt-8">
+
+                        <p class=" mb-0" style="color: #f04f85 !important;">Date Created</p>
+                        <p class="mt-0  text-dark">@Model.patientCompleteInfo.CreatedDate.ToString("MM/dd/yyyy") </p>
+                    </div>
+                }
+                <!--Here-->
+                @if (Model.PatientPrintSettingDto.LastExam)
+                {
+                    <div class="col-md-3 mt-8">
+                        <p class=" mb-0" style="color: #f04f85 !important;">Last Exam</p>
+                        <p class="mt-0  text-dark">  1/22/2018</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+
+        @if (Model.PatientPrintSettingDto.BodyStatus)
+        {
+            <hr />
+            <div class="container">
+                <h2 class="text-primary">Body Status</h2>
+                <div class="row">
+
+
+                    @if (Model.VitalDto.Temprature != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/bp.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Temprature:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Temprature</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.BloodPressure != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/bp.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p>Blood Pressure:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.BloodPressure</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.Pulse != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/oxygen.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Pulse:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Pulse</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.Respiration != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/oxygen.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Respiration:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Respiration</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.Height != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/height.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Height:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Height</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.Weight != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/weight.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Weight:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Weight</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.TempMethod != null)
+                    {
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/bp.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> TempMethod:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.TempMethod</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.BMIStatus != null)
+                    {
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/bp.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> BMIStatus:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.BMIStatus</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.BMI != null)
+                    {
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/oxygen.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> BMI:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.BMI</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                    @if (Model.VitalDto.OxygenSaturation != null)
+                    {
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/oxygen.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> OxygenSaturation:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.OxygenSaturation</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                    @if (Model.VitalDto.Allergies != null)
+                    {
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <i>
+                                            <img src="/app-assets/images/PatientProfileicon/height.png">
+                                        </i>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p> Allergies:</p>
+                                        <span class="no-margin bodyStatusValue">@Model.VitalDto.Allergies</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+
+
+        @if (Model.PatientPrintSettingDto.Reminder)
+        {
+            <hr />
+            <div class="container">
+                <h2 class="text-primary">Reminders</h2>
+                <div class="row">
+                    @if (!(Model.PatientMissingsListDto is null) && Model.PatientMissingsListDto.Count > 0)
+                    {
+                        foreach (var item in Model.PatientMissingsListDto)
+                        {
+                            totalCountMissingFields = item.MissingFieldsList.Count;
+
+                            remainderCountMissingFields++;
+                            if (remainderCountMissingFields <= 4)
+                            {
+                                <div class="col-md-3 ">
+                                    <div class="card">
+                                        <p>@item.CardHeading</p>
+                                    </div>
+
+
+
+
+
+
+                                </div>
+
+                            }
+                        }
+                    }
+                </div>
+
+
+
+
+
+
+            </div>
+
+        }
+        @if (Model.PatientPrintSettingDto.RelatedPatientList)
+        {
+            @if (Model.patientListWithUsers != null)
+            {
+                <hr />
+                <div class="container">
+                    <h2 class="text-primary"> Related Patient List</h2>
+                    <div class="row">
+
+
+                        @foreach (var item in Model.patientListWithUsers)
+                        {
+                            <div class="card relatedcard">
+                                <ul class="collection p-0">
+                                    <li>
+                                        <div class="col-md-4">
+                                            @if (item.PaitentImage != null)
+                                            {
+                                                <img src="~/images/@item.PaitentImage" alt="patient" />
+                                            }
+                                            else
+                                            {
+                                                <div class="FLNameLetter">
+                                                    <span>@item.FirstNameLetter@item.LastNameLetter</span>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="user-content">
+                                            <h6 class="line-height-0">@item.FullName</h6>
+                                            <p class="medium-small blue-grey-text text-lighten-3">@item.Age year old &#8729;<span> male</span></p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        }
+
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-success float-right" onclick="printdiv(printpage)">Print</button>
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+<script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+@*<script src="~/Print.js/src/js/print.js"></script>*@
+<script type="text/javascript">
+    var printpage = document.getElementById('main-div-Print');
+
+    function printdiv(printpage) {
+        $(".fa").hide();
+        $(".btn-success").hide();
+        window.print();
+         $(".fa").show();
+        $(".btn-success").show();
+
+    }
+    function goBack() {
+        window.history.back();
+    }
+    //function click() {
+    //    alert("hello");
+    //}
+    //document.getElementById('div_print').addEventListener("click", print)
+
+    //function print() {
+    //    printJS({
+    //        printable: 'main-div-Print',
+    //        type: 'html',
+    //        targetStyles: ['*']
+    //    })
+    //}
+                //       var doc = new jsPDF();
+                //var specialElementHandlers = {
+                //    '#editor': function (element, renderer) {
+                //        return true;
+                //    }
+                //};
+
+                //$('#cmd').click(function () {
+                //    doc.fromHTML($('#content').html(), 15, 15, {
+                //        'width': 170,
+                //            'elementHandlers': specialElementHandlers
+                //    });
+                //    doc.save('sample-file.pdf');
+                //});
+
+    $("#btnPDFSubmit").on("click", function () {
+        debugger;
+        var s = new XMLSerializer();
+        var d = document.getElementById("printDiv");
+        var str = s.serializeToString(d);
+         $("input[name='pageHtmlString']").val(str);
+    });
+</script>

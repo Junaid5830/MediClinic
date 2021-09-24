@@ -1,0 +1,397 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "MedicalProblem";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+@{
+    var NewId = ViewContext.RouteData.Values["id"];
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 100% !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(function () {
+            var addnew = '<li class="ui-menu-item" id="addnew" onClick="MedicalDisease();"><div class="ui-menu-item-wrapper sidenav-trigger sideout"  href="javascript:void(0);" data-target="slide-out-right30"><a class="sidenav-trigger sideout" data-target="slide-out-right30">Add New</a></div></li>';
+
+            $.widget("custom.combobox", {
+                _create: function () {
+                    this.wrapper = $("<span>")
+                        .addClass("custom-combobox")
+                        .insertAfter(this.element);
+
+                    this.element.hide();
+                    this._createAutocomplete();
+                    this._createShowAllButton();
+                },
+
+                _createAutocomplete: function () {
+                    var selected = this.element.children(":selected"),
+                        value = selected.val() ? selected.text() : "";
+
+                    this.input = $("<input>")
+                        .appendTo(this.wrapper)
+                        .val(value)
+                        .attr("title", "")
+                        .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+                        .autocomplete({
+                            delay: 0,
+                            minLength: 0,
+                            source: $.proxy(this, "_source"),
+                            open: function (e, ui) {
+                                $(".ui-autocomplete").append(addnew);
+                            },
+
+                            response: function (event, ui) {
+                                if (!ui.content.length) {
+                                    var noResult = { value: "", label: "No results found" };
+                                    ui.content.push(noResult);
+                                }
+                            }
+                        })
+                        .tooltip({
+                            classes: {
+                                "ui-tooltip": "ui-state-highlight"
+                            }
+                        });
+
+                    this._on(this.input, {
+                        autocompleteselect: function (event, ui) {
+                            ui.item.option.selected = true;
+                            this._trigger("select", event, {
+                                item: ui.item.option
+                            });
+                        },
+
+                        autocompletechange: "_removeIfInvalid"
+                    });
+                },
+
+                _createShowAllButton: function () {
+
+                    var input = this.input,
+                        wasOpen = false;
+
+                    $("<a>")
+                        .attr("tabIndex", -1)
+                        .attr("title", "Show All Items")
+
+                        .appendTo(this.wrapper)
+                        .button({
+                            icons: {
+                                primary: "ui-icon-triangle-1-s"
+                            },
+                            text: false
+                        })
+                        .removeClass("ui-corner-all")
+                        .addClass("custom-combobox-toggle ui-corner-right")
+                        .on("mousedown", function () {
+                            wasOpen = input.autocomplete("widget").is(":visible");
+                        })
+                        .on("click", function () {
+                            input.trigger("focus");
+
+                            // Close if already visible
+                            if (wasOpen) {
+                                return;
+                            }
+
+                            // Pass empty string as value to search for, displaying all results
+                            input.autocomplete("search", "");
+                        });
+                },
+
+                _source: function (request, response) {
+                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                    response(this.element.children("option").map(function () {
+
+                        var text = $(this).text();
+                        if (this.value && (!request.term || matcher.test(text)))
+                            return {
+                                label: text,
+                                value: text,
+                                option: this
+                            };
+                    }));
+                    globalValue = this.input.val();
+
+                },
+
+                _removeIfInvalid: function (event, ui) {
+
+                    // Selected an item, nothing to do
+                    if (ui.item) {
+                        return;
+                    }
+
+                    // Search for a match (case-insensitive)
+                    var value = this.input.val(),
+                        valueLowerCase = value.toLowerCase(),
+                        valid = false;
+
+
+                    this.element.children("option").each(function () {
+                        if ($(this).text().toLowerCase() === valueLowerCase) {
+                            this.selected = valid = true;
+                            return false;
+                        }
+                    });
+
+                    // Found a match, nothing to do
+                    if (valid) {
+
+                        return;
+                    }
+
+                    //Remove invalid value
+
+                    //this.input
+                    //    .val("")
+                    //    .attr("title", value + " didn't match any item");
+                    //.tooltip("open");
+
+                    //this.element.val("");
+                    //this._delay(function () {
+                    //    this.input.tooltip("close").attr("title", "");
+                    //}, 2500);
+                    //this.input.autocomplete("instance").term = "";
+                },
+
+                _destroy: function () {
+                    this.wrapper.remove();
+                    this.element.show();
+                }
+            });
+
+            $("#DiseaseType").combobox();
+
+
+        });
+        function MedicalDisease() {
+            if (globalValue != "") {
+                $(".related_Facility").val(globalValue);
+            }
+
+            $(".nav-collapsible .navbar-toggler").trigger("click");
+            $("#main").css("padding-right", "340px");
+
+        }
+        function onCreateMedicalDisease(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                $('.SignIdType').val('');
+                $('.SignIdType').removeClass('valid');
+
+                var titleSelectList = $('.multilangOpt');
+                titleSelectList.append($('<option></option>').val(data.diseaseTypeId).text(data.diseaseTypeName));
+            }
+        };
+
+    </script>
+}
+
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6 ">
+                <h5 class="breadcrumbs-title color-blue mt-0">Medical Problem</h5>
+            </div>
+
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="@Url.Action("MedicalProblemlist", "PatientSide" , new { Id = NewId })">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+            <form asp-action="MedicalProblem" asp-controller="PatientSide" method="post">
+                <input hidden="hidden" id="hiddenMedicalProblemId" asp-for="patientMedicalProblemBasicDto.MedicalProblemId" />
+                <input hidden="hidden" id="HiddenPatientId" asp-for="patientMedicalProblemBasicDto.PatientId" />
+                <input hidden="hidden" id="HiddenExaminerId" asp-for="patientMedicalProblemBasicDto.ExaminerId" />
+
+                <div class="row">
+
+                    <div class=" col s12 m6 ">
+                        <p class="mb-0">Type</p>
+
+                        <div class="ui-widget col s10 l10 pl-0">
+                            <select id="DiseaseType" class="multilangOpt" asp-for="patientMedicalProblemBasicDto.DiseaseTypeId" asp-items="@(new SelectList(Model.medicalDiseaseTypeList,"DiseaseTypeId","DiseaseTypeName") )">
+
+
+                                <option></option>
+
+                            </select>
+
+                        </div>
+                        <div class="input-field col s3 m2 pr-0">
+                            <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right30"><i class="material-icons">add</i></a>
+
+                        </div>
+                    </div>
+
+                    <div class=" col m6  s12 ">
+
+                        <p> Date/Year</p>
+
+                        <input type="text" class="datepicker text-input" asp-for="patientMedicalProblemBasicDto.DateYear" placeholder="Select Date/Year">
+
+
+                    </div>
+
+                </div>
+                <div class="row current">
+                    <div class=" col s12 m6">
+                        <p class="mb-0">Current Status</p>
+                        <div class="ui-widget">
+                            <select class="combobox" asp-for="patientMedicalProblemBasicDto.CurrentStatus">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="Remissio">Remission</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        @*<input class="text-input input-styling ICD" asp-for="patientMedicalProblemBasicDto.CurrentStatus" type="text" placeholder="Select Current Status">*@
+
+                    </div>
+                    <div class="col s12 m6">
+
+
+                        <p class="mb-0">Report/Documents</p>
+                        <div class="ui-widget">
+                            <select class="combobox" asp-for="patientMedicalProblemBasicDto.DocumentReport">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+                        @*<input class="text-input input-styling Prescriber" asp-for="patientMedicalProblemBasicDto.DocumentReport" type="text" placeholder="Select Report/Documents">*@
+
+
+                    </div>
+
+                </div>
+
+                <div class="row mt-2 mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <button type="submit" class="btn add-btn">Save</button>
+                        <a href="javascript:void(0);" class="Recreate btn">Edit</a>
+                        <a href="@Url.Action("MedicalProblemlist", "PatientSide",new {Id = NewId })" class="Recreate btn">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right30" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="MedicalDiseaseType" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateMedicalDisease(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add New Type
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input employementTitleval SignIdType" type="text" asp-for="medicalDiseaseTypeBasicDto.DiseaseTypeName" placeholder="Enter Employment Title " />
+                                <span class="required" asp-validation-for="medicalDiseaseTypeBasicDto.DiseaseTypeName"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

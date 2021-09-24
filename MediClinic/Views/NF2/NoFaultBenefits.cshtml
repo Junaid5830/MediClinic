@@ -1,0 +1,1136 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "NoFaultBenefits";
+    Layout = "~/Views/Shared/_NF2Layout.cshtml";
+}
+@section styles{
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        textarea {
+            width: 102%;
+            height: 5rem;
+            border-radius: 4px;
+            border: 1px solid #cfcfcf !important;
+        }
+
+        #instruction {
+            height: 10rem;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+    <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.yourCheckbox').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#secondary_add').show();
+                }
+            });
+            $('.yournoCheckbox').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#secondary_add').hide();
+                }
+            });
+            $('.dateCheckbox').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#datereturned').show();
+                }
+            });
+            $('.datenoCheckbox').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#datereturned').hide();
+                }
+            });
+            $('.injuryexpense').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injuryexpesediv').show();
+                }
+            });
+            $('.injurynoexpense').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injuryexpesediv').hide();
+                }
+            });
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+
+            <div class="row mb-1">
+
+
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s6 m6  margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue">No Fault Benefits</h5>
+                            </div>
+
+
+                            <div class="col s6 m6 margin-top-8">
+                                <a class="waves-effect waves-light float-right mr-2 mt-2" href="javascript:void(0);">
+                                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <form class="form-inline col s12">
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer's Claim Representative</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Phone Number</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col s12 m6 form-firstName">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Policy Holder</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter policy holder">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Policy Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter policy number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Date of Accident</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Claim Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter claim number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Applicant</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+
+                                    <div class="col s12 m6">
+                                        <p>Phone Number (Home)</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter phone number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Phone Number (Business)</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter phone number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+
+                                    <div class="col s12 m6 ">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>DOB</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m6 ">
+                                        <p>Social Security Number</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter social security number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>DOB</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m6">
+                                        <p>Date of Accident</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6 ">
+                                        <p>Time of Accident</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="timepicker text-input" placeholder="HH:MM">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m6">
+                                        <p>Place of Accident</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <textarea row="10" placeholder="enter place"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6 ">
+                                        <p>Description of Accident</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <textarea row="10" placeholder="enter place"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m6">
+                                        <p>Describe Your Injury</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <textarea row="10" placeholder="enter place"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m4">
+                                        <p>Owner's Name</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter owner name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Make</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter make">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Year</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter year">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m12">
+                                        <p>Vehicle Type</p>
+                                        <div class="col s3 m3 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="vehicleTB" class="with-gap" name="yes" value="1" />
+                                                    <span>Bus or school bus</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s3 m3 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="vehicleTT" class="with-gap" name="yes" value="0" />
+                                                    <span>Truck</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                        <div class="col s3 m3 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="vehicleTA" class="with-gap" name="yes" value="0" />
+                                                    <span>Automobile</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                        <div class="col s3 m3 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="vehicleTM" class="with-gap" name="yes" value="0" />
+                                                    <span>Motorcycle</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row ">
+                                    <div class="col s12 m4">
+                                        <p>Were You the Driver of the Motor Cycle?</p>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="DriverY" class="with-gap" name="yes" value="1" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="DriverNo" class="with-gap" name="yes" value="0" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Were You the Passenger of the Motor Vehicle?</p>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="PsngrYes" class="with-gap" name="yes" value="1" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="PsngrNo" class="with-gap" name="yes" value="0" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Were You a Pedestrian?</p>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="PdstrnYes" group="Pdstrn" class="with-gap" name="yes" value="1" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="PdstrnNo" group="Pdstrn" class="with-gap" name="yes" value="0" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Were You a member of our policy holder's household?</p>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="MemPoYes" group="MemPo" class="with-gap" name="yes" value="3" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="MemPoNo" group="MemPo" class="with-gap" name="yes" value="4" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Do you or a relative with whom you reisde own a motor vehicle?</p>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="RelYes" class="with-gap" name="yes" value="1" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s6 m6 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="RelNo" class="with-gap" name="yes" value="0" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12">
+                                        <p>Were yot treated by a Doctor or Person for furnishing health services</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap yourCheckbox" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap yournoCheckbox" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row one" id="secondary_add" style="display:none">
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6 ">
+                                        <p>Address</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m12">
+                                        <p>If you were treated at a hospital, were you an</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap " name="yes" value="one" />
+                                                    <span>Out Patient</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap " name="yes" value="zero" />
+                                                    <span>In Patient</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6 ">
+                                        <p>
+                                            Date of Admission
+                                        </p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Name	of Hospital</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address of Hospital</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col s12 m4">
+                                        <p>Amount of Health Bills to date</p>
+
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Will you've more health treatments</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap yourCheckbox" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap yournoCheckbox" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>At the time of accident were you in the course of your employment</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap  " name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap  " name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col s12 m4">
+                                        <p>Did you lose time from work</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap yourCheckbox" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap yournoCheckbox" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m4">
+                                        <p>Date absence from work began</p>
+
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m4">
+                                        <p>Have you returned to work</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap dateCheckbox" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap datenoCheckbox" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row one" id="datereturned" style="display:none">
+                                    <div class="col s12 m6">
+                                        <p>Date absence from work began</p>
+
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Amount of time lost from work</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="timepicker text-input" placeholder="HH:MM">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>What are your gross weekly earnings</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter earnings">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>No. of days you work per week</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter days">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>No. of hours you work per day</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter hours">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m8">
+                                        <p>Were you receiving unemployment benefits at the time of accident</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap " name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap " name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <p>List Names And Address Of Your Employer And Other Employers For One Year Prior To Accident Date And Give Occupation And Dates Of Employment:</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col s12 m6">
+                                        <p>Employer Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Occupation</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>From</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>To</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row mb-2">
+                                    <div class="col s12 m6">
+                                        <p>Employer Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Occupation</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>From</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>To</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="row mb-2">
+                                    <div class="col s12 m6">
+                                        <p>Employer Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Occupation</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>From</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>To</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col s12 m6">
+                                        <p>As A Result Of Your Injury Have You Had Any Other Expenses?</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap injuryexpense" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap injurynoexpense" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row one" id="injuryexpesediv" style="display:none">
+                                    <div class="col s12 m6">
+                                        <p>Explanation</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Amount</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <p>Due To This Accident Have You Received Or Are You Eligible For Payments Under Any Of The Following:</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col s12 m6">
+                                        <p>New York State Disability?</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap injuryexpense" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap injurynoexpense" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Workers' Compensation?</p>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryYes" class="with-gap injuryexpense" name="yes" value="one" />
+                                                    <span>Yes</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                        <div class="col s4 m4 input-field pl-0 mt-3">
+                                            <p class="check-btn">
+                                                <label>
+                                                    <input type="radio" id="secondaryNo" class="with-gap injurynoexpense" name="yes" value="zero" />
+                                                    <span>No</span>
+                                                </label>
+                                            </p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col s12 m6 form-firstName">
+                                        <p>Instruction</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea id="instruction" row="10" placeholder="enter address">The Applicant Authorizes The Insurer To Submit Any And All Of These Forms To Another Party Or Insurer If Such Is Necessary To Perfect Its Rights Of Recovery Provided For Under The No-fault Law.
+</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <p>
+                                            This Form Is Subscribed And Affirmed By The Applicant As True Under The Penalties Of Perjury
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+
+                                        <p>Write Signature</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <p>
+                                            Authorization For Release Of Work And Other Loss Information
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row ">
+
+                                    <div class="col s12 m4">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Social Security No.</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m8">
+
+                                        <p>Write Signature</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+
+                                </div>
+                             <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <p>
+                                            Authorization For Release Of Health Service Or Treatment Information
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row ">
+
+                                    <div class="col s12 m6">
+                                        <p>Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="enter name">
+                                        </div>
+                                    </div> 
+                                    <div class="col s12 m6">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m8">
+
+                                        <p>Write Signature</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvads" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12" style="text-align:center">
+                                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

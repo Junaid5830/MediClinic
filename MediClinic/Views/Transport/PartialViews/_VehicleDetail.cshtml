@@ -1,0 +1,162 @@
+﻿@model MediClinic.Models.TransportViewModel
+
+<style>
+    .dot {
+        height: 15px !important;
+        width: 25px !important;
+        border-radius: unset !important;
+    }
+</style>
+<div class="row">
+    <div class="col">
+        <div class="row ">
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-3 center">
+                @if (Model.VehicleDetailDto.VehiclePhoto != null)
+                {
+                    if (Model.VehicleDetailDto.VehiclePhoto.Contains("https://"))
+                    {
+                        <img src="@Model.VehicleDetailDto.VehiclePhoto" class=" patient-image circle responsive-img lighten-3 padding-4" />
+                    }
+                    else
+                    {
+                        <img src="~/app-assets/images/user/male-user.png" class=" patient-image circle responsive-img lighten-3 padding-4" />
+                    }
+                }
+                else
+                {
+                    <img src="~/app-assets/images/user/male-user.png" class=" patient-image circle responsive-img lighten-3 padding-4" />
+                }
+
+                @*<img src="~/app-assets/images/avatar/avatar-1.png" class=" patient-image circle responsive-img grey lighten-3 padding-4" />*@
+            </div>
+
+            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-9">
+
+                <div class="row">
+                    <div class="col">
+                        <p>Vehicle Id: <span>@Model.VehicleDetailDto.TransportId</span></p>
+
+                    </div>
+                    <div class="col">
+                        
+                    </div>
+                    <div class="col">
+                     
+
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleMake != null)
+                        {
+                            <p>Vehicle Make: <span>@Model.VehicleDetailDto.VehicleMake.VehicleMake1</span></p>
+                        }
+                        else
+                        {
+                            <p>Vehicle Make: <span>N/A</span></p>
+                        }
+
+
+                    </div>
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleModel != null)
+                        {
+                        <p>Vehicle Model: <span>@Model.VehicleDetailDto.VehicleModel.VehicleModel1</span></p>
+                        }
+                        else
+                        {
+                    <p>Vehicle Model: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleType != null)
+                        {
+                        <p>Vehicle Type: <span>@Model.VehicleDetailDto.VehicleType.VehicleType1</span></p>
+                        }
+                        else
+                        {
+                    <p>Vehicle Type: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleRegistrationState != null)
+                        {
+                        <p>Vehicle Registration State :<span>@Model.VehicleDetailDto.VehicleRegistrationState</span></p>
+                        }
+                        else
+                        {
+                            <p>Vehicle Make: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleLicencePlateNo != null)
+                        {
+                            <p>Vehicle Plate No :<span>@Model.VehicleDetailDto.VehicleLicencePlateNo </span></p>
+                        }
+                        else
+                        {
+                    <p>Vehicle Plate No: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleVINNo != null)
+                        {
+                        <p>Vehicle VIN No :<span>@Model.VehicleDetailDto.VehicleVINNo </span></p>
+                        }
+                        else
+                        {
+                         <p>Vehicle VIN No: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (@Model.VehicleDetailDto.VehicleColor != null)
+                        {
+                            <p>Vehicle Color :<span class="dot"  style="background-color: @Model.VehicleDetailDto.VehicleColor"></span></p>
+                        }
+                        else
+                        {
+                            <p>Vehicle Color :<span>N/A</span></p>
+                        }
+
+
+                    </div>
+                    <div class="col">
+                        @if (Model.VehicleDetailDto.VehicleCapacity != null)
+                        {
+                        <p>Vehicle Capacity :<span>@Model.VehicleDetailDto.VehicleCapacity </span></p>
+                        }
+                        else
+                        {
+                            <p>Vehicle Make: <span>N/A</span></p>
+                        }
+                        
+
+                    </div>
+                    <div class="col">
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@

@@ -1,0 +1,311 @@
+﻿@model MediClinic.Models.CompanyBillsViewModel
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Add New Company Bill</h5>
+                </div>
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" href="@Url.Action("BillList","CompanyBills")" style="margin-top: -11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="Add" asp-controller="CompanyBills" method="post">
+                <input type="hidden" id="billingId" asp-for="companyBillsDto.BillId" />
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Company Type</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.CompanyType">
+                                <option>Select Company Type</option>
+                                <option value="0">Type 1</option>
+                                <option value="1">Type 2</option>
+                                <option value="2">Type 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Company Name</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Name" asp-for="companyBillsDto.CompanyName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Company Info</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Info" asp-for="companyBillsDto.CompanyInfo">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Master Name</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Name" asp-for="companyBillsDto.MaterName">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Master User</p>
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter User" asp-for="companyBillsDto.MasterUser">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Master User Password</p>
+                        <div class="input-field">
+                            <input type="password" class="text-input" placeholder="Enter Password" asp-for="companyBillsDto.MasterUserPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Add User</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;">
+                                <option>Select to add </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Company Status</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.CompanyStatus">
+                                <option>Select Status</option>
+                                <option value="Active">Active</option>
+                                <option value="NotActive">Not Active</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To View Record</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToViewRecord">
+                                <option>Select Authorized </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Authorized To Order Record</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToOrderRecord">
+                                <option>Select Authorized to order record</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorize To Edit Profile</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizeToEditProfile">
+                                <option>Select Case Type </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Send Internal Message</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToSendInternalMessage">
+                                <option>Select </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Medical Record Fee Schedule</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.MedicalRecordFeeSchedule">
+                                <option>Select Schedule</option>
+                                <option value="0.25">$0.25</option>
+                                <option value="0.50">$0.50</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Authorize To Provider All Bill</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizeToProviderAllBill">
+                                <option>Select  </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Create New Claims</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToCreateNewClaims">
+                                <option>Select  </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit Bill</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditBill">
+                                <option>Select  </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit Claims</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditClaims">
+                                <option>Select </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorize To Recreate Bill</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizeToRecreateBill">
+                                <option>Select </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit CPT/HSPC Codes</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditCptHspcCodes">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit ICD Code</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditIcdCode">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit Bill Due Date</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditBillDueDate">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Send NF2 Forms</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToSendNF2Forms">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p> Authorized To Scan Documents</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToScanDocuments">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Print Documents</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToPrintDocuments">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Add Sub Users</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToAddSubUsers">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>n>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized To Edit Billing Settings</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditBillingSettings">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Authorized to Edit Claims Settings</p>
+                        <div class="input-field">
+                            <select class="select2   text-input" style="width: 100%;" asp-for="companyBillsDto.AuthorizedToEditClaimsSettings">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+         $('.select2').select2();
+    </script>
+}

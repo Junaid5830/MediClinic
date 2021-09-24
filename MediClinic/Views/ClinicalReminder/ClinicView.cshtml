@@ -1,0 +1,136 @@
+﻿@using MediClinic.Models.DTOs;
+@model ClinicalReminderDto;
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+
+
+        .Bill_options {
+            margin-top: 0px;
+        }
+        .reminder-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script>
+        var table;
+        $(document).ready(function () {
+
+            $('.select-all').click(function () {
+                debugger;
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+        })
+
+    </script>
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New TransportEms</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("Index","ClinicalReminder")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="Add" asp-controller="ClinicalReminder" method="post" id="ClinicalForm">
+                <input type="hidden" class="text-input" asp-for="@Model.CRId" placeholder="id">
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Reminder Date: <label>@Model.ReminderDate</label></p>
+
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Reminder Type : <label>@Model.ReminderType</label></p>
+
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Reminder by : <label>@Model.ReminderBy</label></p>
+                    </div>
+
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Reminders: <label>@Model.Reminders</label></p>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Due Date : <label>@Model.DueDate</label></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Reminder by : <label><img class="reminder-img"src="@Model.Reminder_By" /></label></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

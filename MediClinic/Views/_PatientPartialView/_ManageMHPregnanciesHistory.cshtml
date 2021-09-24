@@ -1,0 +1,29 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHPregnancyHistory != null)
+{
+    <table class="table table-striped registrationTable ProfileViewTbl" style="overflow:auto;">
+        <tbody>
+            <tr>
+
+                <td><b class="LblMargin">Mammogram:</b>  @Convert.ToDateTime(@Model.GetMHPregnancyHistory.Mammogram).ToString("MM'/'dd'/'yyyy")</td>
+                <td><b class="LblMargin">Breast Exam:</b>  @Convert.ToDateTime(@Model.GetMHPregnancyHistory.BreastExam).ToString("MM'/'dd'/'yyyy")</td>
+                <td><b class="LblMargin">Pap Smear:</b>  @Convert.ToDateTime(@Model.GetMHPregnancyHistory.PapSmear).ToString("MM'/'dd'/'yyyy")</td>
+            </tr>
+            <tr>
+                <td><b class="LblMargin">Do You Use Contraception?</b>@Model.GetMHPregnancyHistory.Contraception</td>
+                <td><b class="LblMargin">What Kind Of Contraception?</b> @Model.GetMHPregnancyHistory.ContraceptionDetail</td>
+                <td><b class="LblMargin">What Was Your Age At First Menses?</b> @Model.GetMHPregnancyHistory.FirstMensesAge</td>
+            </tr>
+            <tr>
+                <td><b class="LblMargin">Menstrual Periods:</b>@Model.GetMHPregnancyHistory.MenstrualPeriods</td>
+                <td><b class="LblMargin">Age At Menopause?</b> @Model.GetMHPregnancyHistory.MenopauseAge</td>
+                <td><b class="LblMargin">Do You Have Hot Flashes Or Other Symptoms (Specify)?</b>@Model.GetMHPregnancyHistory.HotFlashesOrOther</td>
+            </tr>
+            <tr>
+                <td><b class="LblMargin">Any Gynecological Conditions Or Problems?</b> @Model.GetMHPregnancyHistory.GynecologicalConditions</td>
+                <td colspan="2"><b class="LblMargin">Notes:</b> @Model.GetMHPregnancyHistory.Notes</td>
+            </tr>
+        </tbody>
+    </table>
+}

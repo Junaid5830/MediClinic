@@ -1,0 +1,623 @@
+﻿
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var RoleType = _sessionManager.GetRoleId();
+    ViewData["Title"] = "Setting";
+    if (RoleType == 2)
+    {
+        //Layout = "~/Views/Shared/_Layout.cshtml";
+        Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+
+    }
+    else
+    {
+        //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+        Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    }
+    var patientId = ViewContext.RouteData.Values["id"];
+}
+
+@section styles{
+    <style>
+        .Patient_collap{
+            height:auto !important;
+        }
+        .collapsible {
+            border: none !important;
+            margin: 0 0 !important
+        }
+
+        .card a {
+            color: #6b6f82 !important;
+            font-size: 18px !important;
+        }
+
+        .collapsible {
+            box-shadow: none !important;
+        }
+
+        .collapsible-header {
+            border-bottom: none !important;
+            padding: 0 !important;
+            font-size: 18px !important;
+            color: #6b6f82 !important
+        }
+
+        .collapsible-body a {
+            color: #547cea !important
+        }
+
+        .collapsible-body {
+            height: 250px;
+            overflow: scroll auto !important;
+            padding: 8px !important;
+            overflow-x: hidden !important;
+        }
+
+        .custom-icon-color {
+            filter: contrast(0.2) !important;
+        }
+
+        .config-h6 {
+            margin-left: -7px !important;
+            line-height: 1.4 !important;
+            margin-bottom: 0 !important;
+        }
+
+        .collapsible-body a i {
+            font-size: 12px !important;
+            color: #6f6b82 !important;
+            font-weight: bold;
+        }
+
+        .collapsible-body a span {
+            margin-left: 10px !important;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.collapsible').collapsible();
+            $(".collapsible-header").click(function () {
+                $(".more", this).toggle()
+                $(".less", this).toggle()
+            });
+            $("li.settingsheader").addClass("border-bottom-header-active");
+
+        });
+
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m6 ">
+                <h5 class="breadcrumbs-title color-blue">Settings</h5>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row mb-1">
+    <div class="col s12">
+        <div class="container">
+
+            <div class="card">
+                <div class="card-content pt-0 ">
+
+                    <div class="row mt-3">
+                        <div class="col m12 s12 l12">
+
+
+                            <div class="row">
+                                <div class="col s12 m6 l6 showOnHover">
+                                    <i class="material-icons  left add-template">settings_applications</i>
+                                    <a href="@Url.Action("AdministrativeSetting","Home")" class="blue-text text-darken-2 settings">Administrative</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 showOnHover">
+                                    <i class="material-icons  left add-template">perm_identity</i>
+                                    <a href="@Url.Action("AssistantSetting","Home")" class="blue-text text-darken-2 settings">Assistant</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">layers</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Attorneys</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">receipt</i>
+                                    <a href="@Url.Action("Billing","SettingsElite")" class="blue-text text-darken-2 settings">Billing</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">perm_contact_calendar</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Calendar</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">featured_play_list</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Claim</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">local_hospital</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">
+                                        Clinic Location
+                                    </a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">local_hotel</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Clinic Room</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">code</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">CPT/HSPC Codes</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">report</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Custom Report</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">event</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Due Dates</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+
+                                    <i class="material-icons  left add-template">rate_review</i>
+                                    <a  href="@Url.Action("CompanyBilling","SettingsElite")" class="blue-text text-darken-2 settings">Company Billing</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">email</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Email</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*<i class="material-icons  left add-template">receipt</i>*@
+                                    <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/employees.png"></i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Employee</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*<i class="material-icons  left add-template">receipt</i>*@
+                                    <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/euo.png"></i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">EUO</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">airline_seat_individual_suite</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Facility Beds</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">info_outline</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Facility Info</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">room_service</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Facility Room</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">phone_android</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Fax</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">add_location</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Gps/Map</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">business</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">ICD 10</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*<i class="material-icons  left add-template">receipt</i>*@
+                                    <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/ime.png"></i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">IME</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">copyright</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">
+                                        Insurance Companies
+                                    </a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">insert_chart</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Inventory</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*<i class="material-icons  left add-template">receipt</i>*@
+                                    <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/invoices.png"></i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Invoice</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">monetization_on</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Marketing/Advertisement</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1">
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        <li>
+                                            <div class="collapsible-header">
+                                                <i class="material-icons left">settings</i>
+
+                                                <h6 class="mt-0 color-blue config-h6">Configuration </h6>
+                                                <i class="material-icons right more">expand_more</i>
+                                                <i class="material-icons right less" style="display: none">expand_less</i>
+
+                                            </div>
+                                            <div class="collapsible-body">
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientTreatmentStatus","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Patient Treatment Status</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientLegalStatus","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Patient Legal Status</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientRelationship","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Relationship</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("IncidentReportStatus","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Incident Report</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientRoleIncidentSetting","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Patient Role In Incident</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientNF2Status","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Patient NF2 Status</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("Claiminfo","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Claim Status</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("VehicleInsuranceProvider","Home")"><i class="material-icons">radio_button_unchecked</i><span>Vehicle Insurance Provider</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("DiagnosisSetting","Home")"><i class="material-icons">radio_button_unchecked</i><span>Diagnosis Code</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ICDCodeSetting","Home")"><i class="material-icons">radio_button_unchecked</i><span>ICD Code</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("CPTHSPC","Home")"><i class="material-icons">radio_button_unchecked</i><span>CPT/HDPC Code</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientCaseTypeSetting","home")"><i class="material-icons">radio_button_unchecked</i><span>Bill Case Type</span></a>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("TreatingProvides","Home")"><i class="material-icons">radio_button_unchecked</i><span>Treating Provider</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ReferingSetting","Home")"><i class="material-icons">radio_button_unchecked</i><span>Referring Provider</span></a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ClinicTypeNote","Home")"><i class="material-icons">radio_button_unchecked</i><span>Clinical Note Type</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("DmeBarCode","Home")"><i class="material-icons">radio_button_unchecked</i><span>DME Barcode No</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ProviderSpecility","Provider")"><i class="material-icons">radio_button_unchecked</i><span>Provider Speciality</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ProviderTerm","Provider")"><i class="material-icons">radio_button_unchecked</i><span>Provider Term</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("ProviderUidType","Provider")"><i class="material-icons">radio_button_unchecked</i><span>Provider UID Type</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("SubSpecility","Home")"><i class="material-icons">radio_button_unchecked</i><span>Sub-Contractor Speciality</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("HippaState","Home")"><i class="material-icons">radio_button_unchecked</i><span>Hipaa State</span></a>
+                                                    </div>
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("VisitProcedure","Home")"><i class="material-icons">radio_button_unchecked</i><span>Visit/Procedure</span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">person</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">User ID</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">message</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Message</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">notifications</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Notification</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">more</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Other Entities</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 ">
+                                          <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/patients.png"></i>
+
+                                          <a href="@Url.Action("PatientSettings","Setting", new {Id = patientId })"><span class="color-blue">Patient Setting</span></a>
+                                        
+                                    </div>
+                                @*<div class="col s12 m6 l6 pt-1">
+                                    <ul class="collapsible" data-collapsible="accordion">
+                                        <li>
+                                            <div class="collapsible-header">
+                                                <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/patients.png"></i>
+                                                <h6 class="mt-0 color-blue config-h6">Patient </h6>
+                                                <i class="material-icons right more">expand_more</i>
+                                                <i class="material-icons right less" style="display: none">expand_less</i>
+
+                                            </div> 
+                                            <div class="Patient_collap collapsible-body">
+                                                <div class="row">
+                                                    <div class="col s12  pt-1">
+                                                        <a href="@Url.Action("PatientListSetting","Setting", new {Id = patientId })"><i class="material-icons">radio_button_unchecked</i><span>Patient List Setting</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientSummarySetting","Setting", new {Id = patientId })"><i class="material-icons">radio_button_unchecked</i><span>Patient Summary Setting</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientRequiredFieldsInEditing","Setting", new {Id = patientId })"><i class="material-icons">radio_button_unchecked</i><span>Patient Required Field in Editing</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientEmergencyContact","Setting", new {Id = patientId })"><i class="material-icons">radio_button_unchecked</i><span>Patient Emergency Contact</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientLoginandSecurity","Setting", new {Id = patientId })"><i class="material-icons">radio_button_unchecked</i><span>Login and Security</span></a>
+                                                    </div>
+                                                    <div class="col s12 pt-1">
+                                                        <a href="@Url.Action("PatientSettings","Setting")"><i class="material-icons">radio_button_unchecked</i><span>Patient Setting</span></a>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>*@
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">lock</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Permission</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">receipt</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Prescrption</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*   <i class="material-icons  left add-template">receipt</i>*@
+                                    <i class=" left add-template"><img src="/app-assets/images/Dashboard-icons/provider.png"></i>
+                                    <a href="@Url.Action("ProviderSettings","Setting", new {Id = patientId })" class="blue-text text-darken-2 settings">Provider Settings</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">timer</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Reminder</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">block</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Restriction</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">desktop_windows</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Short Cuts</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">info</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Status</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*<i class="material-icons  left add-template">receipt</i>*@
+                                    <i class="left add-template"><img src="/app-assets/images/Dashboard-icons/sub-contractor.png"></i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Sub-Contractor</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    @*   <i class="material-icons  left add-template">receipt</i>*@
+                                    <i class=" left add-template"><img src="/app-assets/images/Dashboard-icons/provider.png"></i>
+                                    <a href="@Url.Action("ProviderSessionSettings","Setting", new {Id = patientId })" class="blue-text text-darken-2 settings">Provider Session Settings</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+                                <div class="col s12 m6 l6 pt-1 showOnHover">
+                                    <i class="material-icons  left add-template">featured_play_list</i>
+                                    <a href="javascript:void(0);" class="blue-text text-darken-2 settings">Template</a>
+                                    <a href="javascript:void(0);">
+                                        <i class="material-icons editOnhover right">edit</i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+

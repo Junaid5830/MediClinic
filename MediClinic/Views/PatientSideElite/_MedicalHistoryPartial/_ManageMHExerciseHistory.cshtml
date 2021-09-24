@@ -1,0 +1,55 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHExerciseHistory != null && Model.GetMHExerciseHistory.Count() > 0)
+{
+    <table class="table centered highlight bordered">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Exercise</th>
+                <th>Exercise Type</th>
+                <th>Number Of Days Per Week</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHExerciseHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Exercise</td>
+                    <td>@loop.ExerciseType</td>
+                    @if (loop.ExerciseNoOfDaysPerWeek != null)
+                    {
+                        <td>@loop.ExerciseNoOfDaysPerWeek</td>
+
+                    }
+                    else
+                    {
+                        <td>N/A</td>
+                    }
+
+                    @if (loop.HobbiesOrLeisureActivities != null)
+                    {
+                        <td><span class="">@loop.HobbiesOrLeisureActivities</span></td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHExerciseHistory(@loop.Id)"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHExerciseHistory(@loop.Id)"><i class="mdi mdi-delete"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

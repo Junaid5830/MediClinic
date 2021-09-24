@@ -1,0 +1,236 @@
+﻿@model LocationFacilityViewModel
+@{
+    ViewData["Title"] = "EditCurrentLocationInFacilityElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+
+
+@section styles{
+   
+    <style>
+
+
+        .AddLocation p {
+            margin-top: 1rem !important;
+        }
+    </style>
+
+}
+@section scripts{
+  
+  
+   
+    <script>
+        $(function () {
+
+            //$(".select2").select2(
+            //);
+            $('.selectpicker').selectpicker();
+        });
+
+        $(".select2").select2();
+    </script>
+    
+
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+    
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Current Location in Facility</h5>
+                    </div>
+
+                    <div class="col">
+                        <a href="/patientSideElite/currentLocationinfacilityElite" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>
+
+                </div>
+        </div>
+                <div class="row">
+                    <form class="col-sm-12" method="post">
+                       <input type="text" hidden  asp-for="CurrentLocation.CurrentLocationId"/>
+                        <input type="text" hidden asp-for="CurrentLocation.VisitId"/>
+                        <div class="row">
+                            @*<div class="col-md-6 ">
+                                <p>
+                                    Patient
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.PatientId" 
+                                            asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                            <option value="" disabled selected></option>
+                                    </select>
+                                </div>
+
+                            </div>*@
+                            <div class="col-md-6 ">
+                                <p>
+                                    Location
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.Location">
+                                        <option>Select</option>
+
+                                        <option value="ICU">ICU</option>
+
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 ">
+                                <p>
+                                    Condition
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.Condition">
+                                        <option>Select</option>
+
+                                        <option value="Critical">Critical</option>
+
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-md-6 ">
+                                <p>Date Checked In</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date" asp-for="CurrentLocation.DateCheckedIn">
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <p>
+                                    Duration
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.Duration">
+                                        <option>Select</option>
+
+                                        <option value="3HR">3HR</option>
+
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-md-6 ">
+                                <p>Anticipated Time To Be In</p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.AnticipatedTime">
+                                        <option>Select</option>
+
+                                        <option value="3HR">3HR</option>
+
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <p>
+                                    Caregiver Of Location
+
+                                </p>
+
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.CaregiverOfLocation">
+                                        <option>Select</option>
+
+                                        <option value="Dr Twister">Dr Twister</option>
+
+
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-md-6 ">
+                                <p>Nurse</p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.Nurse">
+                                        <option>Select</option>
+
+                                        <option value="Miss Sunshine">Miss Sunshine</option>
+
+
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <p>
+                                    Assistant
+
+                                </p>
+
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;" asp-for="CurrentLocation.Assistant">
+                                        <option>Select</option>
+
+                                        <option value="Daisy">Daisy</option>
+
+
+
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                        <div class="row mt-3 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <button  type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                                    <button type="button" class="waves-effect waves-light Recreate btn">Edit</button>
+                                    <button type="reset"  class="waves-effect waves-light Recreate btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+     
+</div>
+
+
+
+

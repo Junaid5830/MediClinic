@@ -1,0 +1,93 @@
+﻿@model MediClinic.Models.DTOs.UsersDto.AuthUserDto
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="RoleModuleTab" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th class="disable">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                        <label class="custom-control-label" for="selectAll"></label>
+                    </div>
+
+                </th>
+            <th>Page No</th>
+            <th>Page Name</th>
+            <th>Active</th>
+            <th>Sub Page Name</th>
+            <th>Active</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserRolePagesList.Where(x => x.ParentId is null))
+        {
+            <tr class="card" style="cursor: pointer">
+                <th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Id_@item.MainMenuId" value="check">
+                            <label class="custom-control-label" for="Id_@item.MainMenuId"></label>
+                        </div>
+                    </th>
+                <td>@item.MainMenuId</td>
+
+                <td>@item.PageName</td>
+                <td>
+
+                    @if (item.IsActive == true)
+                    {
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" onclick="InActivePage(@item.MainMenuId)" id="Active_@item.MainMenuId" checked>
+                            <label class="custom-control-label" for="Active_@item.MainMenuId"></label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" onclick="ActivePage(@item.MainMenuId)" id="@item.MainMenuId">
+                            <label class="custom-control-label" for="@item.MainMenuId"></label>
+                        </div>
+                    }
+                </td>
+                @if (!(item.SubMenu is null))
+                {
+                    <td>
+                        @foreach (var Sub in item.SubMenu)
+                        {
+                            @Sub.PageName <br />
+                        }
+                    </td>
+                    <td>
+                        @foreach (var Sub in item.SubMenu)
+                        {
+                            if (Sub.IsActive == true)
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" onclick="InActivePage(@Sub.MainMenuId)" id="@Sub.MainMenuId" checked>
+                                    <label class="custom-control-label" for="@Sub.MainMenuId"></label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" onclick="ActivePage(@Sub.MainMenuId)" id="@Sub.MainMenuId">
+                                    <label class="custom-control-label" for="@Sub.MainMenuId"></label>
+                                </div>
+                            }
+
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td>N/A</td>
+                    <td>N/A</td>
+                }
+
+
+                
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewData["Title"] = "DocCurrentAppointment";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles
+{
+    <style>
+        #queueAppointment .card{
+            max-height:300px !important; 
+        }
+        #queueAppointment #serving{
+            height:170px;
+            overflow:auto;
+        }
+        .card .card-content {
+            padding: 8px;
+            border-radius: 0 0 2px 2px;
+        }
+
+        hr {
+            border-top: 8px solid #547cea;
+            border-radius: 10px;
+        }
+
+        .smallCap {
+            border: 2px solid #547cea;
+            background-color: #547cea;
+            border-radius: 25px;
+            /* padding: 5px; */
+            width: 73px;
+            text-align: center;
+            height: 20px;
+            /* margin-top: 3px; */
+            margin: 0px auto;
+            margin-bottom: -10px;
+        }
+
+            .smallCap p {
+                color: white;
+                font-size: 12px;
+            }
+
+        .set_a {
+            color: #fff !important
+        }
+
+        .set_Number {
+            background-color: #547cea;
+            border-radius: 25px;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+
+        .set_Name {
+            border: 2px solid #547cea;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            padding: 5px;
+        }
+
+            .set_Name p {
+                font-size: 12px;
+                font-weight: 400;
+                color: #000;
+                text-align: center;
+            }
+
+        @@media (max-width:601px) {
+            .set_ONSmallScreen {
+                padding-right: 1rem !important;
+            }
+        }
+
+        .set_a {
+            font-size: 1rem;
+            color: black;
+            cursor: pointer;
+        }
+
+        .done-appointment {
+            float: right;
+            color: #fff;
+            cursor: pointer;
+            font-size: 30px;
+            margin-right: 5px;
+        }
+    </style>
+
+
+}
+@section scripts
+{
+    <script src="~/Elite/_node_modules/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/Elite/_node_modules/sparkline/jquery.sparkline.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".center>.set_Number>a>span").not(':first').css({ "color": "#167f64", "opacity": 0, "pointer-events": 'none' });
+            $('.tooltipped').tooltip();
+        });
+        function completeAppointment(id) {
+            $.ajax({
+                type: "POST",
+                url: "/Appointment/CompleteAppointment",
+                data: { Id: id },
+                success: function (data) {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Appointment Completed Successfully',
+                        delay: 2500,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                    $("#queueAppointment").empty();
+                    $("#queueAppointment").html(data);
+                    $(".center>.set_Number>a>span").not(':first').css({ "color": "#167f64", "opacity": 0, "pointer-events": 'none' });
+                }
+            });
+        }
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6">
+                    <h5 class="breadcrumbs-title color-blue">Patient Queue</h5>
+                </div>
+
+                @*<div class="col-6 col-sm-6 col-md-6">
+                        <a class="btn waves-effect waves-light float-right add-btn" style=" margin-top: -1px; " href="@Url.Action("PatientQueue")" target="_blank">
+                            Appointment Queue Design
+                        </a>
+                    </div>*@
+
+            </div>
+
+        </div>
+       
+        <div id="queueAppointment">
+            <div class="row">
+                <partial name="~/Views/Appointment/_AppointmentQueue.cshtml" />
+            </div>
+        </div>
+    </div>
+</div>

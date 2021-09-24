@@ -1,0 +1,150 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "SoapNotesList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var RoleId = _sessionManager.GetRoleId();
+
+}
+
+
+
+@section styles{
+    @*<link href="https://surveyjs.azureedge.net/1.8.4/modern.css" type="text/css" rel="stylesheet" />*@
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        #ModalPatientBody td {
+            vertical-align: middle !important
+        }
+
+        .Recreate {
+            color: #fff !important;
+        }
+    </style>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-sm-3 col-md-4 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">SOAP Notes</h5>
+                </div>
+                <div class="col-sm-9 col-md-5 col-lg-5" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (RoleId == 1)
+                {
+
+                }
+                else
+                {
+                    <div class="col-sm-12 col-md-3 col-lg-4">
+
+                        <a href="@Url.Action("AddSoapNotes","soapnotes")" class="btn  float-right add-btn set_smallscreen">
+                            Add New Note
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                    @*Batch Actions*@
+                    @*<span class="caret"></span>*@
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Soap Note </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ModalPatientBody">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<div id="surveyElement" style="display:inline-block;width:100%;"></div>
+    <div id="surveyResult"></div>*@
+
+@section scripts{
+    @*<script src="https://unpkg.com/jquery"></script>
+        <script src="https://surveyjs.azureedge.net/1.8.4/survey.jquery.js"></script>*@
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script type="text/javascript">
+
+
+        var DataRow = [];
+        var DataId = [];
+        var Data = @Html.Raw(Json.Serialize(ViewBag.result));
+        debugger;
+        for (var item of Data) {
+
+            DataRow.push(JSON.parse(item.surveyTest));
+            DataId.push(JSON.parse(item.surveyNoteId));
+        }
+        for (var i = 0; i < DataRow.length && i < DataId.length; i++) {
+            debugger;
+            var titleName;
+            if (DataRow[i].title == undefined) {
+                titleName = 'N/A';
+            }
+            else {
+                titleName = DataRow[i].title;
+            }
+
+            $("#ModalPatientBody").append("<tr class='card'><td>" + titleName + "</td><td><a class='btn add-btn' onclick='RunNotes(" + DataId[i] + ")'>Run</a><a class='btn add-btn ml-2' onclick='EditNotes(" + DataId[i] + ")'>Edit</a><a class='btn Recreate ml-2' onclick='deleteNotes(" + DataId[i] + ")'>Delete</a></td></tr>");
+
+
+        }
+        function deleteNotes(DataId) {
+            debugger;
+            //Event.closest('#ModalPatientBody tr').remove();
+
+            $.get("/SoapNotes/SoapNotesDelete", { Id: DataId }).done(function (data) {
+                debugger;
+
+
+                $(".checkmark").show().fadeOut(6000);
+                window.location.reload();
+
+            });
+        }
+        function RunNotes(DataId) {
+            debugger;
+            window.location.href = '/SoapNotes/SoapNoteSurvay/' + DataId;
+
+        }
+        $(document).ready(function () {
+            $("#List").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [1], "orderable": false }] });
+
+        })
+
+        function EditNotes(DataId) {
+            debugger;
+            window.location.href = '/SoapNotes/EditSoapNotes/' + DataId;
+
+        }
+    </script>
+
+}

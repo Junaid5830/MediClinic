@@ -1,0 +1,126 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+
+    <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+                <div class="col 12">
+                    <h6 class="color-blue">Sorting</h6>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>First Name</p>
+                    <div class="switch">
+                        <input type="checkbox" id="FirstNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FirstName" asp-for="ProviderListSettingDto.FirstName" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Last Name</p>
+                    <div class="switch">
+                        <input type="checkbox" id="LastNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LastName" asp-for="ProviderListSettingDto.LastName" data-toggle="toggle" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+                <div class="col s12">
+                    <h6 class="color-blue">Display Raws/Fields</h6>
+                </div>
+            </div>
+            <div class="row">
+                <input type="hidden" id="UserIdHidden" asp-for="ProviderListSettingDto.UserId" />
+
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Provider Id</p>
+                    <div class="switch">
+                        <input type="checkbox" id="ProviderIdCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="ProviderId" asp-for="ProviderListSettingDto.ProviderIdDisplay" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Entity Name</p>
+                    <div class="switch">
+                        <input type="checkbox" id="EntityNameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="EntityName" asp-for="ProviderListSettingDto.EntityName" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Name</p>
+                    <div class="switch">
+                        <input type="checkbox" id="NameCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="Name" asp-for="ProviderListSettingDto.Name" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Email</p>
+                    <div class="switch">
+                        <input type="checkbox" id="EmailCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="Email" asp-for="ProviderListSettingDto.Email" data-toggle="toggle" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>License No</p>
+                    <div class="switch">
+                        <input type="checkbox" id="licenseNoCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="LicenseNo" asp-for="ProviderListSettingDto.LicenseNo" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Npi Number</p>
+                    <div class="switch">
+                        <input type="checkbox" id="NpiNumberCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="NpiNumber" asp-for="ProviderListSettingDto.NpiNumber" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Phone No</p>
+                    <div class="switch">
+                        <input type="checkbox" id="PhoneNoCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="PhoneNo" asp-for="ProviderListSettingDto.PhoneNo" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Mobile No</p>
+                    <div class="switch">
+                        <input type="checkbox" id="MobileNoCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="MobileNo" asp-for="ProviderListSettingDto.MobileNo" data-toggle="toggle" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Assign Room No</p>
+                    <div class="switch">
+                        <input type="checkbox" id="AssignRoomNoCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="DOB" asp-for="ProviderListSettingDto.AssignRoomNo" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Fax No</p>
+                    <div class="switch">
+                        <input type="checkbox" id="FaxNoCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="FaxNo" asp-for="ProviderListSettingDto.FaxNo" data-toggle="toggle" />
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>Address</p>
+                    <div class="switch">
+                        <input type="checkbox" id="AddressCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="Paralegal" asp-for="ProviderListSettingDto.Address" data-toggle="toggle" />
+                    </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                    <p>TaxId</p>
+                    <div class="switch">
+                        <input type="checkbox" id="TaxIdCheckBox" onchange="checkBoxChangeListSettings(this)" data-val="TaxId" asp-for="ProviderListSettingDto.TaxId" data-toggle="toggle" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        </div>

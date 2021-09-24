@@ -1,0 +1,192 @@
+﻿<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Past Test</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="Test" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th> VISIT/PROCEDURE</th>
+                        <th> DATE/TIME </th>
+                        <th>PHYSICIAN</th>
+                        <th>TOTAL</th>
+                        <th> CPT CODE</th>
+                        <th>ICD CODE</th>
+                        <th class="all">ACTION  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+
+                        <td>Cancer</td>
+                        <td>1920</td>
+                        <td>Remission</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+
+
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+</div>
+<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Current Test</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="PastTest" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th> VISIT/PROCEDURE</th>
+                        <th> DATE/TIME </th>
+                        <th>PHYSICIAN</th>
+                        <th>TOTAL</th>
+                        <th> CPT CODE</th>
+                        <th>ICD CODE</th>
+                        <th class="all">ACTION  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+
+                        <td>Cancer</td>
+                        <td>1920</td>
+                        <td>Remission</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td>Yes</td>
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+
+
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="row"><div class="col-sm-12"><a href="" class="color-blue right mb-2">View More</a></div></div>
+    </div>
+
+
+</div>
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mt-1" id="Test_btn">Add New Test</button>
+        </div>
+    </div>
+
+<section class="Test">
+   
+        <div class="row">
+            <form class="col-sm-12  ">
+                <div class="row">
+
+                    <div class=" col-md-6 ">
+                        <p>Visit/Procedure Category</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Visit/Procedure Category">
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p> Date/Time</p>
+
+                        <div class="input-field">
+                            <input type="date" class="text-input" placeholder="select date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6  ">
+                        <p>Phsician</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter Phsician">
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p>ICD Code</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter ICD Code">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>CPT Code</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" placeholder="Enter CPT Code">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="text-right">
+                            <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+   
+</section>

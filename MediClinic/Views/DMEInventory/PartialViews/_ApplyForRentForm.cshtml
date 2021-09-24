@@ -1,0 +1,692 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <form asp-controller="DMEInventory" asp-action="ApplyForRent" data-ajax="true" id="ListingFormDmePrescription" method="post">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <h5>
+                            NEW YORK MOTOR VEHICLE NO-FAULT INSURANCE LAW
+                            ASSIGNMENT OF BENEFITS FORM
+
+                        </h5>
+                        <p>
+                            <b>
+                                (FOR ACCIDENTS OCCURRING ON AND AFTER 3/1/02)
+                            </b>
+                        </p>
+                    </div>
+
+
+                    @*<div class="col">
+                <a id="arrowIcon" class="waves-effect waves-light float-right mr-2 mt-2" href="DmeSupplies">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>*@
+                </div>
+
+                <div class="row">
+
+                    <div class="input-field">
+                        <p>Claim Number: <span><b><input class="text-input" placeholder="Claim Number" type="text" /></b></span> </p>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+
+                    <p>
+                        <span>
+                            I, <b><input class="text-input col-md-2" type="text" /></b>, ("Assignor") hereby assign to <b><input class="text-input col-md-2" type="text" /></b>
+                        </span>, ("Assignee") all rights privileges and remedies to payment for
+                        health care services provided by assignee to which I am entitled under Article 51 (the No-Fault statute) of
+                        the Insurance Law. The Assignee hereby certifies that they have not received any payment from or on
+                        behalf of the Assignor and shall not pursue payment directly from the Assignor for services provided by
+                        said Assignee for injuries sustained due to the motor vehicle accident which occurred on
+                        <b>
+                            <input class="text-input col-md-2" type="date" />
+                        </b>, notwithstanding any other agreement to the contrary.
+                        This agreement may be revoked by the assignee when benefits are not payable based upon the assignor’s
+                        lack of coverage and/or violation of a policy condition due to the actions or conduct of the assignor
+                    </p>
+
+                </div>
+                <div class="row">
+
+                    <p>
+                        <b>
+                            ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR
+                            OTHER PERSON FILES AN APPLICATION FOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM
+                            FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLY FALSE
+                            INFORMATION, OR CONCEALS FOR THE PURPOSE OF MISLEADING, INFORMATION CONCERNING ANY
+                            FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR
+                            CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH
+                            ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGE OR CONVERSION OF
+                            ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES
+                            OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND
+                            SHALL ALSO BE SUBJECT TO A CIVIL PENALTY NOT TO EXCEED FIVE THOUSAND DOLLARS AND THE
+                            VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                        </b>
+                    </p>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Provider Name: </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="Provider Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Patient Name: </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="Patient Name">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                        <div class="input-field">
+
+                            <p>Provider's Signature: </p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                        <div class="input-field">
+
+
+                            <p>Patient's Signature: </p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                Provider's Address:
+                            </p>
+                            <input class="text-input" type="text" placeholder="Patient Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                        <div class="input-field">
+                            <p>
+                                Patient's Address:
+
+                            </p>
+                            <input class="text-input" type="text" placeholder="Patient Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                Signature Date:
+                            </p>
+                            <input class="text-input" type="date" placeholder="Patient Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                Signature Date:
+                            </p>
+                            <input class="text-input" type="date" placeholder="Patient Name">
+                        </div>
+                    </div>
+                </div>
+                <h6 class=" color-blue ">Patient's Info</h6><br />
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                First & Last Name:
+                            </p>
+                            <input class="text-input" type="text" placeholder="First & Last Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                D.O.B:
+                            </p>
+                            <input class="text-input" type="date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                SS#:
+                            </p>
+                            <input class="text-input" type="text" placeholder="SS">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                MARITAL STATUS
+                            </p>
+                            <input class="text-input" type="text" placeholder=" MARITAL STATUS">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                HOME PHONE:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" MARITAL STATUS">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                MOBILE:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" Mobile">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                BUSINESS PHONE:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" BUSINESS PHONE">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                EMERGENCY CONTACT NAME &
+                            </p>
+                            <input class="text-input" type="text" placeholder="EMERGENCY CONTACT NAME &">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                ADDRESS:
+                            </p>
+                            <input class="text-input" type="text" placeholder="ADDRESS">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                ADDRESS OF DELIVERY IF DIFFERENT FROM ABOVE:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" ADDRESS OF DELIVERY IF DIFFERENT FROM ABOVE">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                DIAGNOSIS:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" DIAGNOSIS">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                PRESCRIBED SUPPLIES/EQUIPMENT:
+                            </p>
+                            <input class="text-input" type="text" placeholder=" PRESCRIBED SUPPLIES/EQUIPMENT">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                SHOULDER CPM
+                            </p>
+                            <input class="text-input" type="text" placeholder="SHOULDER CPM">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                PRESCRIBING PHYSICIAN::
+                            </p>
+                            <input class="text-input" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                        </div>
+                    </div>
+                </div>
+
+
+                <h6 class=" color-blue ">Prescribing Physician :</h6><br />
+                <div class="row">
+
+
+
+                    <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                        <p>
+                            Address:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                        <p>
+                            Phone:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                        <p>
+                            Fax:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="PRESCRIBING PHYSICIAN:">
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-xl-3 col-12">
+                        <p>
+                            License No:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="PRESCRIBING PHYSICIAN">
+                        </div>
+                    </div>
+
+
+                </div>
+                <h6 class=" color-blue ">INSURANCE INFO</h6><br />
+                <div class="row">
+
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <p>
+                            Type:
+                        </p>
+
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="radio" name="Gender" class="filled-in" />
+                            <span>NF</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="radio" name="Gender" class="filled-in" />
+                            <span>WC</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="radio" name="Gender" class="filled-in" />
+                            <span>COMMERCIAL</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="radio" name="Gender" class="filled-in" />
+                            <span>PVT</span>
+                        </label>
+                    </div>
+                </div>
+                <h6 class=" color-blue ">Insurance Provider</h6><br />
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Insurance Provider:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder=" NATIONWIDE INSURANCE CO P.O.BOX 2655 HARRISBURG PA 17105">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Phone
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="Phone">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Adjuster:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="Adjuster">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Accident Date
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Policy No:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="2566">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Claim No:
+                        </p>
+                        <div class="input-field">
+
+                            <input class="text-input" type="text" placeholder="1756">
+                        </div>
+                    </div>
+                </div>
+
+
+                <h6 class=" color-blue ">Insurance Info</h6><br />
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Device Clean</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Device Working</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Hand Control Accessible</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Patient Has To Call Cpm Solutions Ny If Any Problems</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Patient Or Caregiver Has Demonstrated Competency In Using The Device</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Person Taught If Other Than Patient</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in">
+                            <span>Bill Of Rights</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox" class="filled-in">
+                            <span>Device Protocols</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox">
+                            <span>How To Reach Cpm Solutions Ny With Questions And Problems</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox">
+                            <span>Device Operation</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox">
+                            <span>When To Contact Doctor</span>
+                        </label>
+                    </div>
+                    <div class="col-sm-2 col-md-2 col-xl-2 col-12">
+                        <label>
+                            <input type="checkbox">
+                            <span>To Call Cpm Solutions Ny As Instructed</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <p>
+                        BY SIGNING BELOW PATIENT KNOWS AND UNDERSTANDS ALL OF THE CONTENTS OF THIS ASSIGNMENT.
+                        I ALSO ACKNOWLEDGE THAT I HAVE RECEIVED ABOVE MENTIONED EQUIPMENT AND UNDERSTAND MY RIGHTS AND
+                        RESPONSIBILITIES AND UNDERSTAND HOW TO PROPERLY OPERATE THE DEVICE. I ALSO AGREE TO ALLOW AllBody
+                        Healing Supplies LLC TO USE MY PROTECTED HEALTH INFORMATION (PHI) FOR HEALTH INCLUDING PAYMENTS OF
+                        CLAIMS, OBTAINING INFORMATION FROM MY DESIGNATED HEALTH CARE PROVIDER AND FOR QUALITY ASSURANCE
+                        IMPROVEMENTS. IF I CHOOSE NOT TO ALLOW AllBody Healing Supplies LLC, TO RELEASE MY PHI, I WILL BE RESPONSIBLE
+                        FOR PAYMENT OF ALL PRODUCTS, SERVICES I RECEIVED FROM AllBody Healing Supplies LLC. RELEASE OF MY PHI WILL
+                        TERMINATE WHEN MY ACCOUNT BALANCE WITH AllBody Healing Supplies LLC, INC IS AT ZERO DOLLARS FOR MORE
+                        THAN 60 (SIXTY) DAYS. FOR RENTAL EQUIPMENT I UNDERSTAND HOW TO ARRANGE FOR EQUIPMENT RETURN AND
+                        UNDERSTAND THAT IF THIS EQUIPMENT IS DAMAGED, LOST, MISLAID, STOLEN, OR DESTROYED, I AM RESPONSIBLE
+                        FOR THE REPAIR CHARGES OR THE PURCHASE PRICE, WHICHEVER IS LESS.
+
+                    </p>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                Patient Or Authorized Representative Name:
+                            </p>
+                            <input class="text-input" type="text" placeholder="Patient Or Authorized Representative Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p>
+                                Date Of Execution/delivery:
+                            </p>
+                            <input class="text-input" type="date" />
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+                        <div class="input-field">
+
+
+                            <p> Patient Or Authorized Representative Signature: </p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+
+
+                        <div class="input-field">
+
+
+                            <p>Relationship To Patient/reason For Signing: </p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <div class="input-field">
+                            <p> Rep. Signature: </p>
+                            <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                <div class="m-signature-pad--body">
+                                    <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                </div>
+                                <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                    <div class="description">Save Your signature before submit the form</div>
+                                    <button type="button" class="btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+                                        Upload Image
+                                    </button>
+                                    <button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                        Clear
+                                    </button>
+                                    <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                        Save Signature
+                                    </button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Date:
+                        </p>
+
+                        <div class="input-field">
+
+                            <input class="text-input" type="date" />
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success float-right">Apply</button>
+                        @*<button class="btn btn-success float-right" onclick="printdiv();">Print</button>*@
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

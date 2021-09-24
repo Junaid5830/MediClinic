@@ -1,0 +1,124 @@
+﻿@using MediClinic.Models.DTOs;
+@model DepartmentsDto;
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .Bill_options {
+            margin-top: 0px;
+        }
+        .checkbox{
+            margin-top:50px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script>
+        var table;
+        $(document).ready(function () {
+            $('.select-all').click(function () {
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        })
+    </script>
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Departents</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("Index","Departments")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-action="Add" asp-controller="Departments" method="post" id="DepartmentsForm">
+                <input type="hidden" class="text-input" asp-for="@Model.DepartmentsID" placeholder="id">
+                <div class="row">
+                    <div class=" col-sm-6 col-md-4 col-xl-4 col-12">
+                        <p>Department Name</p>
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.DepName class="text-input" placeholder="Enter Department Name">
+                            <span class="required" asp-validation-for="@Model.DepName"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-4 col-xl-4 col-12">
+                        <p>Room</p>
+                        <div class="input-field">
+                            <input type="text" asp-for=@Model.Room class="text-input" placeholder="Enter Room">
+                            <span class="required" asp-validation-for="@Model.Room"></span>
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-4 col-xl-4 col-12">
+                        <div class="checkbox">
+                            <label>Is Active</label>
+                            <input type="checkbox" asp-for=@Model.Isactive>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="@Url.Action("Index","Departments")" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

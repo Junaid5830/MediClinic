@@ -1,0 +1,320 @@
+﻿@using MediClinic.Models
+@model MessageViewModel
+
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "MessageList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var RoleId = _sessionManager.GetRoleId();
+}
+
+
+
+@section styles
+{
+
+}
+@section scripts{
+
+    <script>
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+          var table=  $('#MessagesReceive').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+              "scrollX": false,
+              "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 3], "orderable": false }],
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            }); 
+        });
+        $(function () {
+         var tableSend=    $('#MessagesSend').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+             "scrollX": false,
+             "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 3], "orderable": false }],
+         });
+
+            $('[data-search]').on('keyup', function () {
+                tableSend.search(this.value).draw();
+            }); 
+        })
+        function deleteMesg(Id, event) {
+
+            event.closest('tr').remove();
+            $.get("/Messages/Delete", { mesgId: Id }).done(function (data) {
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+
+    </script>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Messages List
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input data-search type="text" class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                    <a class="btn  float-right add-btn set_smallscreen" href="/Messages/Add">
+                        Add New Messages
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        @if (RoleId == 5)
+        {
+            <h3>Send</h3>
+            <div class="row tablee">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="MessagesSend" class="table">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input select-all" id="selectSend">
+                                            <label class="custom-control-label" for="selectSend"></label>
+                                        </div>
+                                    </th>
+                                    <th>To</th>
+                                    @*<th>Status</th>*@
+                                    <th>Message</th>
+                                    <th class="all">Action  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.list)
+                                {
+
+                                    <tr class="card" style="cursor: pointer">
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="@item.MessageId" value="check">
+                                                <label class="custom-control-label" for="@item.MessageId"></label>
+                                            </div>
+
+                                        </th>
+                                        
+                                            <td>@item.FacilityName</td>
+
+                                       
+                                        @*<td>@item.Status</td>*@
+                                        <td>@item.Message</td>
+
+                                        <td class="action">
+                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                Options
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                <li onclick="deleteMesg(@item.MessageId,this)"><a href="javascript:void(0);">Delete</a></li>
+                                                <li><a href="/Messages/Add?id=@item.MessageId">Edit</a></li>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+
+
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h3>Inbox</h3>
+            <div class="row tablee">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="MessagesReceive" class="table dataTables_wrapper ">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input select-all" id="selectSend">
+                                            <label class="custom-control-label" for="selectSend"></label>
+                                        </div>
+                                    </th>
+                                    <th>From</th>
+                                    @*<th>Status</th>*@
+                                    <th>Message</th>
+                                    <th class="all">Action  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.receiveMessages)
+                                {
+
+                                    <tr class="card" style="cursor: pointer">
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="@item.MessageId" value="check">
+                                                <label class="custom-control-label" for="@item.MessageId"></label>
+                                            </div>
+
+                                        </th>
+
+                                        @if (RoleId == 1)
+                                        {
+                                            <td>@item.DoctorName</td>
+
+                                        }
+                                        else if (RoleId == 2)
+                                        {
+                                            <td>@item.PatientName</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@item.FacilityName</td>
+
+                                        }
+                                        @*<td>@item.Status</td>*@
+                                        <td>@item.Message</td>
+
+                                        <td class="action">
+                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                Options
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                <li onclick="deleteMesg(@item.MessageId,this)"><a href="javascript:void(0);">Delete</a></li>
+                                                <li><a href="/Messages/Add?id=@item.MessageId">Edit</a></li>
+                                            </ul>
+
+                                        </td>
+                                    </tr>
+
+
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <h3>Outbox</h3>
+            <div class="row tablee">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="MessagesSend" class="table">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input select-all" id="selectSend">
+                                            <label class="custom-control-label" for="selectSend"></label>
+                                        </div>
+                                    </th>
+                                    <th>To</th>
+                                    @*<th>Status</th>*@
+                                    <th>Message</th>
+                                    <th class="all">Action  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.list)
+                                {
+
+                                <tr class="card" style="cursor: pointer">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="@item.MessageId" value="check">
+                                            <label class="custom-control-label" for="@item.MessageId"></label>
+                                        </div>
+
+                                    </th>
+                                    @if (RoleId == 1)
+                                    {
+                                        <td>@item.DoctorName</td>
+
+                                    }
+                                    else if (RoleId == 2)
+
+                                    {
+                                        <td>@item.PatientName</td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>@item.FacilityName</td>
+                                    }
+                                    @*<td>@item.Status</td>*@
+                                    <td>@item.Message</td>
+
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@item.MessageId,this)"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a href="/Messages/Add?id=@item.MessageId">Edit</a></li>
+                                        </ul>
+
+                                    </td>
+                                </tr>
+
+
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Appointment";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles
+{
+    <link href="~/Elite/_node_modules/calendar/dist/fullcalendar.css" rel="stylesheet" />
+}
+@section scripts
+{
+    <script src="~/Elite/_node_modules/calendar/jquery-ui.min.js"></script>
+    <script src="~/Elite/_node_modules/moment/moment.js"></script>
+    <script src='~/Elite/_node_modules/calendar/dist/fullcalendar.min.js'></script>
+    <script src="~/Elite/_node_modules/calendar/dist/cal-init.js"></script>
+}
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 ">
+
+                <div class="card-body b-l calender-sidebar">
+                    <div id="calendar"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

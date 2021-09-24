@@ -1,0 +1,217 @@
+﻿@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var RoleType = _sessionManager.GetRoleId();
+    var LoginId = ViewContext.RouteData.Values["id"];
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var EmployeeId = _sessionManager.GetEmployeeId();
+    var PatientName = _sessionManager.GetPatientName();
+    var PatientDOB = _sessionManager.GetPatientDOB();
+    var ProviderName = _sessionManager.GetProviderName();
+    long Id = 0;
+    if (RoleType == 3)
+    {
+        PatientName = "";
+        PatientDOB = "";
+        ProviderName = _sessionManager.GetProviderName();
+        Id = ProviderInfoId;
+    }
+    else if (RoleType == 1)
+
+    {
+        PatientName = _sessionManager.GetPatientName();
+        PatientDOB = _sessionManager.GetPatientDOB();
+        ProviderName = _sessionManager.GetProviderName();
+    }
+    else
+    {
+        Id = EmployeeId;
+    }
+}
+<header class="topbar set_nav">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light  ">
+
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+
+        <div class="navbar-header header_Patient hide_768" style="padding-left:0px !important;">
+
+            <h1 class="navbar-brand">
+                @if (RoleType == 1)
+                {
+
+                    <span>  <a class="brand-logo brand-logo2 darken-1 dark-logo" href="@Url.Action("PatientSummary2","PatientSideElite", new {Id = patientInfoId })"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a></span>
+
+                    <a class="sidebartoggler ml-4" href="javascript:void(0)"><i class="ti-menu iconHeader "></i> </a>
+                }
+                else
+                {
+
+                    <span>  <a class="brand-logo brand-logo2 darken-1 dark-logo" href="@Url.Action("Index2","Home", new {Id = Id })"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a></span>
+
+                    <a class="sidebartoggler ml-4" href="javascript:void(0)"><i class="ti-menu iconHeader "></i> </a>
+                }
+
+            </h1>
+
+
+        </div>
+        <h1 class="navbar-brand min_screenHeading"> <a class="btn btn-success icon-menu dropdown-toggle dropdown-toggle-split header-togle sidebartoggler"></a></h1>
+
+
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+
+        <div class="navbar-collapse">
+            <div class="header-search-wrapper header-1 navbar-width " style="margin-left:44px !important;display:none;">
+                <ul class="navbar-list firstNavBarList " style="margin-bottom:0px !important;">
+                    @if (RoleType == 1)
+                    {
+                        <li class="nav-item col  centralheader  m2 border-bottom-header-active" style="height:64px;"><a class="active " href="@Url.Action("AccessDenied","Error")">Central</a></li>
+                        <li class="tabss col m3 calendarheader "><a href="@Url.Action("AccessDenied","Error")" class="">Calendar-Schedule</a></li>
+                        <li class="tabss col m2  patientlist  "><a href="@Url.Action("AccessDenied","Error")" class="pl-10">Patients</a></li>
+                        <li class="tabss col m3  patientheader  "><a href="@Url.Action("AccessDenied","Error")" class="">Add New Patient</a></li>
+                        <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","SettingsElite",new {Id = LoginId})" class="">Settings</a></li>
+                        <li class="tabss col m2 checkinheader   ">
+                            <a href="@Url.Action("AccessDenied","Error")">Check In/Out</a>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="nav-item col  centralheader  m2 border-bottom-header-active" style="height:64px;"><a class="active " href="@Url.Action("Index2","Home", new {Id = Id } )">Central</a></li>
+                        <li class="tabss col m3 calendarheader "><a href="@Url.Action("CentralCalendar","Appointment",new {Id = Id })" class="">Calendar-Schedule</a></li>
+                        <li class="tabss col m2  patientlist  "><a href="@Url.Action("PatientList","patientsideelite",new {Id = Id })" class="pl-10">Patients</a></li>
+                        <li class="tabss col m3  patientheader  "><a href="@Url.Action("PatientInfo","PatientSideElite")" class="">Add New Patient</a></li>
+                        <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","SettingsElite",new {Id = LoginId})" class="">Settings</a></li>
+                        <li class="tabss col m2 checkinheader   ">
+                            <a href="@Url.Action("CheckInOut","Doctor",new {Id = Id })">Check In/Out</a>
+                        </li>
+                    }
+
+
+                </ul>
+
+                <div id="toggleit"> </div>
+
+            </div>
+            <div class="header-search-wrapper header-2">
+                <div class="btn-group set_marginSmall xs_ScreenSet" style="margin-left:230px; line-height:1;">
+                    <button type="button" class="btn btn-success ti-menu dropdown-toggle dropdown-toggle-split header-togle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top:6px">
+                    </button>
+                    <span style="color:#fff;margin:15px; font-weight:400; margin-left:7px !important;line-height:1.8" class="hide-on-med-and-down hide_Small">Quick Access</span>
+                    <div class="dropdown-menu second_Dropdown">
+                        @if (RoleType == 1)
+                        {
+                            <a class="dropdown-item border-bottom-header-active" href="javascript:void(0)">Central</a>
+                            <a class="dropdown-item" href="@Url.Action("AccessDenied","Error")">Calendar-Schedule</a>
+                            <a class="dropdown-item" href="@Url.Action("AccessDenied","Error")">Patients</a>
+                            <a class="dropdown-item" href="@Url.Action("AccessDenied","Error")">Add New Patient</a>
+                            <a class="dropdown-item" href="@Url.Action("Setting","SettingsElite",new {Id = LoginId})">Settings</a>
+                            <a class="dropdown-item" href="@Url.Action("AccessDenied","Error")">Check In/Out</a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item border-bottom-header-active" href="javascript:void(0)">Central</a>
+                            <a class="dropdown-item" href="@Url.Action("CentralCalendar","Appointment",new {Id = Id })">Calendar-Schedule</a>
+                            <a class="dropdown-item" href="@Url.Action("PatientList","patientsideelite",new {Id = Id })">Patients</a>
+                            <a class="dropdown-item" href="@Url.Action("PatientInfo","PatientSideElite")">Add New Patient</a>
+                            <a class="dropdown-item" href="@Url.Action("Setting","SettingsElite",new {Id = LoginId})">Settings</a>
+                            <a class="dropdown-item" href="@Url.Action("CheckInOut","Doctor",new {Id = Id })">Check In/Out</a>
+                        }
+
+                    </div>
+                </div>
+                <div id="toggleit"> </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- toggle and nav items -->
+            <!-- ============================================================== -->
+            @*<ul class="navbar-nav ml-auto">
+                <li class="nav-item location_text  search-button"><a href="javascript:void(0)" data-toggle="collapse" data-target="#demo" class="icon_setNavSearch"><i class="ti-search"></i></a></li>
+            </ul>*@
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <ul class="navbar-nav my-lg-0">
+                <!-- ============================================================== -->
+                <!-- Comment -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- End Comment -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Messages -->
+                <!-- ============================================================== -->
+                <li class="nav-item location_text border-right dropdown" style="margin-right: 7px !important;">
+                    <a class=" dropdown-toggle waves-effect waves-dark icon_setNavBell" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="mdi mdi-bell-outline"></i> <small class="notification-badge dot"></small></a>
+                    <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                        <ul id="notifications-dropdown">
+                            <li>
+                                <div class="drop-title" onclick="readNotification()" style="cursor:pointer">Notifications<span class="new badge badge-count"></span><small class="badge-all" onclick="readNotification()">view all</small></div>
+
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item border-right location_text hide_nav" style="padding:0 7px !important">
+                    <a href="javascript:void(0)" class="icon_setNav"> <i class="mdi mdi-map-marker"></i><span class="span_set">7777 Main Street</span></a>
+
+                </li>
+                <!-- ============================================================== -->
+                <!-- End Messages -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- mega menu -->
+                <!-- ============================================================== -->
+                <li class="nav-item dropdown  location_text hide_nav" style="padding:0 7px">
+                    <a href="javascript:void(0)" class="icon_setNav"><span class="span_set">@PatientName</span></a>
+
+                </li>
+                <!-- ============================================================== -->
+                <!-- End mega menu -->
+                <!-- ============================================================== -->
+                <li class="nav-item">
+                    <div class="user-profile">
+                        <div class="user-pro-body">
+                            <a href="javascript:void(0)" class="dropdown-toggle u-dropdown link hide-menu user-img" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><div class="user-img"><img src="~/elite/images/users/1.jpg" alt="user-img" class="img-circle"><span class="profile-status online pull-right"></span></div></a>
+                            <div class="dropdown">
+
+                                <div class="dropdown-menu animated flipInY margin_0 profile_item">
+                                    <!-- text-->
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                                    <!-- text-->
+                                    <!-- text-->
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
+                                    <!-- text-->
+                                    <!-- text-->
+                                    <a href="javascript:void(0)" class="dropdown-item"><i class="mdi mdi-help-circle-outline"></i>Help</a>
+                                    <!-- text-->
+                                    <div class="dropdown-divider"></div>
+                                    <!-- text-->
+                                    <a href="/auth/logout" class="dropdown-item"><i class="ti-shift-right"></i> Logout</a>
+                                    <!-- text-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <nav class=" search-sm collapse" id="demo">
+        <div class="nav-wrapper">
+            <form>
+                <div class="input-field location_text" style="background-color: #29b6f6;">
+                    <input class="search-box-sm" type="search" required="">
+                    <a href="javascript:void(0)" class="icon_setNavSearch" data-toggle="collapse" data-target="#demo"><i class="mdi mdi-close" style="font-size:14px; padding-left:16px !important"></i></a>
+                </div>
+            </form>
+        </div>
+    </nav>
+</header>

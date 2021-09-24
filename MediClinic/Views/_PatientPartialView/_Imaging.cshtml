@@ -1,0 +1,196 @@
+﻿
+   
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h6 class="color-blue">Past Imaging</h6>
+            <table id="Pastimaginglist-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="Pastimaginglist-table" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>DATE/Time OF IMAGING</th>
+                        <th>IMAGING FACILITY</th>
+                        <th>REPORT BY</th>
+                        <th>TYPE OF IMAGE</th>
+                        <th>REPORT Status</th>
+                        <th>IMAGE FILM</th>
+                        <th>DIAGNOSIS</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>07/07/2020 11:20pm</td>
+                        <td>SOUTH BEACH</td>
+                        <td>Dr. Imagon</td>
+                        <td>Created</td>
+                        <td>Shoulder X-Ray</td>
+                        <td>YES</td>
+                        <td>Tear</td>
+
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown1' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                </tbody>
+
+            </table>
+            <a href="@Url.Action("PatientHippaReleaseImaging","Home")" class="right exam_viewmore">View More</a>
+            <h6 class="color-blue">Current Imaging</h6>
+            <table id="Currentimaginglist-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="Currentimaginglist-table" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>DATE/Time OF IMAGING</th>
+                        <th>IMAGING FACILITY</th>
+                        <th>REPORT BY</th>
+                        <th>TYPE OF IMAGE</th>
+                        <th>REPORT Status</th>
+                        <th>IMAGE FILM</th>
+                        <th>DIAGNOSIS</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>07/07/2020 11:20pm</td>
+                        <td>SOUTH BEACH</td>
+                        <td>Dr. Imagon</td>
+                        <td>Created</td>
+                        <td>Shoulder X-Ray</td>
+                        <td>YES</td>
+                        <td>Tear</td>
+
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mb-1" id="imaging_btn">Add New Imaging</button>
+        </div>
+    </div>
+</div>
+<div class="container" id="imaging_form" style="display:none">
+    <div class="row">
+        <form class="form-inline col s12">
+            <div class="row">
+                <div class="col s12 m6 ">
+                    <div class="input-field pl-0">
+                        <p>Date of Imaging</p>
+                        <input type="text" class="datepicker text-input" placeholder="Select Date">
+                    </div>
+
+                </div>
+                <div class="col s12 m6 ">
+                    <div class="input-field  pl-0">
+                        <p>Time Of Imaging</p>
+                        <input type="text" class="timepicker text-input" placeholder="Select Time">
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="row">
+
+                <div class="col s12 m6">
+                    <div class="input-field pl-0">
+                        <p>Reported By</p>
+                        <div class="dropdownauto"><input class="text-input input-styling Reported" type="text" placeholder="Select Reported By"></div>
+                    </div>
+                </div>
+                <div class=" col s12 m6">
+
+                    <div class="input-field pl-0">
+                        <p>Type Of Image</p>
+                        <div class="dropdownauto"><input class="text-input input-styling Type" type="text" placeholder="Select Type of Image"></div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field pl-0">
+                        <p>Report Status</p>
+                        <div class="dropdownauto"><input class="text-input input-styling Report" type="text" placeholder="Select Report Status"></div>
+                    </div>
+                </div>
+                <div class=" col s12 m6">
+                    <div class="input-field pl-0">
+                        <p>Image Film</p>
+                        <div class="dropdownauto"><input class="text-input input-styling Film" type="text" placeholder="Select Image Film"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="col s12 m6 ">
+                    <div class="input-field pl-0">
+                        <p>Diagnosis</p>
+                        <div class="dropdownauto"><input class="text-input input-styling Diagnosis" type="text" placeholder="Select Diagnosis"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <a href="javascript:void(0);" class="btn add-btn">Save</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

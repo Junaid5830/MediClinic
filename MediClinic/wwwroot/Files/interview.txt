@@ -1,0 +1,53 @@
+Custom define is convenstional routing hoti hai..
+Attribute routing action method k uper define krty hai
+
+routes.MapMvcAttributeRoutes();
+
+[Route("asdfsadf")]
+Prefix router is controller name router
+
+to override prefix 
+
+
+When we pass a Model in view it become strongly types view
+
+
+http verb
+	POST for read 404 not found, 409 conflict if data already exist
+	GEt	202 ok, 404 not fund
+	PUt update and replace, 200 or 204 not content
+	PATCH Modify/Update 
+	DELETE
+
+
+Class is reference type.
+CLR memory allocation is heap.
+Support inheritence.
+it can be null type
+When class run constructor automatically create a
+
+
+Struct are value type.
+Memory allocation in stack
+Does not support inhertence,
+can't be null
+
+In derived class we use virtual keywork for override the method of Base class
+
+
+Is it possible for a class to inherit the constructor of its base class?
+
+In inheritance, the derived class inherits all the members(fields, methods) of the base class, but derived class cannot inherit the constructor of the base class because constructors are not the members of the class.
+
+
+Multiple type of inhertence
+Single, Multi level, multiple. multipath, hierarchical, hybrid
+
+Construct use for creation of class object, and destructor use to destroy the class
+
+Coupling dependences of each other
+Cohesion completeness of itself
+
+HTTP handler is the process that runs in response to a request made to an ASP.NET Web application. 
+HTTP modules let you examine incoming and outgoing requests and take action based on the request.
+

@@ -1,0 +1,121 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model MediClinic.Models.ReportsViewModel
+<form asp-action="ReportHistory" asp-controller="Reports" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)" method="post">
+    <div class="row">
+
+        <div class="col">
+            <p>Based on the patient's history, where and how did the injury/illness happen :</p>
+            <div class="input-field">
+                <textarea class="form-control" placeholder="Enter Details" asp-for="reportHistoryDto.InjuryOrillneshappen"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>How did you learn about the injury/illness (check one):</p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="injury" name="reportHistoryDto.InjuryOrillnes" class="custom-control-input  injury/illness" value="Patient">
+                        <label class="custom-control-label" for="injury">Patient</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="injury1" name="reportHistoryDto.InjuryOrillnes" class="custom-control-input injury/illness" value="Medical Records">
+                        <label class="custom-control-label" for="injury1">
+                            Medical Records
+                        </label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="injury2" name="reportHistoryDto.InjuryOrillnes" class="custom-control-input injury/illness" value="Other">
+                        <label class="custom-control-label" for="injury2">Other(Specify)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row mt-1" id="InjuryOrillnesDetail" style="display:none">
+        <div class="col">
+            <input type="text" class="text-input" placeholder="Enter Detail" asp-for="reportHistoryDto.InjuryOrillnesDetail" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Did another health provider treat this injury/illness including hospitalizaton and/or surgery?</p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="hospitalizatonYes" name="reportHistoryDto.Hopsitaliaztion" class="custom-control-input  patientInfoTxtField" value="Yes">
+                        <label class="custom-control-label" for="hospitalizatonYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="hospitalizatonNo" name="reportHistoryDto.Hopsitaliaztion" class="custom-control-input patientInfoTxtField" value="No">
+                        <label class="custom-control-label" for="hospitalizatonNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row mt-1" id="HistoryhospitalizatonDetail" style="display:none">
+        <div class="col">
+            <input type="text" placeholder="Enter Detail" class="text-input" asp-for="reportHistoryDto.HospitalizationDetail" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>Have you previously treated this patient for a similar work-related injury/illness?</p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="illnessYes" name="reportHistoryDto.WorkRelatedInjury" class="custom-control-input" value="Yes">
+                        <label class="custom-control-label" for="illnessYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="illnessNo" class="custom-control-input" name="reportHistoryDto.WorkRelatedInjury" value="No">
+                        <label class="custom-control-label" for="illnessNo">
+                            No
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row mt-1" id="WorkRelatedDetail" style="display:none">
+        <div class="col">
+            <input class="text-input" placeholder="Give reson" asp-for="reportHistoryDto.WorkRelatedInjuryDetail" />
+        </div>
+
+
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

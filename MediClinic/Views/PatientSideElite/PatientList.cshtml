@@ -1,0 +1,724 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "PatientList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles
+{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+    <style>
+        #providerOverflow {
+            overflow-x: scroll;
+            overflow-y: hidden;
+            margin-bottom: 10px;
+        }
+            /*#providerOverflow::-webkit-scrollbar-track {
+            background: orange;*/ /* color of the tracking area */
+            /*}*/
+            #providerOverflow::-webkit-scrollbar {
+                width: auto;
+            }
+
+            #providerOverflow::-webkit-scrollbar-track {
+                background: #F5F5F5;
+            }
+
+            #providerOverflow::-webkit-scrollbar-thumb {
+                background: #547cea !important;
+            }
+        @@media screen and (max-width: 768px) {
+            #AppointmentModal .modal-dialog {
+                max-width: 500px !important;
+            }
+        }
+
+        #AppointmentModal .modal-dialog {
+            max-width: 52%;
+        }
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+            border-color: var(--bubble-color);
+        }
+
+
+
+        .custom-control-label::before {
+            border: 2px solid var(--bubble-color);
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: var(--bubble-color) !important;
+            border-color: var(--bubble-color) !important;
+        }
+
+        .custom-control-label::after {
+            position: relative !important;
+        }
+
+        [type="checkbox"]:checked + span:not(.lever)::before {
+            border-right: 2px solid var(--bubble-color);
+            border-bottom: 2px solid var(--bubble-color);
+        }
+
+        .table-responsive {
+            overflow-x: unset !important
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .disable label span:after {
+            border: 2px solid var(--bubble-color) !important;
+        }
+
+        .FLNameLetter {
+            background: #f1f1f1;
+            padding: 11px;
+            border-radius: 50%;
+            color: #547cea;
+            font-weight: bold;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    @*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>*@
+    @*<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>*@
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    @*<script src="~/app-assets/js/jquery.form.js"></script>*@
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        $(".time-picker").hunterTimePicker();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        var ProviderId;
+        var Duration;
+        var selectedList = [];
+        var table;
+        $(document).ready(function () {
+            $('.select2').select2();
+            $('.select-all').click(function () {
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $("#Patient-table").DataTable({
+                "info": false,
+                responsive: false,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+                'order': [[3, 'asc']],
+                'columnDefs': [{
+                    "targets": [0],
+                    "orderable": false,
+                }]
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+            $('#provider_name').change(function () {
+                ProviderId = $('#provider_name option:selected').val();
+            });
+            $('#SlotDuration').change(function () {
+                Duration = $('#SlotDuration option:selected').val();
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+        });
+
+        function PatientBatchActions(batchType) {
+            $("#ModalPatientBody").html('');
+
+            debugger;
+
+            var isAnyChecked = false;
+            var Patientobj = {};
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+
+            $('input[type=checkbox]', rows).each(function () {
+                if ($(this).prop("checked") == true) {
+                    if ($(this).attr('data-val') != "all") {
+                        Patientobj.patientId = $(this).attr('id');
+                        Patientobj.patientName = $(this).attr('data-val')
+                        isAnyChecked = true;
+                        selectedList.push(Patientobj);
+                        Patientobj = {};
+                    }
+                }
+            })
+            if (isAnyChecked) {
+                if (batchType == 'Add Appointment') {
+                    debugger;
+
+                    $("#AppointmentModal").modal();
+                    $('input').val("");
+                    $('input').val("");
+
+                    $("input:checkbox").prop('checked', false);
+
+                    $(".select2").val('').trigger('change');
+
+                    for (var i = 0; i < selectedList.length; i++) {
+
+
+                        $("#ModalPatientBody").append("<tr ><td class='Pat_Id' Pat_Id = " + selectedList[i].patientId + ">" + selectedList[i].patientId + "</td><td>" + selectedList[i].patientName + "</td></tr>");
+
+                    }
+                    //$("#AppointmentModal ModalPatient_Id").val(selectedList[0]);
+                    //$("#AppointmentModal Name").val(selectedList[1]);
+                }
+
+            }
+        }
+        $('#provider_name').change(function () {
+            ProviderId = $('#provider_name option:selected').val();
+        });
+        $('#SlotDuration').change(function () {
+            Duration = $('#SlotDuration option:selected').val();
+        });
+
+        function deletePatient(patientInfoId, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/PatientSide/PatientInfoDelete", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+
+
+
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+        $('#BulkAppointHide').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+                var tblData = "";
+                $('#listable tr:not(:first)').each(function () {
+
+                    var PatientId = $(this).find(".Pat_Id").attr("Pat_Id");
+                    var Provider_Id = ProviderId;
+                    var DurationTime = Duration;
+                    var Date = $("#AppointmentDate").val();
+                    var StartTime = $("#STime").val();
+
+                    tblData += (PatientId + "_" + Provider_Id + "_" + DurationTime + "_" + Date + "_" + StartTime + "|-|");
+                });
+
+                //$("#saveTemplate").prop('disabled', true);
+                $("#selectedData").val(tblData);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+
+                        }
+                    }
+                });
+            }
+
+        });
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Template Name already exists",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        function SuccessMsg() {
+            $(".checkmark").show().fadeOut(6000);
+
+            $("#AppointmentModal").modal('hide');
+        }
+
+
+        function checkVisitExist(patientId) {
+            $.get('/PatientSideElite/GetLatestVisitID', { patientId: patientId }).done(function (data) {
+                window.open('/patientsideelite/PatientSummary2/' + patientId);  
+                @*if (!data) {
+                    new PNotify({
+                        title: 'Error!',
+                        text: "No visit exist against this patient",
+                        delay: 2000,
+                        type: 'error'
+                    });
+                }
+                else {
+                    window.location.href = '/patientsideelite/PatientSummary2/' + patientId  
+                }*@
+            })
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Patients</h5>
+                </div>
+                <div class="col-sm-9 col-md-5 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <a href="@Url.Action("patientinfo","patientsideelite")" class="btn  float-right add-btn set_smallscreen">
+                        Add New Patient
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">
+
+                <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                    Batch Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu batch">
+                    @*<li onclick="PatientBatchActions('Add Appointment')"><a href="javascript:void(0);" class="bulkAppointemtnModalClear">Add Appointment</a></li>*@
+                    @*<li><a href="@Url.Action("Reports","provider")">Progress</a></li>*@
+                    <li><a href="javascript:void(0);">Add Rx</a></li>
+                    <li><a href="javascript:void(0);">Add Visits</a></li>
+                    <li><a href="javascript:void(0);">Assign Transport</a></li>
+                    <li><a href="javascript:void(0);">Call</a></li>
+                    <li><a href="javascript:void(0);">Dispatch Transport</a></li>
+                    <li><a href="javascript:void(0);">Edit</a></li>
+                    <li><a href="javascript:void(0);">Electronic Bill</a></li>
+                    <li><a href="javascript:void(0);">Email</a></li>
+                    <li><a href="javascript:void(0);">Fax</a></li>
+
+                    <li><a href="javascript:void(0);">Generate AOB</a></li>
+                    <li><a href="javascript:void(0);">Generate Complete Delivery Form</a></li>
+                    <li><a href="javascript:void(0);">Generate Currier Assignemnt Form</a></li>
+                    <li><a href="javascript:void(0);">Generate Delivery Acknowledgment</a></li>
+                    <li><a href="javascript:void(0);">Generate Delivery Agreement</a></li>
+                    <li><a href="javascript:void(0);">Generate Referral</a></li>
+                    <li><a href="javascript:void(0);">Options</a></li>
+                    <li><a href="javascript:void(0);">Paper Bill</a></li>
+                    <li><a href="javascript:void(0);">Print</a></li>
+                    <li><a href="javascript:void(0);">Schedule</a></li>
+                    <li><a href="javascript:void(0);">Share</a></li>
+                    <li><a href="javascript:void(0);">SMS</a></li>
+                    <li><a href="javascript:void(0);">Start Exam</a></li>
+                    <li><a href="javascript:void(0);">View</a></li>
+                    <li><a href="javascript:void(0);">View/Print</a></li>
+                    <li><a href="javascript:void(0);">Batch Option</a></li>
+                  
+                </ul>
+
+            </div>
+
+
+        </div>
+
+        <div class="row tablee">
+            <div class="col-md-12" id="providerOverflow">
+                <div class="table-responsive">
+                    <table id="Patient-table" class="table">
+                        <thead>
+                            <tr class="uppercase">
+
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                    </div>
+                                    @*<label>
+                                            <input type="checkbox" data-val="all" id="selectAll" class="select-all" />
+                                            <span style="--bubble-color:#5a5a5a"></span>
+                                        </label>*@
+                                </th>
+                                <th data-orderable="false"></th>
+                                @if (Model.PatientListSettingDto.PatientId)
+                                {
+                                    <th>Patient Id</th>
+                                }
+                                @if (Model.PatientListSettingDto.Name)
+                                {
+                                    if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == false)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else if (Model.PatientListSettingDto.FirstName == false && Model.PatientListSettingDto.LastName == true)
+                                    {
+                                        <th>Name</th>
+                                    }
+                                    else
+                                    {
+                                        <th data-orderable="false">Name</th>
+                                    }
+                                }
+                                @if (Model.PatientListSettingDto.HomePhone)
+                                {
+                                    <th>Home Phone</th>
+                                }
+                                @if (Model.PatientListSettingDto.MobilePhone)
+                                {
+                                    <th>Cell Phone</th>
+                                }
+                                @if (Model.PatientListSettingDto.Address)
+                                {
+                                    <th>Address</th>
+                                }
+                                @if (Model.PatientListSettingDto.DOB)
+                                {
+                                    <th>DOB</th>
+                                }
+                                <th>Insurance</th>
+                                @if (Model.PatientListSettingDto.Gender)
+                                {
+                                    <th>Gender</th>
+                                }
+                                @if (Model.PatientListSettingDto.MartialStatus)
+                                {
+                                    <th>Marital Status</th>
+                                }
+                                @if (Model.PatientListSettingDto.Attorney)
+                                {
+                                    <th>ATTORNEY</th>
+                                }
+                                @if (Model.PatientListSettingDto.Paralegal)
+                                {
+                                    <th>Paralegal</th>
+                                }
+                                @if (Model.PatientListSettingDto.REFERRALNAME)
+                                {
+                                    <th>Ref No/Source</th>
+                                }
+                                @if (Model.PatientListSettingDto.Dispatch)
+                                {
+                                    <th>Dispatch</th>
+                                }
+                                @if (Model.PatientListSettingDto.AssignTransport)
+                                {
+                                    <th>Transport</th>
+                                }
+                                @if (Model.PatientListSettingDto.Route)
+                                {
+                                    <th>Route</th>
+                                }
+                                <td>Status</td>
+                                <th data-searchable=false data-orderable="false" class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.patientListWithUsers != null)
+                            {
+                                @foreach (var Data in Model.patientListWithUsers)
+                                {
+                            <tr class="card">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@Data.PatientInfoId" value="check" data-val="@Data.FullName">
+                                        <label class="custom-control-label" for="@Data.PatientInfoId" style="--bubble-color:@Data.Color"></label>
+                                    </div>
+                                    @*<label>
+                <input type="checkbox" id="@Data.PatientInfoId" data-val="@Data.FullName" />
+                <span style="--bubble-color:@Data.Color"></span>
+            </label>*@
+                                </th>
+                                <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer;text-align: center">
+                                    @if (Data.PaitentImage != null)
+                                    {
+                                        <span class="list-img">
+                                            <img src="~/images/@Data.PaitentImage" alt="Patient">
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <div class="FLNameLetter">
+                                            <span>@Data.FirstNameLetter@Data.LastNameLetter</span>
+                                        </div>
+                                    }
+
+                                </td>
+                                @if (Model.PatientListSettingDto.PatientId)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.PatientInfoId</td>
+                                }
+                                @if (Model.PatientListSettingDto.Name)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.FirstName @Data.LastName</td>
+                                }
+                                @if (Model.PatientListSettingDto.HomePhone)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer"> @Data.HomePhone</td>
+                                }
+                                @if (Model.PatientListSettingDto.MobilePhone)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer"> @Data.MobilePhone</td>
+                                }
+                                @if (Model.PatientListSettingDto.Address)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.AddressLine1</td>
+                                }
+                                @if (Model.PatientListSettingDto.DOB)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.DateOfBirth.ToString("MM/dd/yyyy")</td>
+                                }
+                                <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.PrimaryInsuranceProvider</td>
+
+                                @if (Model.PatientListSettingDto.Gender)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.Gender</td>
+                                }
+                                @if (Model.PatientListSettingDto.MartialStatus)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.MaritalStatus</td>
+                                }
+                                @if (Model.PatientListSettingDto.Attorney)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.AttorneyName</td>
+                                }
+                                @if (Model.PatientListSettingDto.Paralegal)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.LeadingParalegalName </td>
+                                }
+                                @if (Model.PatientListSettingDto.REFERRALNAME)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.ReferralName</td>
+                                }
+                                @if (Model.PatientListSettingDto.Dispatch)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">Dispatch</td>
+                                }
+                                @if (Model.PatientListSettingDto.AssignTransport)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">Transport</td>
+                                }
+                                @if (Model.PatientListSettingDto.Route)
+                                {
+                                    <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">Route</td>
+                                }
+                                <td onclick="checkVisitExist(@Data.PatientInfoId)" style="cursor: pointer">@Data.CurrentStatus</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);">Add Rx</a></li>
+                                        <li><a href="javascript:void(0);">Add Visits</a></li>
+                                        <li><a href="javascript:void(0);">Assign Transport</a></li>
+                                        <li><a href="javascript:void(0);">Call</a></li>
+                                        <li><a href="javascript:void(0);">Dispatch Transport</a></li>
+                                        <li><a href="@Url.Action("PatientInfo","PatientSideElite",new { id = Data.PatientInfoId , clickfrom = Data.Equals("Editicon")})">Edit</a></li>
+                                        <li onclick="deletePatient(@Data.PatientInfoId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                        <li><a href="javascript:void(0);">Electronic Bill</a></li>
+                                        <li><a href="javascript:void(0);">Email</a></li>
+                                        <li><a href="javascript:void(0);">Fax</a></li>
+
+                                        <li><a href="javascript:void(0);">Generate AOB</a></li>
+                                        <li><a href="javascript:void(0);">Generate Complete Delivery Form</a></li>
+                                        <li><a href="javascript:void(0);">Generate Currier Assignemnt Form</a></li>
+                                        <li><a href="javascript:void(0);">Generate Delivery Acknowledgment</a></li>
+                                        <li><a href="javascript:void(0);">Generate Delivery Agreement</a></li>
+                                        <li><a href="javascript:void(0);">Generate Referral</a></li>
+                                        <li><a href="javascript:void(0);">Options</a></li>
+                                        <li><a href="javascript:void(0);">Paper Bill</a></li>
+                                        <li><a href="javascript:void(0);">Print</a></li>
+                                        <li><a href="javascript:void(0);">Schedule</a></li>
+                                        <li><a href="javascript:void(0);">Share</a></li>
+                                        <li><a href="javascript:void(0);">SMS</a></li>
+                                        <li><a href="javascript:void(0);">Start Exam</a></li>
+                                        <li><a href="javascript:void(0);" onclick="checkVisitExist(@Data.PatientInfoId)" class="option-a">View</a></li>
+                                        <li><a href="javascript:void(0);" onclick="checkVisitExist(@Data.PatientInfoId)" class="option-a">View/Print</a></li>
+
+                                            @*<li><a href="javascript:void(0);" onclick="checkVisitExist(@Data.PatientInfoId)" class="option-a">View</a></li>
+
+                                            <li><a href="@Url.Action("PatientInfo","PatientSideElite",new { id = Data.PatientInfoId , clickfrom = Data.Equals("Editicon")})" class="option-a">Edit</a></li>
+                                            <li><a href="@Url.Action("PatientInvoiceListForReceptionlist","Invoices",new { Id=Data.PatientInfoId})" class="option-a">Invoices View</a></li>
+                                            <li><a href="@Url.Action("ClaimListForReceptionist","patientsideelite",new { Id=Data.PatientInfoId})" class="option-a">Claims View</a></li>*@
+
+
+                                    </ul>
+                                </td>
+                            </tr>
+
+
+                                }}
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="AppointmentModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Add Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <form asp-action="BatchAppointmentSave" asp-controller="Appointment" method="post" id="BulkAppointHide">
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.HiddenFor(x => x.patientAppointmentBasicDto.SelectedData, new { id = "selectedData" })
+
+                            <div class="row">
+
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Provider Name <span class="required"> * </span></p>
+
+                                    <select id="provider_name" data-placeholder="Select Provider Name" class="Modelselect2 select2" asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+
+                                        <option value=""></option>
+                                    </select>
+                                    <span class="required" id="ExactPro_err"></span>
+                                </div>
+
+                                <div class="col-sm-12 col-md-6 ">
+                                    <p>Date <span class="required"> * </span></p>
+                                    <input type="text" id="AppointmentDate" class="datepicker text-input app_empty" placeholder="Select Date">
+                                    <span class="required"></span>
+                                </div>
+                            </div>
+
+                            <div class="row" id="EaxctAppointfield">
+
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Time<span class="required"> * </span></p>
+                                    <input type="text" id="STime" class=" time-picker text-input app_empty" placeholder="Select Time">
+                                    <span class="required"></span>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>Duration</p>
+                                    <select id="SlotDuration" class="select2" data-placeholder="Select Duration" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "", Value=""},
+                                                                 new SelectListItem() {Text = "5 Min", Value="5"},
+                                                                    new SelectListItem() {Text = "10 Min", Value="10"},
+                                                                    new SelectListItem() {Text = "15 Min", Value="15"},
+                                                                    new SelectListItem() {Text = "20 Min", Value="20"},
+                                                                    new SelectListItem() {Text = "25 Min", Value="25"},
+                                                                    new SelectListItem() {Text = "30 Min", Value="30"},
+                                                                    new SelectListItem() {Text = "35 Min", Value="35"},
+                                                                    new SelectListItem() {Text = "40 Min", Value="40"},
+                                                                    new SelectListItem() {Text = "45 Min", Value="45"},
+                                                                    new SelectListItem() {Text = "50 Min", Value="50"},
+                                                                    new SelectListItem() {Text = "55 Min", Value="55"},
+                                                                    new SelectListItem() {Text = "60 Min", Value="60"},
+                                                                    new SelectListItem() {Text = "65 Min", Value="65"},
+                                                                    new SelectListItem() {Text = "70 Min", Value="70"},
+                                                                    new SelectListItem() {Text = "75 Min", Value="75"},
+                                                                    new SelectListItem() {Text = "80 Min", Value="80"},
+                                                                    new SelectListItem() {Text = "85 Min", Value="85"},
+                                                                    new SelectListItem() {Text = "90 Min", Value="90"},
+                                                                    new SelectListItem() {Text = "100 Min", Value="100"},
+                                                                    new SelectListItem() {Text = "105 Min", Value="105"},
+                                                                    new SelectListItem() {Text = "110 Min", Value="110"},
+                                                                    new SelectListItem() {Text = "115 Min", Value="115"},
+                                                                    new SelectListItem() {Text = "120 Min", Value="120"}
+                                         })">
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+                                <div class="col-sm-12 mt-2">
+                                    <table id="listable" class="table table-bordered striped centered">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient Id</th>
+                                                <th>Patient Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="ModalPatientBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    <button type="button" class="btn Recreate waves-effect text-left" data-dismiss="modal">Close</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>
+
+

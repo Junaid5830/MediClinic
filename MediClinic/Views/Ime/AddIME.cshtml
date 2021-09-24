@@ -1,0 +1,184 @@
+﻿@model MediClinic.Models.IMEViewModel
+@{
+    ViewData["Title"] = "AddIME";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+}
+@section scripts{
+
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        $(".time-picker").hunterTimePicker();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">I.M.E</h5>
+                </div>
+
+                @*<div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Ime/IMEElite">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>*@
+
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <form class="col-sm-12  " asp-action="AddIME" asp-controller="Ime" method="post">
+                <input hidden="hidden"  id="hiddenVisitId" asp-for="imeDto.VisitId" />
+                <input type="hidden" asp-for="imeDto.ID">
+                <div class="row">
+                    <div class=" col-md-6">
+                        <p>Date of IME</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input datepicker" placeholder="select date" asp-for="imeDto.Date">
+                        </div>
+                    </div>
+                    <div class=" col-md-6 ">
+                        <p>Time of IME</p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input time-picker" placeholder="select time" asp-for="imeDto.Time">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Place of IME
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2" data-placeholder="Select Place of IME" asp-for="imeDto.IME_Place">
+                                <option selected value="" disabled></option>
+
+                                <option value="AK">Bronx NY</option>
+                                <option value="HI">New Jersy</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Represented By
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2" data-placeholder="Select Representer" asp-for="imeDto.Represented_By">
+                                <option selected value="" disabled></option>
+                                <option value="Smart Guy, Esq">Smart Guy, Esq</option>
+                                <option value="Rosy">Rosy</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Status of EUO
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2" data-placeholder="Select Representer" asp-for="imeDto.IME_Status">
+                                <option selected value="" disabled></option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+
+
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Reason
+                        </p>
+
+                        <div class="input-field">
+                            <input type="text" class="text-input" asp-for="imeDto.Reason" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Transcripts
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2" data-placeholder="Select Transcripts" asp-for="imeDto.Transcripts">
+                                <option selected value="" disabled></option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="text-right">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+
+    </div>
+</div>

@@ -1,0 +1,157 @@
+﻿@model MediClinic.Models.ReportsViewModel
+
+@{
+    ViewData["Title"] = "CheckInOut";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@{
+    ViewData["Title"] = "CheckInOut";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+
+    <style>
+    </style>
+}
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#UpcomingDate').datepicker({
+                changeMonth: true,
+                changeYear: true,
+
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                dateFormat: "mm/dd/yy",
+                onSelect: function (date) {
+                    debugger;
+                    $.post("/Reports/CheckInOutList", { dateTime: date }).done(function (data) {
+                        debugger;
+                        $('.table-responsive').html('');
+                        $('.table-responsive').html(data);
+                        $("#CheckInOut-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }] });
+
+                    });
+                },
+
+            });
+
+
+            $('.select-all').click(function () {
+                debugger;
+                $('.table  input').prop('checked', this.checked);
+            });
+
+            $("#CheckInOut-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }] });
+            $("li.checkinheader").addClass("border-bottom-header-active");
+
+        });
+
+        function CheckIn(CheckInId, UserId) {
+            $.get("/Reports/CheckInCreate", { CheckId: CheckInId, UserId: UserId }).done(function (data) {
+                debugger;
+
+                $('.table-responsive').html('');
+                $('.table-responsive').html(data);
+                $("#CheckInOut-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }] });
+                $(".checkmark").show().fadeOut(6000);
+
+
+            });
+        }
+        function CheckOut(CheckOutId, UserId) {
+            $.get("/Reports/CheckOutCreate", { CheckId: CheckOutId, UserId: UserId }).done(function (data) {
+                debugger;
+
+                $('.table-responsive').html('');
+                $('.table-responsive').html(data);
+                $("#CheckInOut-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }] });
+                $(".checkmark").show().fadeOut(6000);
+
+
+            });
+        }
+        function deletePatient(UserId, event) {
+            debugger;
+
+            $.get("/PatientSide/PatientInfoDelete", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+
+
+                $('.table-responsive').html('');
+                $('.table-responsive').html(data);
+                $("#CheckInOut-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }] });
+                $(".checkmark").show().fadeOut(6000);
+
+
+            });
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col s12 m3 l3">
+                    <h5 class="breadcrumbs-title color-blue">Check In/Out</h5>
+                </div>
+
+            </div>
+
+
+            @*<div id="batch_action">
+                    <div class="row">
+
+                        <div class="col-sm-9 col-md-9 col-lg-9">
+
+                            <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                                Batch Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu batch">
+                                <li><a href="#">Option 1</a></li>
+                                <li><a href="#">Option 2</a></li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+                </div>*@
+            <div class="row">
+
+                <div class="col-12 col-xs-12 col-sm-5 col-md-5">
+
+                    <p>Select Date</p>
+                    <input type="text" id="UpcomingDate" class="text-input" placeholder="Select Date">
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <partial name="~/Views/Reports/PartialViews/_CheckInOut.cshtml" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,293 @@
+﻿@model MediClinic.Models.TemplateViewModal
+@{
+    ViewData["Title"] = "Add Doctor";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <style>
+        .checkbox-style {
+            margin-top: -29px !important;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".input-field > input[type='checkbox']").closest('.input-field').addClass('checkbox-style');
+        });
+        $(".select2").select2();
+        function SaveDoctorPatientTemplate() {
+            var Data = new Array();
+            $("#dynamicTemplete input,#dynamicTemplete textarea,#dynamicTemplete select").each(function () {
+                debugger;
+                var docTemplateId = $(this).attr("doctortemplateid");
+                var templateComponentId = $(this).attr("templatecomponentid");
+                var type = $(this).attr("custom-type");
+                var val = "";
+                var element = "";
+                if (type == "radio") {
+                    if (this.checked) {
+                        val = this.value;
+                        element = { DoctorTemplateId: docTemplateId, TemplateComponentId: templateComponentId, Value: val };
+                        Data.push(element);
+                    }
+                }
+                else if (type == "select") {
+                    val = $(this).find(":selected").val();
+                    element = { DoctorTemplateId: docTemplateId, TemplateComponentId: templateComponentId, Value: val };
+                    Data.push(element);
+                }
+                else if (type == "textarea") {
+                    val = $(this).val();
+                    element = { DoctorTemplateId: docTemplateId, TemplateComponentId: templateComponentId, Value: val };
+                    Data.push(element);
+                }
+                else if (type == "checkbox") {
+                    if ($(this).prop("checked")) {
+                        val = "true";
+                    }
+                    else {
+                        val = "false";
+                    }
+                    element = { DoctorTemplateId: docTemplateId, TemplateComponentId: templateComponentId, Value: val };
+                    Data.push(element);
+                }
+                else {
+                    val = $(this).val();
+                    element = { DoctorTemplateId: docTemplateId, TemplateComponentId: templateComponentId, Value: val };
+                    Data.push(element);
+                }
+            });
+            //alert(JSON.stringify(Data));
+            $.ajax({
+                type: "POST",
+                url: '/Template/DoctorPatientTemplate',
+                data: { DoctorPatientTemplateDTO: Data, PatientId: $("#patientId").val(), VisitId: $(".patient-visit-id").html() },
+                success: function (data) {
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Record Saved Successfully',
+                        delay: 2500,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                }
+            });
+        }
+        function getUrlParameter(sParam) {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+        };
+        $("#patientId").change(function () {
+            $.ajax({
+                type: "GET",
+                url: '/Template/GetVisitByPatientId',
+                data: { patientId: $("#patientId").val() },
+                success: function (data) {
+                    $(".patient-visit-id").html(data.visitId);
+                    window.location.href = '/Template/DoctorPatientTemplate?TemplateId=' + getUrlParameter('TemplateId') + '&DoctorId=' + getUrlParameter('DoctorId') + '&VisitId=' + data.visitId;
+                }
+            });
+        });
+        $(".patient-visit-id").html(getUrlParameter('VisitId'));
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    @if (Model.GetDoctorPatientTemplateList != null && Model.GetDoctorPatientTemplateList.Count > 0)
+                    {
+                        <h5 class="breadcrumbs-title color-blue">@Model.GetDoctorPatientTemplateList[0].TemplateName</h5>
+                    }
+                </div>
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Template/DoctorTemplate">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="">
+                <div class="row" style="margin-bottom:20px;">
+                    @*<div class="input-field col-md-4">
+                            <p>Patient Id</p>
+                            <div class="input-field">
+                                <select id="patientId" data-placeholder="Select Patient Name" class="select2 form-control  text-input" asp-items="@(new SelectList(Model.patientInfoBasicDtos, "PatientInfoId","FirstName"))">
+                                    <option value="">-- select --</option>
+                                </select>
+                            </div>
+                        </div>*@
+                    <div class="col-md-4">
+                        <div class="input-field">
+                            <div style="margin-top:46px;"><span>Patient Visit Id: </span><b class="patient-visit-id"> </b></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="dynamicTemplete">
+                    @if (Model.GetDoctorPatientTemplateList != null && Model.GetDoctorPatientTemplateList.Count > 0)
+                    {
+                        foreach (var loop in Model.GetDoctorPatientTemplateList)
+                        {
+                            if (loop.ComponentType == "Heading")
+                            {
+                             <div class="col-12 col-md-6">
+                                     
+                                 <h2 custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder">@loop.ComponentLabel</h2>
+                        
+                             </div>
+                            }
+                            if (loop.ComponentType == "input")
+                            {
+                                <div class="col-12 col-md-6">
+                                    <p>@loop.ComponentLabel</p>
+                                    <div class="input-field">
+                                        <input type="text" custom-type="@loop.ComponentType" class="text-input" value="@loop.Value" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                                    </div>
+                                </div>
+                            }
+                            if (loop.ComponentType == "textarea")
+                            {
+                                <div class="col-12 col-md-6">
+                                    <p>@loop.ComponentLabel</p>
+                                    <div class="input-field">
+                                        <textarea class="text-input" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder">@loop.Value</textarea>
+                                    </div>
+                                </div>
+                            }
+                            if (loop.ComponentType == "select")
+                            {
+                                <div class="col-12 col-md-6">
+                                    <p>@loop.ComponentLabel</p>
+                                    <div class="input-field">
+                                        <select class="text-input" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName">
+                                            <option value="">-- @loop.ComponentPlaceholder --</option>
+                                            @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                                            {
+                                                foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                                                {
+                                                    if (loop1.Value == loop.Value)
+                                                    {
+                                                        <option value="@loop1.Value" selected>@loop1.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@loop1.Value">@loop1.Text</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+                            if (loop.ComponentType == "checkbox")
+                            {
+                                string chk = null;
+                                if (loop.Value != null)
+                                {
+                                    if (loop.Value == "true")
+                                    {
+                                        chk = "checked";
+                                    }
+                                    else
+                                    {
+                                        chk = null;
+                                    }
+                                }
+                                <div class="col-12 col-md-6">
+                                    <p>@loop.ComponentLabel</p>
+                                    <div class="input-field">
+                                        <input class="text-input" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" type="checkbox" @chk id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                                    </div>
+                                </div>
+                            }
+                            if (loop.ComponentType == "radio")
+                            {
+                                @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                                {
+                                    foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                                    {
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-field">
+                                                <p>@loop1.Text</p>
+
+                                                @if (loop1.Value == loop.Value)
+                                                {
+                                                    <input class="text-input" value="@loop1.Value" checked type="radio" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" />
+                                                }
+                                                else
+                                                {
+                                                    <input class="text-input" value="@loop1.Value" type="radio" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" />
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                @*<div class="col-md-3">
+                        <p>@loop.ComponentLabel</p>
+                        <div class="input-field">
+                            <input class="text-input" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" type="radio" id="@loop.ComponentId" name="@loop.ComponentName" placeholder="@loop.ComponentPlaceholder" />
+                        </div>
+                    </div>*@
+                            }
+                            if (loop.ComponentType == "ICD 10")
+                            {
+                                <div class="col-12 col-md-6">
+                                    <p>@loop.ComponentLabel</p>
+                                    <div class="input-field">
+                                        <select class="select2 text-input" custom-type="@loop.ComponentType" doctortemplateid="@loop.DoctorTemplateId" templatecomponentid="@loop.Id" id="@loop.ComponentId" name="@loop.ComponentName" asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                                            <option value="">-- @loop.ComponentPlaceholder --</option>
+                                            @if (loop.TemplateComponentDetailDTO != null && loop.TemplateComponentDetailDTO.Count() > 0)
+                                            {
+                                                foreach (var loop1 in loop.TemplateComponentDetailDTO)
+                                                {
+                                                    if (loop1.Value == loop.Value)
+                                                    {
+                                                        <option value="@loop1.Value" selected>@loop1.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@loop1.Value">@loop1.Text</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="right">
+                            <button type="button" class="waves-effect waves-light btn add-btn" onclick="SaveDoctorPatientTemplate()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

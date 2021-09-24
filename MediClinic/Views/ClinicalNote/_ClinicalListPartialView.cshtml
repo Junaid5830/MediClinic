@@ -1,0 +1,81 @@
+﻿@*@model MediClinic.Models.ClinicalViewModel*@
+@model MediClinic.Models.TemplateViewModal
+
+
+@*@if (Model.ClinicalNotesList != null && Model.ClinicalNotesList.Count > 0)
+    {
+        foreach (var item in Model.ClinicalNotesList)
+        {
+            <tr class="card">
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="@item.ClinicalNoteId" value="check">
+                        <label class="custom-control-label" for="@item.ClinicalNoteId"></label>
+                    </div>
+
+                </td>
+                <td>@item.NoteDate.ToString("MM/dd/yyyy")</td>
+                <td>@item.NoteNo</td>
+                <td>
+                    Dr. @item.WriterName
+                </td>
+                <td>@item.NoteTypeValue</td>
+                <td>@item.WriteNote</td>
+                <td class="action">
+                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                        Options
+
+                    </button>
+
+                    <ul class='dropdown-menu Table_Drop ul_Caim'>
+                        @if (item.IsSigned.Equals(true))
+                        {
+                            <li><a href="@Url.Action("ClinicalNotes","ClinicalNote",new { clinicalNoteId = item.ClinicalNoteId, isEditable = false})" class="option-a">View</a></li>
+                        }
+                        else if (item.IsSigned.Equals(false))
+                        {
+                            <li><a href="@Url.Action("ClinicalNotes","ClinicalNote",new { clinicalNoteId = item.ClinicalNoteId, isEditable = true})" class="option-a">Edit</a></li>
+                        }
+                        <li onclick="deleteClinicalNote(@item.ClinicalNoteId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                        <li><a href="javascript:void(0)" class="option-a">Preview</a></li>
+                        <li><a href="javascript:void(0)" class="option-a">Print</a></li>
+                        <li><a href="javascript:void(0)" class="option-a">Share</a></li>
+                        @if (item.IsSigned.Equals(false))
+                        {
+                            <li><a href="javascript:void(0)" onclick="showModal(@item.ClinicalNoteId,@item.PatientId);" class="option-a">Sign</a></li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        }
+    }*@
+@foreach (var item in Model.GetAllTemplate)
+{
+    <tr class="card">
+        <td>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="@item.Id" value="check">
+                <label class="custom-control-label" for="@item.Id"></label>
+            </div>
+
+        </td>
+        <td>@item.Name</td>
+        <td>@item.CreatedDate.Value.ToShortDateString()</td>
+        <td class="action">
+            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                Options
+                @*<span class="caret"></span>*@
+            </button>
+
+            <ul class='dropdown-menu Table_Drop ul_Caim'>
+               
+                <li onclick="TemplateDetail(@item.VisitId,this);"><a href="javascript:void(0)" class="option-a">Preview</a></li>
+                @*<li><a href="javascript:void(0)" class="option-a">Print</a></li>
+                <li><a href="javascript:void(0)" class="option-a">Share</a></li>*@
+             
+            </ul>
+        </td>
+    </tr>
+}
+

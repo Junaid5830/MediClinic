@@ -1,0 +1,253 @@
+﻿@model DmeInvetoryViewModel
+@{
+    ViewData["Title"] = "CPTHSPCCodes";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+        .nav {
+            display: block ruby !important;
+            height: 64px;
+            overflow-y: auto
+        }
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        .tab-content .container {
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        h3, h4 {
+            color: #333 !important
+        }
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+
+        $(function () {
+            var table = $('#groupGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": true,
+                "responsive": true,
+                "info": false,
+                // 'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+
+        });
+
+    </script>
+    <script>
+
+        function ViewGroupitems(GroupId) {
+            $.post("/DMEitemgroup/groupitemList", { Id: GroupId }).done(function (data) {
+                debugger;
+                $("#GroupItemModel .modal-body").html('');
+                $("#GroupItemModel .modal-body").html(data);
+                $("#GroupItemModel").modal('show');
+            });
+
+        }
+      
+
+
+    </script>
+}
+<div id="GroupItemModel" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Group Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn Recreate waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                       CPT/HSPC Code
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                    <a href="@Url.Action("AddItemGroup","DMEitemgroup")" class="btn  float-right add-btn set_smallscreen">
+                        Add New Group
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="groupGrid" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+
+                                <th>Group#</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (!(Model.dMEGroupitemList is null))
+                            {
+                                @foreach (var item in Model.dMEGroupitemList)
+                                {
+                                    <tr class="card">
+
+                                        <td>@item.DMEGroupId</td>
+                                        <td>@item.GroupName</td>
+                                        <td>@item.GroupDescription</td>
+
+                                        <td class="action">
+                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                Options
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                <li onclick="Delete_Group(@item.DMEGroupId,this)"><a href="javascript:void(0)">Delete</a></li>
+                                                @*<li><a href="/SettingsElite/AddManufacturer/@item.DMEGroupId">Edit</a></li>*@
+                                                <li onclick="ViewGroupitems(@item.DMEGroupId)"><a href="javascript:void(0)">View</a></li>
+                                            </ul>
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

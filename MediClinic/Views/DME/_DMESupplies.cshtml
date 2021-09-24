@@ -1,0 +1,239 @@
+﻿@model MediClinic.Models.DTOs.DMESuppliesDto.DMESupplieDto
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var actionType = ViewBag.ActionType;
+    var imgUrl = ViewBag.Image;
+    var hiddenImage = ViewBag.Image;
+    if ((imgUrl is null) || imgUrl == "")
+    {
+        imgUrl = string.Empty;
+    }
+    else
+    {
+        imgUrl = "/images/" + ViewBag.Image;
+    }
+    var prescriberName = _sessionManager.GetProviderName();
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var UserRole = _sessionManager.GetRoleId();
+}
+@section styles{
+    <style>
+        .qr-code-generator {
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        .qr-code-generator * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        #qrcode {
+            width: 128px;
+            height: 128px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #qrcode a {
+            font-size: 0.8em;
+        }
+
+        .qr-url, .qr-size {
+            padding: 0.5em;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .qr-url {
+            width: 79%;
+        }
+
+        .qr-size {
+            width: 20%;
+        }
+
+        .generate-qr-code {
+            display: block;
+            width: 100%;
+            margin: 0.5em 0 0;
+            padding: 0.25em;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            background-color: #e5554e;
+            color: #fff;
+        }
+    </style>
+
+ }
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/Elite/_node_modules/dropify/dist/js/dropify.min.js"></script>
+    <script type="text/javascript">
+       
+        $('.dropify').dropify();
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "MM/dd/yy"
+        });
+
+        $('.DDownDive').click(function () {
+            var itemVal = $('#comboboxItems').val();
+            var cptVal = $('#cptCodeCombo').val();
+            var icdVal = $('#icdCodeCombo').val();
+
+            if (itemVal) {
+                $('#combobox_ItemErr').html("");
+            }
+            if (cptVal) {
+                $('#combobox_CptErr').html("");
+            }
+            if (icdVal) {
+                $('#combobox_ICDErr').html("");
+            }
+
+        })
+
+        $('#DMEform').on('submit', function (e) {
+            var itemVal = $('#comboboxItems').val();
+            var cptVal = $('#cptCodeCombo').val();
+            var icdVal = $('#icdCodeCombo').val();
+            var isValid = true;
+
+            if (!itemVal) {
+                isValid = false;
+                $('#combobox_ItemErr').html("Please Select Item");
+            }
+            else {
+                $('#combobox_ItemErr').html("");
+            }
+            if (!cptVal) {
+                isValid = false;
+                $('#combobox_CptErr').html("Please Select CPT Code");
+            }
+            else {
+                $('#combobox_CptErr').html("");
+            }
+            if (!icdVal) {
+                isValid = false;
+                $('#combobox_ICDErr').html("Please Select ICD Code");
+            }
+            else {
+                $('#combobox_ICDErr').html("");
+            }
+
+
+            if (!isValid) {
+                return false;
+                e.preventDefault();
+            }
+
+        })
+        $(".combobox").select2();
+
+    </script>
+}
+<form enctype="multipart/form-data" asp-action="DMESuppliesEdit" asp-controller="DME" id="DMEform" method="post" class="form-inline col s12">
+    <input type="hidden" id="dmeEquipSupId" asp-for="DMEEquipSupId" />
+    <input type="hidden" id="visitId" asp-for="VisitId" />
+    <input type="hidden" id="patientId" asp-for="PatientId" />
+    <input type="hidden" id="qrCodeImageUrl" asp-for="QRCodeImageUrl" />
+    <div class="row current">
+        <div class="col-sm-12 col-md-6 col s12 m6">
+            <div class="input-field">
+                <p>Date of Prescription <span class="required"> * </span></p>
+                <input type="text" class="datepicker text-input" asp-for="PrescriptionDate" placeholder="Select Date">
+                <span class="required" asp-validation-for="PrescriptionDate"></span>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 DDownDive col s12 m6" id="itemsDiv">
+            <p>Items or Items Group Name/No <span class="required"> * </span></p>
+            <select data-placeholder="Select Items" id="comboboxItems" class="combobox infoDropDListBeforeEditDisabled" asp-for="ItemId"
+                    asp-items="@(new SelectList(Model.ItemList,"DMESupEquipId","ItemOrGroupName"))">
+                <option value="" selected disabled></option>
+            </select>
+            <span class="required" id="combobox_ItemErr"></span>
+        </div>
+    </div>
+    <div class="row current">
+        <div class="col-sm-12 col-md-6 DDownDive col s12 m6 " id="CPTDiv">
+            <p>CPT Code <span class="required"> * </span></p>
+            <select data-placeholder="Select CPT Code" id="cptCodeCombo" class="combobox infoDropDListBeforeEditDisabled" asp-for="CPTCodeId"
+                    asp-items="@(new SelectList(Model.CPTList,"CPTCodeId","Name"))">
+                <option value="" selected disabled></option>
+            </select>
+            <span class="required" id="combobox_CptErr"></span>
+        </div>
+        <div class="col-sm-12 col-md-6 DDownDive col s12 m6" id="ICDDiv">
+            <p>ICD Code <span class="required"> * </span></p>
+            <select data-placeholder="Select ICD Code" id="icdCodeCombo" class="combobox infoDropDListBeforeEditDisabled" asp-for="ICDCodeId"
+                    asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                <option value="" selected disabled></option>
+            </select>
+            <span class="required" id="combobox_ICDErr"></span>
+        </div>
+    </div>
+    <div class="row current">
+        <div class="col-sm-12 col-md-6 col s12 m6">
+            <div class="input-field">
+                <p>Prescriber</p>
+                <input class="text-input" asp-for="Prescriber" type="text" value="@prescriberName" disabled="disabled">
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col s12 m6">
+            <div class="input-field">
+                <p>Barcode No</p>
+                <input class="text-input Barcode" asp-for="BarcodeNo" type="text" placeholder="Select Barcode">
+            </div>
+        </div>
+    </div>
+    <div class="row current">
+        <div class="col-sm-12 col-md-6 col s12 m6">
+            <p>Prescription Refference/No</p>
+            <input class="text-input RefferenceNo" asp-for="PrescriptionRefNo" type="text" placeholder="Select Refference/No">
+        </div>
+    </div>
+    <div class="row current">
+        <div class="col-sm-12 col-md-6 col s12 m6">
+            <p>Upload Document</p>
+            <input type="hidden" asp-for="ImageUrlHidden" value="@hiddenImage" id="hiddenDMESupEquipImage" />
+            @if (actionType == "Update")
+            {
+                <input type="file" id="files" asp-for="ImageUrl" class="dropify forDMESupplyEquipment" data-default-file="@imgUrl" />
+            }
+            else
+            {
+                <input type="file" id="files" asp-for="ImageUrl" class="dropify forDMESupplyEquipment" data-default-file="@imgUrl" />
+            }
+        </div>
+        <input type="hidden" asp-for="QRCodeImage" id="qr-code-image-path" />
+
+        <div class="col-sm-12 col-md-6 col s12 m6" id="qrcode">
+
+            @if (Model.QRCodeImageUrl != null) 
+            {
+                <img src="@Model.QRCodeImageUrl" />
+            }
+        </div>
+    </div>
+    <div class="row mt-2 mb-2 current">
+        <div class="col-sm-12 col-md-12 col s12 m12" style="text-align:center">
+            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+            <a class="waves-effect waves-light btn generate-qr-code">QR</a>
+        </div>
+    </div>
+</form>

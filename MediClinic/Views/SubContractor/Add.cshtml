@@ -1,0 +1,1785 @@
+﻿@model MediClinic.Models.SubContractorViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+	ViewData["Title"] = "Add";
+	Layout = "~/Views/Shared/_LayoutElite.cshtml";
+	var ProviderInfoId = _sessionManager.GetProviderInfoId();
+	var Signature = ViewBag.WriteSignature;
+	var Action = ViewBag.action;
+	var ProviderProfilePic = ViewBag.SubContractorImage;
+	var ProviderSignature = ViewBag.SubContractorSignatureImage;
+	var SImage = ViewBag.SubContractorSignatureImage;
+	var image = ViewBag.SubContractorImage;
+
+	if (image == "")
+	{
+		image = string.Empty;
+	}
+	else if (!(image is null))
+
+	{
+		image = "/images/" + ViewBag.SubContractorImage;
+	}
+	else
+	{
+
+	}
+	if (SImage == "")
+	{
+		SImage = string.Empty;
+	}
+	else if (!(SImage is null))
+	{
+		SImage = "/images/" + ViewBag.SubContractorSignatureImage;
+	}
+	else
+	{
+		SImage = string.Empty;
+	}
+}
+
+
+
+@section styles{
+	<link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+	<link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+	<link href="~/css/timePicker.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+
+	<link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+	@*<link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />*@
+	@*<link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />*@
+	<link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+	<link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+
+	<link href="~/Color/spectrum.css" rel="stylesheet" />
+	@*<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />*@
+	<link href="~/cropper/croppie.css" rel="stylesheet" />
+
+	<style>
+
+		#captureImageFromCam {
+			width: 100%;
+			margin: 5% 0;
+		}
+
+		#my_camera {
+			margin: 0 auto;
+		}
+
+		input.city, input.state, input.country {
+			background-color: #f0f0f038 !important;
+			color: #00000085;
+			cursor: not-allowed;
+		}
+
+		.input-group-append .form-add-btn {
+			margin-top: 0 !important
+		}
+
+		.top-height {
+			margin-top: 12px;
+		}
+
+		.input-group-append {
+			margin-left: 4px;
+		}
+
+		.form-add-btn {
+			margin-top: 3.3rem !important;
+			height: 36px !important;
+			line-height: 36px !important;
+		}
+
+		.custom-checkbox {
+			margin-top: 12px !important;
+		}
+
+		.select2 {
+			width: 100% !important;
+			margin-bottom: 2% !important
+		}
+
+		.customtab {
+			display: block !important;
+		}
+
+		.nav-tabs {
+			border-bottom: none !important;
+		}
+
+		.customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+			border-bottom: none !important;
+			color: white;
+			background-color: #547cea !important;
+		}
+
+		.nav-tabs .nav-link {
+			border-bottom: 0.5px solid #0000001f !important;
+			border-top-left-radius: 0 !important;
+			border-top-right-radius: 0 !important;
+		}
+
+		.card {
+			padding: 2.5%;
+		}
+
+		.form-firstName {
+			margin-top: -26% !important;
+		}
+
+		.form-MiddleName {
+			margin-top: -14% !important;
+		}
+
+		.form-LastName {
+			margin-top: -3% !important;
+		}
+
+		@@media only screen and (max-width:601px) {
+			.form-firstName {
+				margin-top: 12px !important;
+			}
+		}
+
+		.img-preview {
+			width: auto !important;
+			height: auto !important;
+			border-radius: 50% !important;
+		}
+
+		.center:hover .middle {
+			cursor: pointer;
+			opacity: 1;
+		}
+
+		.middle {
+			transition: .5s ease;
+			opacity: 0;
+			position: absolute;
+			top: 48%;
+			left: 46%;
+			transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			text-align: center;
+		}
+
+		.center:hover .edit {
+			display: block;
+		}
+
+		.ti-camera {
+			font-size: 22px !important;
+		}
+
+		.edit {
+			padding-top: 7px;
+			padding-right: 7px;
+			position: absolute;
+			right: 0;
+			top: 0;
+			display: none;
+		}
+
+			.edit a {
+				color: #000;
+			}
+
+		.center:hover .left-delete {
+			cursor: pointer;
+			opacity: 1;
+		}
+
+		.center:hover .patientProfile_pic {
+			cursor: pointer;
+			opacity: 0.3;
+		}
+
+		.center:hover .middle {
+			cursor: pointer;
+			opacity: 1;
+		}
+
+		.text a, .text p {
+			color: #fff !important;
+			font-size: 17px;
+		}
+
+		.text p {
+			margin-top: 0px !important;
+		}
+
+		.remove-image {
+			display: none;
+			position: absolute;
+			top: 0;
+			right: 22%;
+			border-radius: 10em;
+			padding: 2px 6px 3px;
+			text-decoration: none;
+			font: 700 21px/20px sans-serif;
+			background: #555;
+			border: 3px solid #fff;
+			color: #FFF;
+			box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+			text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+			-webkit-transition: background 0.5s;
+			transition: background 0.5s;
+		}
+
+			.remove-image:hover {
+				background: #E54E4E;
+				padding: 3px 7px 5px;
+				top: 0;
+				right: 22%;
+			}
+
+			.remove-image:active {
+				background: #E54E4E;
+				top: 0;
+				right: 22%;
+			}
+
+		.imageModel {
+			height: 78% !important;
+			max-height: 78% !important;
+		}
+
+			.imageModel .modal-dialog {
+				max-width: 60% !important
+			}
+
+			.imageModel input.custom-file-input {
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				height: 38px !important;
+				width: 5rem !important;
+				cursor: pointer !important;
+			}
+
+		.cr-slider {
+			width: 75% !important
+		}
+
+		.button {
+			position: relative;
+			color: white;
+			padding: 0 2rem !important;
+			border-radius: 3px;
+			font-size: 16px;
+			font-weight: bold;
+			top: 5px !important;
+			margin: 0 auto;
+			margin-bottom: 0px;
+			width: auto;
+			margin-bottom: 10px;
+			text-transform: uppercase;
+		}
+
+		#my_camera {
+			margin: 0 auto
+		}
+
+		.panel-body .btn-info {
+			margin-top: 5px;
+			background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+			color: #fff !important;
+		}
+
+		a {
+			cursor: pointer;
+		}
+
+		#cameraIcon i {
+			color: #547cea !important;
+			font-size: 22px;
+		}
+
+		.croppie-container .cr-image {
+			top: 25px !important;
+			left: 35px !important;
+		}
+
+		.imageModel .mdi {
+			font-size: 22px !important
+		}
+
+		@@media screen and (max-width:600px) {
+			.form-MiddleName {
+				margin-top: 0% !important;
+			}
+		}
+
+		.input-group-append {
+			margin-left: 4px;
+		}
+
+		.AddReminder p {
+			margin-top: 1rem !important;
+		}
+
+		.m-signature-pad {
+			position: relative;
+			font-size: 10px;
+			width: 100%;
+			height: 270px;
+			border: 1px solid #e8e8e8;
+			background-color: #fff;
+			box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+			border-radius: 4px;
+		}
+
+		.m-signature-pad--body {
+			position: absolute;
+			left: 20px;
+			right: 20px;
+			top: 20px;
+			bottom: 80px;
+			border: 1px solid #f4f4f4;
+		}
+
+			.m-signature-pad--body canvas {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				border-radius: 4px;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+			}
+
+		.m-signature-pad--footer {
+			position: absolute;
+			left: 20px;
+			right: 20px;
+			bottom: 5px;
+			height: 65px;
+		}
+
+			.m-signature-pad--footer .description {
+				color: #C3C3C3;
+				text-align: center;
+				font-size: 1.2em;
+				margin-bottom: 3px;
+			}
+
+		.btn-save {
+			text-align: center;
+			text-decoration: none;
+			letter-spacing: .5px;
+			color: #fff;
+			background-color: #03a9f4;
+		}
+
+		input.city, input.state, input.country {
+			background-color: #f0f0f038 !important;
+			color: #00000085;
+			cursor: not-allowed;
+		}
+
+		.top-height {
+			margin-top: 12px;
+		}
+
+
+
+		.custom-checkbox {
+			margin-top: 12px !important;
+		}
+
+		.select2 {
+			width: 100% !important;
+			margin-bottom: 2% !important
+		}
+
+		.customtab {
+			display: block !important;
+		}
+
+		.nav-tabs {
+			border-bottom: none !important;
+		}
+
+		.customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+			border-bottom: none !important;
+			color: white;
+			background-color: #547cea !important;
+		}
+
+		.nav-tabs .nav-link {
+			border-bottom: 0.5px solid #0000001f !important;
+			border-top-left-radius: 0 !important;
+			border-top-right-radius: 0 !important;
+		}
+
+		.card {
+			padding: 2.5%;
+		}
+
+		.form-firstName {
+			margin-top: -55px !important;
+		}
+
+		@@media only screen and (max-width:601px) {
+
+			.form-firstName {
+				margin-top: 12px !important;
+			}
+		}
+	</style>
+}
+@section scripts{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/app-assets/js/jquery.form.js"></script>
+	<script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+	<script src="~/Elite/js/pages/mask.init.js"></script>
+	<script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+	<script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>
+	<script src="~/Elite/_node_modules/dff/dff.js"></script>
+	@*<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>*@
+	<script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+	<script src="~/cropper/croppie.js"></script>
+	<script src="~/webcamjs/webcam.js"></script>
+
+	<script>
+        var saveAction = '@ViewBag.Action';
+        var SignaturePath = '@ViewBag.Signature';
+        var IsCapturedScreen = false;
+        var IsRequiredNf2Date = false;
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+
+
+        function take_snapshot() {
+            debugger;
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        //Usage example:
+        //var file = dataURLtoFile('data:text/plain;base64,aGVsbG8gd29ybGQ=','hello.txt');
+
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+							.then(function (resp) {
+								debugger;
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$('#take_snapbtn').hide();
+			$('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+			$(".remove-Sigatureimage").hide();
+			$('.signature_pad_cancel').on('click', function () {
+				$('#signature-pad1').hide();
+			})
+			if (saveAction == "Update") {
+
+				$("#signature-pad1").hide();
+				$(".signImage #dropifyimage .dropify-wrapper").hide();
+
+				$(".signImage .forPatientSignatures").hide();
+				$(".Signaturepad_show").on('click', function () {
+					$("#signature-pad1").show();
+				})
+				$(".remove-Sigatureimage").on('click', function () {
+
+					$(".signImage .dropify-wrapper").hide();
+					$(".remove-Sigatureimage").hide();
+				})
+				$(".UploadSignature_show").on('click', function () {
+					$(".forPatientSignatures").show();
+					$(".signImage #dropifyimage .dropify-wrapper").show();
+					$(".signatureimage_text").show();
+					$(".remove-Sigatureimage").show();
+				})
+				if (SignaturePath == "Empty.png") {
+					$("#signature-pad1").show();
+				}
+				else if (SignaturePath == "") {
+					$("#signature-pad1").show();
+				}
+			}
+
+		});
+
+		$('.select2').select2();
+		$(".time-picker").hunterTimePicker();
+		/*Signature Image*/
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					debugger;
+					//Signdata = e.target.result;
+					$('#savetarget').attr('src', e.target.result);
+					$('#savetarget').show();
+					$('#UpdateCaseSignature').hide();
+
+				}
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+
+		$("#SignatureImageUpload").change(function () {
+			readURL(this);
+		});
+
+
+		$(function () {
+			$('#savetarget').hide();
+			var canvas = document.querySelector('#signature-pad1 canvas');
+			var pad = new SignaturePad(canvas);
+			$('#pad_clear').on('click', function () {
+				$('#savetarget').hide();
+				Signdata = "";
+			})
+			$('#accept').on('click', function () {
+				debugger;
+				if (pad.isEmpty()) {
+					Signdata = "";
+
+					return false;
+				}
+				else {
+					Signdata = pad.toDataURL();
+					$('#savetarget').attr('src', Signdata);
+					$('#UpdateCaseSignature').hide();
+					$('#savetarget').show();
+					pad.off();
+
+				}
+			});
+
+			//var ImageURL = Signdata;
+			//var block = ImageURL.split(";");
+			//var contentType = block[0].split(":")[1];
+			//var realData = block[1].split(",")[1];
+			////$('#Signfiles').val(data);
+
+
+		});
+		/*End Signature Image*/
+		$(function () {
+
+			$(".fax").inputmask('(999) 999-9999');
+			$('.phoneno').inputmask('1 (999) 999-9999');
+			$(".licenseno").inputmask('999999');
+			$(".npi").inputmask('9999999999');
+			$('.taxid').inputmask('99-9999999');
+
+			$('.selectpicker').selectpicker();
+		});
+		$('#SubContractorform').on('submit', function (e) {
+			debugger;
+			e.preventDefault();
+			$("#providerSpeciality option:selected").val() == "" ? $("#providerSpecialityError").text("Speciality is required.") : $("#providerSpecialityError").text("");
+			//$('input[name="Provider.Speciality"]').val($("#providerSpeciality option:selected").val());
+
+			$("#providerTitle option:selected").val() == "" ? $("#providerTitleError").text("Provider Title is required.") : $("#providerTitleError").text("");
+			//$('input[name="Provider.Title"]').val($("#providerTitle option:selected").val());
+
+			$("#providerSuffix option:selected").val() == "" ? $("#providerSuffixError").text("Provider Suffix is required.") : $("#providerSuffixError").text("");
+			//$('input[name="Provider.Suffix"]').val($("#providerSuffix option:selected").val());
+
+			$("#providerTerm option:selected").val() == "" ? $("#providerTermError").text("Provider Term is required.") : $("#providerTermError").text("");
+			//$('input[name="Provider.Term"]').val($("#providerTerm option:selected").val());
+
+			$("#providerScannedDoc option:selected").val() == "" ? $("#providerScanDocError").text("Scanned Document is required.") : $("#providerScanDocError").text("");
+			//$('input[name="Provider.ScannedDocuments"]').val($("#providerScannedDoc option:selected").val());
+
+			$("#providerRelatedFacility option:selected").val() == "" ? $("#providerRelatedFacilityError").text("Related Facility is required.") : $("#relatedFacilityError").text("");
+			//$('input[name="Provider.RelatedFacilityId"]').val($("#providerRelatedFacility option:selected").val());
+
+			$("#providerUidType option:selected").val() == "" ? $("#providerUidTypeError").text("Provider UID Type is required.") : $("#providerUidTypeError").text("");
+			//$('input[name="Provider.UidType"]').val($("#providerUidType option:selected").val());
+
+			$("#providerStatus option:selected").val() == "" ? $("#providerStatusError").text("Provider Status is required.") : $("#providerStatusError").text("");
+			//$('input[name="Provider.Status"]').val($("#providerStatus option:selected").val());
+
+
+			$("#providerRentType option:selected").val() == "" ? $("#providerRentTypeError").text("This field Provider Rent is required.") : $("#providerRentTypeError").text("");
+			//$('input[name="Provider.RentType"]').val($("#providerRentType option:selected").val());
+
+
+
+
+			$("input:radio[name='Provider.IsBilledAmountVisible']:checked").val() == undefined ? $("#isBilledAmtVisibleError").text("Please choose an option.") : $("#isBilledAmtVisibleError").text("");
+			//$('input[name="Provider.IsBilledAmountVisible"]').val($("input:radio[name='Provider.IsBilledAmountVisible']:checked").val());
+
+
+			$("input:radio[name='Provider.IsAllowToBill']:checked").val() == undefined ? $("#isAllowToBillError").text("Please choose an option.") : $("#isAllowToBillError").text("");
+			//$('input[name="Provider.IsAllowToBill"]').val($("input:radio[name='Provider.IsAllowToBill']:checked").val());
+
+			$("input:radio[name='Provider.IsAllowToAddVisits']:checked").val() == undefined ? $("#isAllowToAddVistsError").text("Please choose an option.") : $("#isAllowToAddVistsError").text("");
+			//$('input[name="Provider.IsAllowToAddVisits"]').val($("input:radio[name='Provider.IsAllowToAddVisits']:checked").val());
+
+			$("input:radio[name='Provider.IsAllowToSchedule']:checked").val() == undefined ? $("#isAllowToScheduleError").text("Please choose an option.") : $("#isAllowToScheduleError").text("");
+			//$('input[name="Provider.IsAllowToSchedule"]').val($("input:radio[name='Provider.IsAllowToSchedule']:checked").val());
+
+			$("input:radio[name='Provider.AllowSms']:checked").val() == undefined ? $("#isAllowSmsError").text("Please choose an option.") : $("#isAllowSmsError").text("");
+			//$('input[name="AllowSms"]').val($("input:radio[name='AllowSms']:checked").val());
+
+			//var providerPermissions = $('input[name="Provider.ProviderPermissions"]:checked').map(function () {
+			//    return this.value;
+			//}).get().join(",");
+			//providerPermissions == "" ? $("#isProviderPermError").text("Please choose at least one permission.") : $("#isProviderPermError").text("");
+			//$('input[name="Provider.ProviderPermissions"]').val(providerPermissions);
+			//$("input:radio[name='ElectrnoicSign']:checked").val() == undefined ? $("#isAddElectronicSign").text("Please choose an option.") : $("#isAddElectronicSign").text("");
+
+			var speciality = $('#providerSpeciality').val();
+			var providerTitle = $('#providerTitle').val();
+			var providerSuffix = $('#providerSuffix').val();
+			var providerTerm = $('#providerTerm').val();
+			var providerScannedDoc = $('#providerScannedDoc').val();
+			var providerRelatedFacility = $('#providerRelatedFacility').val();
+			var providerUidType = $('#providerUidType').val();
+			var providerStatus = $('#providerStatus').val();
+
+			var ProfileSrc = $("#result").attr('src');
+
+			if ($(this).valid()) {
+				if (!(speciality == "" || providerTitle == "" || providerSuffix == "" || providerTerm == "" || providerScannedDoc == "" || providerRelatedFacility == "" || providerUidType == "" || providerStatus == "")) {
+					$('#accept').trigger('click');
+					debugger;
+					$(".btn").attr("disabled", true);
+					$(this).ajaxSubmit({
+						data: { Signature: Signdata, profileImage: ProfileSrc },
+						success: function (data) {
+							debugger;
+							var msg = data.success;
+							if (data.isError == true) {
+								new PNotify({
+									title: 'Error!',
+									text: msg,
+									delay: 5000,
+									type: 'error',
+									addclass: 'pnotify-center'
+								});
+								$(".btn").attr("disabled", false);
+								return;
+							}
+
+							if (data.Success == "Data saved successfully") {
+								$('#SubContractorInfo_UserId').val(data.SubContractorUserId);
+								$('#SubContractorInfoId').val(data.subContractorInfoId);
+								var success = data.Success;
+							}
+							else {
+								var success = data.success;
+							}
+							$(".checkmark").show().fadeOut(6000);
+
+							//setTimeout(function () {
+							//    window.location.href = '/Provider/ProviderList';
+							//},1000);
+
+						},
+						complete: function (xhr) {
+
+						}
+					});
+				}
+
+			}
+		});
+	</script>
+}
+
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+	<div class="container">
+		<div id="breadcrumbs-wrapper">
+			<!-- Search for small screen-->
+			<div class="row">
+				<div class=" col" margin-top-8">
+					<h5 class="breadcrumbs-title color-blue"> New Sub Contractor</h5>
+				</div>
+
+				<div class="col">
+					<a href="@Url.Action("Subcontractors","subContractor")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+						<i class="mdi mdi-arrow-left right arrow-icon"></i>
+					</a>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row">
+
+			<form class="col-sm-12" asp-action="Add" asp-controller="SubContractor" method="post" id="SubContractorform" enctype="multipart/form-data">
+				<input class="text-input input-styling" name="User.UserId" id="SubContractorInfo_UserId" type="text" hidden="hidden">
+				<input id="SubContractorInfoId" hidden="hidden" asp-for="SubContractor.SubContractorId" />
+				<input hidden="hidden" asp-for="SubContractor.UserId" />
+
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Company/Entity Name<span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" asp-for="SubContractor.EntityName" class="text-input entity-name-input" placeholder="Enter Entity Name">
+							<span class="required" asp-validation-for="SubContractor.EntityName"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<div class="center">
+
+							<div class="docs-preview clearfix">
+								<div class="img-preview preview-lg">
+									<div id="result-wrapper">
+										@if (Action == "Update")
+										{
+											@if (image == null)
+											{
+												<a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+												<div class="middle">
+													<div class="text">
+														<a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+														<p>Upload</p>
+													</div>
+												</div>
+
+												<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+											}
+											else if (image == "")
+											{
+												<a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+												<div class="middle">
+													<div class="text">
+														<a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+														<p>Upload</p>
+													</div>
+												</div>
+
+												<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+											}
+											else
+											{
+												<a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+												<div class="middle">
+													<div class="text">
+														<a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+
+														<p>Upload</p>
+													</div>
+												</div>
+												@*<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">*@
+												<img src="@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+											}
+										}
+										else
+										{
+											<a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+											<div class="middle">
+												<div class="text">
+													<a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+													<p>Upload</p>
+												</div>
+											</div>
+
+											<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+										}
+									</div>
+								</div>
+							</div>
+
+							<div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-body">
+											<div class="row">
+												<div id="main-cropper"></div>
+												<div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+													<div class="panel-heading">Camera</div>
+													<div class="panel-body">
+														<div id="my_camera"></div>
+														<!-- A button for taking snaps -->
+
+													</div>
+												</div>
+
+											</div>
+											<div class="row">
+												<div class="col-sm-12 center">
+													<a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+														<i class="mdi mdi-camera"></i>
+													</a>
+													<a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+													<a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+														<i class="mdi mdi-cloud-upload"></i>
+														<input type="file" class="custom-file-input" id="upload">
+													</a>
+													<a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+													<a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+													<a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+													@*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+													<a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+												</div>
+
+											</div>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="row">
+
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>First Name<span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" asp-for="SubContractor.FirstName" class="text-input first-name-input" placeholder="Enter First Name">
+							<span class="required" asp-validation-for="SubContractor.FirstName"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Middle Name</p>
+
+						<div class="input-field">
+							<input type="text" asp-for="SubContractor.MiddleName" class="text-input middle-name-input" placeholder="Enter Middle Name">
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p> Last Name<span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" asp-for="SubContractor.LastName" class="text-input last-name-input" placeholder="Enter Last Name">
+							<span class="required" asp-validation-for="SubContractor.LastName"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>
+							Speciality <span class="required">*</span>
+						</p>
+
+						<div class="input-field">
+							<select id="Speciality" data-placeholder="Select Specility" class="select2 form-control  text-input" asp-for="SubContractor.Speciality"
+											asp-items="@(new SelectList(Model.SubContractorSpecialityList,"LookupId","LookupValue"))">
+
+								<option value="" selected disabled></option>
+							</select>
+							<span class="required" id="SubContractorSpecialityError"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>
+							Title <span class="required">*</span>
+						</p>
+
+						<div class="input-field">
+							<select id="Tittle" data-placeholder="Select Title" class="select2 form-control  text-input" asp-for="SubContractor.Title"
+											asp-items="@(new SelectList(Model.SubContractorTitleList,"LookupId","LookupValue"))">
+								<option value="" selected disabled></option>
+							</select>
+							<span class="required" id="providerTitleError"></span>
+						</div>
+
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>
+							Suffix <span class="required">*</span>
+						</p>
+
+						<div class="input-field">
+							<select id="SubContractorSuffix" data-placeholder="Select Suffix" class="select2 form-control  text-input" asp-for="SubContractor.Suffix"
+											asp-items="@(new SelectList(Model.SubContractorSuffixList,"LookupId","LookupValue"))">
+								<option value="" selected disabled></option>
+							</select>
+							<span class="required" id="providerSuffixError"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>License No <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input licenseno" asp-for="SubContractor.LicenseNo" placeholder="Enter License No">
+							<span class="required" asp-validation-for="SubContractor.LicenseNo"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>NPI No <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input npi" asp-for="SubContractor.NpiNumber" placeholder="Enter NPI No">
+							<span class="required" asp-validation-for="SubContractor.NpiNumber"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Tax ID <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input taxid" asp-for="SubContractor.TaxId" placeholder="Enter Tax ID">
+							<span class="required" asp-validation-for="SubContractor.TaxId"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Assign Room No <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input" asp-for="SubContractor.AssignRoomNo" placeholder="Enter Room No">
+							<span class="required" asp-validation-for="SubContractor.AssignRoomNo"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Rent Fee If Any</p>
+						<div class="input-field">
+							<input class="text-input" asp-for="SubContractor.Rent" type="text" placeholder="Enter Rent">
+							<span class="required" asp-validation-for="SubContractor.Rent"></span>
+
+						</div>
+					</div>
+
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Rent Type  <span class="required">*</span></p>
+						<div class="input-field">
+							<select id="SubContractorRentType" data-placeholder="Select Rent Type" class="select2 form-control  text-input" asp-for="SubContractor.RentType"
+											asp-items="@(new SelectList(Model.SubContractorRentTypeList,"LookupId","LookupValue"))">
+								<option value="" selected disabled></option>
+							</select>
+							<span class="required" id="SubContractorRentTypeError"></span>
+						</div>
+					</div>
+
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Scanned Documnet <span class="required">*</span></p>
+						<div class="input-field">
+							<select id="ScannedDocument" data-placeholder="Select Document" class="select2 form-control  text-input" asp-for="SubContractor.ScannedDocuments"
+											asp-items="@(new SelectList(Model.SubContractorScannedDocumentsList,"LookupId","LookupValue"))">
+								<option value="" selected disabled></option>
+
+							</select>
+							<span class="required" id="SubContractorScanDocError"></span>
+
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Electronic Signature Password <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="password" asp-for="SubContractor.ElectronicSignPassword" class="text-input" placeholder="Enter Password" value="@ViewBag.ElectronicPassword">
+							<a href="javascript(0);">Forget Signature</a><br />
+							<span class="required" asp-validation-for="SubContractor.ElectronicSignPassword"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Confirm Password <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="password" class="text-input" asp-for="SubContractor.ElectronicConfirmPassword" placeholder="Enter Password" value="@ViewBag.ElectronicPassword">
+							<span class="required" asp-validation-for="SubContractor.ElectronicConfirmPassword"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12 12">
+						@if (Action == "Update")
+						{
+							if (Signature == "Empty.png")
+							{
+								<p>Write Signature</p>
+								<div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+									<div class="m-signature-pad--body">
+										<canvas id="sigCanvas" width="500" height="200"></canvas>
+									</div>
+									<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+										<div class="description">Save Your signature before submit the form</div>
+										<button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+											Upload Image
+										</button>
+										<button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+											Clear
+										</button>
+										<button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+											Save Signature
+										</button>
+
+
+									</div>
+								</div>
+								<img id="savetarget" height="250" width="600" />
+								<input type="file" id="SignatureImageUpload" asp-for="SubContractor.SignImage" style="display:none" />
+
+								<span class="WriteSignatureError required"></span>
+							}
+							else if (Signature == null)
+							{
+								<p>Write Signature</p>
+								<div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+									<div class="m-signature-pad--body">
+										<canvas id="sigCanvas" width="500" height="200"></canvas>
+									</div>
+									<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+										<div class="description">Save Your signature before submit the form</div>
+										<button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+											Upload Image
+										</button>
+										<button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+											Clear
+										</button>
+										<button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+											Save Signature
+										</button>
+
+
+									</div>
+								</div>
+								<img id="savetarget" height="250" width="600" />
+								<input type="file" id="SignatureImageUpload" asp-for="SubContractor.SignImage" style="display:none" />
+
+								<span class="WriteSignatureError required"></span>
+							}
+							else if (Signature == "")
+							{
+								<p>Write Signature</p>
+								<div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+									<div class="m-signature-pad--body">
+										<canvas id="sigCanvas" width="500" height="200"></canvas>
+									</div>
+									<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+										<div class="description">Save Your signature before submit the form</div>
+										<button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox" id="pad_clear">
+											Upload Image
+										</button>
+										<button type="button" class="btn add-btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+											Clear
+										</button>
+										<button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+											Save Signature
+										</button>
+
+
+									</div>
+								</div>
+
+								<img id="savetarget" height="250" style="width:600px" />
+								<input type="file" id="SignatureImageUpload" asp-for="SubContractor.SignImage" style="display:none" />
+
+							}
+							else
+							{
+								<p>Your Signature is :</p>
+								<img id="savetarget" height="250" width="450" />
+
+								<img src="/SignatureImages/@Signature" class="SignatureImageUpdate" id="UpdateCaseSignature" height="250" />
+								<div class="row">
+									<div class="col s12 ">
+										<a class="Signaturepad_show btn add-btn patientSignatureTxtField">Update Signature</a>
+
+									</div>
+
+								</div>
+
+								<div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+									<div class="m-signature-pad--body">
+										<canvas id="sigCanvas" width="500" height="200"></canvas>
+									</div>
+									<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+										<div class="description">Save Your signature before submit the form</div>
+										<button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+											Upload Image
+										</button>
+										<button type="button" class="btn add-btn btn-sm clear signature_pad_cancel">
+											Cancel
+										</button>
+										<button type="button" class="btn btn-sm add-btn clear signature_pad_clear" data-action="clear">
+											Clear
+										</button>
+										<button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+											Save Signature
+										</button>
+
+
+									</div>
+								</div>
+								<span class="WriteSignatureError required"></span>
+								<input type="file" id="SignatureImageUpload" asp-for="SubContractor.SignImage" style="display:none" />
+
+							}
+
+						}
+						else
+						{
+							<p>Write Signature Or Upload Signature Image</p>
+							<div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+								<div class="m-signature-pad--body">
+									<canvas id="sigCanvas" width="500" height="200"></canvas>
+								</div>
+								<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+									<div class="description">Save Your signature before submit the form</div>
+									<button type="button" class="btn add-btn btn-sm uploadImageFromSignatureBox">
+										Upload Image
+									</button>
+									<button type="button" class="btn btn-sm add-btn clear signature_pad_clear" id="pad_clear" data-action="clear">
+										Clear
+									</button>
+									<button type="button" id="accept" class="btn add-btn btn-sm btn-info save1" data-action="save">
+										Save Signature
+									</button>
+
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col m6">
+									<img id="savetarget" height="250" width="600" />
+
+								</div>
+							</div>
+							<span class="WriteSignatureError required"></span>
+							<input type="file" id="SignatureImageUpload" style="display:none" />
+						}
+						<input id="HidenWriteSignPic" hidden="hidden" value="@Signature" asp-for="SubContractor.WriteSignature" />
+						<input id="HidenWriteSignPic" hidden="hidden" asp-for="SubContractor.WriteSignature" />
+						<input id="HidenProfilePic" hidden="hidden" value="@ProviderProfilePic" asp-for="SubContractor.SubContractorProfilePic" />
+
+						<input type="file" id="SignatureImageUpload" style="display:none" />
+					</div>
+
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Phone Number <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input phoneno" asp-for="SubContractor.PhoneNo" placeholder="Enter Phone Number">
+							<span class="required" asp-validation-for="SubContractor.PhoneNo"></span>
+
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Mobile Number <span class="required">*</span></p>
+						<div class="input-field">
+							<input type="text" class="text-input phoneno" asp-for="SubContractor.MobileNo" placeholder="Enter Mobile Number">
+							<span class="required" asp-validation-for="SubContractor.MobileNo"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Fax Number <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input fax" asp-for="SubContractor.FaxNo" placeholder="Enter Fax Number">
+							<span class="required" asp-validation-for="SubContractor.FaxNo"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Email <span class="required">*</span></p>
+						<div class="input-field">
+							<input type="email" class="text-input" asp-for="SubContractor.Email" placeholder="Enter Email">
+							<span class="required" asp-validation-for="SubContractor.Email"></span>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Address Line 1 <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input" asp-for="SubContractor.AddressLine1" placeholder="Enter Address Line 1">
+							<span class="required" asp-validation-for="SubContractor.AddressLine1"></span>
+
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Address Line 2</p>
+						<div class="input-field">
+							<input type="text" class="text-input" asp-for="SubContractor.AddressLine2" placeholder="Enter Address Line 2">
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Address Line 3</p>
+
+						<div class="input-field">
+							<input type="text" class="text-input" asp-for="SubContractor.AddressLine3" placeholder="Enter Address Line 3">
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>City</p>
+						<div class="input-field">
+							<input type="text" class="text-input" placeholder="Enter City" id="SubContractor_city" asp-for="SubContractor.City">
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>State</p>
+
+						<div class="input-field">
+							<input type="text" class="text-input" id="provider_state" asp-for="SubContractor.State">
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Zip <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" class="text-input" maxlength="5" asp-for="SubContractor.Zip" placeholder="Enter Zip Code">
+							<span class="required" asp-validation-for="SubContractor.Zip"></span>
+							<span class="required" id="err_zip"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>User ID <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="text" asp-for="User.UserName" class="text-input" placeholder="Enter User ID">
+							<span class="required" asp-validation-for="User.UserName"></span>
+						</div>
+					</div>
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Password <span class="required">*</span></p>
+
+						<div class="input-field">
+							<input type="password" class="text-input" asp-for="SubContractor.Password" placeholder="Enter Password" value="@ViewBag.Password">
+							<span class="required" asp-validation-for="SubContractor.Password"></span>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+						<p>Status <span class="required">*</span></p>
+						<div class="input-field">
+							<select id="SubContractorStatus" data-placeholder="Select Status" class="select2 form-control  text-input" asp-for="SubContractor.Status"
+											asp-items="@(new SelectList(Model.SubContractorStatusList,"LookupId","LookupValue"))">
+								<option value="" disabled selected></option>
+
+							</select>
+							<span class="required" id="SubContractorStatusError"></span>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2 mb-2">
+					<div class="col s12">
+						<div class="center">
+							<button type="submit" id="SubContractorInfoBtn" class="btn add-btn">@ViewBag.BtnSubmit</button>
+							@*<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>*@
+							<a href="@Url.Action("Subcontractors", "SubContractor")" class="waves-effect waves-light Recreate btn">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+	</div>
+</div>
+
+<!--<div id="breadcrumbs-wrapper">-->
+<!-- Search for small screen-->
+<!--<div class="row">
+				<div class=" col" margin-top-8">
+						<h5 class="breadcrumbs-title color-blue"> New SubContractor</h5>
+				</div>
+
+				<div class="col">
+						<a href="@Url.Action("SubContractors","provider")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+								<i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+						</a>
+				</div>
+
+		</div>
+</div>
+<div class="row">
+		<form class="col-sm-12  ">
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Company/Entity Name</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Entity Name">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>
+										Reminder by
+								</p>
+								<input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+						</div>
+
+				</div>
+
+				<div class="row">
+
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>First Name</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter First Name">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Middle Name</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Middle Name">
+								</div>
+						</div>
+
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p> Last Name</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Last Name">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>
+										Speciality
+								</p>
+
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select Speciality</option>
+
+												<option value="AK">Dr Aibolt</option>
+												<option value="HI">Dr Jack</option>
+
+
+										</select>
+								</div>
+
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>
+										Title
+								</p>
+
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select Title</option>
+
+												<option value="AK">Dr Aibolt</option>
+												<option value="HI">Dr Jack</option>
+
+
+										</select>
+								</div>
+
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>
+										Suffix
+								</p>
+
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select Suffix</option>
+
+												<option value="AK">Dr Aibolt</option>
+												<option value="HI">Dr Jack</option>
+
+
+										</select>
+								</div>
+
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>License No</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter License No">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>NPI No</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter NPI No">
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Tax ID</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Tax ID">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Assign Room No</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Room No">
+								</div>
+						</div>
+				</div>
+				<div class="row">
+
+
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Rent Fee If Any</p>
+								<div class="input-field">
+										<input class="text-input" type="text" placeholder="Enter Rent">
+
+								</div>
+						</div>
+
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Rent Type</p>
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select Rent Type</option>
+												<option value="AK">Dr Aibolt</option>
+												<option value="HI">Dr Jack</option>
+										</select>
+								</div>
+						</div>
+
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Scanned Documnet</p>
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Enter Rent Type</option>
+												<option value="AK">Monthly</option>
+												<option value="HI">Daily</option>
+												<option value="HI">Weekly</option>
+										</select>
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Electronic Signature Password</p>
+
+								<div class="input-field">
+										<input type="password" class="text-input" placeholder="Enter Password">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Confirm Password</p>
+
+								<div class="input-field">
+										<input type="password" class="text-input" placeholder="Enter Password">
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class="col">
+								<p>Write Signature Or Upload Signature Image</p>
+								<div id="signature-pad1" class="m-signature-pad mt-2 mb-2 ml-0">
+										<div class="m-signature-pad--body">
+												<canvas id="sigCanvas" width="500" height="200"></canvas>
+										</div>
+										<div class="m-signature-pad--footer pull-right" style="text-align: right;">
+												<div class="description">Save Your signature before submit the form</div>
+												<button type="button" class="btn btn-sm uploadImageFromSignatureBox">
+														Upload Image
+												</button>
+												<button type="button" class="btn btn-sm clear signature_pad_clear" id="pad_clear" data-action="clear">
+														Clear
+												</button>
+												<button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+														Save Signature
+												</button>
+
+
+										</div>
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Phone Number</p>
+
+								<div class="input-field">
+										<input type="number" class="text-input" placeholder="Enter Phone Number">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Mobile Number</p>
+								<div class="input-field">
+										<input type="number" class="text-input" placeholder="Enter Mobile Number">
+								</div>
+						</div>
+
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Fax Number</p>
+
+								<div class="input-field">
+										<input type="number" class="text-input" placeholder="Enter Fax Number">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Email</p>
+								<div class="input-field">
+										<input type="email" class="text-input" placeholder="Enter Email">
+								</div>
+						</div>
+
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Address Line 1</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Address Line 1">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Address Line 2</p>
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Address Line 2">
+								</div>
+						</div>
+
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Address Line 3</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Address Line 3">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>City</p>
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select City</option>
+												<option value="AK">Monthly</option>
+												<option value="HI">Daily</option>
+												<option value="HI">Weekly</option>
+										</select>
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>State</p>
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select State</option>
+												<option value="AK">Monthly</option>
+												<option value="HI">Daily</option>
+												<option value="HI">Weekly</option>
+										</select>
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Zip</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter Zip Code">
+								</div>
+						</div>
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>User ID</p>
+
+								<div class="input-field">
+										<input type="text" class="text-input" placeholder="Enter User ID">
+								</div>
+						</div>
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Password</p>
+
+								<div class="input-field">
+										<input type="password" class="text-input" placeholder="Enter Password">
+								</div>
+						</div>
+
+				</div>
+				<div class="row">
+						<div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+								<p>Status</p>
+								<div class="input-field">
+										<select class="select2 form-control  text-input" style="width: 100%;">
+												<option>Select Status</option>
+												<option value="AK">Monthly</option>
+												<option value="HI">Daily</option>
+												<option value="HI">Weekly</option>
+										</select>
+								</div>
+						</div>
+				</div>
+				<div class="row mt-2 mb-2">
+						<div class="col s12">
+								<div class="center">
+										<a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+										<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+										<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+								</div>
+						</div>
+				</div>
+		</form>
+</div>-->
+	</div>
+</div>
+
+
+
+
+

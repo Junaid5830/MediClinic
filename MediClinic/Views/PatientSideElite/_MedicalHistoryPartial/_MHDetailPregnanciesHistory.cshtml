@@ -1,0 +1,110 @@
+﻿@model MediClinic.Models.PatientViewModel
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">GYNAECOLOGICAL HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <div id="MHDetailPregnanciesHistory">
+                                @*<partial name="../_PatientPartialView/_ManageMHDetailPregnanciesHistory" />*@
+                                <partial name="../_MedicalHistoryPartial/_ManageMHDetailPregnanciesHistory.cshtml" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="SaveMHDetailPregnanciesHistory" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMHDetailPregnancyHistorySucess(data)" id="DetailPragnanciesForm">
+                        <input type="hidden" asp-for="MHDetailPregnanciesHistory.Id" />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    Delivery Date <span class="required"> * </span>
+                                </p>
+                                <input class="text-input datepicker" asp-for="MHDetailPregnanciesHistory.DeliveryDate" type="text" placeholder="Delivery Date">
+                                <span class="required" asp-validation-for="MHDetailPregnanciesHistory.DeliveryDate"></span>
+                            </div>
+
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    Delivery Type
+                                </p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.DeliveryType" type="text" placeholder="Delivery Type">
+                                <span class="required" asp-validation-for="MHDetailPregnanciesHistory.DeliveryType"></span>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <p>
+                                    Gender <span class="required"> * </span>
+                                </p>
+                                <div >
+                                    <select data-placeholder="Select Gender" class="select2" id="genderId" asp-for="MHDetailPregnanciesHistory.Gender" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Male", Value="Male"},
+                        new SelectListItem() {Text = "Female", Value="Female"},
+                        new SelectListItem() {Text = "Other", Value="Other"}
+                                         })">
+                                        <option value="" selected disabled>
+                                            
+                                        </option>
+                                    </select>
+                                    <span class="required" id="MHDetailPregnanciesHistory_Gender_err"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Number Of Pregnancies
+                                </p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.NoOfPregnancies" type="text" placeholder="Number Of Pregnancies">
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Number Of Living Childrens
+                                </p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.NoOfLivingChildren" type="text" placeholder="Number Of Living Childrens">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Number Of Abortions
+                                </p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.NoOfAbortions" type="text" placeholder="Number Of Abortions">
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Number Of Miscarriages
+
+                                </p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.NoOfMiscarriages" type="text" placeholder="Number Of Miscarriages">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">Notes</p>
+                                <input class="text-input" asp-for="MHDetailPregnanciesHistory.Complications" type="text" placeholder="Notes">
+                                <span class="required" asp-validation-for="MHDetailPregnanciesHistory.Complications"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col" style="text-align:center">
+                                <button type="submit" id="SaveDetailPragnanciesForm" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

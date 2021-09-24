@@ -1,0 +1,319 @@
+﻿@model MediClinic.Models.SettingViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+   
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <div class="col s12">
+                <h5 class="color-blue">Print Options</h5>
+            </div>
+        </div>
+        <input type="hidden" id="hiddenPrintSettingsUserId" asp-for="PatientPrintSettingDto.UserId" />
+
+        <div class="row">
+            <div class="col s6 m3 l3 ">
+                <p>First Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="firstNameBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.FIrstName" data-toggle="toggle" />
+                </div>
+            </div>
+
+            <div class="col s6 m3 l3">
+                <p>Last Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastNameBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.LastName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>DOB</p>
+                <div class="switch">
+                    <input type="checkbox" id="DOBPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.DOB" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Age</p>
+                <div class="switch">
+                    <input type="checkbox" id="agePrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Age" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Address</p>
+                <div class="switch">
+                    <input type="checkbox" id="AddressPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Address" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>SS Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="SSNPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.SSNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Gender</p>
+                <div class="switch">
+                    <input type="checkbox" id="GenderPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Gender" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Marital Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="MSCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.MaritalStatus" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Mobile Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="MPhoneCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.MobilePhone" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Home Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="HPhoneCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.HomePhone" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Emergency Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmergencyPhoneCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.EmergencyPhone" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Languages</p>
+                <div class="switch">
+                    <input type="checkbox" id="LanguagesPhoneCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.languages" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Case Type</p>
+                <div class="switch">
+                    <input type="checkbox" id="CaseTypeCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.CaseType" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Claim Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="ClaimNumberCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.ClaimNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Policy Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="PolicyNumberCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.PolicyNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>WCB Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="WCBCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.WCBNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Carrier Case Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="CCNumberCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.CarrierCaseNumber" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Policy Holder Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="PHNameCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.PolicyHolderName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Employer Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmployerInfoCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.EmployerInfo" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>DOA</p>
+                <div class="switch">
+                    <input type="checkbox" id="DOACheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.DOA" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Place/Time Of Incident</p>
+                <div class="switch">
+                    <input type="checkbox" id="PTOIncidentCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.PlaceTimeOfAccident" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Full Insurance Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullInsurancInfoCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.FullInsuranceInfo" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Full Claim Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullClaimInfoCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.FullClaimInfo" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>NF2 Filling Date</p>
+                <div class="switch">
+                    <input type="checkbox" id="NF2FillingCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Nf2fillingDate" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Created Date</p>
+                <div class="switch">
+                    <input type="checkbox" id="CreatedDateCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.DateCreated" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Primary Dr</p>
+                <div class="switch">
+                    <input type="checkbox" id="PrimaryDrCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.PrimaryDr" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>First Visit</p>
+                <div class="switch">
+                    <input type="checkbox" id="FirstVisitPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.FirstVisit" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Last Visit</p>
+                <div class="switch">
+                    <input type="checkbox" id="LastVisitCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.LastVisit" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Last Exam</p>
+                <div class="switch">
+                    <input type="checkbox" id="LastExamCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.LastExam" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Vitals</p>
+                <div class="switch">
+                    <input type="checkbox" id="vitalsPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Vitals" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Body Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="bodyStatusPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.BodyStatus" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Tests</p>
+                <div class="switch">
+                    <input type="checkbox" id="testsPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Tests" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Reminders</p>
+                <div class="switch">
+                    <input type="checkbox" id="remainderPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Reminder" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Missing</p>
+                <div class="switch">
+                    <input type="checkbox" id="MissingPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Missing" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Full P.I. Attorney</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullPIAttorneyPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.FullPIAttorneyinfo" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Paralegal</p>
+                <div class="switch">
+                    <input type="checkbox" id="ParalegalPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.Paralegal" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Collection Attorney</p>
+                <div class="switch">
+                    <input type="checkbox" id="CollectionAttorneyPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.CollectionAttorney" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Referral Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="ReferralNamePrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.ReferralName" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Current Location in Facility</p>
+                <div class="switch">
+                    <input type="checkbox" id="CurrentlocationInFacilityPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.CurrentLocationInFacility" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Last I.M.E</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastIMEPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.LastIME" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Last E.U.O</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastEUOPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.LastEUO" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>All Visits</p>
+                <div class="switch">
+                    <input type="checkbox" id="allVisitPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.AllVisits" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Number Of Visits</p>
+                <div class="switch">
+                    <input type="checkbox" id="numberVisitPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.NumberOfVisits" data-toggle="toggle" />
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Related Patient List</p>
+                <div class="switch">
+                    <input type="checkbox" id="relatedPatientPrintCheckBox" onchange="checkBoxChangePrintSettingsDisplaySettings(this)" asp-for="PatientPrintSettingDto.RelatedPatientList" data-toggle="toggle" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

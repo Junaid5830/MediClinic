@@ -1,0 +1,1077 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "AddClaimInfoElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var RoleId = _sessionManager.GetRoleId();
+    
+
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+    <style>
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .select2-container a {
+            color: #6b6f82 !important;
+            width: 100% !important;
+        }
+
+        .form-add-btn {
+            margin-top: 2.4rem !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/microsoft/signalr/notify.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+
+        $(".time-picker").hunterTimePicker();
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+
+        $('#claim_Zip').keyup(function () {
+
+            $zval = $('#claim_Zip').val();
+
+            if ($zval.length == 5) {
+                $jCSval = getclaimCityState($zval, true);
+
+            }
+
+        });
+        function getclaimCityState($zip, $blnUSA) {
+
+            var date = new Date();
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+                if (response.status == "ZERO_RESULTS") {
+                    $("#err_claimzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+                    $("#claim_city").val(city);
+                    $("#claim_state").val(state);
+                    $("#claim_country").val(country);
+                    //$('#modal3').modal('open');
+                }
+                //find the city and state
+
+
+                //pre-fill the city and state
+
+            });
+        }
+        $(function () {
+
+            $('#ssn').inputmask('999-99-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $('.fax').inputmask('(999) 999-9999');
+            $('.vitalBloodPressure').inputmask("999/99");
+            $('.vitalHeight').inputmask("9'99\"");
+            $('.vitalTemprature').inputmask("999 °F");
+            $('.vitalOxygenSaturation').inputmask("99 %");
+            $('.vitalWeight').inputmask("999 lbs");
+            $('.vitalRespiration').inputmask("99 per/min");
+            $('.vitalPulse').inputmask("99 per/min");
+
+
+        });
+        $(document).ready(function () {
+              debugger
+            $(".select2").select2();
+
+            $('#Patient_RoleIncident')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right8\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_incidentReport')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right9\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_nf2Status')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right10\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_claimStatus')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right11\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_ProviderName')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right12\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+
+            $('#PI_AttoneyName')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right22\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            @*var Id = @PatientId;
+            setTimeout(function () {
+                $("#seleciona").val(Id);
+                $('#seleciona').trigger('change');
+            },500);*@
+           
+
+        });
+        $(document).on('click', '#btnPatientClaimInfo', function (e) {
+
+            debugger;
+            var nf2ComboVal = $('#Patient_nf2Status').val();
+            var CaseType = $("#Patient_caseType").val();
+            var nf2Date = $("#nf2FilledDateInput").val();
+            if ($("#Patient_nf2Status").val() == '15' && nf2Date == "") {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                e.preventDefault();
+                return false;
+            }
+            if (nf2ComboVal == "") {
+                $("#nf2_err").html("Select Nf2 Status");
+            }
+            else {
+                $("#nf2_err").html("");
+            }
+            if (CaseType == "") {
+                $("#casetype_err").html("Select Case Type");
+            }
+            else {
+                $("#casetype_err").html("");
+            }
+            if (nf2Date == "" && IsRequiredNf2Date) {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                e.preventDefault();
+                return false;
+            }
+            else {
+                $("#nf2DateValidationSpan").html("");
+            }
+
+            var isValidForm = $("#patientClaimForm").valid();
+
+            e.preventDefault();
+
+            if (isValidForm) {
+                if (!(nf2ComboVal == "" || CaseType == "")) {
+                    isInfoButtonClick = true;
+                    $("#patientClaimForm").ajaxSubmit({
+
+                        success: function (response) {
+                            //$('#btnPatientClaimInfo').attr('disabled', false);
+                            //$('#btnPatientClaimInfo .waves-ripple').remove();
+                        },
+                        error: function (response) {
+                            console.log('error');
+                        },
+                        complete: function (xhr) {
+
+                            //$('#btnPatientClaimInfo').attr('disabled', false);
+                            //$('#btnPatientClaimInfo .waves-ripple').remove();
+                            onCreateToDoclaim(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+            }
+
+        });
+
+        function onCreateToDoclaim(data) {
+            debugger;
+            var isErrorMessage = data.isError;
+            if (isErrorMessage) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Please provide patient info first',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.select2').val('').trigger('change');
+                $('input').val('');
+            }
+
+        };
+        function onCreateAttorneyName(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+
+                $('.addlegalStatus').val('');
+                $('.addlegalStatus').removeClass('valid');
+
+                var statusSelectList = $('.attorneyNameCombo');
+                statusSelectList.append($('<option></option>').val(data.attorneyId).text(data.attorneyName));
+
+            }
+        }
+        function onCreatePatientclaimstatus(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addClaimStatusInfo').val('');
+                $('.addClaimStatusInfo').removeClass('valid');
+                var claimstatusList = $('.claimlist');
+                claimstatusList.append($('<option></option>').val(data.claimStatusId).text(data.claimStatus1));
+            }
+        }
+        function onCreatePatientnf2(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addPatientnf2').val('');
+                $('.addPatientnf2').removeClass('valid');
+                var nf2List = $('.nf2list');
+                nf2List.append($('<option></option>').val(data.nf2Id).text(data.nf2Status1));
+            }
+        }
+        function onCreatePatientIncidentReport(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.incidentReportStatusadd').val('');
+                $('.incidentReportStatusadd').removeClass('valid');
+                var IncidentReportList = $('.incidentReport');
+                IncidentReportList.append($('<option></option>').val(data.incidentReportId).text(data.incidentReportStatus1));
+            }
+        }
+        function onCreatePatientRoleIncident(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addpatientRoleIncident').val('');
+                $('.addpatientRoleIncident').removeClass('valid');
+                var IncidentList = $('.incidentRole');
+                IncidentList.append($('<option></option>').val(data.patientIncidentRoleId).text(data.patientRoleInIncident));
+            }
+        }
+
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> New Claim</h5>
+                </div>
+
+                <div class="col">
+                    <a href="@Url.Action("ClaimInfoListElite","PatientSideElite")" class="waves-effect waves-light float-right">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="row">
+            <form class="col-sm-12" asp-action="AddClaimInfoElite" asp-controller="PatientSideElite" id="patientClaimForm" method="post">
+                <input hidden="hidden" id="hiddenClaimInfoBasicUserid" asp-for="patientClaimInfo.PatientClaimID" />
+                @if (RoleId == 5)
+                {
+                    <div class="row">
+                        <div class="col-6">
+                            <p>Patient Name</p>
+                            <select id="seleciona" class="select2" data-placeholder="Select Patient Name" asp-for="patientClaimInfo.PatientInfo" 
+                                    asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            Primary Insurance Provider<span class="required"> * </span>
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling primaryInsuranceProvider claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PrimaryInsuranceProvider" type="text" placeholder="Enter Primary Insurance Provider">
+                            <span class="required" asp-validation-for="patientClaimInfo.PrimaryInsuranceProvider"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Address Line 1<span class="required"> * </span>
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling primaryInsuranceAddress claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.Addressline1" type="text" placeholder="Enter Addressline 1">
+                            <span class="required" asp-validation-for="patientClaimInfo.Addressline1"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Address Line 2
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.Addressline2" placeholder="Enter Addressline 2">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Address Line 3
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.Addressline3" placeholder="Enter Address line 3">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Zip Code<span class="required"> * </span>
+
+                        </p>
+
+                        <div class="input-field">
+
+                            <input class="text-input input-styling primaryInsuranceZipCode claim_tab patientClaimInfoTxtField" maxlength="5" id="claim_Zip" asp-for="patientClaimInfo.Zip" type="text" placeholder="Enter ZIP Code">
+                            <span class="required" asp-validation-for="patientClaimInfo.Zip"></span>
+                            <span class="required" id="err_claimzip"></span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            City
+
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling primaryInsuranceCity city patientClaimInfoTxtField" id="claim_city" type="text" asp-for="patientClaimInfo.City" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            State
+
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling primaryInsuranceState state patientClaimInfoTxtField" id="claim_state" type="text" asp-for="patientClaimInfo.State" readonly>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Country
+
+                        </p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling primaryInsuranceCountry country patientClaimInfoTxtField" id="claim_country" type="text" asp-for="patientClaimInfo.Country" readonly>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Web Page</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling webPageUrl claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.WebPage" placeholder="Enter Web Page">
+                            <span class="required" id="web_err"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Primary Phone
+                        </p>
+                        <div class="input-field">
+                            <input class="text-input input-styling phoneno claim_tab patientClaimInfoTxtField" type="text" id="claim_number" asp-for="patientClaimInfo.PrimaryPhone" placeholder="Enter Primary Phone Number">
+                            <span class="required" id="claim_errmsg_number"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Fax</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling fax claim_tab patientClaimInfoTxtField" id="claim_fax" type="text" asp-for="patientClaimInfo.Fax" placeholder="Enter Fax Number">
+                            <span class="required" id="claim_errmsg_fax"></span>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Email<span class="required"> * </span>
+                        </p>
+                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="claimInfoEmail" type="email" asp-for="patientClaimInfo.Email" placeholder="Enter Email Address">
+                        <span class="required" asp-validation-for="patientClaimInfo.Email"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Adjuster Name<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="ClaimInfoadjusterName" type="text" asp-for="patientClaimInfo.AdjusterName" placeholder="Enter adjuster Name">
+                            <span class="required" asp-validation-for="patientClaimInfo.AdjusterName"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Adjuster Id
+                        </p>
+                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.AdjusterID" type="text" placeholder="Enter adjuster ID">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Adjuster Phone<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling phoneno claim_tab patientClaimInfoTxtField" id="adjust_claim_num" asp-for="patientClaimInfo.AdjusterPhone" type="text" id="adjusterPhone" placeholder="Enter adjuster Phone">
+                            <span class="required" asp-validation-for="patientClaimInfo.AdjusterPhone"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Adjuster Extension
+                        </p>
+                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.AdjusterExtension" placeholder="Enter adjuster Extension">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Adjuster Fax<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling fax claim_tab patientClaimInfoTxtField" id="adjust_claim_fax" asp-for="patientClaimInfo.AdjusterFax" type="text" placeholder="Enter adjuster fax">
+                            <span class="required" id="adjust_claim_errmsg_fax"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Adjuster Email<span class="required"> * </span>
+                        </p>
+                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="climInfoAdjusterEmail" asp-for="patientClaimInfo.AdjusterEmail" type="email" placeholder="Enter adjuster Email">
+                        <span class="required" asp-validation-for="patientClaimInfo.AdjusterEmail"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>NF2 Filled Date<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input type="text" id="nf2FilledDateInput" class="datepicker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.NF2FillingDate" placeholder="MM/DD/YYYY">
+                            <span id="nf2DateValidationSpan" class="required" asp-validation-for="patientClaimInfo.NF2FillingDate"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Case Type<span class="required"> * </span>
+                        </p>
+                        <div class="input-field claimSelect_tab">
+                            <select id="Patient_caseType" class="select2 patientClaimInfoTxtField genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.CaseType" data-placeholder="Select Case Type">
+                                <option selected value="" disabled></option>
+                                <option value="No-Fault">No-Fault</option>
+                                <option value="WC">WC</option>
+                                <option value="Private">Private</option>
+                                <option value="Self/Out of Pocket">Self/Out of Pocket</option>
+                                <option value="Medicare">Medicare</option>
+                                <option value="Tricare">Tricare</option>
+                                <option value="Champva">Champva</option>
+                                <option value="Group Health Plan">Group Health Plan</option>
+                                <option value="Feca Blk Lung">Feca Blk Lung</option>
+                                <option value="Medicaid">Medicaid</option>
+                                <option value="Lien">Lien</option>
+                            </select>
+                            <p class="required" id="casetype_err"></p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                        <p>
+                            Attorney Name
+
+                        </p>
+
+                        <div class="input-field piSelect_tab">
+                            <select id="PI_AttoneyName" class="select2 attorneyNameCombo genericClassForDD PIDropDListBeforeEditDisabled" asp-for="patientClaimInfo.AttorneyId" data-placeholder="Select Attorney Name"
+                                    asp-items="@(new SelectList(Model.legalInfoAttorneyNameList,"AttorneyId","AttorneyName"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                        <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right22')"><i class="ti ti-plus"></i></a>
+
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Date of Incident<span class="required"> * </span></p>
+
+                        <div class="input-field">
+                            <input type="text" class="datepicker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.DateOfIncident" placeholder="MM/DD/YYYY">
+                            <span class="required" asp-validation-for="patientClaimInfo.DateOfIncident"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>
+                            Time of Incident
+                        </p>
+                        <div class="input-field col s12 m12 l12 pl-0">
+                            <input type="text" class="time-picker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.TimeOfIncident" placeholder="Select Time">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Was the Incident In the course of employment?</p>
+
+                        <div class="form-group">
+                            <input type="radio" id="IsYes" class="check patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="1">
+                            <label for="IsYes" style="margin:0 !important">Yes</label>
+                            <input type="radio" id="IsNo" class="check patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="0" style="margin-left:25px !important">
+                            <label for="IsNo" style="margin:0 !important">No</label>
+                        </div>
+
+
+                        @*<div class="input-field">
+                    <ul class="icheck-list">
+                        <li class="yes">
+                            <input type="radio" class="check patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="1" id="square-radio-1">
+                            <label for="square-radio-1">Yes</label>
+                        </li>
+                        <li class="no">
+                            <input type="radio" id="square-radio-2" class="check patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="0">
+                            <label for="square-radio-2">No</label>
+                        </li>
+
+                    </ul>
+                </div>*@
+                    </div>
+                    <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                        <p>
+                            Patient role in the incident
+                        </p>
+
+                        <div class="input-field claimSelect_tab">
+                            <select id="Patient_RoleIncident" class="select2 incidentRole genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.PatientIncidentRoleId" data-placeholder="Select Patient Role"
+                                    asp-items="@(new SelectList(Model.IncidentList,"PatientIncidentRoleId","PatientRoleInIncident"))">
+                                <option selected value="" disabled></option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                        <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right8')"><i class="ti ti-plus"></i></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-10 col-xl-5  col-10 ">
+                        <p>
+                            Incident Report Status
+                        </p>
+                        <div class="input-field claimSelect_tab">
+                            <select id="Patient_incidentReport" class="select2 incidentReport genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.IncidentReportId" data-placeholder="Select Incident Report Status"
+                                    asp-items="@(new SelectList(Model.IncidentReportStatusList,"IncidentReportId","IncidentReportStatus1"))">
+                                <option selected value="" disabled></option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                        <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right9')"><i class="ti ti-plus"></i></a>
+
+                    </div>
+                    <div class="col-md-5 col-xs-10 col-xl-5  col-10">
+                        <p>
+                            NF2 Status<span class="required"> * </span>
+                        </p>
+                        <div class="input-field claimSelect_tab">
+                            <select id="Patient_nf2Status" class="select2 genericClassForDD nf2list claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.Nf2Id" data-placeholder="Select Nf2 Status"
+                                    asp-items="@(new SelectList(Model.Nf2list,"Nf2Id","Nf2Status1"))">
+                                <option selected disabled value=""></option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                        <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right10')"><i class="ti ti-plus"></i></a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6 ">
+                        <p>Place of Incident</p>
+
+                        <div class="input-field">
+                            <input class="text-input claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.PlaceOfIncident" placeholder="Enter place of incident">
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-xs-10 col-xl-5  col-10 ">
+                        <p>
+                            Claim Status
+                        </p>
+                        <div class="input-field claimSelect_tab">
+                            <select data-placeholder="Select Claim Status" id="Patient_claimStatus" class="select2 claimlist genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.ClaimStatusId"
+                                    asp-items="@(new SelectList(Model.ClaimStatusList,"ClaimStatusId","ClaimStatus1"))">
+
+                                <option selected disabled value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-1 col-xs-2 col-xl-1  col-2">
+                        <a class="btn form-add-btn sideout" href="javascript:void(0);" onclick="ToggleSideBar('slide-out-right11')"><i class="ti ti-plus"></i></a>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6  ">
+                        <p>Policy Number</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PolicyNumber" type="text" placeholder="Enter Policy Number">
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p>Policy Holder Name</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.PolicyHolderName" placeholder="Enter Policy Holder Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6  ">
+                        <p>Policy Limits</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PolicyNumber" type="text" placeholder="Enter Policy Limits">
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p>Claim Number</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.ClaimNumber" placeholder="Enter Claim Number">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6  ">
+                        <p>WCB Number</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.WCBNumber" type="text" placeholder="Enter WCB Number">
+                            <span class="required" id="adjust_claim_errmsg_num"></span>
+
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p>WCB Case Number</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.WCBCaseNumber" placeholder="Enter WCB Case Number">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-md-6  ">
+                        <p>Group Number</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.GroupNumber" type="text" placeholder="Enter Group Number">
+                        </div>
+                    </div>
+                    <div class=" col-md-6  ">
+                        <p>$CoPay</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling copay claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.CoPay" placeholder="Enter $CoPay">
+                            <span class="required" asp-validation-for="patientClaimInfo.CoPay"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Accept Assignment?</p>
+                        @*<div class="input-field">
+                    <ul class="icheck-list">
+                        <li class="yes">
+                            <input type="radio" class="check patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.AcceptAssignment" value="1" id="square-radio-1" data-radio="iradio_square-red">
+                            <label for="square-radio-1">Yes</label>
+                        </li>
+                        <li class="no">
+                            <input type="radio" class="check patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.AcceptAssignment" value="0" id="square-radio-2" data-radio="iradio_square-red">
+                            <label for="square-radio-2">No</label>
+                        </li>
+
+                    </ul>
+                </div>*@
+                        <div class="form-group">
+                            <input type="radio" class="check patientClaimInfoTxtField" id="IsAcceptYes" asp-for="patientClaimInfo.AcceptAssignment" value="1">
+                            <label for="IsAcceptYes" style="margin:0 !important">Yes</label>
+                            <input type="radio" class="check patientClaimInfoTxtField" id="IsAcceptNo" asp-for="patientClaimInfo.AcceptAssignment" value="0" style="margin-left:25px !important">
+                            <label for="IsAcceptNo" style="margin:0 !important">No</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <p>Policy Effective Date</p>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="input-field">
+                                    <input class="datepicker text-input input-styling claim_tab patientClaimInfoTxtField" id="from" type="text" asp-for="patientClaimInfo.PolicyEffectiveDate" placeholder="MM/DD/YYYY">
+
+                                </div>
+
+                            </div>
+                            To
+                            <div class="col-md-5">
+                                <div class="input-field">
+
+                                    <input class="datepicker text-input input-styling claim_tab patientClaimInfoTxtField" id="to" type="text" asp-for="patientClaimInfo.PolicyEffectiveDate" placeholder="MM/DD/YYYY">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="row">
+
+                    <div class=" col-md-6  ">
+                        <p>Relationship to Policy Holder</p>
+
+                        <div class="input-field">
+                            <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.RelationShipToPolicyHolder" type="text" placeholder="Enter RelationShip To Policy Holder">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 ">
+                        <p>Was Policy effect at the time of incident?</p>
+                        @*<div class="input-field">
+                    <ul class="icheck-list">
+                        <li class="yes">
+                            <input type="radio" class="check patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="1" id="square-radio-1" data-radio="iradio_square-red">
+                            <label for="square-radio-1">Yes</label>
+                        </li>
+                        <li class="no">
+                            <input type="radio" class="check patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="0" id="square-radio-2" data-radio="iradio_square-red">
+                            <label for="square-radio-2">No</label>
+                        </li>
+
+                    </ul>
+                </div>*@
+                        <div class="form-group">
+                            <input type="radio" class="check patientClaimInfoTxtField" id="IsAcceptYes1" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="1">
+                            <label for="IsAcceptYes1" style="margin:0 !important">Yes</label>
+                            <input type="radio" class="check patientClaimInfoTxtField" id="IsAcceptNo1" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="0" style="margin-left:25px !important">
+                            <label for="IsAcceptNo1" style="margin:0 !important">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" id="btnPatientClaimInfo" class="btn add-btn">Save</button>
+
+                            @if (ViewBag.Action == "Update")
+                            {
+                                <button type="button" data-val="claimForm" id="claimEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                <button type="button" data-val="claimForm" id="claimCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                            }
+                            else
+                            {
+                                @*<a href="javascript:void(0);" data-val="NewForm" id="claimCancel_btn"  class="btn Recreate">Edit</a>*@
+                                <a href="javascript:void(0);" data-val="NewForm" id="claimCancel_btn" onclick="emptyPatientClaimFields();" class="Recreate btn">Cancel</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="right-sidebar slide-out-right8">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="patientRoleIncident" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientRoleIncident(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Incident Role</h6>
+
+                        <input class="text-input  addpatientRoleIncident" asp-for="patientIncidentRole.PatientRoleInIncident" type="text" placeholder="Add new patient role in the incident">
+                        <span class="required" asp-validation-for="patientIncidentRole.PatientRoleInIncident"> </span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right9">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="IncidentReportStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientIncidentReport(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Report Status</h6>
+                        <input class="text-input input-styling incidentReportStatusadd" asp-for="IncidentReportStatusBasicDto.IncidentReportStatus1" type="text" placeholder=" Add new incident report status">
+                        <span class="required" asp-validation-for="IncidentReportStatusBasicDto.IncidentReportStatus1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right10">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="nf2Status" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientnf2(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New NF2 Status</h6>
+                        <input class="text-input input-styling addPatientnf2" asp-for="nf2Status.Nf2Status1" type="text" placeholder="Add new NF2 status">
+                        <span class="required" asp-validation-for="nf2Status.Nf2Status1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right11">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="PatientClaimStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientclaimstatus(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Claim Status</h6>
+                        <input class="text-input input-styling addClaimStatusInfo" asp-for="claimStatusBasicDto.ClaimStatus1" type="text" placeholder="Add new claim status">
+                        <span class="required" asp-validation-for="claimStatusBasicDto.ClaimStatus1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right22">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <form asp-action="AttorneyName" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateAttorneyName(data)" class="col s12">
+
+                <div class="row">
+                    <div class="col-12">
+                        <h6>Add New Attorney Name</h6>
+                        <input class="text-input attorney_name addlegalStatus" asp-for="LegalInfoAttorneyNameBasicDto.AttorneyName" type="text" placeholder="Enter Attorney Name" />
+                        <span class="required" asp-validation-for="LegalInfoAttorneyNameBasicDto.AttorneyName"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

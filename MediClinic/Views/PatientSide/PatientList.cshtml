@@ -1,0 +1,704 @@
+﻿
+@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "PatientList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@section  scripts{
+        <script>
+
+        </script>
+
+    }*@
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/timePicker.css" rel="stylesheet" />
+
+    <style>
+        .Hunter-clean-btn {
+            display: none;
+        }
+
+        [type="checkbox"] + span:not(.lever)::before {
+            border: 2px solid var(--bubble-color);
+        }
+
+        [type="checkbox"]:checked + span:not(.lever)::before {
+            border-right: 2px solid var(--bubble-color);
+            border-bottom: 2px solid var(--bubble-color);
+        }
+
+        table.dataTable.display tbody tr.odd:hover {
+            background-color: #f1f1f1 !important;
+        }
+
+        .modal {
+            background-color: #fff !important
+        }
+
+        .select2-container .select2-selection--single {
+            height: 49px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px !important
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 44px;
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+        }
+
+        #AppointmentModal {
+            width: 65% !important;
+            background-color: #fff !important;
+            max-height: 80% !important;
+        }
+
+            #AppointmentModal .select-wrapper {
+                display: none;
+            }
+
+        .FLNameLetter {
+            background: #f1f1f1;
+            padding: 11px;
+            border-radius: 50%;
+            color: #547cea;
+            width: 30px;
+            font-weight: bold;
+        }
+
+        .card:hover {
+            background-color: #f1f1f1 !important;
+            box-shadow: none !important;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+
+        .dropdown-trigger {
+            text-transform: none;
+        }
+
+        .disable label span:after {
+            border: 2px solid var(--bubble-color) !important;
+        }
+
+        .checkmark {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #4bb71b;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #4bb71b;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            position: fixed;
+            top: 12%;
+            right: 2%;
+            float: right;
+            z-index: 9999;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #4bb71b;
+            fill: #fff;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @@keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @@keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @@keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4bb71b;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        var ProviderId;
+        var Duration;
+        var selectedList = [];
+        $('.select2').select2({
+            selectOnClose: false,
+            dropdownParent: $('#AppointmentModal'),
+            placeholder: "Select a Provider Name"
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            minDate: 0
+        });
+        $(document).ready(function () {
+            $(".time-picker").hunterTimePicker();
+            //           $('[data-search]').on("keyup", function () {
+            //               debugger;
+            //               var value = $(this).val().toLowerCase();
+
+            //$("table tbody tr").filter(function() {
+            //  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            //});
+            //           });
+
+        })
+        var table;
+        $(document).ready(function () {
+            $('.select-all').click(function () {
+
+                $('table tbody tr th input').prop('checked', this.checked);
+            });
+            table = $("#Patient-table").DataTable({ "info": false, responsive: true, lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]], 'order': [[3, 'asc']], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+            $('#provider_name').change(function () {
+                ProviderId = $('#provider_name option:selected').val();
+            });
+            $('#SlotDuration').change(function () {
+                Duration = $('#SlotDuration option:selected').val();
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+        });
+
+        function PatientBatchActions(batchType) {
+            debugger;
+
+            var isAnyChecked = false;
+            var Patientobj = {};
+            var rows = table.rows({ 'search': 'applied' }).nodes();
+
+            $('input[type=checkbox]', rows).each(function () {
+                if ($(this).prop("checked") == true) {
+                    if ($(this).attr('data-val') != "all") {
+                        Patientobj.patientId = $(this).attr('id');
+                        Patientobj.patientName = $(this).attr('data-val')
+                        isAnyChecked = true;
+                        selectedList.push(Patientobj);
+                        Patientobj = {};
+                    }
+                }
+            })
+            if (isAnyChecked) {
+                if (batchType == 'Add Appointment') {
+                    debugger;
+
+                    $("#AppointmentModal").modal('open');
+                    $('input').val("");
+                    $('input').val("");
+
+                    $("input:checkbox").prop('checked', false);
+
+                    $(".select2").val('').trigger('change');
+                    $("#ModalPatientBody").html('');
+
+                    for (var i = 0; i < selectedList.length; i++) {
+
+
+                        $("#ModalPatientBody").append("<tr ><td class='Pat_Id' Pat_Id = " + selectedList[i].patientId + ">" + selectedList[i].patientId + "</td><td>" + selectedList[i].patientName + "</td></tr>");
+
+                    }
+                    //$("#AppointmentModal ModalPatient_Id").val(selectedList[0]);
+                    //$("#AppointmentModal Name").val(selectedList[1]);
+                }
+
+            }
+        }
+        $('#provider_name').change(function () {
+            ProviderId = $('#provider_name option:selected').val();
+        });
+        $('#SlotDuration').change(function () {
+            Duration = $('#SlotDuration option:selected').val();
+        });
+
+        function deletePatient(patientInfoId, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/PatientSide/PatientInfoDelete", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record deleted successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+            });
+        }
+        $('#BulkAppointHide').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+                var tblData = "";
+                $('#listable tr:not(:first)').each(function () {
+
+                    var PatientId = $(this).find(".Pat_Id").attr("Pat_Id");
+                    var Provider_Id = ProviderId;
+                    var DurationTime = Duration;
+                    var Date = $("#AppointmentDate").val();
+                    var StartTime = $("#STime").val();
+
+                    tblData += (PatientId + "_" + Provider_Id + "_" + DurationTime + "_" + Date + "_" + StartTime + "|-|");
+                });
+
+                //$("#saveTemplate").prop('disabled', true);
+                $("#selectedData").val(tblData);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+
+                        }
+                    }
+                });
+            }
+
+        });
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Template Name already exists",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        function SuccessMsg() {
+            $(".checkmark").show().fadeOut(6000);
+
+            $("#AppointmentModal").modal('close');
+        }
+
+    </script>
+}
+<label>@ViewData["FileLocation"]</label>
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m3 l2 margin-top-8">
+                <h5 class="breadcrumbs-title color-blue">Patients</h5>
+            </div>
+            <div class="col s9 m5 l6 display-block">
+                <div class="header-search-wrapper  display-flex position-relative">
+                    <i class="material-icons position-absolute  search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" data-search placeholder="Search">
+                    <a class="btn ml-2 search-btn">
+                        Search
+                    </a>
+                </div>
+            </div>
+            <div class="col s12 m4 l4 ">
+
+                <a class="btn waves-effect waves-light float-right add-btn" href="@Url.Action("PatientInfo","PatientSide")">
+                    Add New Patient
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown5' class='dropdown-content dropbody batchdrop'>
+                    <li><a href="javascript:void(0);" class="bulkAppointemtnModalClear" onclick="PatientBatchActions('Add Appointment')">Add Appointment</a></li>
+                    <li><a href="javascript:void(0);">Generate Labels</a></li>
+                    <li><a href="javascript:void(0);">Generate Delivery Slips</a></li>
+                    <li><a href="javascript:void(0);">Generate  NF3 Forms</a></li>
+                    <li><a href="javascript:void(0);">Generate  1500 Forms</a></li>
+                    <li><a href="javascript:void(0);">Generate  C4 Forms</a></li>
+                    <li><a href="javascript:void(0);">Batch Message</a></li>
+                    <li><a href="javascript:void(0);">Generate Bar Code Labels</a></li>
+                    <li><a href="javascript:void(0);">Generate Invoice</a></li>
+                    <li><a href="javascript:void(0);">Scan</a></li>
+                    <li><a href="javascript:void(0);">Email</a></li>
+                    <li><a href="javascript:void(0);">View & Print</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col m12">
+        <div class="container">
+
+
+            <table id="Patient-table" class="display table-option">
+                <thead>
+                    <tr class="uppercase">
+                        <th class="disable">
+                            <label>
+                                <input type="checkbox" data-val="all" id="selectAll" class="select-all" />
+                                <span style="--bubble-color:#5a5a5a"></span>
+                            </label>
+                        </th>
+
+                        <th data-orderable="false"></th>
+                        @if (Model.PatientListSettingDto.PatientId)
+                        {
+                            <th>Patient Id</th>
+                        }
+                        @if (Model.PatientListSettingDto.Name)
+                        {
+                            if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == true)
+                            {
+                                <th>Name</th>
+                            }
+                            else if (Model.PatientListSettingDto.FirstName == true && Model.PatientListSettingDto.LastName == false)
+                            {
+                                <th>Name</th>
+                            }
+                            else if (Model.PatientListSettingDto.FirstName == false && Model.PatientListSettingDto.LastName == true)
+                            {
+                                <th>Name</th>
+                            }
+                            else
+                            {
+                                <th data-orderable="false">Name</th>
+                            }
+                        }
+                        @if (Model.PatientListSettingDto.HomePhone)
+                        {
+                            <th>Home Phone</th>
+                        }
+                        @if (Model.PatientListSettingDto.MobilePhone)
+                        {
+                            <th>Cell Phone</th>
+                        }
+                        @if (Model.PatientListSettingDto.Address)
+                        {
+                            <th>Address</th>
+                        }
+                        @if (Model.PatientListSettingDto.DOB)
+                        {
+                            <th>DOB</th>
+                        }
+                        @if (Model.PatientListSettingDto.Gender)
+                        {
+                            <th>Gender</th>
+                        }
+                        @if (Model.PatientListSettingDto.MartialStatus)
+                        {
+                            <th>Marital Status</th>
+                        }
+                        @if (Model.PatientListSettingDto.Attorney)
+                        {
+                            <th>ATTORNEY</th>
+                        }
+                        @if (Model.PatientListSettingDto.Paralegal)
+                        {
+                            <th>Paralegal</th>
+                        }
+                        @if (Model.PatientListSettingDto.REFERRALNAME)
+                        {
+                            <th>Ref Name</th>
+                        }
+                        @if (Model.PatientListSettingDto.Dispatch)
+                        {
+                            <th>Dispatch</th>
+                        }
+                        @if (Model.PatientListSettingDto.AssignTransport)
+                        {
+                            <th>Transport</th>
+                        }
+                        @if (Model.PatientListSettingDto.Route)
+                        {
+                            <th>Route</th>
+                        }
+                        <th data-searchable=false data-orderable="false" class="all">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.patientListWithUsers != null)
+                    {
+                        @foreach (var Data in Model.patientListWithUsers)
+                        {
+                            <tr class="card">
+                                <th>
+                                    <label>
+                                        <input type="checkbox" id="@Data.PatientInfoId" data-val="@Data.FullName" />
+                                        <span style="--bubble-color:@Data.Color"></span>
+                                    </label>
+                                </th>
+                                <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer;text-align: center">
+                                    @if (Data.PaitentImage != null)
+                                    {
+                                        <span class="list-img">
+                                            <img src="~/images/@Data.PaitentImage" alt="Patient">
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <div class="FLNameLetter">
+                                            <span>@Data.FirstNameLetter@Data.LastNameLetter</span>
+                                        </div>
+                                    }
+
+                                </td>
+                                @if (Model.PatientListSettingDto.PatientId)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.PatientInfoId</td>
+                                }
+                                @if (Model.PatientListSettingDto.Name)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.FirstName @Data.LastName</td>
+                                }
+                                @if (Model.PatientListSettingDto.HomePhone)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer"> @Data.HomePhone</td>
+                                }
+                                @if (Model.PatientListSettingDto.MobilePhone)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer"> @Data.MobilePhone</td>
+                                }
+                                @if (Model.PatientListSettingDto.Address)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.AddressLine1</td>
+                                }
+                                @if (Model.PatientListSettingDto.DOB)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.DateOfBirth.ToString("MM/dd/yyyy")</td>
+                                }
+                                @if (Model.PatientListSettingDto.Gender)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.Gender</td>
+                                }
+                                @if (Model.PatientListSettingDto.MartialStatus)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.MaritalStatus</td>
+                                }
+                                @if (Model.PatientListSettingDto.Attorney)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.AttorneyName</td>
+                                }
+                                @if (Model.PatientListSettingDto.Paralegal)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.LeadingParalegalName </td>
+                                }
+                                @if (Model.PatientListSettingDto.REFERRALNAME)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">@Data.ReferralName</td>
+                                }
+                                @if (Model.PatientListSettingDto.Dispatch)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">Dispatch</td>
+                                }
+                                @if (Model.PatientListSettingDto.AssignTransport)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">Transport</td>
+                                }
+                                @if (Model.PatientListSettingDto.Route)
+                                {
+                                    <td onclick="location.href='@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})'" style="cursor: pointer">Route</td>
+                                }
+                                <td class="action">
+                                    <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target="dropdown+@Data.PatientInfoId">Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                                    <!-- Dropdown Structure -->
+                                    <ul id="dropdown+@Data.PatientInfoId" class='dropdown-content'>
+                                        <li><a href="@Url.Action("PatientSummary","PatientSide",new { Id=Data.PatientInfoId})" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                        <li><a href="@Url.Action("PatientInfo","PatientSide",new { id = Data.PatientInfoId , clickfrom = Data.Equals("Editicon")})" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+
+                                        <li onclick="deletePatient(@Data.PatientInfoId, this);"><a href="javascript:void(0);" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                                        <li><a href="#" class="option-a">Print</a></li>
+                                        <li><a href="#" class="option-a">Scan</a></li>
+                                        <li><a href="#" class="option-a">PRINT BAR CODE LABELS</a></li>
+                                        <li><a href="#" class="option-a">OPEN CALENDAR</a></li>
+                                        <li><a href="#" class="option-a">SHARE BY FAX</a></li>
+                                        <li><a href="#" class="option-a">SHARE BY EMAIL</a></li>
+
+                                        <li><a href="#" class="option-a">Send SMS</a></li>
+                                        <li><a href="#" class="option-a">Send Email</a></li>
+                                        <li><a href="#" class="option-a">Send Internal Message</a></li>
+                                        <li><a href="#" class="option-a">PRINT MAILING LABEL</a></li>
+                                        <li><a href="#" class="option-a">OPEN & PRINT DELIVERY SLIP</a></li>
+                                        <li><a href="#" class="option-a">Start a Exam</a></li>
+                                        <li><a href="#" class="option-a">CREATE A REMINDER</a></li>
+                                        <li><a href="#" class="option-a">AD Rx</a></li>
+                                        <li><a href="#" class="option-a">Dispatch</a></li>
+                                        <li><a href="#" class="option-a">Assign Transport</a></li>
+                                        <li><a href="#" class="option-a">Route</a></li>
+                                    </ul>
+
+                                </td>
+                            </tr>
+                        }
+
+                    }
+
+
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+<div id="AppointmentModal" class="modal">
+    <div class="modal-content">
+        <h4>Add Appointment</h4>
+        <hr />
+
+        <div class="row">
+            <div class="col s12">
+                <form asp-action="BatchAppointmentSave" asp-controller="Appointment" method="post" id="BulkAppointHide">
+                    @Html.HiddenFor(x => x.patientAppointmentBasicDto.SelectedData, new { id = "selectedData" })
+
+                    <div class="row">
+
+                        <div class="col s12 m6 pl-0 pr-0">
+                            <p>Provider Name <span class="required"> * </span></p>
+
+                            <select id="provider_name" class="Modelselect2 select2" asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                >
+                                <option value=""></option>
+                            </select>
+                            <span class="required" id="ExactPro_err"></span>
+                        </div>
+
+                        <div class="col s12 m6 ">
+                            <p>Date <span class="required"> * </span></p>
+                            <input type="text" id="AppointmentDate" class="datepicker text-input app_empty" placeholder="Select Date">
+                            <span class="required"></span>
+                        </div>
+                    </div>
+
+                    <div class="row" id="EaxctAppointfield">
+
+                        <div class="col s12 m6 pl-0">
+                            <p>Time<span class="required"> * </span></p>
+                            <input type="text" id="STime" class=" time-picker text-input app_empty" placeholder="Select Time">
+                            <span class="required"></span>
+                        </div>
+                        <div class="col s12 m6">
+                            <p>Duration</p>
+                            <select id="SlotDuration" class="select2" data-placement="Select Duration" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "", Value=""},
+                                                                 new SelectListItem() {Text = "5 Min", Value="5"},
+                                                                    new SelectListItem() {Text = "10 Min", Value="10"},
+                                                                    new SelectListItem() {Text = "15 Min", Value="15"},
+                                                                    new SelectListItem() {Text = "20 Min", Value="20"},
+                                                                    new SelectListItem() {Text = "25 Min", Value="25"},
+                                                                    new SelectListItem() {Text = "30 Min", Value="30"},
+                                                                    new SelectListItem() {Text = "35 Min", Value="35"},
+                                                                    new SelectListItem() {Text = "40 Min", Value="40"},
+                                                                    new SelectListItem() {Text = "45 Min", Value="45"},
+                                                                    new SelectListItem() {Text = "50 Min", Value="50"},
+                                                                    new SelectListItem() {Text = "55 Min", Value="55"},
+                                                                    new SelectListItem() {Text = "60 Min", Value="60"},
+                                                                    new SelectListItem() {Text = "65 Min", Value="65"},
+                                                                    new SelectListItem() {Text = "70 Min", Value="70"},
+                                                                    new SelectListItem() {Text = "75 Min", Value="75"},
+                                                                    new SelectListItem() {Text = "80 Min", Value="80"},
+                                                                    new SelectListItem() {Text = "85 Min", Value="85"},
+                                                                    new SelectListItem() {Text = "90 Min", Value="90"},
+                                                                    new SelectListItem() {Text = "100 Min", Value="100"},
+                                                                    new SelectListItem() {Text = "105 Min", Value="105"},
+                                                                    new SelectListItem() {Text = "110 Min", Value="110"},
+                                                                    new SelectListItem() {Text = "115 Min", Value="115"},
+                                                                    new SelectListItem() {Text = "120 Min", Value="120"}
+                                         })">
+                                >
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row" id="ExactFormButton">
+                        <a href="javascript:void(0);" class="modal-action modal-close Recreate ml-2 btn mt-2 right">Cancel</a>
+                        <button type="submit" class="modal-action btn mt-2 add-btn right">Save</button>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col s12">
+                        <table id="listable" class="striped centered">
+                            <thead>
+                                <tr>
+                                    <th>Patient Id</th>
+                                    <th>Patient Name</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ModalPatientBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,809 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ViewPrescription";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        form label{
+            margin-top:9px;
+            margin-left:10px;
+        }
+        form p {
+            font-weight: bold;
+        }
+    </style>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-sm-9 col-md-6 ">
+                    <h5 class="breadcrumbs-title color-blue">Patient Information</h5>
+                </div>
+                <div class="col-sm-3 col-md-6 ">
+                    <a class="waves-effect waves-light float-right mr-2" style="margin-top: -5%;" href="@Url.Action("PrescriptionListElite","PatientSideElite", new {Id = patientInfoId })">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col-md-12">
+                <form class="col-sm-12  ">
+                    <h5>Prescription</h5>
+                    <div class="row">
+
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Medication Name: </p>
+                                <label>@Model.MedicineName.Name</label>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Quantity: </p>
+                                <label>@Model.prescriptionBasicDto.Quantity</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="row">
+                                <p>Frequency: </p>
+                                <label>@Model.prescriptionBasicDto.FrequencyId</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Dose:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Dose</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Unit:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Unit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Start Date:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.StartDate</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    End Date:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.EndDate</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="row">
+                                <p>
+                                    Medication Comments:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Notes</label>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <h5>DME</h5>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Date of Prescription: </p>
+                                <label>@Model.dMEDto.PrescriptionDate</label>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Items Group Name: </p>
+                                <label>@Model.dMeSupply.ItemOrGroupName</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="row">
+                                <p>CPT Code: </p>
+                                <label>@Model.dMEDto.CPTCodeId</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    ICD Code:
+                                </p>
+                                <label>@Model.dMEDto.ICDCodeId</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Prescriber:
+                                </p>
+                                <label>@Model.dMEDto.PrescriberId</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Barcode No:
+                                </p>
+                                <label>@Model.dMEDto.BarcodeNo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Prescription Refference/No:
+                                </p>
+                                <label>@Model.dMEDto.PrescriptionRefNo</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <h5>Family History</h5>
+                    </div>
+                    <table class="table centered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Relation</th>
+                                <th>If Deceased - Death Age</th>
+                                <th>MEDICAL CONDITIONS/CAUSE OF DEATH</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int Sr = 0;
+                            }
+                            @foreach (var loop in Model.GetMHFamilyHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    @if (loop.Relation != null)
+                                    {
+                                        <td>@loop.Relation</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.DeceasedOrDeathAge != null)
+                                    {
+                                        <td>@loop.DeceasedOrDeathAge</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.MedicalConditionsOrCauseDeath != null)
+                                    {
+                                        <td>@loop.MedicalConditionsOrCauseDeath</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.Notes != null)
+                                    {
+                                        <td class="">@loop.Notes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+
+
+
+                    <div class="row">
+                        <h5>Problem History</h5>
+                    </div>
+                    <table class="table centered highlight ">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Type</th>
+                                <th>Date/Year</th>
+                                <th>Current Status</th>
+                                <th>Report/Documents</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.patientMedicalProblemsList)
+                            {
+
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@item.DieaseName</td>
+                                    <td>@item.DateYear.Value.ToString("MM/dd/yyyy")</td>
+                                    <td>@item.CurrentStatus</td>
+                                    <td>@item.DocumentReport</td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>PAST DISEASE HISTORY</h5>
+                    </div>
+
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Disease Name</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHPastDiseaseHistory)
+                            {
+
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Name</td>
+                                    <td>@loop.Notes</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>CURRENT MEDICATIONS HISTORY</h5>
+                    </div>
+                    <table class="table centered highlight">
+                        <thead>
+                            <tr>
+
+                                <th class="left">Sr#</th>
+
+                                <th>Name</th>
+                                <th>Reason For Taking Medicine</th>
+                                <th>Dose</th>
+                                <th>Dose Frequency</th>
+                                <th>Doctor Name</th>
+                                <th>Doctor Number</th>
+                                <th>Pharmacy Name</th>
+                                <th>Pharmacy Number</th>
+                                <th>As Needed</th>
+                                <th>Notes</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHPastMedicationHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Name</td>
+                                    <td>@loop.ReasonForMedicine</td>
+                                    @if (loop.Dose != null)
+                                    {
+                                        <td>@loop.Dose</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+
+                                    @if (loop.DoseFrequency != null)
+                                    {
+                                        <td>@loop.DoseFrequency</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                    @if (loop.DocName != null)
+                                    {
+                                        <td>@loop.DocName</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.DocNumber != null)
+                                    {
+                                        <td>@loop.DocNumber</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.PharName != null)
+                                    {
+                                        <td>@loop.PharName</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.PharNumber != null)
+                                    {
+                                        <td>@loop.PharNumber</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                    @if (loop.AsNeeded != true)
+                                    {
+                                        <td>NO</td>
+                                    }
+                                    else
+                                    {
+                                        <td>YES</td>
+                                    }
+                                    @if (loop.Notes != null)
+                                    {
+                                        <td class="">@loop.Notes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Drugs</h5>
+                    </div>
+
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+
+                                <th class="left">Sr#</th>
+
+                                <th>Drugs</th>
+                                <th>Drug Type</th>
+                                <th>Last Used</th>
+                                <th>Notes</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.MHRecreationalDrugsHistoryList)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+
+                                    <td class="left">@Sr</td>
+
+                                    <td>@loop.Drugs</td>
+                                    <td>@loop.RecreationalDugsType</td>
+                                    @if (loop.RecreationalDrugsLastUsed != null)
+                                    {
+                                        <td>@loop.RecreationalDrugsLastUsed</td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+
+                                    @if (loop.RecreationDrugsNotes != null)
+                                    {
+                                        <td><span class="">@loop.RecreationDrugsNotes</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Exercise History</h5>
+                    </div>
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Exercise</th>
+                                <th>Exercise Type</th>
+                                <th>Number Of Days Per Week</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHExerciseHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Exercise</td>
+                                    <td>@loop.ExerciseType</td>
+                                    @if (loop.ExerciseNoOfDaysPerWeek != null)
+                                    {
+                                        <td>@loop.ExerciseNoOfDaysPerWeek</td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+
+                                    @if (loop.HobbiesOrLeisureActivities != null)
+                                    {
+                                        <td><span class="">@loop.HobbiesOrLeisureActivities</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Physician History</h5>
+                    </div>
+
+                    <table class="table centered highlight">
+                        <thead>
+                            <tr>
+
+                                <th class="left">Sr#</th>
+
+                                <th>Physician</th>
+                                <th>Location</th>
+                                <th>Hospital</th>
+                                <th>Phone No</th>
+                                <th>Specialty</th>
+                                <th>Notes</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHMyPhysician)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Name</td>
+                                    <td>@loop.Location</td>
+                                    <td>@loop.Hospital</td>
+                                    @if (loop.PhoneNo != null)
+                                    {
+                                        <td>@loop.PhoneNo</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                    @if (loop.Specialty != null)
+                                    {
+                                        <td>@loop.Specialty</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                    @if (loop.Notes != null)
+                                    {
+                                        <td class="">@loop.Notes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Surgical History</h5>
+                    </div>
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Surgery Type</th>
+                                <th>Surgeon Name</th>
+                                <th>Year</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHSurgicalHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+
+                                    <td class="left">@Sr</td>
+                                    @if (loop.SurgeryType != null)
+                                    {
+                                        <td>@loop.SurgeryType</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                    @if (loop.SurgeonName != null)
+                                    {
+                                        <td>@loop.SurgeonName</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.Year != null)
+                                    {
+                                        <td>@loop.Year</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.Notes != null)
+                                    {
+                                        <td class="">@loop.Notes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Detail Pregnency History</h5>
+                    </div>
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Delivery Date</th>
+                                <th>Delivery Type</th>
+                                <th>Gender</th>
+                                <th>Number Of Pregnancies</th>
+                                <th>Number Of Living Childrens</th>
+                                <th>Number Of Abortions</th>
+                                <th>Number Of Miscarriages</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHDetailPregnancyHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>
+                                        @if (loop.DeliveryDate.HasValue)
+                                        {
+                                            @loop.DeliveryDate.Value.ToShortDateString()
+                                        }
+                                    </td>
+                                    <td>@loop.DeliveryType</td>
+                                    <td>@loop.Gender</td>
+                                    <td>@loop.NoOfPregnancies</td>
+                                    <td>@loop.NoOfLivingChildren</td>
+                                    <td>@loop.NoOfAbortions</td>
+                                    <td>@loop.NoOfMiscarriages</td>
+                                    <td>@loop.Complications</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Allergies History</h5>
+                    </div>
+                    <table class="table centered highlight">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Allergy To</th>
+                                <th>Reaction</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHAllergiesHistory)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td>@Sr</td>
+                                    <td>@loop.AllergyTo</td>
+                                    <td>@loop.Recation</td>
+                                    @if (loop.Notes != null)
+                                    {
+                                        <td class="">@loop.Notes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Pharmacy History</h5>
+                    </div>
+                    <table class="table centered highlight">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Pharmacy Name</th>
+                                <th>Phone No</th>
+                                <th>Country</th>
+                                <th>State</th>
+                                <th>City</th>
+                                <th>Fax</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHPharmacyInfo)
+                            {
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Name</td>
+                                    @if (loop.PhoneNo != null)
+                                    {
+                                        <td>@loop.PhoneNo</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.CountryId != null)
+                                    {
+                                        <td>@loop.CountryId</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.State != null)
+
+                                    {
+                                        <td>@loop.State</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.City != null)
+                                    {
+                                        <td>@loop.City</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+
+                                    @if (loop.FaxNo != null)
+                                    {
+                                        <td>@loop.FaxNo</td>
+                                    }
+                                    else
+                                    {
+                                        <td>NA</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <h5>Hospitalization History</h5>
+                    </div>
+                    <table class="table centered highlight bordered">
+                        <thead>
+                            <tr>
+                                <th class="left">Sr#</th>
+                                <th>Disease Name</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loop in Model.GetMHPastDiseaseHistory)
+                            {
+
+                                <tr class="card">
+                                    @{
+                                        Sr++;
+                                    }
+                                    <td class="left">@Sr</td>
+                                    <td>@loop.Name</td>
+                                    <td>@loop.Notes</td>
+
+                                </tr>
+
+                            }
+                        </tbody>
+                        </table>*@
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

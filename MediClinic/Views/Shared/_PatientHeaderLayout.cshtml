@@ -1,0 +1,178 @@
+﻿
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var RoleType = _sessionManager.GetRoleId();
+    var LoginId = ViewContext.RouteData.Values["id"];
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+
+    var PatientName = _sessionManager.GetPatientName();
+    var PatientDOB = _sessionManager.GetPatientDOB();
+    var ProviderName = _sessionManager.GetProviderName();
+    if (LoginId is null)
+    {
+        PatientName = _sessionManager.GetPatientName();
+        PatientDOB = "";
+        ProviderName = "";
+    }
+    else
+    {
+        PatientName = _sessionManager.GetPatientName();
+        PatientDOB = _sessionManager.GetPatientDOB();
+        ProviderName = _sessionManager.GetProviderName();
+    }
+}
+
+<header class="page-topbar" id="header">
+    <div class="navbar navbar-fixed">
+        <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-light">
+            <div class="nav-wrapper">
+
+
+                <div class="header-search-wrapper heading-1 navbar-width">
+                    @*<i class="material-icons">search</i>
+                        <input class="header-search-input z-depth-2" type="text" name="Search" placeholder="Explore Materialize">*@
+                    <ul class="navbar-list firstNavBarList " id="firstNavBarListDefault">
+                        @if (RoleType == 1)
+                        {
+                            <li class="nav-item col  centralheader  m2" style="height:64px;"><a class="active nav-link" href="@Url.Action("AccessDenied","Error")">Central</a></li>
+                            <li class="tabss col m4  calendarheader "><a href="@Url.Action("AccessDenied","Error")" class="">Calendar-Schedule</a></li>
+                            <li class="tabss col m2  patientlist  "><a href="@Url.Action("AccessDenied","Error")" class="pl-10">Patients</a></li>
+                            <li class="tabss col m3  patientheader  "><a href="@Url.Action("AccessDenied","Error")" class="">Add New Patient</a></li>
+                            <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","Setting",new {Id = LoginId})" class="">Settings</a></li>
+                            <li class="tabss col m2 checkinheader   ">
+                                <a href="@Url.Action("AccessDenied","Error")">Check In/Out</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item col  centralheader  m2" style="height:64px;"><a class="active nav-link" href="@Url.Action("Index","Home", new {Id = ProviderInfoId })">Central</a></li>
+                            <li class="tabss col m4  calendarheader "><a href="@Url.Action("CentralCalendar","Appointment",new {Id = ProviderInfoId })" class="">Calendar-Schedule</a></li>
+                            <li class="tabss col m2  patientlist  "><a href="@Url.Action("PatientList","PatientSide",new {Id = ProviderInfoId })" class="pl-10">Patients</a></li>
+                            <li class="tabss col m3  patientheader  "><a href="@Url.Action("PatientInfo","PatientSide")" class="">Add New Patient</a></li>
+                            <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","Setting",new {Id = LoginId})" class="">Settings</a></li>
+                            <li class="tabss col m2 checkinheader   ">
+                                <a href="@Url.Action("CheckInOut","Doctor",new {Id = ProviderInfoId })">Check In/Out</a>
+                            </li>
+                        }
+
+
+                    </ul>
+
+                    <div id="toggleit"> </div>
+
+                </div>
+
+
+                <div class="header-search-wrapper header-2" style="display:none">
+                    @*<i class="material-icons">search</i>
+                        <input class="header-search-input z-depth-2" type="text" name="Search" placeholder="Explore Materialize">*@
+                    <ul class="navbar-list firstNavBarList" id="firstNavBarListDefault">
+                        <li>
+
+                            <a class='dropdown-trigger header-togle btn btn-floating' href='javascript:void(0);' data-target='dropdown100'><i class="material-icons">menu</i></a>
+                            <!-- Dropdown Structure -->
+
+                            <ul id='dropdown100' class='dropdown-content header-togle-drop set_minscreen'>
+                                @if (RoleType == 1)
+                                {
+                                    <li class="nav-item col  centralheader  m2" style="height:64px;"><a class="active nav-link" href="@Url.Action("AccessDenied","Error")">Central</a></li>
+                                    <li class="tabss col m4  calendarheader "><a href="@Url.Action("AccessDenied","Error")" class="">Calendar-Schedule</a></li>
+                                    <li class="tabss col m2  patientlist  "><a href="@Url.Action("AccessDenied","Error")" class="pl-10">Patients</a></li>
+                                    <li class="tabss col m3  patientheader  "><a href="@Url.Action("AccessDenied","Error")" class="">Add New Patient</a></li>
+                                    <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","Setting",new {Id = LoginId})" class="">Settings</a></li>
+                                    <li class="tabss col m2 checkinheader   ">
+                                        <a href="@Url.Action("AccessDenied","Error")">Check In/Out</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item col  centralheader  m2" style="height:64px;"><a class="active nav-link" href="@Url.Action("Index","Home",new {Id = ProviderInfoId })">Central</a></li>
+                                    <li class="tabss col m4  calendarheader "><a href="@Url.Action("CentralCalendar","Appointment",new {Id = ProviderInfoId })" class="">Calendar-Schedule</a></li>
+                                    <li class="tabss col m2  patientlist  "><a href="@Url.Action("PatientList","PatientSide",new {Id = ProviderInfoId })" class="pl-10">Patients</a></li>
+                                    <li class="tabss col m3  patientheader  "><a href="@Url.Action("PatientInfo","PatientSide")" class="">Add New Patient</a></li>
+                                    <li class="tabss col m2  settingsheader "><a href="@Url.Action("Setting","Setting",new {Id = LoginId})" class="">Settings</a></li>
+                                    <li class="tabss col m2 checkinheader   ">
+                                        <a href="@Url.Action("CheckInOut","Doctor",new {Id = ProviderInfoId })">Check In/Out</a>
+                                    </li>
+                                }
+
+                            </ul>
+                            <span style="color:rgba(0, 0, 0, .87)" class="hide-on-med-and-down">Quick Access</span>
+                        </li>
+                    </ul>
+                    <div id="toggleit"> </div>
+
+                </div>
+
+                <ul class="navbar-list right">
+                    <li><a class="waves-effect waves-block waves-light search-button" href="javascript:void(0);"><i class="material-icons">search</i></a></li>
+                    <li><a class="waves-effect waves-block waves-light notification-button border-right" href="javascript:void(0);" data-target="notifications-dropdown"><i class="material-icons">notifications_none<small class="notification-badge dot"></small></i></a></li>
+                    @*<li style="line-height:12px;text-align:center;padding:0 10px">
+                                <p style="color:#000;">@PatientName</p>
+                                <p style="color:#000;">
+                                    @PatientDOB
+                            </p>
+                        </li>*@
+                    <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light padding-0 font-1rem" href="javascript:void(0);"><i class="material-icons font-1rem">location_on</i> <span class="hide-at-1024">7777 Main Street</span> </a></li>
+
+                    @* <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light translation-button" href="javascript:void(0);" data-target="translation-dropdown"><span class="flag-icon flag-icon-gb"></span></a></li>*@
+                    @*<li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light toggle-fullscreen" href="javascript:void(0);"><i class="material-icons">settings_overscan</i></a></li>*@
+
+                    @*<li class="hide-on-large-only"><a class="waves-effect waves-block waves-light search-button" href="javascript:void(0);"><i class="material-icons">search</i></a></li>*@
+
+
+                    <li style="padding:0 10px">
+                        <a href="javascript:void(0);" class="border-left">@PatientName</a>
+                        @*<p style="color:#000;">
+                                @PatientDOB
+                            </p>*@
+                    </li>
+
+                    <li><a class=" profile-button" href="javascript:void(0);" data-target="profile-dropdown"><span class="avatar-status avatar-online"><img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar"><i></i></span></a></li>
+
+                    @* <li><a class="waves-effect waves-block waves-light sidenav-trigger" href="#" data-target="slide-out-right"><i class="material-icons">format_indent_increase</i></a></li>*@
+                </ul>
+                <!-- translation-button-->
+                <ul class="dropdown-content" id="translation-dropdown">
+                    <li><a class="grey-text text-darken-1" href="javascript:void(0);"><i class="flag-icon flag-icon-gb"></i> English</a></li>
+                    <li><a class="grey-text text-darken-1" href="javascript:void(0);"><i class="flag-icon flag-icon-fr"></i> French</a></li>
+                    <li><a class="grey-text text-darken-1" href="javascript:void(0);"><i class="flag-icon flag-icon-cn"></i> Chinese</a></li>
+                    <li><a class="grey-text text-darken-1" href="javascript:void(0);"><i class="flag-icon flag-icon-de"></i> German</a></li>
+                </ul>
+
+                <!-- notifications-dropdown-->
+                <ul class="dropdown-content notifications-dropdown" id="notifications-dropdown">
+                    <li class="title">
+                        <h6>NOTIFICATIONS<span class="new badge badge-count"></span><small class="badge-all" onclick="readNotification()">view all</small></h6>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                <!-- profile-dropdown-->
+                <ul class="dropdown-content" id="profile-dropdown">
+
+                    <li><a class="grey-text text-darken-1" href="@Url.Action("Patient","Home")"><i class="material-icons">person_outline</i> Profile</a></li>
+                    <li><a class="grey-text text-darken-1" href="javascript:void();"><i class="material-icons">chat_bubble_outline</i> Chat</a></li>
+                    <li><a class="grey-text text-darken-1" href="javascript:void();"><i class="material-icons">help_outline</i> Help</a></li>
+                    <li class="divider"></li>
+                    <li><a class="grey-text text-darken-1" href="@Url.Action("Logout","Auth")"><i class="material-icons">keyboard_tab</i> Logout</a></li>
+                </ul>
+            </div>
+            <nav class="display-none search-sm">
+                <div class="nav-wrapper">
+                    <form>
+                        <div class="input-field">
+                            <input class="search-box-sm" type="search" required="">
+                            <label class="label-icon" for="search"><i class="material-icons search-sm-icon">search</i></label><i class="material-icons search-sm-close">close</i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+        </nav>
+    </div>
+</header>
+@section scripts{
+    <script>
+        
+    </script>
+}

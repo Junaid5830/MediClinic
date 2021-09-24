@@ -1,0 +1,315 @@
+﻿
+@{
+    ViewData["Title"] = "ADTApproval";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section scripts{ 
+    <script>
+        $('.table').DataTable();
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-md-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">A.D.T Approval</h5>
+                </div>
+                @*<div class="col-md-10 text-align">
+                    <a href="@Url.Action("Departments","Departments")" class="btn  float-right add-btn set_smallscreen">
+                        Add Department
+                    </a>
+                </div>*@
+            </div>
+        </div>
+        <div class="col-12">
+            <ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"> <span class="hidden-xs-down">ADT Approval</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><span class="hidden-xs-down"></span>Admitted Patient</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"><span class="hidden-xs-down"></span>Transfer Patient</a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab4" role="tab"><span class="hidden-xs-down"></span>Discharge Patient</a> </li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1" role="tabpanel">
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+                            <h5 class="breadcrumbs-title color-blue">Admitted Approval</h5>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>Department Name</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                            <th>Approval</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+                                            <td class="action">
+                                                <button class="btn"><i class="ti-check"></i></button>
+                                                <button class="btn"><i class="ti-close"></i></button>
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+
+                            <h5 class="breadcrumbs-title color-blue">Transfer Approval</h5>
+
+                        </div>
+                    </div>
+                    <div class="row tablee">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>From Department </th>
+                                            <th>To Department</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                            <th>Approval</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>ICU</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+                                            <td class="action">
+                                                <button class="btn"><i class="ti-check"></i></button>
+                                                <button class="btn"><i class="ti-close"></i></button>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+
+                            <h5 class="breadcrumbs-title color-blue">Discharge Approval</h5>
+
+                        </div>
+                    </div>
+                    <div class="row tablee">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>Department Name</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                            <th>Bill Status</th>
+                                            <th>Approval</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+                                            <td>Paid</td>
+                                            <td class="action">
+                                                <button class="btn"><i class="ti-check"></i></button>
+                                                <button class="btn"><i class="ti-close"></i></button>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane " id="tab2" role="tabpanel">
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+                            <div class="col-md-2" margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue">Admitted Patient</h5>
+                            </div>
+                            @*<div class="col-md-10 text-align">
+                        <a href="@Url.Action("StaffDuty","Departments")" class="btn  float-right add-btn set_smallscreen">
+                            Add New Roster
+                        </a>
+                    </div>*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>Department Name</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane " id="tab3" role="tabpanel">
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+
+                            <h5 class="breadcrumbs-title color-blue">Transfer Patient</h5>
+
+                        </div>
+                    </div>
+                    <div class="row tablee">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>From Department </th>
+                                            <th>To Department</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>ICU</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+                                       
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="tab-pane " id="tab4" role="tabpanel">
+                    <div id="breadcrumbs-wrapper">
+                        <div class="row">
+
+                            <h5 class="breadcrumbs-title color-blue">Discharge Patient</h5>
+
+                        </div>
+                    </div>
+                    <div class="row tablee">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="companyBillGrid1" class="table dataTables_wrapper ">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th>Department Name</th>
+                                            <th>Department Room</th>
+                                            <th>Provider Name</th>
+                                            <th>Patient ID</th>
+                                            <th>Patient Name</th>
+                                            <th>Date of Approval</th>
+                                            <th>Duration</th>
+                                            <th>Bill Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr class="card">
+                                            <td>Heart</td>
+                                            <td>1</td>
+                                            <td>Dr John</td>
+                                            <td>3</td>
+                                            <td>Emily</td>
+                                            <td>22-1-2021</td>
+                                            <td>3 Days</td>
+                                            <td>Paid</td>
+                                          
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

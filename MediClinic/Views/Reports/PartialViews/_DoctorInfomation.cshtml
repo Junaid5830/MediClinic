@@ -1,0 +1,184 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model MediClinic.Models.ReportsViewModel
+<form asp-action="DoctorInformation" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+    <div class="row">
+
+
+        <div class="col">
+            <p>Name</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.DoctorName" placeholder="Enter Full Name" />
+            </div>
+        </div>
+        <div class="col">
+            <p>WCB Authorization</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.WCBAuthorization" placeholder="Enter Authorization" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            <p>WBC Rating Code </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.WCBRatingCode" placeholder="Enter Rating" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Federal Tax ID </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.FedralTaxId" placeholder="Enter Tax ID" />
+            </div>
+        </div>
+        <div class="col">
+            <p>The Tax ID No is the</p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="secondaryYes" name="reportDoctorInfoDto.TaxIdSSNOrEIN" class="custom-control-input" value="SSN">
+                        <label class="custom-control-label" for="secondaryYes">SSN</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="secondaryNo" name="reportDoctorInfoDto.TaxIdSSNOrEIN" class="custom-control-input" value="EIN">
+                        <label class="custom-control-label" for="secondaryNo">EIN</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>Office Address</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.Address" placeholder="Enter Number & street" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>City</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.city" placeholder="Enter City" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>State</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.state" placeholder="Enter State" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>Zip</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.zip" placeholder="Enter zip" />
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col">
+            <p>Billing group or practice name</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.BillingGroupOrPractiveName" placeholder="Enter Billing grou" />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>Billing address</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.BillingAddress" placeholder="Enter Number & street" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>City</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.Billingcity" placeholder="Enter City" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>State</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.BillingState" placeholder="Enter State" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>Zip</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.Billingzip" placeholder="Enter zip" />
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Office phone # </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.officePhone" placeholder="Enter Office phone" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Billing phone #</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.BillingPhone" placeholder="Enter Billing phone" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Treating Provider's NPI #</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportDoctorInfoDto.TreatingProviderNPI" placeholder="Enter NPI" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>You are a </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="AreyYes" name="reportDoctorInfoDto.Skill" class="custom-control-input" value="Physician">
+                        <label class="custom-control-label" for="AreyYes">Physician</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="AreyNo" name="reportDoctorInfoDto.Skill" class="custom-control-input " value="Podiatrist">
+                        <label class="custom-control-label" for="AreyNo">Podiatrist</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="secondary2" class="custom-control-input " name="reportDoctorInfoDto.Skill" value="Chiropractor">
+                        <label class="custom-control-label" for="secondary2">Chiropractor</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

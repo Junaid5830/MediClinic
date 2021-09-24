@@ -1,0 +1,301 @@
+﻿<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Past Vitals</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="PastVitals" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th>Date of Exam</th>
+                        <th>Examinar</th>
+                        <th>REASON FOR EXAM</th>
+                        <th>Results</th>
+                        <th class="all">Action  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+
+
+                        <td>
+                            06/22/2020
+                        </td>
+                        <td>
+                            Dr. Asad khan
+                        </td>
+                        <td>
+                            Initial
+                        </td>
+                        <td>
+                            Temp : 36 ℃
+                        </td>
+
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Current Vitals</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="CurrentVitals" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th>Date of Exam</th>
+                        <th>Examinar</th>
+                        <th>REASON FOR EXAM</th>
+                        <th>Results</th>
+                        <th class="all">Action  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+
+
+                        <td>
+                            06/22/2020
+                        </td>
+                        <td>
+                            Dr. Asad khan
+                        </td>
+                        <td>
+                            Initial
+                        </td>
+                        <td>
+                            Temp : 36 ℃
+                        </td>
+
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mt-1" id="Vitals_btn">Add New Vital</button>
+        </div>
+    </div>
+
+<section class="Vitals">
+        <div class="row">
+            <form class="col-sm-12  ">
+                <div class="row">
+
+                    <div class=" col ">
+                        <p>Date of Exam</p>
+
+                        <div class="input-field">
+                            <input type="date" class="text-input" placeholder="select date">
+                        </div>
+                    </div>
+                    <div class="col ">
+                        <p>
+                            Examiner
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Examiner</option>
+                                <option value="AK">Dr Gohar</option>
+                                <option value="HI">Dr Ali</option>
+                                <option value="AK">Dr Aibolt</option>
+                                <option value="HI">Dr Jack</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Reason Of Exam
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>
+                                    Select  Reason Of Exam
+                                </option>
+                                <option value="AK">Initial</option>
+                                <option value="HI">Fever</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    <div id="breadcrumbs-wrapper">
+        <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Exam Types</h5>
+                </div>
+            </div>
+        </div>
+    <section class="AddReminder">
+            <div class="row">
+                <form class="col-sm-12  ">
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Blood Pressure</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Blood Pressure">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Pulse</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Pulse">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Respiration</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Respiration">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Height</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Height">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Weight</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Weight">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Temp Method</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Temp Method">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>BMI Status</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter BMI Status">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>BMI</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter BMI">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Oxygen Saturation</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Oxygen Saturation">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Allergies</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Allergies">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-6">
+                            <p>Temperature</p>
+
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Temperature">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="text-right">
+                                <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </section>
+
+</section>

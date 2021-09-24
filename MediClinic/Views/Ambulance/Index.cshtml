@@ -1,0 +1,321 @@
+﻿@model MediClinic.Models.AmbulanceAssignViewModel
+@{
+    ViewData["Title"] = "Available Driver";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="~/Elite/css/pages/google-vector-map.css" rel="stylesheet" />
+    @*<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">*@
+    <style>
+        .tabs {
+            height: auto !important;
+        }
+
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+}
+@section scripts{
+    @*<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>*@
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoliAneRffQDyA7Ul9cDk3tLe7vaU4yP8"></script>
+    <script src="~/Elite/_node_modules/gmaps/gmaps.min.js"></script>
+    <script src="~/Elite/_node_modules/gmaps/jquery.gmaps.js"></script>
+    <script>
+        $('.select2').select2();
+        $(function () {
+            $('#onWayGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                ///  'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+            $('#availableGrid').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                // 'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+            });
+
+        });
+        function AssignRoute(DriverId, Event) {
+            if (DriverId == null) {
+                $("#DriverField").show();
+            }
+            else {
+                $("#DriverField").hide();
+                $("#DriverId").val(DriverId);
+            }
+            $("#Save_btn").attr('disabled', true);
+            $("#ambulanceModal").modal('show');
+        }
+
+        var lat = '';
+        var long = '';
+
+        $(document).ready(function () {
+            $.support.cors = true;
+            $.ajaxSetup({ cache: false });
+            $('#PickAddress').blur(function () {
+                debugger;
+                $zval = $('#PickAddress').val();
+
+                getCityState($zval);
+
+            });
+            function getCityState($zip) {
+                debugger;
+                $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+                    debugger;
+                    if (response.status == "ZERO_RESULTS") {
+                        $("#err_infozip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                    }
+                    else {
+                        var address_components = response.results[0].geometry;
+                        $.each(address_components, function (index, component) {
+                            debugger;
+                           
+                                if (index == 'location') {
+                                    lat = component.lat;
+                                    long = component.lng;
+
+                                }
+
+                            
+                        });
+
+                        $("#latitude").val(lat);
+                        $("#longitude").val(long);
+
+                        //$('#modal1').modal('open');
+                    }
+                    //find the city and state
+
+
+                    //pre-fill the city and state
+                    LatAndLonValue(lat, long)
+                });
+            }
+
+
+
+        });
+        function LatAndLonValue(latitude, longitude) {
+            debugger;
+            if (latitude != '' && longitude != '') {
+                $("#Save_btn").attr('disabled', false);
+            }
+        }
+        function onSuccessAssign(data) {
+            debugger;
+            $("#DriverAvailable").empty();
+            $("#DriverAvailable").html(data);
+            $(".checkmark").show().fadeOut(6000);
+
+            $("#ambulanceModal").modal("hide");
+        }
+    </script>
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div id="ambulanceModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Pick Up Point</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form asp-action="AssignDriverToAddress" asp-controller="Ambulance" method="post" data-ajax="true" data-ajax-success="onSuccessAssign(data)">
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-12" id="DriverField">
+                            <p>Select Driver</p>
+
+                            <div class="input-field">
+                                <select id="DriverId" data-placeholder="Select Driver Name" asp-for="driverJobRequestDto.DriverId" type="text" class="select2 text-input" asp-items="Model.DriversList">
+                                    <option selected disabled value=""></option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <p>
+                                Pick Up Address:
+                            </p>
+                            <div class="input-field">
+
+                                <input class="text-input" type="text" id="PickAddress" asp-for="driverJobRequestDto.Address" placeholder="Enter Address">
+                            </div>
+                        </div>
+                        <input type="text" id="latitude" asp-for="driverJobRequestDto.Latitude" hidden="hidden" />
+                        <input type="text" id="longitude" asp-for="driverJobRequestDto.Longitude" hidden="hidden" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="Save_btn" class="btn add-btn waves-effect">Save</button>
+
+                    <button type="button" class="btn Recreate waves-effect" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Ambulance Information</h5>
+                </div>
+
+                <div class="col">
+                    <a onclick="AssignRoute(null, this);" class=" btn add-btn set_smallscreen waves-effect waves-light float-right" style="margin-top: -11px">
+                        Add New
+
+                    </a>
+                </div>
+
+
+            </div>
+
+        </div>
+        @*<div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h4 class="card-title">Simple Basic Map</h4>
+                                </div>
+                                <div class="col-4">
+                                    <select class="input-field select2">
+                                        <option>All</option>
+                                        <option>On Way</option>
+                                        <option>Available</option>
+                                    </select>
+                                </div>
+
+
+                            </div>
+
+                            <div id="gmaps-simple" class="gmaps"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-12">
+
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"> <span class="hidden-xs-down">Available Ambulance</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"><span class="hidden-xs-down"></span>On Way Ambulance</a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab1" role="tabpanel">
+                        <div id="breadcrumbs-wrapper mb-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="breadcrumbs-title color-blue">Available Ambulance</h5>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row tablee mb-2">
+                            <div class="col-md-12">
+                                <div class="table-responsive" id="DriverAvailable">
+
+                                    <partial name="~/Views/Ambulance/PartialView/_AvailableDriver.cshtml" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane  p-20" id="tab2" role="tabpanel">
+                        <div id="breadcrumbs-wrapper">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="breadcrumbs-title color-blue">On Way Ambulance</h5>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                        <div class="row tablee mb-2">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="onWayGrid" class="table dataTables_wrapper ">
+                                        <thead>
+                                            <tr class="uppercase">
+
+                                                <th>Ambulance Id</th>
+                                                <th>Modal</th>
+                                                <th>Ambulance Number</th>
+                                                <th>Ambulance Type</th>
+                                                <th>Actions</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

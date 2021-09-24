@@ -1,0 +1,207 @@
+﻿@model MediClinic.Models.SoapNotesViewModal 
+
+@{
+    ViewData["Title"] = "Soap Notes";
+
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.min.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/worker-json.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/mode-json.js"
+            type="text/javascript"
+            charset="utf-8"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-debug.js"></script>
+    <script src="https://unpkg.com/survey-knockout"></script>
+    <script src="https://unpkg.com/survey-creator"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+   
+    <script type="text/javascript">
+        var itemNames = @Html.Raw(Json.Serialize(Model.ICDNameList));
+        debugger;
+
+        var itemData = [];
+        $.each(itemNames, function (i, v) {
+            itemData.push(v);
+        })
+       
+        var creatorOptions = {
+            showJSONEditorTab: false,
+
+        };
+        var test = ["1", "2", "3", "4"];
+        var surveyCreator = new SurveyCreator.SurveyCreator("creatorElement", creatorOptions);
+        //surveyCreator.text = window.localStorage.getItem("YourStorageName") || "";
+        surveyCreator.JSON = {
+            title: "Write Soap Notes Name",
+            pages: [
+                {
+                    name: "Subject",
+                    title: "Subjective",
+                    popupdescription: "",
+                    elements: [{
+                        type: "comment",
+                        title: "Chief Complaints"
+                    },
+                    {
+                        "type": "text",
+                        "name": "question2",
+                        "title": "History of Patient illness"
+                    },
+                    {
+                        "type": "text",
+                        "name": "question3",
+                        "title": "Medical History"
+                    }
+
+                    ]
+                }, {
+                    name: "Objective",
+                    title: "Objective",
+                    popupdescription: "",
+                    elements: [{
+                        type: "comment",
+                        name: "question4",
+                        title: "Clinical Exam"
+                    },
+                    {
+                        type: "text",
+                        name: "question5",
+                        title: "Review of Symptoms"
+                    }
+                    ]
+
+                }, {
+                    name: "Assessment",
+                    title: "Assessment",
+                    popupdescription: "",
+                    elements: [{
+                        type: "comment",
+                        name: "question6",
+                        titleLocation: "hidden"
+                    },
+                    {
+                        type: "dropdown",
+                        name: "question7",
+                        title: "Different Diagnosis",
+                        choices: itemNames
+                    }
+                    ]
+
+                },
+                {
+                    name: "Plan",
+                    title: "Plan",
+                    popupdescription: "",
+                    elements: [
+                        {
+                            type: "text",
+                            name: "question8",
+                            titleLocation: "hidden"
+                        },
+                        {
+                            type: "dropdown",
+                            name: "question9",
+                            title: "Final Disgnosis",
+                            choices: itemData
+                        },
+                        {
+                            type: "signaturepad",
+                            name: "question10",
+                            title: "Write Signature"
+                        }
+                    ]
+
+                }
+            ]
+        };
+      
+        surveyCreator.saveSurveyFunc = function (saveNo, callback) {
+            debugger;
+            //Save the survey definition into a local storage
+            //window.localStorage.setItem("YourStorageName", surveyCreator.text);
+            !!callback && callback(saveNo, true);
+        };
+
+        surveyCreator.saveSurveyFunc = function (saveNo, callback) {
+            debugger;
+            $.ajax({
+
+                url: "AddSoapNotes",
+
+                type: "POST",
+                data: {
+
+                    surveyText: surveyCreator.text
+                },
+                success: function (data) {
+                    debugger;
+                    //callback(saveNo, data.isSuccess);
+
+                    window.location.href = '/SoapNotes/SoapNotesList';
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    callback(saveNo, false);
+                    alert(thrownError);
+                }
+
+            });
+
+        }
+        surveyCreator.showToolbox = "right";
+        surveyCreator.showPropertyGrid = "right";
+        surveyCreator.rightContainerActiveItem("toolbox");
+        setTimeout(function () {
+       
+        }, 10000);
+
+
+    </script>
+
+}
+
+@section styles{
+   
+    <link rel="stylesheet"
+          href="https://unpkg.com/survey-knockout/survey.css" />
+
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/survey-creator/survey-creator.css" />
+    <style>
+        .svd-toolbar-boolean .svd-toolbar-boolean_check{
+            z-index:1 !important
+        }
+    </style>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <a href="@Url.Action("SoapnotesList","SoapNotes")" class="right"><i class="mdi mdi-arrow-left right arrow-icon"></i></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="waitingdiv" style="display:none;width:100%;height:20px;background:lightgray">Please wait. We are doing some complex calculations...</div>
+        <div id="surveyContainer">
+            <div id="creatorElement"></div>
+        </div>
+    </div>
+    </div>
+
+
+

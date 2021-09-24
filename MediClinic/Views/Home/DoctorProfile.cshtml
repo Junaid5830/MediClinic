@@ -1,0 +1,401 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@{
+    ViewData["Title"] = "DoctorProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style>
+        .patient-image {
+            width: 100px;
+        }
+
+        .p-image {
+            width: 130px !important;
+        }
+
+        .bodyStatusCardTitle {
+            font-size: 12px !important;
+            font-weight: bold;
+            margin-top: 0px !important;
+            margin-bottom: 5px !important;
+            color: #1a3a77 !important;
+        }
+
+        #cards-extended .card-width .card {
+            padding: 22px 15px 22px 15px !important;
+        }
+
+            #cards-extended .card-width .card img {
+                height: 30px !important;
+                width: 30px !important;
+                vertical-align: middle !important;
+                margin-top: 7px !important;
+            }
+
+        .bodyStatusValue {
+            font-weight: bold;
+            color: black;
+        }
+
+        .doc_Infor_Card {
+            padding: 10px !important;
+        }
+
+        .vertical-align-center {
+            background-color: #fff !important;
+            color: #bcccf7;
+        }
+
+
+        .padding-right-0 {
+            padding-right: 0 !important;
+        }
+
+        .margin-top-0 {
+            margin-top: 0px !important
+        }
+
+        span.avatar-status.avatar-50 > i, span.secondary-content.medium-small {
+            display: none;
+        }
+
+        span.avatar-status.avatar-50 {
+            padding-right: 10px;
+        }
+
+        .card-padding-0 {
+            padding: 0 !important;
+        }
+
+        .margin-bottom-30 {
+            margin-bottom: 30px !important;
+        }
+
+
+        .margin-bottom-0 {
+            margin-bottom: 0px !important
+        }
+
+        .collection .collection-item.avatar {
+            min-height: 62px !important;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#Patient-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [1], "orderable": false }] });
+        });
+
+
+    </script>
+}
+
+<div class="row">
+    <div class="col l9 m9 s12">
+        <div class="container">
+            <!--Gradient Card-->
+            <div id="cards-extended">
+
+                <div class="row">
+                    <div class="col s12 m3 pl-0">
+                        <h5 class="color-blue text-darken-4 ml-3 left-align mt-15 pt-0">Doctor</h5>
+                    </div>
+                    <div class="col s6 m3">
+                        <p class="right"><span class="red-text">Last Visit:</span> 1/22/2018</p>
+                    </div>
+                    <div class="col s6 m4">
+                        <p class="left"><span class="red-text">Date Created:</span> 1/22/2018</p>
+                    </div>
+                    <div class="col s6 m2">
+                        <a class="waves-effect waves-light float-right mr-2" href="/provider/providerList">
+                            <i class="material-icons  right arrow-icon" style="margin-top:8px !important;">arrow_back</i>
+
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row center">
+                    <div class="col s12 m2 mt-3">
+                        @if (Model.Provider.ProviderProfilePic != null)
+                        {
+                            <img src="~/images/@Model.Provider.ProviderProfilePic" alt="provider" class=" patient-image circle responsive-img grey lighten-1 padding-4" />
+                        }
+                        else
+                        {
+                            <img src="~/app-assets/images/user/male-user.png" alt="provider" class=" patient-image circle responsive-img grey lighten-1 padding-4" />
+                        }
+                    </div>
+                    <div class="col s12 m9 ml-0 pl-0 mr-0 ">
+                        <div class="row">
+                            <div class="col s6 m3 l3 m-0">
+                                <p class=" mb-0">Name</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.FirstName @Model.Provider.LastName</p>
+                            </div>
+                            <div class="col s6 m2 l2">
+                                <p class="mb-0">Speciality</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.SpecialityNavigation.ProviderSpeciality</p>
+                            </div>
+                            <div class="col s6 m3 l3">
+                                <p class="mb-0">Title</p>
+                                <p class="mt-0 black-text font-weight-600">@Model.Provider.TitleNavigation.LookupValue</p>
+                            </div>
+                            <div class="col s6 m3 l4">
+                                <p class="mb-0">Suffix</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.SuffixNavigation.LookupValue</p>
+                            </div>
+                        </div>
+                        <div class="row mt-0">
+                            <div class="col s6 m1 m3 l3 m-0">
+                                <p class=" mb-0">License No</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.LicenseNo</p>
+                            </div>
+                            <div class="col s6 m3 l2">
+                                <p class="mb-0">NPI No</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.NpiNumber</p>
+                            </div>
+                            <div class="col s6 m3 l3">
+                                <p class="mb-0">Phone Number</p>
+                                <p class="mt-0 black-text font-weight-600">@Model.Provider.PhoneNo</p>
+                            </div>
+                            <div class="col s6 m4 l4">
+                                <p class="mb-0">PC/EntityName</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.EntityName</p>
+                            </div>
+                        </div>
+                        <div class="row  mt-0">
+                            <div class="col s12 m3 m-0">
+                                <p class=" mb-0">Address</p>
+                                <p class=" mt-0 font-weight-600 black-text">@Model.Provider.AddressLine1</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider mt-2"></div>
+            </div>
+        </div>
+        <div class="container">
+            <!--Gradient Card-->
+            <div id="cards-extended">
+
+                <div class="row">
+                    <div class="col s12 m6 pl-0">
+                        <h5 class="color-blue text-darken-4 left-align ml-3 mt-15 pt-0 mb-0">Providers Patient List</h5>
+                    </div>
+
+                </div>
+                <div class="row ">
+                    <div class="col s12 m12 l12 card-width">
+                        <table id="Patient-table" class="display">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>Name</th>
+                                    <th></th>
+                                    <th>Home Phone</th>
+                                    <th>Cell Phone</th>
+                                    <th>Address</th>
+                                    <th>DOB</th>
+                                    <th>Attorney</th>
+                                    <th>Paralegal</th>
+                                    <th>Ref Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="card" onclick="location.href='@Url.Action("Patient","Home")'" style="cursor: pointer">
+                                    <td>John</td>
+                                    <td>
+                                        <span class="list-img">
+                                            <img src="~/app-assets/images/avatar/avatar-1.png"
+                                                 alt="avatar">
+                                        </span>
+                                    </td>
+                                    <td>111-22-33</td>
+                                    <td>111-22-33</td>
+                                    <td>23BD Main St</td>
+                                    <td>1/22/18</td>
+                                    <td>Smith$Smith LLP</td>
+                                    <td>Boney</td>
+                                    <td>A$N Binnary LLC</td>
+
+                                </tr>
+                                <tr class="card" onclick="location.href='@Url.Action("Patient","Home")'" style="cursor: pointer">
+
+                                    <td>John</td>
+                                    <td>
+                                        <span class="list-img">
+                                            <img src="~/app-assets/images/avatar/avatar-1.png"
+                                                 alt="avatar">
+                                        </span>
+                                    </td>
+                                    <td>111-22-33</td>
+                                    <td>111-22-33</td>
+                                    <td>23BD Main St</td>
+                                    <td>1/22/18</td>
+                                    <td>Smith$Smith LLP</td>
+                                    <td>Boney</td>
+                                    <td>A$N Binnary LLC</td>
+
+                                </tr>
+                                <tr class="card" onclick="location.href='@Url.Action("Patient","Home")'" style="cursor: pointer">
+
+                                    <td>John</td>
+                                    <td>
+                                        <span class="list-img">
+                                            <img src="~/app-assets/images/avatar/avatar-1.png"
+                                                 alt="avatar">
+                                        </span>
+                                    </td>
+                                    <td>111-22-33</td>
+                                    <td>111-22-33</td>
+                                    <td>23BD Main St</td>
+                                    <td>1/22/18</td>
+                                    <td>Smith$Smith LLP</td>
+                                    <td>Boney</td>
+                                    <td>A$N Binnary LLC</td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col l3 m3 s12 padding-right-0 hide-on-med-and-down">
+        <div class="card card-default margin-top-0 margin-bottom-0" style="height:1024px !important;">
+            <div class="card-content card-padding-0">
+                <div class="collection border-none">
+                    <div class="col s12">
+                        <h5 class="card-title" style="margin:7px 0 !important">Patient Data  <i class="material-icons right color-blue">add</i></h5>
+                        <input class="header-search-input mt-4 mb-2" type="text" name="Search" placeholder="Search Patient" />
+
+                    </div>
+
+                    <ul class="collection p-0">
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.00 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Mary Adams</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-2.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Caleb Richards</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-3.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Caleb Richards</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">9.00 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-4.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">June Lane</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-5.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Edward Fletcher</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.15 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-6.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Crystal Bates</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">8.00 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Nathan Watts</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">9.53 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-8.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Willard Wood</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.20 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Ronnie Ellis</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.20 AM</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

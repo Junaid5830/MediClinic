@@ -1,0 +1,295 @@
+﻿@using MediClinic.Models
+@model InvoicesViewModel
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    int unique = 0;
+    int sub_total = 0;
+}
+@section styles{
+    <style>
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+        .textLine {
+            border: none;
+            border-bottom: 1px solid black;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: left;
+            background-color: transparent;
+        }
+        .icon-trash {
+            font-size: 20px;
+            color: blue;
+        }
+        td {
+            width: 100px;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+}
+<div class="page-wrapper">
+    <div class="container">
+        
+        <div class="row">
+            <form class="col-sm-12 " asp-action="Add" asp-controller="Invoices" method="post">
+                <div class="row">
+
+                    <input type="hidden" class="text-input" asp-for="@Model.invoices.InvoiceId" placeholder="id" id="invId">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Patient ID:<span>@Model.invoices.PatientId</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Patient Name:<span>@Model.invoices.Name</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Patient Phn No:<span>@Model.invoices.MobileNumber</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Patient Email:<span>@Model.invoices.Email</span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Billing Address:<span>@Model.invoices.Address</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Terms:<span>@Model.invoices.Terms</span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Invoice Date:<span>@Model.invoices.InvoiceDate</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Due Date:<span>@Model.invoices.DueDate</span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Crew #:<span>@Model.invoices.Crew</span></p>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>Message on Invoice:<span>@Model.invoices.MessageOnInvoice</span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p> Message on Statement:<span>@Model.invoices.MessageOnStatement</span></p>
+                    </div>
+                </div>
+                <div class="row tablee">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="myTableEUO" class="table dataTables_wrapper">
+                                <thead>
+                                    <tr class="uppercase">
+                                        <th>PRODUCT/SERVICE</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>QTY</th>
+                                        <th>RATE </th>
+                                        <th> AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tby">
+                                    @foreach (var item in Model.invoicesChargesList)
+                                    {
+                                        <tr class="card invoice-row-0 invoice_row" style="cursor: pointer ">
+                                            <text name="invoicesChargesList[@unique].InvoiceChargesId" type="hidden" value="@item.InvoiceChargesId" />
+                                            <td class=""><input name="invoicesChargesList[@unique].Product" type="text" placeholder="Enter Product" class="textLine product" value="@item.Product" /></td>
+                                            <td class=""><input name="invoicesChargesList[@unique].Description" type="text" placeholder="Enter Description" class="textLine description" value="@item.Description" /></td>
+                                            <td class=""><input name="invoicesChargesList[@unique].Qty" type="text" placeholder="Enter Quantity" class="textLine quantity" value="@item.Qty" /></td>
+                                            <td class=""><input name="invoicesChargesList[@unique].Rate" type="text" placeholder="Enter Rate" class="textLine rate" value="@item.Rate" /></td>
+                                            <td class=""><input name="invoicesChargesList[@unique].Amount" type="text" placeholder="Enter Amount" onchange="AddAmount()" class="textLine amount amount_data" data-Quantity="@unique" value="@item.Amount" /></td>
+                                            <td class="">
+                                            </td>
+                                        </tr>
+                                        unique++;
+                                        sub_total = Convert.ToInt32(sub_total + @item.Amount);
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="btnhit">
+                    <div class="col-sm-6">
+                        <div class="mt-2">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="col">
+                            <div class="row ">
+                                <div class="container">
+                                    <div class="row">
+
+                                        <div class="col">
+                                            <p>Subtotal </p>
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" name="gtotal" id="gtotal" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row ">
+                                        <div class="col">
+                                            <p>Taxable subtotal </p>
+                                        </div>
+                                        <div class="col">
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col ">
+                                            <p></p>
+                                            <div class="input-field  ">
+                                                <div class="dropdownauto"><input class="text-input input-styling sales" id="tax" type="text" placeholder="sales tax rate" style="width:96%;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col s5 m5 l5">
+                                            <p></p>
+                                            <div class="input-field ">
+                                                <input class="text-input" type="text" style="width:50%; border-color: #D4D7DC;
+                                                         background-color: #ECEEF1;
+                                                          color: #818181;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p></p>
+                                            <div class="input-field col s12 m12 l12 pl-0 mt-0" style="display:inline-flex">
+                                                <div class="dropdownauto"><input class="text-input input-styling sales" type="text" onchange="AddAmount()" id="discount" placeholder="Discount"></div>
+                                                <input class="text-input input-styling " type="text" style="width: 30%!important;
+                                                      margin-left: 10px !important;
+                                                      padding-right: 0px !important;">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <span id="discount_"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col">
+                                            <p>Total </p>
+                                        </div>
+                                        <div class="col">
+                                            <span id="fv"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col">
+                                            <p>Balance Due</p>
+                                        </div>
+                                        <div class="col">
+                                            <p> $0.00 </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            AddAmount();
+            setTimeout(function () { window.print(); }, 500);
+        });
+        function dayString(count) {
+            var dayString = '';
+            dayString += '<tr class="card invoice_row invoice-row-' + count + '">';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Product" type="text" placeholder="Enter Product" class="textLine product" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Description" type="text" placeholder="Enter Description" class="textLine description" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Qty" type="text" placeholder="Enter Quantity" class="textLine quantity" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Rate" type="text" placeholder="Enter Rate" class="textLine rate" /></td>';
+            dayString += '<td class=""><input name="invoicesChargesList[' + count + '].Amount" type="text" placeholder="Enter Amount"  onchange="AddAmount()" class="textLine amount_data" data-Quantity="' + count + '" /></td>';
+            dayString += '<td class="">';
+            dayString += '<label>';
+            dayString += '<span></span>';
+            dayString += '</label>';
+            dayString += '</td>';
+            dayString += '<td>';
+            dayString += '</td>';
+            dayString += '</tr>';
+            return dayString;
+        }
+
+        $('#btnhit').on('click', '.form-add-btn', function () {
+            var count = $('.tby > tr').length;
+            $('#myTableEUO > tbody').append(dayString(count));
+        });
+
+        function AddAmount() {
+            var gTotal = 0;
+            $('.tby > .invoice_row').each(function () {
+                gTotal += parseInt($(this).find(".amount_data").val());
+            });
+            if (!isNaN(gTotal)) {
+                $('#gtotal').val(gTotal);
+            }
+            var fv = parseInt($('#tax').val()) + parseInt($('#discount').val());
+            if (!isNaN(fv)) {
+                document.getElementById("discount_").innerHTML = "$" + fv;
+            }
+            var fc = parseInt(gTotal) - parseInt(fv);
+            if (!isNaN(fc)) {
+                document.getElementById("fv").innerHTML = "$" + fc;
+            }
+        }
+        $('.ipaitentId').focusout(function () {
+            var Id = $('.ipaitentId').val();
+            $.ajax({
+                type: "GET",
+                url: '/Invoices/GetPtientRecord',
+                data: { id: Id },
+                success: function (data) {
+                    $('#invId').val('');
+                    $('#patientId').attr('value', data.patientInfoId);
+                    $('#name').attr('value', data.firstName);
+                    $('#phnNo').attr('value', data.zip);
+                    $('#emial').attr('value', data.email);
+                    $('#address').attr('value', data.addressLine1);
+                }
+            });
+        });
+        $('#myTableEUO > tbody').on('click', '.deleteRow', function () {
+            DeleteRecord($(this).attr("deleterow"), $(this));
+        });
+
+        function DeleteRecord(id, event) {
+            debugger;
+            if (id != 0) {
+                event.closest('tr').remove();
+                $.get("/Invoice/ChargesDelete", { invoiceCId: id }).done(function (data) {
+                    showDangerNotification("Record Deleted!");
+                });
+            }
+            else {
+                event.closest('tr').remove();
+            }
+        };
+    </script>
+}

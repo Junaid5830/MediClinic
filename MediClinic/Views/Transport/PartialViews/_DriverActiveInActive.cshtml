@@ -1,0 +1,387 @@
+﻿@model MediClinic.Models.TransportViewModel
+@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager;
+<div class="row">
+    <div class="col-12">
+
+        <ul class="nav nav-tabs customtab" role="tablist">
+            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#Active" role="tab"> <span class="hidden-xs-down">Active Driver</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Deactive" role="tab"><span class="hidden-xs-down"></span>Deactive Driver</a> </li>
+
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane p-10 active" id="Active" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-2" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue">Drivers List</h5>
+                    </div>
+                    <div class="col-sm-9 col-md-5 col-lg-6" display-block">
+                        <div class="header-search-wrapper  display-flex position-relative">
+                            <i class="ti-search position-absolute  search-icons"></i>
+                            <input type="text" class="form-control set_Place search-box z-depth-2" placeholder="Search" aria-label="Username" data-search-driver aria-describedby="basic-addon11">
+                            <a class="btn ml-2 search-btn">
+                                Search
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+
+                        <a href="@Url.Action("DriverAdd","Transport")" class="btn  float-right add-btn set_smallscreen">
+                            Add New Driver
+                        </a>
+                    </div>
+
+                </div>
+                <div class="row tablee">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="myDriver" class="table dataTables_wrapper">
+                                <thead>
+                                    <tr class="uppercase">
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                                <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                            </div>
+                                        </th>
+                                        <th>Driver Image</th>
+                                        <th>Driver Name</th>
+                                        <th>Driver License ID No</th>
+                                        <th>Licence State</th>
+                                        <th>License Class</th>
+                                        <th>Vehicle ID Assigned</th>
+                                        <th>Driver Gender</th>
+                                        <th>Drivers languages Spoken</th>
+                                        <th>Mobile Phone</th>
+                                        <th data-orderable="false" class="all">Action  </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!(Model is null))
+                                    {
+                                        @if (!(Model.DriverList is null))
+                                        {
+                                            var bgColor = "";
+                                            @foreach (var item in Model.DriverList)
+                                            {
+                                                @if (item.IsActive)
+                                                {
+                                                    <tr class="card_@item.DriverId @bgColor" style="cursor: pointer">
+                                                        <th>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="@item.DriverId" value="check">
+                                                                <label class="custom-control-label" for="@item.DriverId"></label>
+                                                            </div>
+
+                                                        </th>
+
+                                                        @if (!(item.DriverImage is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">
+                                                                <span class="list-img">
+                                                                    <img src="@item.DriverImage" />
+                                                                </span>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.FullName is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.FullName</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.DriverLicence is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.DriverLicence</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.LicenseState is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.LicenseState</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.LicenseClass is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.LicenseClass</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.TransportId is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.TransportId</td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.Gender is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.Gender</td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.Langauges is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">
+                                                                @foreach (var Lang in item.Langauges)
+                                                                {
+                                                                    @Lang.LanguageName
+                                                                    <br />
+
+                                                                }
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.MobilePhone is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.MobilePhone</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+
+                                                        <td class="action">
+                                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                                Options
+                                                                @*<span class="caret"></span>*@
+                                                            </button>
+                                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                                <li><a href="@Url.Action("DriverAdd","Transport",new {Id = item.DriverId })">Edit</a></li>
+                                                                @if (item.IsActive)
+                                                                {
+                                                                    <li onclick="ChangeDriverStatus(@item.DriverId, false,this);"><a href="javascript:void(0);">Deactivate</a></li>
+                                                                }
+
+
+                                                                <li><a onclick="openUpModal(@item.DriverId)" href="javascript:void(0);">View</a></li>
+                                                                <li><a href="@Url.Action("Index","ClinicOverView",new {Id = item.DriverId })">Route</a></li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+
+                                            }
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane p-10" id="Deactive" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-2" >
+                        <h5 class="breadcrumbs-title color-blue">Inactive Drivers List</h5>
+                    </div>
+                    <div class="col-sm-9 col-md-5 col-lg-6">
+                        <div class="header-search-wrapper  display-flex position-relative">
+                            <i class="ti-search position-absolute  search-icons"></i>
+                            <input type="text" class="form-control set_Place search-box z-depth-2" placeholder="Search" aria-label="Username" data-search-driver aria-describedby="basic-addon11">
+                            <a class="btn ml-2 search-btn">
+                                Search
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+
+
+                    </div>
+
+                </div>
+                <div class="row tablee">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="inactiveDriver" class="table dataTables_wrapper">
+                                <thead>
+                                    <tr class="uppercase">
+                                        <th>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                                <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                            </div>
+                                        </th>
+                                        <th>Driver Image</th>
+                                        <th>Driver Name</th>
+                                        <th>Driver License ID No</th>
+                                        <th>Licence State</th>
+                                        <th>License Class</th>
+                                        <th>Vehicle ID Assigned</th>
+                                        <th>Driver Gender</th>
+                                        <th>Drivers languages Spoken</th>
+                                        <th>Mobile Phone</th>
+                                        <th data-orderable="false" class="all">Action  </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (!(Model is null))
+                                    {
+                                        @if (!(Model.DriverList is null))
+                                        {
+                                            var bgColor = "";
+                                            @foreach (var item in Model.DriverList)
+                                            {
+                                                @if (!item.IsActive)
+                                                {
+                                                    <tr class="card_@item.DriverId @bgColor" style="cursor: pointer">
+                                                        <th>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="@item.DriverId" value="check">
+                                                                <label class="custom-control-label" for="@item.DriverId"></label>
+                                                            </div>
+
+                                                        </th>
+
+                                                        @if (!(item.DriverImage is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">
+                                                                <span class="list-img">
+                                                                    <img src="@item.DriverImage" />
+                                                                </span>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.FullName is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.FullName</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.DriverLicence is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.DriverLicence</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.LicenseState is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.LicenseState</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.LicenseClass is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.LicenseClass</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.TransportId is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.TransportId</td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.Gender is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.Gender</td>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.Langauges is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">
+                                                                @foreach (var Lang in item.Langauges)
+                                                                {
+                                                                    @Lang.LanguageName
+                                                                    <br />
+
+                                                                }
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+                                                        @if (!(item.MobilePhone is null))
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">@item.MobilePhone</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td onclick="openUpModal(@item.DriverId)">N/A</td>
+                                                        }
+
+                                                        <td class="action">
+                                                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                                Options
+                                                                @*<span class="caret"></span>*@
+                                                            </button>
+                                                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                                                <li><a href="@Url.Action("DriverAdd","Transport",new {Id = item.DriverId })">Edit</a></li>
+                                                                @if (item.IsActive)
+                                                                {
+                                                                    <li onclick="ChangeDriverStatus(@item.DriverId, false,this);"><a href="javascript:void(0);">Deactivate</a></li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li onclick="ChangeDriverStatus(@item.DriverId, true,this);"><a href="javascript:void(0);">Activate</a></li>
+                                                                }
+
+                                                                <li><a onclick="openUpModal(@item.DriverId)" href="javascript:void(0);">View</a></li>
+                                                                @*<li><a href="@Url.Action("Index","ClinicOverView",new {Id = item.DriverId })">Route</a></li>*@
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+
+                                            }
+                                        }
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

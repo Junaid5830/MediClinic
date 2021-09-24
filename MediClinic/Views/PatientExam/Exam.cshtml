@@ -1,0 +1,544 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "Exam";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    bool shouldDisableFieldsOrNot = false;
+    if (!(Model.VitalDto is null))
+    {
+        shouldDisableFieldsOrNot = Model.VitalDto.IsDisableFields;
+    }
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .customtab li a.nav-link {
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .Exams {
+            margin-top: 25px;
+        }
+
+            .Exams p {
+                margin-top: 1rem !important;
+            }
+
+        .DMeSupplies p {
+            margin-top: 1rem !important;
+        }
+
+        .AddReminder {
+            display: none;
+        }
+
+        .prescription {
+            display: none;
+        }
+
+        .Test {
+            display: none;
+        }
+
+            .Test p {
+                margin-top: 1rem !important;
+            }
+
+        .Lab {
+            display: none;
+        }
+
+        .Vitals {
+            display: none;
+        }
+
+        .DMeSupplies {
+            display: none;
+        }
+
+        .Imaging {
+            display: none;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script>
+        $(function () {
+            from = $("#Prescriptionfrom")
+                .datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    minDate: 0
+                })
+                .on("change", function () {
+                    to.datepicker("option", "minDate", getDate(this));
+                }),
+                to = $("#Prescriptionto").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    minDate: 0
+
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(element.value);
+                } catch (error) {
+                    date = null;
+                }
+                return date;
+            }
+        });
+
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                dateFormat: "mm/dd/yy",
+                minDate: 0
+            });
+            $('.table').DataTable();
+            $("#examField").on('click', function () {
+                $("#examForm").show();
+            });
+            $("#vitalField").on('click', function () {
+                $("#vitalForm").show();
+            });
+            $("#growthChartField").on('click', function () {
+                $("#growthChartForm").show();
+            });
+            $("#immunizationsField").on('click', function () {
+                $("#immunizationsForm").show();
+            });
+            $("#prescriptionField").on('click', function () {
+                $("#prescriptionForm").show();
+            });
+            $("#labField").on('click', function () {
+                $("#labForm").show();
+            });
+            $("#imagingField").on('click', function () {
+                $("#imagingForm").show();
+            });
+            $(".select2").select2();
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+
+        });
+        function deleteVital(VitalId, event) {
+            debugger;
+
+            $.get("/PatientSide/DeleteVital", { patientVitalId: VitalId }).done(function (data) {
+                debugger;
+
+                if (data) {
+                    event.closest('tr').remove();
+
+
+                    $(".checkmark").show().fadeOut(6000);
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Something went wron',
+                        delay: 2500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+
+            });
+        }
+        $('.vitalBloodPressure').inputmask("999/99");
+        $('.vitalHeight').inputmask("9'99\"");
+        $('.vitalTemprature').inputmask("999 °F");
+        $('.vitalOxygenSaturation').inputmask("99 %");
+        $('.vitalWeight').inputmask("999 lbs");
+        $('.vitalRespiration').inputmask("99 per/min");
+        $('.vitalPulse').inputmask("99 per/min");
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+          $(document).ready(function () {
+            $('.dropify').dropify();
+            $('.combobox').select2();
+            //var id = getUrlParameter("visitid");
+            //$('.patient-btns').each(function () {
+            //    debugger;
+            //    var url = $(this).attr('href');
+            //    url = url + id;
+            //    $(this).attr('href', url);
+            //});
+            var dateVal = $('.patientDOB').val();
+            if (dateVal == "01-01-0001" || dateVal == "01/01/0001") {
+                $('.patientDOB').val('');
+            }
+            if ('@shouldDisableFieldsOrNot' == "True") {
+                $('.custom-combobox-input').attr('disabled',true)
+                $('.disableIncasesOfView').attr('disabled', true);
+            }
+        });
+        function onCreatePatientExamType(data) {
+            debugger;
+            $("#Vitaltable").html('');
+            $("#Vitaltable").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        };
+        function onCreateExamReason(data) {
+            debugger;
+            var msg = data.success;
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Cannot Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+                $('.ExamReasonNameVal').val('');
+                $('.ExamReasonNameVal').removeClass('valid');
+                var examReasonSelectList = $('#resonOfExam');
+                examReasonSelectList.append($('<option></option>').val(data.examReasonId).text(data.reasonName));
+            }
+        };
+
+        function OnSuccessPhysicalExam(data) {
+            debugger;
+            $("#physicalList").html('');
+            $("#physicalList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+        function onCreategrowthchart(data) {
+            debugger;
+            $("#gwowthList").html('');
+            $("#gwowthList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+        function onCreateImmunization(data) {
+            debugger;
+            $("#immunizationList").html('');
+            $("#immunizationList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+        function onCreatePrescription(data) {
+            debugger;
+            $("#prescriptionList").html('');
+            $("#prescriptionList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+        function onCreatelab(data) {
+            debugger;
+            $("#LabList").html('');
+            $("#LabList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+        function onCreateImaging(data) {
+            debugger;
+            $("#imagingList").html('');
+            $("#imagingList").html(data);
+            $(".checkmark").show().fadeOut(6000);
+            $('.table').DataTable();
+
+        }
+
+        //$('#vitalForm').on('submit',function (e) {
+        //    debugger;
+        //   var examinerVal = $('#comboboxExaminer').val();
+        //   var examReasonVal = $('#resonOfExam').val();
+        //    if (examinerVal == "") {
+        //      $("#combobox_ExaminerErr").html("Examiner field is required");
+        //    }
+        //    else {
+        //      $("#combobox_ExaminerErr").html("");
+        //    }
+        //    if (examReasonVal == "") {
+        //      $("#combobox_Reasonerr").html("Reason field is required");
+        //    }
+        //    else {
+        //      $("#combobox_Reasonerr").html("");
+        //    }
+        //    if ($(this).valid()) {
+        //        if (!(examinerVal == "" || examReasonVal == "")) {
+        //            $(this).ajaxSubmit({
+        //                success: function (response) {
+        //                    debugger;
+        //                    $("#Vitaltable").html('');
+
+        //            }
+
+        //        });
+        //        }
+        //    }
+        //});
+        $(document).on("click", "#examinerDiv", function () {
+            var examinerVal = $('#comboboxExaminer').val();
+            if (examinerVal) {
+                $('#combobox_ExaminerErr').html("");
+            }
+        });
+        $(document).on("click", "#resonDiv", function () {
+           var examReasonVal = $('#resonOfExam').val();
+            if (examReasonVal) {
+                $('#combobox_Reasonerr').html("");
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            //var id = getUrlParameter("visitid");
+            //$('.patient-btns').each(function () {
+            //    debugger;
+            //    var url = $(this).attr('href');
+            //    url = url + id;
+            //    $(this).attr('href', url);
+            //});
+            var age = "";
+            $('.Dob').datepicker({
+                onSelect: function (value, ui) {
+                    var today = new Date();
+                    age = today.getFullYear() - ui.selectedYear;
+                    $('.age').val(age);
+                },
+                changeMonth: true,
+                changeYear: true
+            })
+        })
+
+        $(function () {
+
+            $('.selectpicker').selectpicker();
+        });
+        function ageCalculate() {
+            var birthDate = document.getElementById('birth_date').value;
+            var d = new Date(birthDate);
+
+            var mdate = birthDate.toString();
+            var yearThen = parseInt(mdate.substring(0, 4), 10);
+            var monthThen = parseInt(mdate.substring(5, 7), 10);
+            var dayThen = parseInt(mdate.substring(8, 10), 10);
+
+            var today = new Date();
+            var birthday = new Date(yearThen, monthThen - 1, dayThen);
+            var differenceInMilisecond = today.valueOf() - birthday.valueOf();
+            var year_age = Math.floor(differenceInMilisecond / 31536000000);
+            var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+            if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+                alert("Happy B'day!!!");
+            }
+
+            var month_age = Math.floor(day_age / 30);
+
+            day_age = day_age % 30;
+
+            var tMnt = (month_age + (year_age * 12));
+            var tDays = (tMnt * 30) + day_age;
+
+            if (isNaN(year_age) || isNaN(month_age) || isNaN(day_age)) {
+                document.getElementsByClassName("age").innerHTML = ("Invalid birthday - Please try again!");
+            }
+            else {
+                //document.getElementById("age").innerHTML = year_age + " years " + month_age + " months " + day_age + " days"
+                $("#years").val(year_age + " years");
+                $("#months").val(month_age + " months");
+                $("#days").val(day_age + " days");
+            }
+
+        }
+        $("#birth_date").focusout(function () {
+            debugger;
+            ageCalculate();
+        });
+
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">New Exam</h5>
+                </div>
+
+                @*<div class="col">
+                        <a class="waves-effect waves-light float-right" style="margin-top: -11px" href="/patientsideelite/PatientClaimsExamsElite  ">
+                            <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                        </a>
+                    </div>*@
+            </div>
+        </div>
+        <ul class="nav nav-tabs customtab" role="tablist">
+            <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#ExamType" role="tab"> <span class="hidden-xs-down">Exam Type</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#physcicalExam" role="tab"> <span class="hidden-xs-down">Physical Exam</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#Vitals" role="tab"> <span class="hidden-xs-down">Vitals</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#growthcharts" role="tab"> <span class="hidden-xs-down">Growth Charts</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#immunization" role="tab"> <span class="hidden-xs-down">Immunization</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#clinicalNotes" role="tab"> <span class="hidden-xs-down">Clinical Notes</span></a> </li>
+            <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#prescription" role="tab"> <span class="hidden-xs-down">Prescriptions</span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#lab" role="tab"><span class="hidden-xs-down">Labs </span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#imaging" role="tab"> <span class="hidden-xs-down">Imaging </span></a> </li>
+            <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#DME" role="tab"> <span class="hidden-xs-down">DME Prescription </span></a> </li>
+
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="ExamType" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_ExamType.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="physcicalExam" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_PhysicalExam.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="Vitals" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_Vital.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="growthcharts" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_growthChart.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="immunization" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_immunization.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="clinicalNotes" role="tabpanel">
+                <ul class="nav nav-tabs customtab" role="tablist">
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#clinicalTemplate" role="tab"> <span class="hidden-xs-down">Clinical Template</span></a> </li>
+                    <li class="nav-item"> <a class="nav-link " data-toggle="tab" href="#voiceTemplate" role="tab"> <span class="hidden-xs-down">Voice Template</span></a> </li>
+
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="clinicalTemplate" role="tabpanel">
+                        @*<partial name="_ExamsElitePartial/_ExamNewAdd.cshtml" />*@
+                    </div>
+                    <div class="tab-pane" id="voiceTemplate" role="tabpanel">
+                        @*<partial name="_ExamsElitePartial/_ExamNewAdd.cshtml" />*@
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane  p-20" id="prescription" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_Prescriptions.cshtml" />
+            </div>
+            <div class="tab-pane  p-20" id="lab" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_Lab.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="imaging" role="tabpanel">
+                <partial name="~/Views/PatientExam/ExamPartialViews/_Imaging.cshtml" />
+
+            </div>
+            <div class="tab-pane  p-20" id="DME" role="tabpanel">
+                @*<partial name="_ExamsElitePartial/_Vitals.cshtml" />*@
+
+            </div>
+        </div>
+
+    </div>
+</div>

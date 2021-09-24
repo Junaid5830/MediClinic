@@ -1,0 +1,75 @@
+﻿
+@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHSurgicalHistory != null && Model.GetMHSurgicalHistory.Count() > 0)
+{
+    <table class="table centered highlight bordered">
+        <thead>
+            <tr>
+
+                <th class="left">Sr#</th>
+                <th>Surgery Type</th>
+                <th>Surgeon Name</th>
+                <th>Year</th>
+                <th>Notes</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHSurgicalHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+
+                    <td class="left">@Sr</td>
+                    @if (loop.SurgeryType != null)
+                    {
+                        <td>@loop.SurgeryType</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    @if (loop.SurgeonName != null)
+                    {
+                        <td>@loop.SurgeonName</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.Year != null)
+                    {
+                        <td>@loop.Year</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    <td>
+                        <a href="javascript:void(0);" class="EditSurgicalHistory" SurgicalHistoryId="@loop.Id"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0);" class="DeleteSurgicalHistory" SurgicalHistoryId="@loop.Id"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

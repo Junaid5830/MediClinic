@@ -1,0 +1,211 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "PrescriptionListElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var roleId = _sessionManager.GetRoleId();
+}
+@section styles
+{
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+      
+        $(document).ready(function () {
+            $('.select-all').click(function () {
+                debugger;
+                $('.table  input').prop('checked', this.checked);
+            });
+            var table = $("#PrescriptionTab").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+        });
+        function myFillNowFunction(prescriptionId, roleId) {
+            debugger;
+            var uri;
+            var route;
+            if (roleId == 2) {
+                route = "/PatientSideElite/AddPrescriptionElite" + "/" + prescriptionId + "";
+                var Tabname = "#test2";
+                uri = route + decodeURIComponent(Tabname);
+            }
+            else {
+                route = "/PatientSideElite/ViewPrescription" + "/" + prescriptionId + "";
+                uri = route;
+            }
+            window.location.href = uri;
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Prescription
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2 search_box2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (roleId == 1)
+                {
+
+                }
+                else
+                {
+                    <div class="col-sm-12 col-md-3 col-lg-3">
+
+                        <a class="btn  float-right add-btn set_smallscreen" href="/patientSideElite/AddPrescriptionElite">
+                            Add New  Prescription
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+        @*<div class="row">
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                    Batch Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu batch">
+                    <li><a href="#">Option 1</a></li>
+                    <li><a href="#">Option 2</a></li> Comment batch action
+                </ul>
+            </div>
+        </div>*@
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="PrescriptionTab" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+                                </th>
+                                <th>Medication Name</th>
+                                <th>Quantity</th>
+                                <th>Frequency</th>
+                                <th>Dose</th>
+                                <th>Unit</th>
+                                <th>Start Date</th>
+                                <th>Stop Date</th>
+                                <th>Medication Comments</th>
+                                <th>VisitId</th>
+                                <th data-searchable=false data-orderable="false" class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.prescriptionBasicsList != null)
+                            {
+                                foreach (var item in Model.prescriptionBasicsList)
+                                {
+                                    <tr class="card">
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="@item.Id" value="check">
+                                                <label class="custom-control-label" for="@item.Id"></label>
+                                            </div>
+                                        </td>
+                                        <td>@item.Medication.Name</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.FrequencyId</td>
+                                        <td>@item.Dose</td>
+                                        <td>@item.Unit</td>
+                                        <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                        <td>@item.Notes</td>
+                                        <td>@item.VisitId</td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            @if (roleId == 2)
+                                            {
+                                                <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                                <li onclick="myFillNowFunction(@item.Id,@roleId)"><a href="javascript:void(0);" class="option-a">Edit</a></li>
+                                                <li onclick="deleteprescription(@item.Id, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+                                            }
+                                            else
+                                            {
+                                                <li onclick="myFillNowFunction(@item.Id,@roleId)"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                                <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

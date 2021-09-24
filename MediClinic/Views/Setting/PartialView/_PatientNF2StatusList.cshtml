@@ -1,0 +1,24 @@
+﻿@model MediClinic.Models.SettingViewModel
+
+@foreach (var item in Model.NF2StatusList)
+{
+    <tr class="card">
+        <th>
+            <label>
+                <input type="checkbox" />
+                <span></span>
+            </label>
+        </th>
+        <td>@item.Nf2Status1</td>
+
+        <td>
+            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1_@item.Nf2Id'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1_@item.Nf2Id' class='dropdown-content'>
+                <li><a href="#!" onclick="deleteNf2Status(@item.Nf2Id)" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                <li><a href="#!" onclick="editNf2Status(@item.Nf2Id)" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+            </ul>
+
+        </td>
+    </tr>
+}

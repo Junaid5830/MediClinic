@@ -1,0 +1,490 @@
+﻿@model MediClinic.Models.TemplateViewModal
+@{
+    ViewData["Title"] = "Add Doctor";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+    <style>
+        .mt-3 {
+            margin-top: 9% !important;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+        $("#icd10").on('click', function () {
+            debugger;
+
+            var SelectTemplateValue = $('#templateId option:selected').val();
+            if (SelectTemplateValue) {
+                $.ajax({
+                    type: "GET",
+                    url: '/Template/CheckICD10',
+                    data: { Id: SelectTemplateValue },
+                    success: function (data) {
+                        debugger;
+                        if (data.isError == true) {
+                            debugger;
+                            new PNotify({
+                                title: 'Error!',
+                                text: "ICD10 Code is already exist",
+                                delay: 1500,
+                                type: 'error',
+                                addclass: 'pnotify-center'
+                            });
+
+                        }
+
+                        else {
+                            debugger;
+                            var TemplateComponentDTO = {};
+                            TemplateComponentDTO["ComponentType"] = "ICD 10";
+                            TemplateComponentDTO["ComponentLabel"] = "Select ICD10 Code";
+                            TemplateComponentDTO["ComponentPlaceholder"] = "Select ICD10 Code";
+                            TemplateComponentDTO["ComponentId"] = "ICD10";
+                            TemplateComponentDTO["ComponentName"] = "ICD10";
+                            TemplateComponentDTO["TemplateId"] = SelectTemplateValue;
+                            $.ajax({
+                                type: "POST",
+                                url: '/Template/CreateTemplate',
+                                data: { TemplateComponentDTO: TemplateComponentDTO },
+                                success: function (data) {
+                                    $("#createTemplateGrid").empty();
+                                    $("#createTemplateGrid").html(data);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            
+           
+        })
+        
+        function templateChange(ths) {
+            var val = $(ths).val();
+            if (val != "") {
+                $.ajax({
+                    type: "GET",
+                    url: '/Template/GetTemplateComponent',
+                    data: { TemplateId: val },
+                    success: function (data) {
+                        $("#createTemplateGrid").empty();
+                        $("#createTemplateGrid").html(data);
+                        $("#createTemplate").show();
+                    }
+                });
+            }
+            else {
+                $("#createTemplate").hide();
+            }
+        }
+        $('body').off('click', '.control-click');
+        $('body').on('click', '.control-click', function () {
+            //$(".control-click").click(function () {
+            $("#templateModal input").val("");
+            $("#appendNewRowBtn #tblBody").html("");
+            appendNewRow(this, "1");
+            var type = $(this).attr("custom-type");
+            if (type == "checkbox") {
+                $("#TemplateComponentDTO_ComponentPlaceholder").val("NA");
+                $("#componentPlaceholderInput").hide();
+                $("#appendNewRowBtn").hide();
+            }
+            else if (type == "select") {
+                $("#appendNewRowBtn").show();
+                $("#componentPlaceholderLabel").show();
+                $("#componentPlaceholderInput").show();
+            }
+            else if (type == "radio") {
+                $("#appendNewRowBtn").show();
+                $("#componentPlaceholderLabel").hide();
+                $("#TemplateComponentDTO_ComponentLabel").val("NA");
+                $("#TemplateComponentDTO_ComponentPlaceholder").val("NA");
+                $("#componentPlaceholderInput").hide();
+            }
+            else {
+                $("#appendNewRowBtn").hide();
+                $("#componentPlaceholderLabel").show();
+                $("#componentPlaceholderInput").show();
+            }
+            var templateId = $("#templateId").val();
+            $("#TemplateComponentDTO_TemplateId").val(templateId);
+            $("#TemplateComponentDTO_ComponentType").val(type);
+            $("#templateModal").modal("show");
+
+            var isEdit = $(this).attr("isEdit");
+            if (isEdit == "Y") {
+                $.ajax({
+                    type: "GET",
+                    url: '/Template/EditControl',
+                    data: { Id: $(this).attr("id"), TemplateId: $(this).attr("templateid") },
+                    success: function (res) {
+                        
+                        var data = res[0];
+                        var detail = res[0].templateComponentDetailDTO;
+                        $("#templateModal #TemplateComponentDTO_ComponentLabel").val(data.componentLabel);
+                        $("#templateModal #TemplateComponentDTO_ComponentId").val(data.componentId);
+                        $("#templateModal #TemplateComponentDTO_ComponentName").val(data.componentName);
+                        $("#templateModal #TemplateComponentDTO_ComponentPlaceholder").val(data.componentPlaceholder);
+
+                        $("#templateModal #TemplateComponentDTO_Id").val(data.id);
+                        $("#templateModal #TemplateComponentDTO_ComponentId").val(data.componentId);
+                        $("#templateModal #TemplateComponentDTO_ComponentType").val(data.componentType);
+                        //Detail
+                        $("#appendNewRowBtn #tblBody").html("");
+                        if (detail != null) {
+                            for (var i = 0; i < detail.length; i++) {
+                                $("#tblBody").append(
+                                    '<tr id="row' + i + '">' +
+                                    //'<input type="hidden" value="' + detail[i].id + '" class="text-input Id" name="TemplateComponentDetailDTO[' + i + '].Id" />' +
+                                    '<td>' +
+                                    '<input type="text" value="' + detail[i].text + '" class="text-input Text" placeholder="Enter Text" name="TemplateComponentDetailDTO[' + i + '].Text" />' +
+                                    '</td>' +
+                                    '<td>' +
+                                    '<input type="text" value="' + detail[i].value + '" class="text-input Value" placeholder="Enter Value" name="TemplateComponentDetailDTO[' + i + '].Value" />' +
+                                    '</td>' +
+                                    '<td class="text-center">' +
+                                    '<a href="javascript:void(0);" onclick="removeComponentRow(this)"><i class="mdi mdi-minus"></i></a>' +
+                                    '</td>' +
+                                    '</tr>'
+                                )
+                            }
+                        }
+                        appendNewRow(this, "1");
+                    }
+                });
+            }
+        });
+        function onSuccessCreateTemplate(data) {
+            $("#createTemplateGrid").empty();
+            $("#createTemplateGrid").html(data);
+            new PNotify({
+                title: 'Success!',
+                text: 'Record Saved Successfully',
+                delay: 2500,
+                type: 'success',
+                addclass: 'pnotify-center'
+            });
+            $("#templateModal").modal("hide");
+        }
+        function submitComponentClick() {
+            //if ($("#TemplateComponentDTO_ComponentId").val() != "") {
+            //    var createComponentId = $("#templateId option:selected").text().replace(/ /g, '') + "_" + $("#TemplateComponentDTO_ComponentId").val();
+            //}
+            //if ($("#TemplateComponentDTO_ComponentName").val() != "") {
+            //    var createComponentName = $("#templateId option:selected").text().replace(/ /g, '') + "_" + $("#TemplateComponentDTO_ComponentName").val();
+            //}
+            //$("#TemplateComponentDTO_ComponentId").val(createComponentId);
+            //$("#TemplateComponentDTO_ComponentName").val(createComponentName);
+            if ($("#TemplateComponentDTO_ComponentType").val() == "select" || $("#TemplateComponentDTO_ComponentType").val() == "radio") {
+                if ($("#appendNewRowBtn #tblBody tr").length > 1) {
+                    $("#createComponentForm").submit();
+                }
+                else {
+                    new PNotify({
+                        title: 'Alert!',
+                        text: 'Enter atleast tow rows',
+                        delay: 2500,
+                        type: 'alert',
+                        addclass: 'pnotify-center'
+                    });
+                }
+            }
+            else {
+                $("#createComponentForm").submit();
+            }
+        }
+        function appendNewRow(ths, isFirst) {
+            debugger;
+            var txt = $(ths).closest("tr").find(".Text").val();
+            var vl = $(ths).closest("tr").find(".Value").val();
+            var canAppendNewRow = true;
+            if (isFirst != "1") {
+                if (txt == "" || vl == "") {
+                    canAppendNewRow = false;
+                }
+            }
+            if (canAppendNewRow == true) {
+                var count = $("#tblBody > tr").length;
+                //var reqCount = count - 1;
+                //minAmount = $(addBtn).parents().parents().parents().find("[name='corp_titles_wise_salary.corp_titles_wise_salary_dt[" + reqCount + "].minimum_amount']").val();
+                //if (minAmount != "") {
+                $(ths).children().attr("class", "mdi mdi-minus");
+                $(ths).attr("onclick", "removeComponentRow(this)");
+                $("#tblBody").append('<tr id="row' + count + '">' +
+                    '<td>' +
+                    '<input type="text" class="text-input Text" placeholder="Enter Text" name="TemplateComponentDetailDTO[' + count + '].Text" />' +
+                    '</td>' +
+                    '<td>' +
+                    '<input type="text" class="text-input Value" placeholder="Enter Value" name="TemplateComponentDetailDTO[' + count + '].Value" />' +
+                    '</td>' +
+                    '<td class="text-center">' +
+                    '<a href="javascript:void(0);" onclick="appendNewRow(this)"><i class="mdi mdi-plus"></i></a>' +
+                    '</td>' +
+                    '</tr>')
+                //}
+            }
+            else {
+                new PNotify({
+                    title: 'Alert!',
+                    text: 'Enter All Fields Value',
+                    delay: 2500,
+                    type: 'alert',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        function removeComponentRow(removeBtn) {
+            removeBtn.closest("tr").remove();
+            var count = $("#tblBody > tr").length;
+            var row = $("#tblBody > tr:first");  // Find 1st tr
+            for (var i = 0; i < count; i++) {
+                // Set Name Index
+                $(row).find("[placeholder='Enter Text']").attr("name", "TemplateComponentDetailDTO[" + i + "].Text");
+                $(row).find("[placeholder='Enter Value']").attr("name", "TemplateComponentDetailDTO[" + i + "].Value");
+                row = row.next();   // Get Next Row
+            }
+        }
+        function DeleteControl(Id, TemplateId) {
+            $.ajax({
+                type: "GET",
+                url: '/Template/DeleteControl',
+                data: { Id: Id, TemplateId: TemplateId },
+                success: function (data) {
+                    if (data.status == true) {
+                        new PNotify({
+                            title: 'Alert!',
+                            text: data.msg,
+                            delay: 2500,
+                            type: 'alert',
+                            addclass: 'pnotify-center'
+                        });
+                    }
+                    else {
+                        $("#createTemplateGrid").empty();
+                        $("#createTemplateGrid").html(data);
+                        new PNotify({
+                            title: 'Success!',
+                            text: 'Record Deleted Successfully',
+                            delay: 2500,
+                            type: 'success',
+                            addclass: 'pnotify-center'
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Add Controls</h5>
+                </div>
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Template/DoctorTemplate">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>Template</p>
+                <div class="input-field">
+                    <select id="templateId" onchange="templateChange(this)" class="text-input" asp-items="@(new SelectList(Model.GetAllTemplate,"Id","Name"))">
+                        <option value="">-- Select Template --</option>
+                    </select>
+                    <span asp-validation-for="TemplateComponentDTO.TemplateId"></span>
+                </div>
+            </div>
+        </div>
+        <div id="createTemplate" style="display:none">
+            <div id="breadcrumbs-wrapper">
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue">Control Detail</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div id="createTemplateGrid">
+                        @Html.Partial("_CreateTemplate", Model)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <p>Heading</p>
+                            <div class="input-field">
+                                <h2 class="control-click" custom-type="Heading">Create Heading</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>Input</p>
+                            <div class="input-field">
+                                <input class="text-input control-click" custom-type="input" placeholder="Create Input" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>Text Area</p>
+                            <div class="input-field">
+                                <textarea class="text-input control-click" custom-type="textarea" placeholder="Create Text Area"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p>Select</p>
+                            <div class="input-field">
+                                <select class="text-input control-click" custom-type="select">
+                                    <option value="">-- Select Option --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col">
+                                    <p>CheackBox</p>
+
+                                </div>
+                                <div class="col">
+                                    <div class="input-field mt-3">
+                                        <input class="text-input control-click" custom-type="checkbox" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col">
+                                    <p>Radio Buton</p>
+                                </div>
+                                <div class="col">
+                                    <div class="input-field mt-3">
+                                        <input class="text-input control-click" custom-type="radio" type="radio" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <p>Add ICD 10 Codes</p>
+                            <div class="input-field">
+                                <select class="text-input" id="icd10" custom-type="ICD10">
+                                    <option value="">-- Select Option --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="templateModal" role="dialog">
+    <div class="modal-dialog  modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create Control Component</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form asp-controller="Template" asp-action="CreateTemplate" method="POST" data-ajax="true" data-ajax-success="onSuccessCreateTemplate(data)" class="col-sm-12" id="createComponentForm">
+                        <input asp-for="TemplateComponentDTO.Id" type="hidden" />
+                        <input asp-for="TemplateComponentDTO.TemplateId" type="hidden" />
+                        <input asp-for="TemplateComponentDTO.ComponentType" type="hidden" />
+                        <div class="row">
+                            
+                            <div class="col-md-3" id="componentPlaceholderLabel">
+                                <p>Label</p>
+                                <div class="input-field">
+                                    <input asp-for="TemplateComponentDTO.ComponentLabel" class="text-input" placeholder="Enter Label" />
+                                    <span asp-validation-for="TemplateComponentDTO.ComponentLabel"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="componentPlaceholderInput">
+                                <p>Placeholder</p>
+                                <div class="input-field">
+                                    <input asp-for="TemplateComponentDTO.ComponentPlaceholder" class="text-input" placeholder="Enter Placeholder" />
+                                    <span asp-validation-for="TemplateComponentDTO.ComponentPlaceholder"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Binding Id</p>
+                                <div class="input-field">
+                                    <input asp-for="TemplateComponentDTO.ComponentId" class="text-input" placeholder="Enter Binding Id" />
+                                    <span asp-validation-for="TemplateComponentDTO.ComponentId"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Binding Name</p>
+                                <div class="input-field">
+                                    <input asp-for="TemplateComponentDTO.ComponentName" class="text-input" placeholder="Enter Binding Name" />
+                                    <span asp-validation-for="TemplateComponentDTO.ComponentName"></span>
+                                </div>
+                            </div>
+                            @*<div class="col-md-1" id="appendNewRowBtn">
+            <p>Add</p>
+            <div class="input-field">
+                <a href="javascript:void(0);" onclick="appendNewRow(this)"><i class="mdi mdi-plus"></i></a>
+            </div>
+        </div>*@
+                        </div>
+                        <table class="table dataTables_wrapper" id="appendNewRowBtn">
+                            <thead>
+                                <tr class="uppercase">
+                                    <th>Text</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblBody">
+                                @*<tr>
+                                        <td>
+                                            <input type="text" class="text-input Text" placeholder="Enter Text" name="TemplateComponentDetailDTO[0].Text" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="text-input Value" placeholder="Enter Value" name="TemplateComponentDetailDTO[0].Value" />
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0);" onclick="appendNewRow(this)"><i class="mdi mdi-plus"></i></a>
+                                        </td>
+                                    </tr>*@
+                            </tbody>
+                        </table>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="right">
+                                    <button type="button" onclick="submitComponentClick()" class="waves-effect waves-light btn add-btn">Save</button>
+                                    @*<a href="javascript:void(0);" class="Recreate btn">Edit</a>
+                                        <a href="javascript:void(0);" class="Recreate btn">Cancel</a>*@
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>*@
+        </div>
+
+    </div>
+</div>
+<!-- End Modal -->

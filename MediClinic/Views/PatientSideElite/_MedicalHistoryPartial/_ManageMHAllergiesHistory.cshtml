@@ -1,0 +1,47 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHAllergiesHistory != null && Model.GetMHAllergiesHistory.Count() > 0)
+{
+    <table class="table centered highlight">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Allergy To</th>
+                <th>Reaction</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHAllergiesHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td>@Sr</td>
+                    <td>@loop.AllergyTo</td>
+                    <td>@loop.Recation</td>
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHAllergiesHistory(@loop.Id)"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHAllergiesHistory(@loop.Id)"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

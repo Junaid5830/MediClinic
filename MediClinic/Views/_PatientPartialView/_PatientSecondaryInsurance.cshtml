@@ -1,0 +1,297 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3">
+                <div class="row mb-1">
+
+
+                    <div class="col s12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h5 class="breadcrumbs-title color-blue">Secondary Insurance Provider</h5>
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <form asp-action="PatientSecondaryInsurance" id="PatientSecondaryInsuranceForm" asp-controller="PatientSide" method="post" >
+                                        <input class="text-input input-styling" asp-for="patientSecondaryInsurance.UserId" id="PatientSecondary_UserId" type="text" hidden="hidden">
+                                        <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+                                        <input hidden="hidden" asp-for="patientSecondaryInsurance.SecondaryInsuranceProviderID" />
+
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Provider Name<span class="required"> * </span></p>
+
+                                                <div class="ui-widget secondarySelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_ProviderName" class="secondaryInsuranceProviderCombo genericClassForDD secondaryDropDListBeforeEditDisabled" asp-for="patientSecondaryInsurance.ProviderId"
+                                                            asp-items="@(new SelectList(Model.InsuranceProviderNamesList,"ProviderId","ProviderName"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="secondaryInsuranceProvider_err"></p>
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right15"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Plan Name</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField" asp-for="patientSecondaryInsurance.PlanName" type="text" placeholder="Enter Plan Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Effective Date</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input type="text" class="datepicker text-input secondary_tab patientsecondaryTxtField" asp-for="patientSecondaryInsurance.EffectiveDate" placeholder="MM/DD/YYYY">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Policy Number</p>
+
+                                                <div class="input-field pl-0">
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField"  type="text" asp-for="patientSecondaryInsurance.PolicyNumber" placeholder="Enter Policy Number">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Group Number</p>
+
+                                                <div class="ui-widget secondarySelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_GroupName" class="providerGroupNumber genericClassForDD secondaryDropDListBeforeEditDisabled" asp-for="patientSecondaryInsurance.GroupId"
+                                                            asp-items="@(new SelectList(Model.InsuranceGroupNumbersList,"GroupId","GroupName"))">
+                                                        <option></option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right16"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Subscriber Employer</p>
+
+                                                <div class="input-field  pl-0">
+
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField"  type="text" asp-for="patientSecondaryInsurance.SubscriberEmployer" placeholder="Enter Subscriber Employer">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p> Address Line 1<span class="required"> * </span></p>
+
+                                                <div class="input-field pl-0">
+
+                                                    <input class="text-input input-styling SecondaryAddressLine1 secondary_tab patientsecondaryTxtField" asp-for="patientSecondaryInsurance.AddressLine1" type="text" placeholder="Enter Address Line 1">
+                                                    <span class="required" asp-validation-for="patientSecondaryInsurance.AddressLine1"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Address Line 2</p>
+
+                                                <div class="input-field pl-0">
+
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField" asp-for="patientSecondaryInsurance.AddressLine2" type="text" placeholder="Enter Address Line 2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 ">
+                                                <p>Address Line 3</p>
+
+                                                <div class="input-field pl-0">
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField"  asp-for="patientSecondaryInsurance.AddressLine3" type="text" placeholder="Enter Address Line 3">
+                                                </div>
+                                            </div>
+                                            <div class="col s6 m3">
+                                                <p>ZIP Code <span class="required"> * </span></p>
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input SecondaryZipCode secondary_tab patientsecondaryTxtField" maxlength="5" id="secondary_Zip" onkeypress="return AvoidSpace(event)" asp-for="patientSecondaryInsurance.Zip" type="text" placeholder="Enter ZIP Code">
+                                                    <span class="required" asp-validation-for="patientSecondaryInsurance.Zip"></span>
+                                                    <span class="required" id="err_secondaryzip"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s6 m3 pl-0">
+                                                <p>City</p>
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input SecondaryCity city patientsecondaryTxtField" id="secondary_city" asp-for="patientSecondaryInsurance.City" type="text" readonly>
+                                                    @*<span class="required" asp-validation-for="patientSecondaryInsurance.City"></span>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>State</p>
+                                                    <div class="input-field">
+
+                                                        <input class="text-input input-styling state SecondaryState patientsecondaryTxtField" id="secondary_state"  asp-for="patientSecondaryInsurance.State" type="text" readonly>
+                                                        @*<span class="required" asp-validation-for="patientSecondaryInsurance.State"></span>*@
+
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>Country </p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling SecondaryCountry country patientsecondaryTxtField" id="secondary_country" asp-for="patientSecondaryInsurance.Country" type="text" readonly>
+                                                        @*<span class="required" asp-validation-for="patientSecondaryInsurance.Country"></span>*@
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Phone Number<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno secondary_tab patientsecondaryTxtField" id="secon_num" asp-for="patientSecondaryInsurance.PhoneNumber" type="text" placeholder="Enter Phone Number">
+                                                    <span class="required" asp-validation-for="patientSecondaryInsurance.PhoneNumber"></span>
+                                                    <span class="required" id="secon_errmsg_phone"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Fax</p>
+
+                                                <div class="input-field pl-0">
+                                                    <input class="text-input input-styling fax secondary_tab patientsecondaryTxtField" id="secon_fax" asp-for="patientSecondaryInsurance.Fax" type="text" placeholder="Enter Fax Number">
+                                                    <span class="required" id="secon_errmsg_fax"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Email<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling secondary_tab patientsecondaryTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientSecondaryInsurance.Email" type="email" placeholder="Enter Email Address">
+                                                    <span class="required" asp-validation-for="patientSecondaryInsurance.Email"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Website</p>
+                                                <div class="input-field webUrlDiv">
+                                                    <input class="text-input input-styling SecwebPageUrl secondary_tab patientsecondaryTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientSecondaryInsurance.website" placeholder="Enter Website">
+                                                    <span class="required" id="secweb_err"></span>
+                                                </div>
+                                                @*<div class="input-field col s2 m2">
+                                                    <a href="javascript:void(0);" id="secondaryWebPageOnNextTab" class="btn form-add-btn" onclick="openSecUrlOnTab();"><i class="material-icons">arrow_forward</i></a>
+                                                </div>*@
+                                            </div>
+
+                                        </div>
+                                        <div class="row set_rowbtn">
+                                            <div class="col s12 m12 pr-0" style="text-align:center">
+                                                <button type="submit" id="btnPatientSecondary" class="btn add-btn">Save</button>
+
+                                                @if (ViewBag.Action == "Update")
+                                                {
+                                                    <button type="button" data-val="secondaryForm" id="SecondaryEdit_Btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                    <button type="button" data-val="secondaryForm" id="SecondaryCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                                }
+                                                else
+                                                {
+                                                    @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                                    <a href="javascript:void(0);" data-val="NewForm" id="SecondaryCancel_btn" onclick="emptyPatientsecondaryFields();" class="Recreate btn">Cancel</a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right15" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="InsuranceProviderName" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateProviderName(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Provider Name
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input providerName SignIdType" type="text" asp-for="InsuranceProviderNameBasicDto.ProviderName" placeholder="Enter Provider Name" />
+                                <span class="required" asp-validation-for="InsuranceProviderNameBasicDto.ProviderName"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right16" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="InsuranceGroupNumber" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateGroupNumber(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Group Number
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input groupName SignIdType" type="text"  asp-for="InsuranceGroupNumberBasicDto.GroupName" placeholder="Enter Group Number" />
+                                <span class="required" asp-validation-for="InsuranceGroupNumberBasicDto.GroupName"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

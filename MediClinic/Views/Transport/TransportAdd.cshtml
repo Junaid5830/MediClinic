@@ -1,0 +1,1248 @@
+﻿@model TransportViewModel
+@{
+    ViewData["Title"] = "TransportAdd";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var Action = ViewBag.Action;
+    var image = ViewBag.VehiclePhoto;
+    var LatestVehicleId = ViewBag.LatestVehicleId;
+    if (image == "")
+    {
+        image = string.Empty;
+    }
+
+}
+
+@section scripts{
+
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+
+ 
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    <script src="~/Color/spectrum.js"></script>
+
+
+
+    <script src="~/webcamjs/webcam.js"></script>
+    <script>
+        function enablefields() {
+            debugger
+            var update = document.getElementsByClassName("update-class")
+            for (var j = 0; j < update.length; j++) {
+                var val = $(update[j]).val();
+                $(update[j]).attr("disabled", false);
+
+            }
+            $(".remove-image").removeClass('hidden');
+            $(".UploadPic").removeClass('hidden');
+            //$("#documentName").attr('hidden', false);
+            //$(".dropify-clear").attr('hidden', false);
+            //$("#sigCanvas").css('pointer-events', 'all');
+        }
+        function disablefield() {
+            debugger
+
+            var update = document.getElementsByClassName("update-class")
+            for (var j = 0; j < update.length; j++) {
+                var val = $(update[j]).val();
+                $(update[j]).attr("disabled", true);
+
+            }
+            debugger
+
+            //$("#documentName").attr('hidden', true);
+            //$(".dropify-clear").attr('hidden', true);
+            $(".remove-image").addClass('hidden');
+            $(".UploadPic").addClass('hidden');
+            //$("#sigCanvas").css('pointer-events', 'none');
+
+        }
+        $(document).ready(function () {
+            var updateAction = "@Action";
+            if (updateAction == "Update") {
+                disablefield();
+
+            }
+            $('.dropify').dropify();
+        });
+        var banColor = ['#ffffff', '#000000', '#F0FFF0', '#F5FFFA', '#F0FFFF', '#F0F8FF', '#F8F8FF', '#FFF5E', '#F5F5DC', '#FDF5E6', '#FFFAF0', '#FFFFF0', '#FAEBD7', '#FAF0E6', '#FFF0F5'];
+
+
+        $("#showPalette").spectrum({
+            //color: "#f00",
+            allowEmpty: true,
+
+            showInput: true,
+            containerClassName: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            showAlpha: true,
+            maxPaletteSize: 10,
+            preferredFormat: "hex",
+            change: function (color) {
+                debugger;
+                if (color) {
+                    if ($.inArray(color.toHexString(), banColor) >= 0) {
+                        $("#color_error").text("White color is Not Allowed");
+                        // Reset your palate
+                        $("#showPalette").val('');
+                        $('.sp-clear').trigger('click');
+                    }
+                    else {
+                        $("#color_error").html("");
+                    }
+                }
+
+            },
+            move: function (color) {
+                //updateBorders(color);
+            },
+            show: function () {
+
+            },
+            beforeShow: function () {
+
+            },
+            hide: function (color) {
+                //updateBorders(color);
+            },
+
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", /*"rgb(153, 153, 153)","rgb(183, 183, 183)",*/
+                    "rgb(204, 204, 204)", "rgb(217, 217, 217)", /*"rgb(239, 239, 239)", "rgb(243, 243, 243)",*/, "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                    "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)"],
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)",
+                    "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)",
+                    "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)",
+                    "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)",
+                    "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)",
+                    "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                    "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                    "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                    /*"rgb(133, 32, 12)", "rgb(153, 0, 0)", "rgb(180, 95, 6)", "rgb(191, 144, 0)", "rgb(56, 118, 29)",
+                    "rgb(19, 79, 92)", "rgb(17, 85, 204)", "rgb(11, 83, 148)", "rgb(53, 28, 117)", "rgb(116, 27, 71)",*/
+                    "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)",
+                    "rgb(12, 52, 61)", "rgb(28, 69, 135)"]
+            ]
+        });
+    </script>
+    <script>
+        $(".select2").select2();
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+        var IsCapturedScreen = false;
+
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $('#take_snapbtn').show();
+
+            $("#RemoveResult").removeAttr("disabled");
+            $('#main-cropper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+
+
+        function take_snapshot() {
+            debugger;
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#showResult').removeClass('disabled');
+            $('#captureImageFromCam').hide();
+            $('#main-cropper').show();
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            debugger;
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+        $(document).ready(function () {
+            $('#myTab a[href="' + window.location.hash + '"]').tab('show')
+
+            $('#take_snapbtn').hide();
+
+
+        });
+    </script>
+    <script>
+        $('#VehicleType')
+            .select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+            });
+        $('#VehicleMake')
+            .select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right2\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+            });
+        $('#VehicleModel')
+            .select2()
+            .on('select2:open', () => {
+                $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right3\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+            });
+
+    </script>
+    <script>
+        function onMakeCreate(data) {
+            debugger
+
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+
+                $(".checkmark").show().fadeOut(6000);
+                var legalStatusSelectList = $('#VehicleMake');
+                legalStatusSelectList.append($('<option></option>').val(data.data.vehicleMakeId).text(data.data.vehicleMake1));
+                $(".color_Close").trigger("click");
+            }
+        }
+        function onTypeCreate(data) {
+            debugger
+
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+
+                $(".checkmark").show().fadeOut(6000);
+                var legalStatusSelectList = $('#VehicleType');
+                legalStatusSelectList.append($('<option></option>').val(data.data.vehicleTypeId).text(data.data.vehicleType1));
+                $(".color_Close").trigger("click");
+            }
+        }
+        $('#Transport_LicenseIssueDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            maxDate: new Date()
+        });
+
+        $('#Transport_LicenseExpireDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+            minDate: new Date()
+        });
+
+
+        function onModelCreate(data) {
+            debugger
+
+            if (data.isError) {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+
+                $(".checkmark").show().fadeOut(6000);
+                var legalStatusSelectList = $('#VehicleModel');
+                legalStatusSelectList.append($('<option></option>').val(data.data.vehicleModelId).text(data.data.vehicleModel1));
+                $(".color_Close").trigger("click");
+            }
+        }
+    </script>
+    <script>
+        $('.valid').change(function () {
+            debugger
+            var value = $(this).val();
+            if (value != "") {
+                var el = $(this).siblings('.required');
+                el.html("");
+               
+            }
+        });
+        $('#TransportForm').on('submit', function (e) {
+            debugger;
+            e.preventDefault();
+
+            var VehiclePhoto = $("#result").attr('src');
+            if ($(this).valid()) {
+                  $(this).ajaxSubmit({
+
+                data: { profileImage: VehiclePhoto },
+                success: function (data) {
+
+                    var msg = data.success;
+                    if (data.isError) {
+
+                        var message = data.message
+                        new PNotify({
+                            title: 'Error!',
+                            text: message,
+                            delay: 5000,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                        return;
+                    }
+                    else {
+                        $(".checkmark").show().fadeOut(6000);
+                         window.location.href = "@Url.Action("TransportAndDriver","Transport")";
+                    }
+
+
+
+                },
+                complete: function (xhr) {
+
+                }
+
+            });
+            }
+
+
+        });
+    </script>
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+
+    <style>
+      
+        .hidden {
+            display: none !important;
+        }
+
+        .sp-replacer {
+            margin: 15px auto;
+            width: 45%;
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f6f6f6 !important;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1), 0 1px 1px -2px rgba(0, 0, 0, .1), 0 1px 3px 0 rgba(0, 0, 0, .2);
+        }
+
+        .sp-picker-container, .sp-palette-container {
+            background-color: #f6f6f6;
+        }
+
+        .sp-preview {
+            width: 86%;
+            height: 30px;
+        }
+
+        .sp-dd {
+            text-align: center;
+            color: #787878;
+            line-height: 27px;
+            font-size: 11px;
+        }
+
+        .sp-palette .sp-thumb-el {
+            border-radius: 50%;
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .sp-palette .sp-thumb-inner {
+            border-radius: 50%;
+        }
+
+        .sp-replacer {
+            margin: 0px !important
+        }
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+
+        .actions {
+            display: none;
+        }
+
+        .danger {
+            color: red;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .img-preview {
+            margin: 0 auto;
+            height: 250px;
+            width: 250px;
+            border-radius: 50% !important;
+        }
+
+        .remove-image {
+            /* display: none; */
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 43%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .mdi {
+            font-size: 24px !important;
+        }
+
+
+        #result {
+            cursor: pointer;
+        }
+
+
+        #result-wrapper:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+
+        .imageModel input.custom-file-input {
+            width: 5rem;
+            right: 17px;
+            height: 38px !important;
+            top: -40px;
+            cursor: pointer !important;
+        }
+
+        .actionUpload {
+            width: 5rem;
+        }
+
+        .required {
+            color: black !important;
+        }
+
+        #captureImageFromCam {
+            width: 100%;
+            margin: 5% 0;
+        }
+
+        #my_camera {
+            margin: 0 auto;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .input-group-append .form-add-btn {
+            margin-top: 0 !important
+        }
+
+        .top-height {
+            margin-top: 12px;
+        }
+
+        .input-group-append {
+            margin-left: 4px;
+        }
+
+        .form-add-btn {
+            margin-top: 3.3rem !important;
+            height: 36px !important;
+            line-height: 36px !important;
+        }
+
+        .custom-checkbox {
+            margin-top: 12px !important;
+        }
+
+        .select2 {
+            width: 100% !important;
+            margin-bottom: 2% !important
+        }
+
+        .customtab {
+            display: block !important;
+        }
+
+        .nav-tabs {
+            border-bottom: none !important;
+        }
+
+        .customtab li a.nav-link.active, .profile-tab li a.nav-link.active {
+            border-bottom: none !important;
+            color: white;
+            background-color: #547cea !important;
+        }
+
+        .nav-tabs .nav-link {
+            border-bottom: 0.5px solid #0000001f !important;
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+        }
+
+
+
+        @@media only screen and (max-width:601px) {
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 48%;
+            left: 46%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .ti-camera {
+            font-size: 22px !important;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff !important;
+            font-size: 17px;
+        }
+
+        .text p {
+            margin-top: 0px !important;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+            .remove-image:hover {
+                background: #E54E4E;
+                padding: 3px 7px 5px;
+                top: 0;
+                right: 22%;
+            }
+
+            .remove-image:active {
+                background: #E54E4E;
+                top: 0;
+                right: 22%;
+            }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+            .imageModel .modal-dialog {
+                max-width: 60% !important
+            }
+
+            .imageModel input.custom-file-input {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                height: 38px !important;
+                width: 5rem !important;
+                cursor: pointer !important;
+            }
+
+        .cr-slider {
+            width: 75% !important
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 0 2rem !important;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            margin-bottom: 0px;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        #my_camera {
+            margin: 0 auto
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+            color: #fff !important;
+        }
+
+        a {
+            cursor: pointer;
+        }
+
+        #cameraIcon i {
+            color: #547cea !important;
+            font-size: 22px;
+        }
+
+        .croppie-container .cr-image {
+            top: 25px !important;
+            left: 35px !important;
+        }
+
+        .imageModel .mdi {
+            font-size: 22px !important
+        }
+
+        @@media screen and (max-width:600px) {
+            .form-MiddleName {
+                margin-top: 0% !important;
+            }
+        }
+
+
+        .required {
+           color: red !important;
+        }
+
+    </style>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper pb-0">
+            <div class="row">
+                <div class="col margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">New Vehicle</h5>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("TransportAndDriver","Transport")" class="waves-effect waves-light float-right update-class">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <form asp-action="TransportAdd" asp-controller="Transport" method="post" id="TransportForm">
+            <input type="hidden" asp-for="Transport.TransportId" />
+
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <p>Vehicle Id</p>
+                    @if (Action == "Update")
+                    {
+                        <input type="text" value="@Model.Transport.TransportId" disabled class="text-input dob-input update-class" placeholder="Enter Capacity">
+                    }
+                    else
+                    {
+                        <input type="text" value="@LatestVehicleId" disabled class="text-input dob-input update-class" placeholder="Enter Capacity">
+                    }
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <p>Vehicle Type</p>
+                    <select id="VehicleType" asp-for="Transport.VehicleTypeId" asp-items="Model.VehicleTypeList" class="select2 valid update-class" data-placeholder="Select Vehicle Type">
+                        <option value="" selected disabled></option>
+                    </select>
+                    <span class="required" asp-validation-for="Transport.VehicleTypeId"></span>
+                </div>
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <p>Vehicle Make </p>
+                    <select id="VehicleMake" asp-for="Transport.VehicleMakeId" asp-items="Model.VehicleMakeList" class="select2 update-class" data-placeholder="Select Vehicle Make">
+                        <option value="" selected disabled></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <p>Vehicle Model</p>
+                    <select id="VehicleModel" asp-for="Transport.VehicleModelId" asp-items="Model.VehicleModelList" class="select2 valid update-class" data-placeholder="Select Vehicle Models">
+                        <option value="" selected disabled></option>
+                    </select>
+                    <span class="required" asp-validation-for="Transport.VehicleModelId"></span>
+                </div>
+
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+
+                    <div class="input-field">
+                        <p>
+                            Vehicle Capacity
+                        </p>
+                        <input type="text" asp-for="Transport.VehicleCapacity" class="text-input dob-input update-class" placeholder="Enter Capacity">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <div class="input-field">
+                        <p>
+                            Vehicle Licence Plate No
+                        </p>
+                        <input type="text" asp-for="Transport.VehicleLicencePlateNo" class="text-input dob-input update-class" placeholder="Enter Capacity">
+                        <span class="required" asp-validation-for="Transport.VehicleLicencePlateNo"></span>
+                    </div>
+                </div>
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <p>Vehicle Registration State</p>
+                    <select asp-for="Transport.VehicleRegistrationState" class="select2 valid update-class" data-placeholder="Select Registration State">
+                        <option value="" selected disabled></option>
+                        <option value="AL">AL-Alabama</option>
+                        <option value="AK">AK-Alaska</option>
+                        <option value="AZ">AZ-Arizona</option>
+                        <option value="AR">AR-Arkansas</option>
+                        <option value="CA">CA-California</option>
+                        <option value="CO">CO-Colorado</option>
+                        <option value="CT">CT-Connecticut</option>
+                        <option value="DE">DE-Delaware</option>
+                        <option value="DC">DC-District Of Columbia</option>
+                        <option value="FL">FL-Florida</option>
+                        <option value="GA">GA-Georgia</option>
+                        <option value="HI">HI-Hawaii</option>
+                        <option value="ID">ID-Idaho</option>
+                        <option value="IL">IL-Illinois</option>
+                        <option value="IN">IN-Indiana</option>
+                        <option value="IA">IA-Iowa</option>
+                        <option value="KS">KS-Kansas</option>
+                        <option value="KY">KY-Kentucky</option>
+                        <option value="LA">LA-Louisiana</option>
+                        <option value="ME">ME-Maine</option>
+                        <option value="MD">MD-Maryland</option>
+                        <option value="MA">MA-Massachusetts</option>
+                        <option value="MI">MI-Michigan</option>
+                        <option value="MN">MN-Minnesota</option>
+                        <option value="MS">MS-Mississippi</option>
+                        <option value="MO">MO-Missouri</option>
+                        <option value="MT">MT-Montana</option>
+                        <option value="NE">NE-Nebraska</option>
+                        <option value="NV">NV-Nevada</option>
+                        <option value="NH">NH-New Hampshire</option>
+                        <option value="NJ">NJ-New Jersey</option>
+                        <option value="NM">NM-New Mexico</option>
+                        <option value="NY">NY-New York</option>
+                        <option value="NC">NC-North Carolina</option>
+                        <option value="ND">ND-North Dakota</option>
+                        <option value="OH">OH-Ohio</option>
+                        <option value="OK">OK-Oklahoma</option>
+                        <option value="OR">OR-Oregon</option>
+                        <option value="PA">PA-Pennsylvania</option>
+                        <option value="RI">RI-Rhode Island</option>
+                        <option value="SC">SC-South Carolina</option>
+                        <option value="SD">SD-South Dakota</option>
+                        <option value="TN">TN-Tennessee</option>
+                        <option value="TX">TX-Texas</option>
+                        <option value="UT">UT-Utah</option>
+                        <option value="VT">VT-Vermont</option>
+                        <option value="VA">VA-Virginia</option>
+                        <option value="WA">WA-Washington</option>
+                        <option value="WV">WV-West Virginia</option>
+                        <option value="WI">WI-Wisconsin</option>
+                        <option value="WY">WY-Wyoming</option>
+                    </select>
+                    <span class="required" asp-validation-for="Transport.VehicleRegistrationState"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <div class="input-field">
+                        <p>
+                            Vehicle VIN No
+                        </p>
+                        <input asp-for="Transport.VehicleVINNo" type="text" class="text-input dob-input update-class" placeholder="Enter Capacity">
+                        <span class="required" asp-validation-for="Transport.VehicleVINNo"></span>
+                    </div>
+                </div>
+
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+
+                    <div class="input-field">
+                        <p>
+                            Vehicle Color
+                        </p>
+                        <input asp-for="Transport.VehicleColor" type="text" class="patientColorInput patientInfoTxtField update-class" id="showPalette">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                    <div class="input-field">
+                        <p>
+                            License Issue Date
+                        </p>
+                        <input type="text" asp-for="Transport.LicenseIssueDate" class="text-input datepicker update-class" placeholder="Enter Issue Date">
+                    </div>
+                </div>
+
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+
+                    <div class="input-field">
+                        <p>
+                            License Expiration Date
+                        </p>
+                        <input type="text" asp-for="Transport.LicenseExpireDate" class="text-input datepicker update-class" placeholder="Enter Registration Date">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+                    <p>Update Photo</p>
+                    <div class="center">
+
+                        <div class="docs-preview clearfix">
+                            <div class="img-preview preview-lg">
+                                <div id="result-wrapper">
+                                    @if (Action == "Update")
+                                    {
+                                        @if (image == null)
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger UploadPic update-class" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                    <p class="UploadPic">Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else if (image == "")
+                                        {
+                                            <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger UploadPic update-class" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera update-class"></i></a>
+                                                    <p class="UploadPic">Upload</p>
+                                                </div>
+                                            </div>
+
+                                            <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                        }
+                                        else
+                                        {
+                                            <a class="remove-image" href="javascript:void(0)" style="display: inline;">&#215;</a>
+                                            <div class="middle">
+                                                <div class="text">
+                                                    <a class=" modal-trigger UploadPic update-class" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera "></i></a>
+
+                                                    <p class="UploadPic">Upload</p>
+                                                </div>
+                                            </div>
+                                            @*<img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5;display:none">*@
+                                            <img src="/images/@image" id="result" class="list_image" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                        <div class="middle">
+                                            <div class="text">
+                                                <a class=" modal-trigger UploadPic update-class" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera update-class"></i></a>
+                                                <p class="UploadPic">Upload</p>
+                                            </div>
+                                        </div>
+
+                                        <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div id="main-cropper"></div>
+                                            <div class="panel panel-default" id="captureImageFromCam" style="display: none;">
+                                                <div class="panel-heading">Camera</div>
+                                                <div class="panel-body">
+                                                    <div id="my_camera"></div>
+                                                    <!-- A button for taking snaps -->
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 center">
+                                                <a class="btn add-btn button imageSection" onclick="OpenImageSection();" data-toggle="tooltip" data-placement="top" title="" data-original-title="Capture From Camera">
+                                                    <i class="mdi mdi-camera"></i>
+                                                </a>
+                                                <a class="btn btn-info add-btn" id="take_snapbtn" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                    <i class="mdi mdi-cloud-upload"></i>
+                                                    <input type="file" class="custom-file-input" id="upload">
+                                                </a>
+                                                <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+
+                    <div class="input-field">
+                        <p>
+                            Vehicle Attachments
+                        </p>
+                        @if (Model.Transport.vehicleAttchments.Count > 0)
+                        {
+                            <input type="file"  multiple data-default-file="@Model.Transport.vehicleAttchments[0]" id="imgInp" class="form-control update-class fileUpload dropify" data-height="100">
+                        }
+                        else
+                        {
+                            <input type="file" asp-for="Transport.Attachments" multiple id="imgInp" class="form-control update-class fileUpload dropify" data-height="100">
+
+                        }
+
+
+                    </div>
+
+
+                </div>
+                <div class="col-md-6 ">
+                    <p>
+                        Upload Registration Document
+                    </p>
+                    <div class="input-field">
+                        <input type="hidden" asp-for="Transport.RegistrationDocuments" />
+                        <input type="file" class="form-control rentfield update-class dropify" id="input-file-now-custom-2" data-default-file="@ViewBag.RegistrationDocument" data-height="100" asp-for="Transport.File">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2">
+                <div class="col s12">
+                    <div class="center">
+                        <button type="submit" class="waves-effect waves-light btn add-btn update-class">Save</button>
+                        @if (Action == "Update")
+                        {
+
+                            <a href="javascript:void(0);" onclick="enablefields()" class="waves-effect waves-light Recreate btn">Edit</a>
+                        }
+
+                        <a href="/Transport/TransportAndDriver" class="waves-effect waves-light Recreate btn">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<div class="right-sidebar slide-out-right">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <div class="row">
+                <form asp-controller="Transport" asp-action="AddVehicleType" method="post" data-ajax="true" data-ajax-success="onTypeCreate(data)" class="col s12">
+                    <div class="col-12">
+                        <h6>Add New Type <span class="required">*</span></h6>
+                        <input class="text-input employementTitleval SignIdType" asp-for="VehicleType.VehicleType1" type="text" placeholder="Enter Language Title " />
+                        <span class="required" asp-validation-for="VehicleType.VehicleType1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right2">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <div class="row">
+                <form asp-controller="Transport" asp-action="AddVehicleMake" method="post" data-ajax="true" data-ajax-success="onMakeCreate(data)" class="col s12">
+                    <div class="col-12">
+                        <h6>Add New Make <span class="required">*</span></h6>
+                        <input asp-for="VehicleMake.VehicleMake1" class="text-input employementTitleval SignIdType" type="text" placeholder="Enter Language Title " />
+                        <span class="required" asp-validation-for="VehicleMake.VehicleMake1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="right-sidebar slide-out-right3">
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close right-side-toggle color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+            <div class="row">
+                <form asp-controller="Transport" asp-action="AddVehicleModel" method="post" data-ajax="true" data-ajax-success="onModelCreate(data)" class="col s12">
+                    <div class="col-12">
+                        <h6>Add New Model <span class="required">*</span></h6>
+                        <input asp-for="VehicleModel.VehicleModel1" class="text-input employementTitleval SignIdType" type="text" placeholder="Enter Language Title " />
+                        <span class="required" asp-validation-for="VehicleModel.VehicleModel1"></span>
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

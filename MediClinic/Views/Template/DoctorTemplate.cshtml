@@ -1,0 +1,135 @@
+﻿@model MediClinic.Models.TemplateViewModal
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "Add Doctor";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var roleId = _sessionManager.GetRoleId();
+}
+@section styles{
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            var id = getUrlParameter("visitid");
+            $('.patient-btns').each(function () {
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+        });
+        $(".select2").select2();
+        function onSuccessDoctorTemplate(data) {
+            //alert(data);
+            $("#doctorTemplateGrid").empty();
+            $("#doctorTemplateGrid").html(data);
+            $("#DoctorTemplateDTO_TemplateId").val("");
+            new PNotify({
+                title: 'Success!',
+                text: 'Record Saved Successfully',
+                delay: 2500,
+                type: 'success',
+                addclass: 'pnotify-center'
+            });
+            $("#TemplateTable").DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+
+                'columnDefs': [{
+                    "targets": [0, 2],
+                    "orderable": false,
+                }]
+            });
+        }
+        $(document).ready(function () {
+
+            $("#TemplateTable").DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]],
+
+                'columnDefs': [{
+                    "targets": [0, 2],
+                    "orderable": false,
+                }]
+            });
+        });
+
+    </script>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        @*<div class="col-2">
+
+                    @Html.Partial("~/Views/Appointment/PartialViews/_VisitsButtons.cshtml")
+            </div>*@
+
+
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Assign Template</h5>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <a href="@Url.Action("Template","Template")" class="btn  float-right add-btn set_smallscreen">
+                        Add New Template
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form asp-controller="Template" asp-action="DoctorTemplate" method="POST" data-ajax="true" data-ajax-success="onSuccessDoctorTemplate(data)" class="col-sm-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Template</p>
+                        @if (roleId == 2)
+                        {
+                            <div class="input-field">
+                                <input readonly value="@ViewBag.DoctorName" class="text-input" />
+                            </div>
+                        }
+                        else
+                        {
+                            <select class="select2" data-placeholder="Select Doctor Name" asp-for="DoctorTemplateDTO.DoctorId"
+                                    asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                <option value="" selected disabled></option>
+                            </select>
+                        }
+
+                    </div>
+                    <div class="col-md-6">
+                        <p>Template</p>
+                        <div class="input-field">
+                            <select asp-for="DoctorTemplateDTO.TemplateId" class="text-input" asp-items="@(new SelectList(Model.GetAllTemplate,"Id","Name"))">
+                                <option value="">-- Select Template --</option>
+                            </select>
+                            <span asp-validation-for="TemplateComponentDTO.TemplateId"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="right">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="doctorTemplateGrid">
+            @Html.Partial("_DoctorTemplate", Model)
+        </div>
+    </div>
+</div>

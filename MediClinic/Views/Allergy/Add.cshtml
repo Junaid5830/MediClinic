@@ -1,0 +1,533 @@
+﻿@model AllergyViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var PatientId = _sessionManager.GetPatientInfoId();
+    var roleId = _sessionManager.GetRoleId();
+    var patientRole = RoleNames.Patient;
+}
+@section styles
+{
+    <style>
+        .add-btn {
+            padding: 0 1rem !important;
+        }
+
+        #breadcrumbs-wrapper {
+            padding: 20px 0;
+            background: unset !important;
+        }
+
+        .container {
+            padding: 0 1.5rem !important
+        }
+
+        .card .card-content .card-title {
+            line-height: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .chip {
+            color: white;
+            background-color: #ff8376;
+        }
+
+        .chip {
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 32px;
+            display: inline-block;
+            height: 32px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            padding: 0 12px;
+            border-radius: 16px;
+        }
+
+        .card .card-content {
+            padding: 24px;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .chip i {
+            font-size: 16px;
+            line-height: 32px;
+            float: right;
+            padding-left: 8px;
+            cursor: pointer;
+        }
+
+        .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .collection {
+            position: relative;
+            overflow: hidden;
+            margin: .5rem 0 1rem 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+        }
+
+            .collection .collection-item.avatar {
+                min-height: 62px !important;
+            }
+
+            .collection .collection-item {
+                line-height: 1.5rem;
+                margin: 0;
+                padding: 10px 20px;
+                border-bottom: 1px solid #e0e0e0;
+                background-color: #fff;
+            }
+
+        ul:not(.browser-default) > li {
+            list-style-type: none;
+        }
+
+        span.avatar-status.avatar-50 {
+            padding-right: 10px;
+        }
+
+        .avatar-status.avatar-50 {
+            line-height: 0;
+            width: 50px;
+        }
+
+        .avatar-status {
+            position: relative;
+            display: inline-block;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-radius: 50px;
+        }
+
+        .user-content .line-height-0 {
+            margin-bottom: 5px !important;
+        }
+
+        .collection .collection-item.avatar p {
+            margin: 0;
+        }
+
+        .avatar-status img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border: 0 none;
+            border-radius: 1000px;
+            background: #e6e6e6;
+        }
+    </style>
+
+}
+
+@section scripts
+{
+    <script>
+        var id = 0;
+        $(document).ready(function () {
+
+            var Location = window.location.search;
+
+            id = getUrlParameter("VisitId");
+
+            var LocationValue = "?VisitId=" + id;
+            debugger;
+            if (LocationValue == Location) {
+                $("#VisitButton").show();
+            }
+            else {
+                $("#VisitButton").hide();
+            }
+            $("#VisitId").val(id);
+            GetAllergies();
+            $('.patient-btns').each(function () {
+                debugger;
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+        });
+
+        $(".allergy_wrapper").on('click', '.buttonSubmit', function () {
+            debugger
+            $("#allergy").val('');
+            $("#label").html($(this).attr("data-label"));
+            $("#ForiegnId").val($(this).attr("data-foreignId"))
+            $(".allergy_submission").attr("data-method", $(this).attr("data-url"));
+
+            ToggleSideBar('slide-out-right');
+        });
+
+        /* allergy_submission */
+        $('.allergy_submission').click(function () {
+            let allergy = $('#allergy').val();
+
+            // Validate
+            if (allergy == '') {
+                $('.required').html('Please enter allergy');
+                return false;
+            } else {
+                $('.required').html('');
+
+            }
+
+            //Object Initilizer
+
+            const allergyType = {
+                'Name': allergy,
+                'VisitId': $("#VisitId").val(),
+                'ForiegnId': $('#ForiegnId').val()
+            }
+            const obj = {
+                'Allergies': allergyType
+            }
+
+            // URL PATH
+            debugger
+            var path = "/Allergy/" + $(this).attr("data-method");
+
+            $.ajax({
+                type: "POST",
+                url: path,
+                dataType: 'json',
+                data: { "allergyViewModel": obj },
+                success: function (data) {
+                    debugger;
+                    if (data.success == "Data saved successfully") {
+                        $("#AllergyTypeId").val(data.allergyTypeId);
+                        $(".checkmark").show().fadeOut(6000);
+                        ToggleSideBar('slide-out-right');
+                        GetAllergies();
+                    }
+
+                },
+                error: function (res) {
+                    //AjaxFailure(res);
+                }
+            });
+        });
+
+
+        function GetAllergies() {
+            debugger;
+            $(".allergies_data").html('');
+            $.ajax({
+                type: "Get",
+                url: '/Allergy/List',
+                success: function (data) {
+                    debugger;
+
+                    console.log(data);
+                    debugger;
+                    for (var i = 0; i < data.alergyTypeList.length; i++) {
+                        $(".allergies_data").append(dataAlleryTypeString(data.alergyTypeList[i].name, data.alergyTypeList[i].allergyTypeId));
+
+                        for (var j = 0; j < data.alergyTypeList[i].allergies.length; j++) {
+                            $('.allergy_' + data.alergyTypeList[i].allergyTypeId).append(dataAllergyString(data.alergyTypeList[i].allergies[j].allergyId, data.alergyTypeList[i].allergies[j].name));
+                        }
+                    }
+
+                }
+
+            });
+
+        }
+
+        function dataAlleryTypeString(allergyType, allergyTypeId) {
+            debugger
+            var currentRoleId = '@roleId';
+            var patientRole = '@patientRole';
+
+            var dayString = "";
+            dayString += '<div class="col-sm-6 col-md-6 col-lg-3 col">';
+            dayString += '		<div class="card">';
+            dayString += '		<div class="card-content">';
+            dayString += '		<div class="row">';
+            dayString += '			<div class="col-sm-12 col">';
+            dayString += '				<h6 class="card-title">' + allergyType + '</h6>';
+            dayString += '			</div>';
+            dayString += '	<div class="col-sm-12 col delete allergy_' + allergyTypeId + '">';
+            dayString += '		</div>';
+            if (currentRoleId != patientRole) {
+                dayString += '		<div class="col-sm-12 col padding-top-20">';
+                dayString += '		<a class="btn add-btn buttonSubmit" data-foreignId="' + allergyTypeId + '" id="test" data-label="Add ' + allergyType + '" data-url="Add" href="javascript:void(0);"> Add New </a>';
+                dayString += '		</div>';
+            }
+
+
+            dayString += '		</div>';
+            dayString += '		</div>';
+            dayString += '	</div>';
+            dayString += '	</div>';
+
+            return dayString;
+        }
+
+        function dataAllergyString(allergId, allergyName) {
+            debugger;
+
+            //$(".delete").html('');
+
+            var dayString = "";
+            dayString += '	<div class="chip">';
+            dayString += '	' + allergyName + '';
+            dayString += '			<i class="mdi mdi-close onclick="(DeleteAllergy(' + allergId + ')")"></i>';
+            dayString += '			</div>';
+
+            return dayString;
+        }
+
+
+        // Delete Allergy
+
+        function DeleteAllergy(allergyId) {
+            debugger;
+
+            $.ajax({
+                type: "POST",
+                url: "/Allergy/DeleteAllergy",
+                data: { "Id": allergyId },
+                success: function (data) {
+                    debugger;
+                    if (data.success == "Data saved successfully") {
+                        $(".checkmark").show().fadeOut(6000);
+                        dataAllergyString();
+                    }
+
+                },
+                error: function (res) {
+                    //AjaxFailure(res);
+                }
+            });
+        }
+
+    </script>
+
+}
+
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div id="PatientAllergy">
+    <div class="page-wrapper">
+
+        <div class="container allergy_wrapper">
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen-->
+
+                <div class="row">
+                    <div class="col-sm-4 col-lg-6 col-md-6 col">
+                        <h5 class="breadcrumbs-title color-blue">Allergies</h5>
+                    </div>
+                    @if (roleId == 1)
+                    {
+
+                    }
+                    else
+                    {
+                        <div class="col-sm-8 col-lg-6 col-md-6 right-align-md col addNewNotForPatient ">
+                            <a class="btn mb-1 waves-effect waves-light right add-btn sideout  sidenav-trigger buttonSubmit" data-label="Add Allergy Type" data-url="AllergyType" href="javascript:void(0);">
+                                Add Allergy Type
+                            </a>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+            <div class="row allergies_data">
+
+            </div>
+
+
+        </div>
+        <div class="row white">
+
+            @*<div class="col-lg-3 col-md-3 col-sm-12 padding-right-0 hide-on-med-and-below" id="users_List">
+                    <div class="card card-default margin-top-0 margin-bottom-0">
+                        <div class="card-content card-padding-0" style="padding: 0px;">
+
+                            <div class=" col-sm-12">
+                                <h5 class="card-title" style="margin: 0  !important ">Patient Data  <i class="mdi mdi-plus color-blue right" style="font-size: 22px;"></i></h5>
+                                <input class="form-control mt-2 mb-2" type="text" name="Search" placeholder="Search Patient">
+
+                            </div>
+
+                            <ul class="collection p-0">
+
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+                                <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <span class="avatar-status  avatar-50">
+                                                <img src="~/Elite/images/users/5.jpg" alt="avatar">
+                                                <i></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="user-content">
+                                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old ∙<span> male</span></p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+<div class="right-sidebar slide-out-right">
+
+    <div class="slimscrollright">
+
+        <div class="row">
+            <div class="col"> <span><i class="ti-close left right-side-close color_Close"></i></span> </div>
+        </div>
+
+        <div class="r-panel-body">
+
+            <div class="row">
+                <div class="col-12">
+                    <h5 id="label"></h5>
+                    <input hidden id="AllergyTypeId" type="text" />
+                    <input class="form-control text-input" id="allergy" type="text" placeholder="Enter Allergy" />
+                    <input hidden id="VisitId" type="text" />
+                    <input hidden id="ForiegnId" type="text" />
+
+                    <span class="required"></span>
+                    <button href="javascript:void(0);" id="allergy_submission" data-method="AlergyType" class="modal-action btn add-btn right mb-2 allergy_submission">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

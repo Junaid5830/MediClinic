@@ -1,0 +1,1134 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var RoleId = _sessionManager.GetRoleId();
+    
+}
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PatientInfoAdd</title>
+    <link rel="apple-touch-icon" href="~/app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+
+    <link rel="stylesheet" type="text/css" href="~/app-assets/vendors/vendors.min.css">
+
+
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+
+    <link id="linkCss" rel="stylesheet" type="text/css" href="" />
+
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/materialize.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/style.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-calendar.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-sidebar.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/pages/app-email.css">
+    <link href="~/app-assets/vendors/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/app-assets/css/pages/data-tables.css" rel="stylesheet" />
+
+    <!-- END: Page Level CSS-->
+    <!-- BEGIN: Custom CSS-->
+    @*<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>*@
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/custom/custom.css">
+    <!-- END: Custom CSS-->
+    <link href="~/app-assets/vendors/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" crossorigin="anonymous">
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <link href="~/Color/spectrum.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />*@
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+
+        input[type="search"]:not(.browser-default) {
+            height: 2rem !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 50px !important;
+            margin-top: 1rem !important;
+            border: 1px solid #cfcfcf !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 46px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 27px !important;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border: solid #cfcfcf 1px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            border: solid #cfcfcf 1px !important;
+            padding-bottom: 0px !important;
+            padding-right: 0px !important;
+        }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .12), 0 1px 5px 0 rgba(0, 0, 0, .2);
+                background-color: #f6f6f6;
+            }
+
+        .select2-container--default.select2-container--disabled .select2-selection--multiple {
+            background-color: #fff !important;
+        }
+
+        .SignatureImageUpdate {
+            width: 100%;
+        }
+
+        .sp-replacer {
+            margin: 15px auto;
+            width: 45%;
+            padding: 5px;
+            border-radius: 4px;
+            background-color: #f6f6f6 !important;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1), 0 1px 1px -2px rgba(0, 0, 0, .1), 0 1px 3px 0 rgba(0, 0, 0, .2);
+        }
+
+        .sp-picker-container, .sp-palette-container {
+            background-color: #f6f6f6;
+        }
+
+        .sp-preview {
+            width: 86%;
+            height: 30px;
+        }
+
+        .sp-dd {
+            text-align: center;
+            color: #787878;
+            line-height: 27px;
+            font-size: 11px;
+        }
+
+        .sp-palette .sp-thumb-el {
+            border-radius: 50%;
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .sp-palette .sp-thumb-inner {
+            border-radius: 50%;
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+        }
+
+        .fa-camera:before {
+            font-size: 23px;
+            color: #547cea !important;
+        }
+
+        .empty {
+            box-shadow: 0px 0px 2px 0px red !important;
+            border: 1px solid red !important;
+        }
+
+        .image-area {
+            position: relative;
+            width: 50%;
+            background: #333;
+        }
+
+            .image-area img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-Sigatureimage {
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-image:hover {
+            background: #E54E4E;
+            padding: 3px 7px 5px;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-image:active {
+            background: #E54E4E;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-Sigatureimage:hover {
+            background: #E54E4E;
+            padding: 3px 7px 5px;
+            top: 0;
+            right: 22%;
+        }
+
+        .remove-Sigatureimage:active {
+            background: #E54E4E;
+            top: 0;
+            right: 22%;
+        }
+
+        .Signaturepad_show {
+            cursor: pointer;
+            line-height: 30px !important;
+            height: 30px !important;
+            padding: 0px 0.5rem !important;
+            font-size: 12px !important;
+        }
+
+        .UploadSignature_show {
+            cursor: pointer;
+            line-height: 30px !important;
+            height: 30px !important;
+            padding: 0px 0.5rem !important;
+            font-size: 12px !important;
+        }
+
+        #result {
+            cursor: pointer;
+        }
+
+        .imageModel {
+            height: 78% !important;
+            max-height: 78% !important;
+        }
+
+        .button {
+            position: relative;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: bold;
+            top: 5px !important;
+            margin: 0 auto;
+            width: auto;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        input.custom-file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            padding: 7px 0;
+            height: 48px !important;
+            width: 5rem !important;
+            cursor: pointer !important;
+        }
+
+        .selectize-input {
+            min-height: 3.2rem !important;
+            padding: 14px 12px !important;
+        }
+
+            .selectize-input > input {
+                width: 100% !important;
+            }
+
+            .selectize-input.focus {
+                box-shadow: none !important;
+                border-color: #ccc !important
+            }
+
+        .select-dropdown {
+            display: none !important;
+        }
+
+        .multiple-select-dropdown {
+            height: 200px !important;
+            overflow-y: scroll !important;
+        }
+
+        .img-preview {
+            width: auto !important;
+            height: auto !important;
+            border-radius: 50% !important;
+        }
+
+        .img-container {
+            max-height: 240px !important;
+            min-height: 240px !important;
+        }
+
+        .patientProfile_pic {
+            border-radius: 50%;
+            opacity: 1;
+            border: 2px solid #efefef;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+            width: 200px;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 47%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .center:hover .edit {
+            display: block;
+        }
+
+        .edit {
+            padding-top: 7px;
+            padding-right: 7px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: none;
+        }
+
+            .edit a {
+                color: #000;
+            }
+
+        .center:hover .left-delete {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .center:hover .patientProfile_pic {
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .center:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .text a, .text p {
+            color: #fff;
+            font-size: 17px;
+        }
+
+        .zip_model .modal-content {
+            text-align: center !important;
+        }
+
+        .zip_model.modal-fixed-footer {
+            height: 40% !important;
+            width: 40% !important;
+        }
+
+        .zip_model {
+            height: 40% !important;
+            width: 40% !important;
+            max-height: 40% !important;
+            background-color: #fff !important;
+            border-radius: 8px !important;
+        }
+
+        input.city, input.state, input.country {
+            background-color: #f0f0f038 !important;
+            color: #00000085;
+            cursor: not-allowed;
+        }
+
+        .ui-widget .select-wrapper {
+            display: none
+        }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 125px !important;
+            }
+        }
+
+        .set_formadd {
+            margin-top: 22px !important;
+        }
+
+
+
+        #slide-out-right3.sidenav {
+            top: 66px;
+            width: 340px;
+            padding-bottom: 0;
+        }
+
+        #slide-out-right4.sidenav {
+            top: 66px;
+            width: 340px;
+            padding-bottom: 0;
+        }
+
+        .tabs {
+            height: 700px;
+            white-space: normal;
+        }
+
+        .tab {
+            display: block;
+            width: 100%;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .tab-content {
+            height: auto;
+            width: 100%;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+        }
+
+        .indicator {
+            display: none;
+        }
+
+        .tabs .tab {
+            text-align: unset !important;
+            text-transform: unset !important;
+            display: block !important;
+        }
+
+            .tabs .tab a {
+                padding: 0 10px !important;
+                color: #757575 !important;
+            }
+
+        h4 {
+            color: #757575 !important
+        }
+
+        i.right {
+            margin-top: 9px !important;
+        }
+
+        .legaldrop {
+            line-height: 48px !important;
+            padding: 0 10px !important;
+        }
+
+            .legaldrop a {
+                color: #757575 !important;
+            }
+
+        #dropdown1 {
+            box-shadow: none !important;
+            width: 230px !important;
+        }
+
+            #dropdown1 li a {
+                line-height: 48px !important;
+            }
+
+        @@media screen and (max-width: 991px) and (min-width: 600px) {
+            .tabs {
+                display: block !important;
+            }
+        }
+
+        @@media screen and (max-width: 600px) {
+            .tabs {
+                height: auto;
+                white-space: nowrap !important;
+                margin-top: 20px;
+                width: 360px !important;
+            }
+
+            .patient_new {
+                display: none
+            }
+        }
+
+        .imageSection {
+            cursor: pointer;
+        }
+
+        .webUrlDiv {
+            cursor: pointer;
+        }
+        .caret {
+            display:none !important; 
+        }
+        .select2-container--default .select2-search--inline .select2-search__field{
+            height:3rem !important
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+
+    <!-- Search for small screen-->
+
+
+
+    <div class="row">
+        <div class="col m6 col offset-m3">
+            <div class="content-area content-right">
+                <div class="app-wrapper">
+
+                    <div class="card card card-default scrollspy border-radius-6 fixed-width">
+                        <div class="card-content padding-3 ">
+                            <div class="row mb-1">
+
+
+                                <div class="col s12">
+
+                                    <div class="container">
+                                        <h5 class="color-blue">Enter Your Personal Info</h5>
+                                        <div class="row">
+
+
+
+                                            <form asp-action="PatientInfoAdd" asp-controller="PatientWidget" method="post" class="form-inline col s12" id="patientinfo">
+                                                <input class="text-input input-styling" name="User.UserId" id="PatientInfo_UserId" type="text" hidden="hidden">
+
+                                                <input hidden="hidden" id="hiddenPatientInfoId" asp-for="patientInfoBasicDto.PatientInfoId" />
+                                                <input hidden="hidden" id="HiddenPatientInfoFormUserId" asp-for="patientInfoBasicDto.UserId" />
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <p>Patient ID</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling patientID" asp-for="PatientInfoIdForDisplay" disabled="disabled">
+                                                        </div>
+                                                    </div>
+                                                    <div class=" col s12 m6">
+                                                        <p>Prefix</p>
+
+                                                        <select class="combobox patientPrefix infoDropDListBeforeEditDisabled genericClassForDD" id="prefixes" asp-for="patientInfoBasicDto.PrefixId"
+                                                                asp-items="@(new SelectList(Model.prefixs,"LookupId","LookupValue"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col s12 m6">
+                                                        <p>Suffix</p>
+
+
+                                                        <select class="combobox patientSuffix infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.Suffix"
+                                                                asp-items="@(new SelectList(Model.suffix,"LookupId","LookupValue"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+
+                                                    </div>
+
+                                                    <div class="col s12 m6">
+                                                        <p>First Name </p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling patientFirstName patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.FirstName" onkeypress="return AvoidSpace(event)" type="text" placeholder="Enter First Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s12 m6 ">
+                                                        <p>Middle Name</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling patientMiddleName patientinfo_tab patientInfoTxtField" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.MiddleName" type="text" placeholder="Enter Middle Name">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Last Name</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling patientLastName patientinfo_tab patientInfoTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.LastName" placeholder="Enter Last Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <p>Gender</p>
+
+
+                                                        <select id="gender" class="combobox patientGender infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.GenderId"
+                                                                asp-items="@(new SelectList(Model.gender,"LookupId","LookupValue"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+                                                        <p class="required" id="gender_err"></p>
+
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>DOB</p>
+                                                        <div class="input-field col s12 m12 l12 pl-0">
+                                                            <input type="text" class="datepicker text-input testDate patientDOB patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.DateOfBirth" placeholder="MM/DD/YYYY">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <p>SSN</p>
+                                                        <div class="input-field">
+                                                            <input data-val="@Model.PatientInfoFormRequireSettingsDto.SSNumber" class="text-input input-styling patientInfoSsn patientinfo_tab patientInfoTxtField" type="text" id="ssn" asp-for="patientInfoBasicDto.SSN" placeholder="Enter Security Service Number">
+                                                            <span class="required" id="errmsg"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Marital Status</p>
+
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.MaritalStatus" id="maritalStatus" class="combobox patientMaritalStatus infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.MaitalStatusId"
+                                                                asp-items="@(new SelectList(Model.maritalStatus,"LookupId","LookupValue"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+                                                        <p class="required" id="combobox5_err"></p>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col s12 m6 ">
+                                                        <p>Race/Ethnicity</p>
+
+                                                        <select id="combobox6" class="combobox patientinfo_tab infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.RaceEthnicityId"
+                                                                asp-items="@(new SelectList(Model.RaceEthnicity,"LookupId","LookupValue"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+
+
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Address Line1</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling paientAddressLine1 patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine1" placeholder="Enter Address Line1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col s12 m6 ">
+                                                        <p>Address Line2</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling paientAddressLine2 patientinfo_tab patientInfoTxtField patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine2" placeholder="Enter Address Line2">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Address Line3</p>
+                                                        <div class="input-field">
+                                                            <input class="text-input input-styling paientAddressLine3 patientinfo_tab patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.AddressLine3" placeholder="Enter Address Line3">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m6 ">
+                                                        <p>User Name<span class="required"> * </span></p>
+
+                                                        <div class="input-field col s12 pl-0">
+
+                                                            <input class="text-input paientUserId patientinfo_tab patientInfoTxtField" type="text" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.UserName" placeholder="Enter User Name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Email<span class="required"> * </span></p>
+                                                        <div class="input-field col s12 pl-0 importEmailToModal EmailDiv">
+                                                            <input class="text-input paientEmail patientinfo_tab patientInfoTxtField emailForModal" id="patientInfoEmail" type="email" onkeypress="return AvoidSpace(event)" asp-for="patientInfoBasicDto.Email" placeholder="Enter Email Address">
+                                                            <span class="required" asp-validation-for="patientInfoBasicDto.Email"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m6 ">
+                                                        <div class="input-field pl-0">
+                                                            <p class="mb-2">Password <span class="required"> * </span></p>
+
+                                                            <input class="text-input paientPassword patientinfo_tab patientInfoTxtField" type="password" asp-for="patientInfoBasicDto.WPassword" value="@ViewBag.Password" placeholder="Enter Password">
+                                                            <span class="required" asp-validation-for="patientInfoBasicDto.WPassword"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s12 m6 ">
+                                                        <div class="input-field  pl-0">
+                                                            <p>Confirm Password <span class="required"> * </span></p>
+                                                            <input class="text-input mt-2 paientConPassword patientinfo_tab patientInfoTxtField" asp-for="patientInfoBasicDto.WConfirmPassword" value="@ViewBag.Password" type="password" placeholder="Confirm Password">
+                                                            <span class="required" asp-validation-for="patientInfoBasicDto.WConfirmPassword"></span>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col s12 m6">
+
+
+                                                        <div class=" col s6 m6 pl-0">
+                                                            <p>ZIP Code</p>
+                                                            <div class="input-field">
+                                                                <input data-val="@Model.PatientInfoFormRequireSettingsDto.ZipCode" class="text-input input-styling paientZipCode patientinfo_tab patientInfoTxtField" maxlength="5" id="info_Zip" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientInfoBasicDto.ZIP" placeholder="Enter ZIP Code">
+                                                                <span class="required" asp-validation-for="patientInfoBasicDto.ZIP"></span>
+                                                                <span class="required" id="err_infozip"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class=" col s6 m6 pl-0 pr-0">
+                                                            <p>City</p>
+                                                            <div class="input-field">
+                                                                <input class="text-input input-styling paientCity city patientInfoTxtField" id="info_city" type="text" asp-for="patientInfoBasicDto.City" readonly>
+                                                                @*<span class="required" asp-validation-for="patientInfoBasicDto.City"></span>*@
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col s12 m6">
+
+                                                        <div class=" col s6 m6 pl-0">
+                                                            <p>State</p>
+                                                            <div class="input-field">
+
+                                                                <input class="text-input input-styling state paientState patientInfoTxtField" id="info_state" type="text" asp-for="patientInfoBasicDto.State" readonly>
+                                                                @*<span class="required" asp-validation-for="patientInfoBasicDto.State"></span>*@
+                                                            </div>
+                                                        </div>
+                                                        <div class=" col s6 m6 pl-0 pr-0">
+                                                            <p>Country</p>
+                                                            <div class="input-field">
+                                                                <input class="text-input input-styling paientCountry country patientInfoTxtField" id="info_country" type="text" asp-for="patientInfoBasicDto.Country" readonly>
+                                                                @*<span class="required" asp-validation-for="patientInfoBasicDto.Country"></span>*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col s12 m6">
+                                                        <p>Select Language</p>
+
+                                                        <div class="input-field col s9 l10 pl-0">
+                                                            <select data-val="@Model.PatientInfoFormRequireSettingsDto.Languages" multiple id="multilanguage" class="multilangOpt" asp-for="patientInfoBasicDto.PatientLanguages"
+                                                                    asp-items="@(new SelectList(Model.patientLanguageList, "LanguageName", "LanguageName"))">
+                                                            </select>
+
+                                                        </div>
+                                                        @*<div class="input-field col s3 m2 pr-0">
+                                                                <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right30"><i class="material-icons">add</i></a>
+
+                                                            </div>*@
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <p>Employment Status</p>
+
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.EmployementStatus" id="Employment_Status" class="combobox empStatusComboPatientInfo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.EmploymentStatusId"
+                                                                asp-items="@(new SelectList(Model.EmploymentStatuslist,"EmploymentStatusId","EmploymentStatus1"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+
+                                                        @*<div class="input-field col s3 m2 pr-0">
+                                                                <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right23"><i class="material-icons">add</i></a>
+                                                            </div>*@
+
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Employment Title</p>
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.EmploymentTitle" id="Employment_Title" class="combobox employmentTitlePatientInfo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.EmploymentTitleId"
+                                                                asp-items="@(new SelectList(Model.EmploymentTitleList,"EmploymentTitleId","EmploymentTitle1"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+
+                                                        @*<div class="input-field col s3 m2 pr-0">
+                                                                <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right24"><i class="material-icons">add</i></a>
+                                                            </div>*@
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    @*<div class="col s12 m6 ">
+                                                            <p>Secondary Address</p>
+                                                            <div class="col s4 m4 input-field pl-0 mt-3">
+                                                                <p class="check-btn">
+                                                                    <label>
+                                                                        <input type="radio" id="secondaryYes" class="with-gap patientInfoTxtField" name="yes" value="1" />
+                                                                        <span>Yes</span>
+                                                                    </label>
+                                                                </p>
+
+                                                            </div>
+                                                            <div class="col s4 m4 input-field pl-0 mt-3">
+                                                                <p class="check-btn">
+                                                                    <label>
+                                                                        <input type="radio" id="secondaryNo" class="with-gap patientInfoTxtField" name="yes" value="0" />
+                                                                        <span>No</span>
+                                                                    </label>
+                                                                </p>
+
+                                                            </div>
+                                                        </div>*@
+                                                    <div class="col s12 m6 mt-2">
+                                                        <p>Referral Name</p>
+                                                        <div class="input-field">
+                                                            <input data-val="@Model.PatientInfoFormRequireSettingsDto.ReferralName" class="text-input patientInfoReferralName input-styling patientinfo_tab patientInfoTxtField" type="text" asp-for="patientInfoBasicDto.ReferralName" placeholder="Enter Referral Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="col s12 m6">
+                                                        <p>Patient Treatment Status</p>
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.PatientTreatmentStatus" id="patientTreatment" class="combobox patientTreatmentStatusCombo infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.PatientTreatmentId"
+                                                                asp-items="@(new SelectList(Model.patientTreatmentStatuslist,"PatientTreatmentId","PatientTreatmentStatus1"))">
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+                                                        <p class="required" id="combobox_err"></p>
+
+                                                        @*<div class="input-field col s3 m2 pr-0">
+                                                                <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right"><i class="material-icons">add</i></a>
+                                                            </div>*@
+                                                    </div>
+                                                    <div class="col s12 m6">
+                                                        <p>Patient legal Status</p>
+                                                        <select data-val="@Model.PatientInfoFormRequireSettingsDto.PatientLegalStatus" id="patientLegal" class="combobox patientLegalStatusCombo patientinfo_tab infoDropDListBeforeEditDisabled genericClassForDD" asp-for="patientInfoBasicDto.PatientLegalId"
+                                                                asp-items="@(new SelectList(Model.patientLegalStatusBasicDtoslist,"PatientLegalId","PatientLegalStatus1"))">
+
+                                                            <option value="" selected disabled></option>
+                                                        </select>
+                                                        <p class="required" id="combobox2_err"></p>
+                                                        @*<div class="input-field col s3 m2 pr-0">
+                                                                <a class="btn form-add-btn sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right2"><i class="material-icons">add</i></a>
+
+                                                            </div>*@
+                                                    </div>
+
+                                                </div>
+
+
+
+
+                                                <div class="row set_rowbtn">
+                                                    <div class="col s12 m12" style="text-align:center">
+                                                        <button type="submit" id="info_btnWidget" class="btn add-btn">Save</button>
+
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <script src="~/app-assets/js/vendors.min.js" type="text/javascript"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <script src="~/app-assets/vendors/jquery.nestable/jquery.nestable.js" type="text/javascript"></script>
+
+
+
+
+    <script src="~/app-assets/vendors/sortable/jquery-sortable-min.js"></script>
+
+    <script src="~/app-assets/vendors/waypoints/jquery.waypoints.min.js"></script>
+
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/lib/pnotify.custom.min.js"></script>
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN THEME  JS-->
+    @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
+
+    <script src="~/app-assets/js/plugins.js" type="text/javascript"></script>
+    <!-- END THEME  JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+
+
+    <script src="~/app-assets/vendors/sweetalert/sweetalert.min.js"></script>
+    <script src="~/app-assets/js/materialize.min.js"></script>
+
+    <!-- END PAGE LEVEL JS-->
+    <script src="~/app-assets/js/scripts/form-elements.js"></script>
+
+    <script src="~/app-assets/js/scripts/extra-components-sweetalert.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>*@
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.martial').select2();
+            $('.race').select2();
+            $('.gender').select2();
+            $('.suffix').select2();
+            $('.prefix').select2();
+            $('.combobox').select2();
+
+        });
+        $('#multilanguage').select2({
+            placeholder: "Select Languages"
+        });
+        var PatId = '@ViewBag.PatientId';
+
+        $(document).on('submt', '#patientinfo', function (e) {
+                debugger;
+                var isRequireFieldSettingsValid = true;
+               
+                $('#patientinfo *').filter(':input').each(function () {
+                    var valueSelected = $(this).val();
+                    var dataVal = $(this).attr('data-val');
+                    if (dataVal == "True" && !(valueSelected)) {
+                        isRequireFieldSettingsValid = false;
+                    }
+                });
+
+                var Selectlanguage = [];
+                $('#multilanguage :selected').each(function (i, selected) {
+                    Selectlanguage.push($(selected).val());
+                });
+
+                //var genderComboVal = $('#gender').val();
+                //var martialStatus = $('#maritalStatus').val();
+                //var isRequireMaritalStatus = $('#maritalStatus').attr('data-val');
+                //var zipCode = $('#info_Zip').val();
+                //var isRequireZipCode = $('#info_Zip').attr('data-val');
+
+                //var patientTreatmentStatus = $('#patientTreatment').val();
+                //var isRequireTreatmentStatus = $('#patientTreatment').attr('data-val');
+
+                //var patientLegal = $('#patientLegal').val();
+                //var isRequirepatientLegal = $('#patientLegal').attr('data-val');
+
+
+                //if (genderComboVal == "") {
+                //    $("#gender_err").html("Select Gender");
+                //}
+                //else {
+                //    $("#gender_err").html("");
+                //}
+
+                //if (martialStatus == "") {
+                //    $("#combobox5_err").html("Select Marital Status");
+                //}
+                //else {
+                //    $("#combobox5_err").html("");
+                //}
+
+                //if (zipCode == "") {
+                //    $("#err_infozip").html("Select Marital Status");
+                //}
+                //else {
+                //    $("#err_infozip").html("");
+                //}
+
+
+                //if (patientTreatmentStatus == "") {
+                //    $("#combobox_err").html("Select treatment status");
+                //}
+                //else {
+                //    $("#combobox_err").html("");
+                //}
+                //if (patientLegal == "") {
+                //    $("#combobox2_err").html("Select legal status");
+                //}
+                //else {
+                //    $("#combobox2_err").html("");
+                //}
+                //var isValidForm = $("#patientinfo").valid();
+
+                e.preventDefault();
+                debugger;
+              
+                    savePatientInfoForm(Selectlanguage);
+             
+            })
+
+            function savePatientInfoForm(Selectlanguage) {
+                isInfoButtonClick = true;
+                //$('#info_btn').attr('disabled', true);
+                debugger;
+                $("#patientinfo").ajaxSubmit({
+
+                    data: { language: Selectlanguage },
+                    success: function (response) {
+                        debugger;
+                        //$('#info_btn').attr('disabled', false);
+                        $('#info_btnWidget .waves-ripple').remove();
+                        //window.location.href = '../../auth/AuthUser';
+
+
+                    },
+                    error: function (response) {
+                        console.log('error');
+                        $('#info_btnWidget').attr('disabled', false);
+                    },
+                    complete: function (xhr) {
+                        debugger;
+
+
+                        //$('#info_btn').attr('disabled', false);
+                        //$('#info_btn .waves-ripple').remove();
+                        onCreatePatientInfo(xhr.responseJSON);
+
+                    }
+                });
+        }
+        $(function () {
+
+            $('#ssn').mask('999-99-9999');
+
+        });
+        var city = '';
+        var hascity = 0;
+        var hassub = 0;
+        var state = '';
+        var nbhd = '';
+        var subloc = '';
+        var country = '';
+        var hascountry = 0;
+          $('#info_Zip').keyup(function () {
+        $zval = $('#info_Zip').val();
+        if ($zval.length == 5) {
+            $jCSval = getCityState($zval, true);
+        }
+    });
+    function getCityState($zip, $blnUSA) {
+
+        $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+            if (response.status == "ZERO_RESULTS") {
+                $("#err_infozip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+            }
+            else {
+                 var address_components = response.results[0].address_components;
+                $.each(address_components, function (index, component) {
+
+                var types = component.types;
+                $.each(types, function (index, type) {
+                    if (type == 'locality') {
+                        city = component.long_name;
+                        hascity = 1;
+                    }
+                    else if (type == 'sublocality') {
+                        city = component.long_name;
+                    }
+                    if (type == 'administrative_area_level_1') {
+                        state = component.long_name;
+                    }
+                    if (type == 'country') {
+                        country = component.long_name;
+
+                    }
+                    if (type == 'neighborhood') {
+                        nbhd = component.long_name;
+                    }
+                    if (type == 'sublocality') {
+                        subloc = component.long_name;
+                        hassub = 1;
+                    }
+                });
+            });
+
+            $("#info_city").val(city);
+            $("#info_state").val(state);
+            $("#info_country").val(country);
+            //$('#modal1').modal('open');
+            }
+            //find the city and state
+
+
+            //pre-fill the city and state
+
+        });
+            }
+    </script>
+</body>
+</html>

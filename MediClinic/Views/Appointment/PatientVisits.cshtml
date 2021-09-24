@@ -1,0 +1,345 @@
+﻿@using MediClinic.Models
+@model AppointmentViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var roleId = _sessionManager.GetRoleId();
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var PatientId = _sessionManager.GetPatientInfoId();
+}
+@section styles
+{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .card-body {
+            padding: 0.5rem 1.25rem !important;
+        }
+        .dark-color {
+            color: #0d47a1 !important;
+            font-weight: bold;
+        }
+        h6 {
+            font-size: .875rem !important;
+        }
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+        .position-relative {
+            position: relative;
+        }
+        .display-flex {
+            display: flex;
+        }
+        .position-absolute {
+            position: absolute;
+        }
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 93px;
+            position: absolute;
+            display: block;
+            opacity: 1;
+            background-color: #fff;
+            z-index: 1;
+            text-align: center;
+        }
+        #loading-image {
+            position: absolute;
+            top: 100px;
+            left: 240px;
+            z-index: 100;
+        }
+        #loading > div {
+            margin-top: 25%;
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+        #loading .bounce1 {
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        #loading .bounce2 {
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+        @@-webkit-keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0)
+            }
+
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+        @@keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            40% {
+                -webkit-transform: scale(1.0);
+                transform: scale(1.0);
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+       
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+           var table= $('#patientVisitTable').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+               "scrollX": false,
+               "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }],
+           });
+
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            }); 
+
+        });
+        $('#print').click(function() {
+            window.location.href = "/Appointment/VisitsDetail?Id=" + $("#visit-id-hidden").val() +"&IsForPrint=print";
+        });
+        function deleteMesg(Id, event) {
+            event.closest('tr').remove();
+            $.get("/Invoices/Delete", { inv: Id }).done(function (data) {
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+        function VisitDetail(VisitId, event) {
+            debugger
+            $('.modal-body').html('');
+            $.get("@Url.Action("VisitsDetail", "Appointment")", { Id: VisitId }).done(function (data) {
+                debugger
+                $(".modal-body").html('');
+                $(".modal-body").html(data);
+                $("#a").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+                $("#VitalTab").DataTable({ "info": false, responsive: true, lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+                $('#Immunization').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+                });
+                $('#myTableEUO').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+
+                });
+                //$('#LabsTable').DataTable({
+                //    "lengthMenu": false,
+                //    "lengthChange": false,
+                //    "scrollX": false,
+                //    "searching": false,
+                //    "responsive": true,
+                //    "info": false,
+                //    'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+                //});
+                $('#ImagingTable').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+                });
+                $("#DME-table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+                            $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 6], "orderable": false }],
+            });
+                $('#MessagesReceive').DataTable({
+                    "lengthMenu": false,
+                    "lengthChange": false,
+                    "scrollX": false,
+                    "searching": false,
+                    "responsive": true,
+                    "info": false,
+                    'order': [], 'columnDefs': [{ "targets": [0, 3], "orderable": false }],
+                });
+                $('.modal').modal('show');
+            });
+        }
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Patient Visits
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" data-search class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                </div>
+            </div>
+        </div>
+        @*<div class="row">
+            <div class="col-sm-9 col-md-9 col-lg-9">
+                <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                    Batch Actions
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu batch">
+                    <li><a href="#">Option 1</a></li>
+                    <li><a href="#">Option 2</a></li> Comment batch action
+                </ul>
+            </div>
+        </div>*@
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="patientVisitTable" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>Patient Name</th>
+                                <th>Visit Id</th>
+                                @*<th>Appoinment ID</th>*@
+                                <th>Provider Name</th>
+                                <th>STATUS</th>
+                                <th>Visit Date</th>
+                                <th>Visit Time</th>
+                                <th class="all">Action  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.visitsDtosList)
+                            {
+                                <tr class="card" style="cursor: pointer">
+                                    <td>@item.PatientName</td>
+                                    <td>@item.VisitId</td>
+                                    @*<td>@item.AppoinmentId</td>*@
+                                    <td>@item.ProviderName</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.CreatedDate.Value.ToShortDateString()</td>
+                                    <td>@item.CreatedDate.Value.ToShortTimeString()</td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            @if (roleId == 1)
+                                            {
+                                                <li><a href="javascript:void(0);" onclick="VisitDetail(@item.VisitId,this)">View</a></li>
+                                            }
+                                            else
+                                            {
+                                                if (PatientId == 0)
+                                                {
+                                                    <li><a href="/Appointment/VisitView?visitid=@item.VisitId">View</a></li>
+
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="javascript:void(0);" onclick="VisitDetail(@item.VisitId,this)">View</a></li>
+
+                                                }
+                                                @*<li><a href="/patientSideElite/AddVitalsElite?visitid=@item.VisitId">VITALS</a></li>
+            <li><a href="/Lab/Add?visitid=@item.VisitId">Lab</a></li>
+            <li><a href="/Template/DoctorTemplate?visitid=@item.VisitId">Clinical Notes</a></li>
+            <li><a href="/GrowthChart/Add?visitid=@item.VisitId">Growth charts</a></li>
+            <li><a href="/Immunization/AssignImmunization?visitid=@item.VisitId">Immunizations</a></li>
+            <li><a href="/patientSideElite/AddPrescriptionElite?visitid=@item.VisitId">Prescriptions</a></li>*@
+                                            }
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel">Visit Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
+                <a id="print" class="btn btn-success waves-effect text-left">Print</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+
+

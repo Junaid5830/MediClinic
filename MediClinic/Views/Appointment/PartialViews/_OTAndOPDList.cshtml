@@ -1,0 +1,140 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+@using MedliClinic.Utilities.Utility
+@{
+    static string CLassNameMethord(int id)
+    {
+        // Arrived  CheckedIn InSession Completed NotConfirmed Rescheduled Canceled Late NotShow CheckedOut
+        string className = string.Empty;
+        if (id == 1)
+        {
+            className = "Arrived";
+        }
+        else if (id == 2)
+        {
+            className = "CheckedIn";
+        }
+        else if (id == 3)
+        {
+            className = "InSession";
+        }
+        else if (id == 4)
+        {
+            className = "Completed";
+        }
+        else if (id == 5)
+        {
+            className = "NotConfirmed";
+        }
+        else if (id == 6)
+        {
+            className = "Rescheduled";
+        }
+        else if (id == 7)
+        {
+            className = "Canceled";
+        }
+        else if (id == 8)
+        {
+            className = "Late";
+        }
+        else if (id == 9)
+        {
+            className = "NotShow";
+        }
+        else if (id == 10)
+        {
+            className = "CheckedOut";
+        }
+        else
+        {
+            className = "";
+        }
+        return className;
+    }
+}
+<table class="table" id="OTtable">
+    <thead>
+        <tr class="uppercase">
+            <th class="disable">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll"></label>
+                </div>
+
+            </th>
+            <th>Appointment No</th>
+            <th>Appointment type</th>
+            <th>Status</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Doctor Name</th>
+            <th>Patient Name</th>
+            <th>Date</th>
+
+            @*<th data-searchable="false" data-orderable="false" class="all">Action  </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @if (!(Model.patientAppointmentBasicsList is null))
+        {
+            @foreach (var item in Model.patientAppointmentBasicsList)
+            {
+                var id = Convert.ToInt32(item.StatusId);
+                string className = "";
+                if (id > 0)
+                {
+                    className = CLassNameMethord(id);
+                }
+                <tr class="card" style="cursor: pointer">
+                    <th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="@item.AppointmentId" value="check">
+                            <label class="custom-control-label" for="@item.AppointmentId"></label>
+                        </div>
+                    </th>
+
+
+                    <td>@item.AppointmentId</td>
+                    <td>@item.AppointmentType</td>
+                    <td class="action">
+
+                        <select onchange="OTStatusChange(@item.AppointmentId,@item.PatientInfoId , this)" class="form-control  @className " asp-for="@item.StatusId">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="1">Arrived</option>                    
+                            <option value="2">Checked In</option>
+                            <option value="3">In Session</option>
+                            <option value="4">Completed</option>
+                            <option value="5">Not Confirmed</option>
+                            <option value="6">Rescheduled</option>
+                            <option value="7">Cancelled</option>
+                            <option value="8">Late</option>
+                            <option value="9">Not Show</option>
+                        </select>
+                    </td>
+                    <td>@item.StartTime</td>
+                    <td>@item.EndTime</td>
+                    <td>@item.DocFullName</td>
+                    <td>@item.PatientFullName</td>
+                    <td>@item.Date.Value.ToString(SystemFormat.DateFormat())</td>
+
+
+                    <!--<td class="action">
+                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                            Options-->
+                            @*<span class="caret"></span>*@
+                        <!--</button>
+                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                            <li><a href="javascript:void(0);">View</a></li>
+                            <li><a href="javascript:void(0);">Delete</a></li>
+                            <li><a href="javascript:void(0);">Edit</a></li>
+
+                        </ul>
+
+                    </td>-->
+                </tr>
+            }
+        }
+
+
+    </tbody>
+</table>

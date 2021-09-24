@@ -1,0 +1,257 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    var isShowVehicleButtons = ViewBag.IsShowVehicleButton;
+}
+
+@{
+
+
+}
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3">
+                <div class="row mb-1">
+
+
+
+                    <div class="col s12">
+                        <h5 class="breadcrumbs-title color-blue">Vehicles/Entities Involved</h5>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        @if (isShowVehicleButtons)
+                        {
+                            <div class="row">
+                                <div class="col s9 m6">
+                                    <p>Enter No Vehicles / Entities Involved</p>
+                                    <div class="input-field pl-0">
+                                        <input type="text" class="text-input patientvehicleInfoTxtField" id="VehicleInvolved" name="name" value="" />
+                                        <span class="required" id="VehicleInvolved_errmsg"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col s3 m2">
+                                    <p></p>
+                                    <div class="input-field">
+                                        <button id="Append-btn" class="add-btn btn vehicleCreateBtn" style="margin-top:22px !important">Create</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        <form asp-action="PatientVehicle" asp-controller="PatientSide" id="patientVehicleForm" method="post">
+                            <input class="text-input input-styling" name="User.UserId" id="PatientVehicle_UserId" type="text" hidden="hidden">
+                            @*<input hidden="hidden" asp-for="@Model.patientVehiclesBasic.PatientVehicleID" />*@
+                            <input hidden="hidden" asp-for="patientVehiclesBasic.UserId" />
+                            @Html.HiddenFor(x => x.InsuranceProviderNamesList, new { id = "ProviderList" })
+                            <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+
+
+                            <div id="newDiv">
+
+                                @if (Model.patientVehiclesBasiclist != null && Model.patientVehiclesBasiclist.Count > 0)
+                                {
+                                    var loopCounter = 0;
+                                    foreach (var item in Model.patientVehiclesBasiclist)
+                                    {
+                                        <div id="parentDiv-@item.PatientVehicleID">
+                                            <div class="row">
+                                                <div class="col s12 ">
+                                                    <a class="right btn delete-btn Recreate forShowBtnVehicle" href="javascript:void(0);" onclick="deleteVehicle(@item.PatientVehicleID,this)"><i class="material-icons">delete</i></a>
+                                                    <a class="right btn delete-btn Recreate forHideBtnVehicle"  href="javascript:void(0);"><i class="material-icons">delete</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12 m6">
+                                                    <p>Vehicles/Entities Info<span class="required"> * </span></p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input class="text-input input-styling patientvehicleInfoTxtField" value="@item.VehicleInfo" asp-for="patientVehiclesBasiclist[loopCounter].VehicleInfo" type="text" placeholder="Enter Vehicles/Entities Info">
+                                                        <span asp-validation-for="patientVehiclesBasiclist[loopCounter].VehicleInfo" class="required"></span>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col s12 m6">
+                                                    <p>Vehicle/Entities License Plate Number<span class="required"> * </span></p><div class="input-field col s12 pl-0">
+                                                        <input class="text-input input-styling insuranceProvider vehicleLicenseNumber patientvehicleInfoTxtField" value="@item.VehicleLicense" asp-for="patientVehiclesBasiclist[loopCounter].VehicleLicense" type="text" placeholder="Enter Vehicle/Entities License Plate Number">
+                                                        <span asp-validation-for="patientVehiclesBasiclist[loopCounter].VehicleLicense" class="required"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12 m6 ">
+                                                    <p>Vehicles/Entities Registration State<span class="required"> * </span></p><div class="input-field col s12 pl-0">
+                                                        <input class="text-input input-styling vehicleRegistrationState patientvehicleInfoTxtField" value="@item.VehicleResigrationState" asp-for="patientVehiclesBasiclist[loopCounter].VehicleResigrationState" type="text" placeholder="Enter Vehicles/Entities Registration State">
+                                                        <span asp-validation-for="patientVehiclesBasiclist[loopCounter].VehicleResigrationState" class="required"></span>
+                                                    </div>
+                                                </div><div class="col s12 m6">
+                                                    <p>Insurance Provider</p>
+                                                    <div class="ui-widget vehicle">
+                                                        <select class="vehicleInsurance VehicleComobox VehicleInsuranceProvider vehicle_tab genericClassForDD vehicleDropDListBeforeEditDisabled" asp-for="patientVehiclesBasiclist[loopCounter].InsuranceProviderId" asp-items="@(new SelectList(Model.InsuranceProviderNamesList,"ProviderId","ProviderName"))">
+                                                            <option></option>
+                                                        </select>
+                                                    </div>
+                                                    @* <input class="text-input input-styling insuranceProvider" value="@item.InsuranceProviderId" name="patientVehiclesBasiclist[@loopCounter].InsuranceProviderId" type="text" placeholder="Enter Insurance Provider">*@
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12 m6">
+                                                    <p>Role</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input class="text-input input-styling insuranceProvider vehicle_tab patientvehicleInfoTxtField" value="@item.Role" name="patientVehiclesBasiclist[@loopCounter].Role" type="text" placeholder="Enter Role">
+                                                    </div>
+                                                </div><div class="col s12 m6">
+                                                    <p>Notes</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input class="text-input input-styling insuranceProvider vehicle_tab patientvehicleInfoTxtField" value="@item.Notes" name="patientVehiclesBasiclist[@loopCounter].Notes" placeholder="Enter Notes" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <input hidden="hidden" id="IsDelete-@item.PatientVehicleID" name="patientVehiclesBasiclist[@loopCounter].IsDelete" />
+                                            <input hidden="hidden" id="loop-@item.PatientVehicleID" value="@item.PatientVehicleID" name="patientVehiclesBasiclist[@loopCounter].PatientVehicleID" />
+                                            <input hidden="hidden" value="@item.UserId" name="patientVehiclesBasiclist[@loopCounter].UserId" />
+                                            <input hidden="hidden" value="@item.PatientVehicleID" asp-for="patientVehiclesBasic.PatientVehicleID" />
+                                            <hr />
+                                        </div>
+
+                                        loopCounter++;
+                                    }
+
+                                }
+                            </div>
+                            @*<div class="row">
+                                    <div class="col s12 m6">
+                                        <p>
+                                            Vehicles/Entities Info
+                                        </p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input input-styling" id="FirstSaveNotAllow" asp-for="@Model.patientVehiclesBasiclist[0].PatientVehicleID" type="text" placeholder="Enter Vehicles/Entities Info">
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Vehicle/Entities License Plate Number</p>
+                                        <div class="input-field col s12 pl-0">
+
+                                            <input class="text-input input-styling insuranceProvider" id="FirstSaveNotAllow" asp-for="@Model.patientVehiclesBasiclist[0].VehicleLicense" type="text" placeholder="Enter Vehicle/Entities License Plate Number">
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6 ">
+                                        <p>
+                                            Vehicles/Entities Registration State
+                                        </p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input input-styling" id="FirstSaveNotAllow" asp-for="@Model.patientVehiclesBasiclist[0].VehicleResigrationState" type="text" placeholder="Enter Vehicles/Entities Registration State">
+                                        </div>
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Insurance Provider</p>
+                                        <div class="input-field col s12 pl-0">
+
+                                            <input class="text-input input-styling insuranceProvider" id="FirstSaveNotAllow" asp-for="@Model.patientVehiclesBasiclist[0].InsuranceProvider" type="text" placeholder="Enter Insurance Provider">
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>
+                                            Role
+                                        </p>
+                                        <input type="text" asp-for="@Model.patientVehiclesBasiclist[0].Role" name="name" value="" />
+
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Notes</p>
+                                        <div class="input-field col s12 pl-0">
+
+                                            <textarea class="materialize-textarea text-input" id="FirstSaveNotAllow" asp-for="@Model.patientVehiclesBasiclist[0].Notes" placeholder="Enter Notes"></textarea>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>*@
+
+                            <div class="row set_rowbtn">
+                                <div class="col s12 m12" style="text-align:center">
+                                    <button class="btn add-btn" id="Vehiclebtn" type="submit">Save</button>
+                                    
+                                    @if (ViewBag.Action == "Update")
+                                    {
+                                        <button type="button" data-val="vehicleForm" id="vehicleEdit_Btn" class="btn Recreate patientEditBtn">Edit</button>
+                                        <button type="button" data-val="vehicleForm" id="vehicleCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                    }
+                                    else
+                                    {
+                                        @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                        <a href="javascript:void(0);" data-val="NewForm" id="vehicleCancel_btn" onclick="emptyPatientvehicleFields();" class="Recreate btn">Cancel</a>
+                                    }
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right9" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="InsuranceProviderName" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateProviderName(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add Insurance Provider<span class="required"> * </span>
+
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+                                <input class="text-input providerName SignIdType" type="text" asp-for="InsuranceProviderNameBasicDto.ProviderName" placeholder="Enter Provider Name" />
+                                <span class="required" asp-validation-for="InsuranceProviderNameBasicDto.ProviderName"></span>
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

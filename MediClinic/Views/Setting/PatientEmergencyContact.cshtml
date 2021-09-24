@@ -1,0 +1,151 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var RoleType = _sessionManager.GetRoleId();
+
+    ViewData["Title"] = "Emergency Contact";
+    if (RoleType == 2)
+    {
+        //Layout = "~/Views/Shared/_Layout.cshtml";
+        Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+
+    }
+    else
+    {
+        //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+        Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    }
+    var patientId = ViewContext.RouteData.Values["id"];
+    var data = 0;
+}
+@section styles{
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+    <style>
+        .container {
+            padding: 0 1.5rem !important;
+        }
+
+        .toggle-handle {
+            margin-top: -3px !important;
+        }
+
+        .switch {
+            margin: 12px 0;
+        }
+
+        .toggle-group .btn {
+            padding: 0 1rem !important;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #428bca !important;
+        }
+
+        .btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #ccc;
+        }
+
+            .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+                color: #333;
+                background-color: #e6e6e6;
+                border-color: #adadad;
+            }
+    </style>
+
+}
+
+
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6">
+                <h5 class="breadcrumbs-title color-blue mt-0">
+                    Patient Emergency Contact
+                </h5>
+            </div>
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="@Url.Action("Setting","Setting", new {Id = patientId })">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="card">
+
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>First Name</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Last Name</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m3 l3">
+                <p>Relationship</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Address</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+            <div class="col s6 m3 l3">
+                <p>Home Phone</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+            <div class="col s6 m3 l3 ">
+                <p>Mobile Phone</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s6 m6 l3">
+                <p>Fax</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+            <div class="col s6 m6 l3 ">
+                <p>Email</p>
+                <div class="switch">
+                    <input type="checkbox" data-toggle="toggle">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

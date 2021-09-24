@@ -1,0 +1,1008 @@
+﻿@model MediClinic.Models.DTOs.DMESuppliesDto.DMERxOrderTemplateDto
+
+@{
+    Layout = null;
+    var empty = "N/A";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RxeOrder</title>
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/custom/custom.css">
+
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/materialize.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/style.css">
+    <style>
+        .patient-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 75px;
+        }
+
+        p.text-dark {
+            font-weight: 600 !important;
+        }
+
+        hr {
+            overflow: hidden;
+            height: 1px;
+            background-color: #e0e0e0;
+            width: 100%;
+        }
+
+        .card {
+            padding: 15px !important;
+        }
+
+        .card-content {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+        .btn-success:hover {
+            color: rgb(255, 255, 255);
+            background-color: rgb(33, 136, 56);
+            border-color: rgb(30, 126, 52);
+        }
+
+        .btn-success {
+            margin-right: 20px;
+            background-color: rgb(33, 136, 56);
+            border-color: rgb(30, 126, 52);
+        }
+
+        .btn:focus, .btn-large:focus, .btn-small:focus, .btn-floating:focus {
+            background-color: rgb(33, 136, 56) !important;
+            border-color: rgb(30, 126, 52) !important;
+        }
+
+        [type='checkbox']:checked + span:not(.lever):before {
+            margin-top: 14px !important;
+        }
+
+        .set_Checkbox p {
+            margin-top: 12px !important;
+            margin-bottom: 12px !important;
+        }
+
+        [type='checkbox'] + span:not(.lever):before {
+            margin-top: 14px !important;
+        }
+
+        .margin-top-8 {
+            margin-top: 15px !important;
+        }
+
+        [type='radio']:disabled:not(:checked) + span:before, [type='radio']:disabled:checked + span:before {
+            margin-top: 12px;
+        }
+
+        [type='radio']:disabled:not(:checked) + span:before, [type='radio']:disabled:checked + span:after {
+            margin-top: 12px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            debugger;
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            $('#dateArea').html(today);
+
+            var itemNames = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Items));
+            for (var i = 0; i < itemNames.length; i++) {
+
+                 $('input[type=checkbox]').each(function () {
+                    debugger;
+                     var name = $(this).attr("data-val");
+                     if (name == itemNames[i]) {
+                        $(this).prop('checked', 'checked');
+                    }
+                });
+
+            }
+
+        })
+
+        function printdiv() {
+            $("#arrowIcon").hide();
+            $(".btn-success").hide();
+            window.print();
+            $("#arrowIcon").show();
+            $(".btn-success").show();
+        }
+    </script>
+
+</head>
+
+<body>
+    <div class="content-area content-right">
+        <div class="app-wrapper">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col m2 s2  margin-top-8">
+                        <img src="~/app-assets/images/IconForms.png" style="width:100px; float:left">
+                    </div>
+                    <div class="col m4 s4">
+                        <p>2386 JEROME AVENUE</p>
+                        <p>2nd Floor</p>
+                        <p>BRONX, NY 10468</p>
+                    </div>
+                    <div class="col m2 s2">
+                        <h6>BLANK PC</h6>
+                    </div>
+                    <div class="col m3 s4">
+                        <p>P:(347) 862-4200</p>
+                        <p>F:(347) 862-7707</p>
+                        <p>E:jeromemedical@gmail.com</p>
+                    </div>
+                    <div class="col m1 s3 margin-top-8">
+                        <a id="arrowIcon" class="waves-effect waves-light float-right mr-2 mt-2" href="DmeSupplies">
+                            <i class="material-icons right arrow-icon">arrow_back</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-top-8">
+                <div class="col  m12  ">
+                    <div class="row">
+                        <div class="col m6 s6">
+                            <div class="input-field">
+                                <h6>
+                                    Patient's Name:<span>
+                                        <b>
+                                            @Model.PatientName
+                                        </b>
+                                    </span>
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="col m6 s6">
+                            <div class="input-field">
+                                <h6>
+                                    Date:<span>
+                                        <b id="dateArea">
+
+                                        </b>
+                                    </span>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m6 s6">
+                            <div class="input-field">
+                                <h6>
+                                    D.O.A:<span>
+                                        <b>
+                                            @empty
+                                        </b>
+                                    </span>
+                                </h6>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Positoning Cushon/Pilow/Wedge">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Positoning Cushon/Pilow/Wedge</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="INFRA RED LAMP.">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Infra Red Light Therapy Lamp</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="ORTHOPEDIC CAR SEAT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s9">    <p>Orthopedic Car Seat</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="MASSAGER">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Personal Massager</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="GENERAL USE CUSHION">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>General Use Cushion(wide)</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Thermal Moist Head Pad">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Thermal Moist Head Pad</p></div>
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="Water Therapy Device">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Water Therapy Device
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Water" class="filled-in" />
+                                    <span>Cold</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Water" class="filled-in" />
+                                    <span>Hot</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="T.e.n.s. Accessories Kit">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>T.e.n.s. Accessories Kit</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="KNEE SUPPORT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Knee</p></div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="knee" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="knee" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="WHIRLPOOL">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Whirlpool</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="ARM SLING">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Arm
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Arm" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Arm" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Paraffin Bath">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Paraffin Bath</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="ANKLE SUPPORT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Ankle</p></div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Ankle" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Ankle" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="THERMOPHORE">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Thermophore</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="WRIST SUPPORT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Hand Wrist
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Hand" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Hand" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="E.m.s">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>E.m.s</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="T.e.n.s Unit">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>T.e.n.s Unit</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="8 Lead">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>8 Lead</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="4 Lead">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        4 Lead
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Elbow">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Elbow</p></div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Elbow" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Elbow" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="EMS BELT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>E.m.s Belt</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="SHOULDER SUPPORT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Shoulder</p></div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Shoulder" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Shoulder" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="LUMBAR SACRAL SUPPORT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Lumber Sacral
+                                    <p>
+
+                                </div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Lumber" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Lumber" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="K.o(Custom Fitted)">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>K.o(Custom Fitted)</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Lso Back">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Lso Back</p></div>
+
+                            </div>
+                            <div class="right">
+                                <label>
+                                    <input type="radio" name="Lso" class="filled-in" />
+                                    <span>Support</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="Lso" class="filled-in" />
+                                    <span>Brace </span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Lso W/apl Control Custom" />
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Lso W/apl Control Custom</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="BED BOARD">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Bed Board
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Tlso">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Tlso</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="EGG CRATE MATTRESS">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Egg Crate Mattress</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Shoulder Immobilizer(Custom Fitted)">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Shoulder Immobilizer(Custom Fitted)</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="Ervical Collar">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Ervical Collar
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Shoulder Immobilizer">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Shoulder Immobilizer</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Cervical Posture Pump">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Cervical Posture Pump</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="C.c. Dvt">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>C.c. Dvt</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="CERVICAL TRACTION UNIT">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Cervical Traction
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Sams Unit">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Sams Unit</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="CERVICAL PILLOW">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Cervical Pillow</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Cervical Over The Door">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Cervical Over The Door</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="Cervical Head Halter">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Cervical Head Halter
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Crutches">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Crutches</p></div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="CANE">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Cane</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="HOT/COLD PACK">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Hot / Cold Pack</p></div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3  center">
+                                    <label>
+                                        <input type="checkbox" data-val="PHILIDELPHIA COLLAR">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8  s7">
+                                    <p>
+                                        Philadelphia Collar
+                                    <p>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Pelvic Traction">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">  <p>Pelvic Traction</p></div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="Wheelchair">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Wheelchair</p></div>
+                            </div>
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="CERVICAL COLLAR 2PC">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Cervical Collar 2PC</p></div>
+                            </div>
+                        </div>
+                        <div class="col m3 s6">
+                            <div class="row">
+                                <div class="col  m4 s3 center">
+                                    <label>
+                                        <input type="checkbox" data-val="OTHERS">
+                                        <span></span>
+                                    </label>
+                                </div>
+                                <div class="col  m8 s9 ">     <p>Other</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" onclick="printdiv();">Print</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

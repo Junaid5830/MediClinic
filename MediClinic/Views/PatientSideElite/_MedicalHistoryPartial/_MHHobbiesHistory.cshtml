@@ -1,0 +1,47 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">HOBBIES HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div id="MHHobbiesHistoryGrid">
+                                @*<partial name="../_PatientPartialView/_ManageMHhobbiesHistory" />*@
+                                <partial name="../_MedicalHistoryPartial/_ManageMHPastDiseaseHistory.cshtml" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <form asp-action="SaveMHHobbiesHistory" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMHHobbiesHistorySucess(data)" id="PatientHobbiesForm">
+                        <input type="hidden" asp-for="MHHobbiesHistory.Id" />
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">
+                                    Hobby <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHHobbiesHistory.Hobbies" type="text" placeholder="Hobby" autocomplete="off">
+                                <span class="required" asp-validation-for="MHHobbiesHistory.Hobbies"></span>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12 m12" style="text-align:center">
+                                <button type="submit" id="SavePatientHobbies" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

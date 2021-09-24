@@ -1,0 +1,168 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ViewPrescription";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        form label{
+            margin-top:1rem;
+            margin-left:5px;
+        }
+        form p {
+            font-weight: bold;
+        }
+    </style>
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-sm-9 col-md-6 ">
+                    <h5 class="breadcrumbs-title color-blue">Prescription</h5>
+                </div>
+                <div class="col-sm-3 col-md-6 ">
+                    <a class="waves-effect waves-light float-right mr-2" style="margin-top: -5%;" href="@Url.Action("Prescription","PatientSide", new {Id = patientInfoId })">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col-md-12">
+                <form class="col-sm-12  ">
+                    <div class="row">
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Medication Name: </p>
+                                <label>@Model.MedicineName.Name</label>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Quantity: </p>
+                                <label>@Model.prescriptionBasicDto.Quantity</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="row">
+                                <p>Frequency: </p>
+                                <label>@Model.prescriptionBasicDto.FrequencyId</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Dose:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Dose</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Unit:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Unit</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Start Date:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.StartDate</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    End Date:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.EndDate</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="row">
+                                <p>
+                                    Medication Comments:
+                                </p>
+                                <label>@Model.prescriptionBasicDto.Notes</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5>DME</h5>
+                    </div>
+                    <div class="row">
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Date of Prescription: </p>
+                                <label>@Model.dMEDto.PrescriptionDate</label>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="row">
+                                <p>Items Group Name: </p>
+                                <label>@Model.dMeSupply.ItemOrGroupName</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="row">
+                                <p>CPT Code: </p>
+                                <label>@Model.dMEDto.CPTCodeId</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    ICD Code:
+                                </p>
+                                <label>@Model.dMEDto.ICDCodeId</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Prescriber:
+                                </p>
+                                <label>@Model.dMEDto.PrescriberId</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Barcode No:
+                                </p>
+                                <label>@Model.dMEDto.BarcodeNo</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <p>
+                                    Prescription Refference/No:
+                                </p>
+                                <label>@Model.dMEDto.PrescriptionRefNo</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

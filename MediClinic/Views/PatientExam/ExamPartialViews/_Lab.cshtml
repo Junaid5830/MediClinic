@@ -1,0 +1,79 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+
+    var userRole = _sessionManager.GetRoleId();
+
+}
+
+<div id="LabList">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_LabList.cshtml" />
+
+</div>
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="labField">
+            Add New Lab
+        </a>
+    </div>
+</div>
+<div id="labForm" style="display:none">
+    <form class="col-sm-12" asp-action="AddLab" asp-controller="PatientExam" method="post" data-ajax="true" data-ajax-success="onCreatelab(data)">
+        <input hidden="hidden" id="hiddenVisitId" asp-for="labDto.VisitId" />
+        <input type="hidden" asp-for="labDto.LabId">
+        <div class="row">
+            <div class=" col ">
+                <p>Date/Time of exam</p>
+                <div class="input-field">
+                    <input type="text" class="text-input datepicker" placeholder="select date" asp-for="labDto.DateTime">
+                </div>
+            </div>
+            <div class=" col ">
+                <p>Examiner</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter Examiner Name" asp-for="labDto.Examiner">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col ">
+                <p>Type of Exam</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter Type of Exam" asp-for="labDto.TypeOfExam">
+                </div>
+            </div>
+            <div class=" col ">
+                <p>Reason for exam</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter reason for exam" asp-for="labDto.ReasonForExam">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col ">
+                <p>Results</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter Results" asp-for="labDto.Results">
+                </div>
+            </div>
+            <div class=" col ">
+                <p>Report</p>
+                <div class="input-field">
+                    <input type="text" class="text-input" placeholder="Enter Report" asp-for="labDto.Report">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

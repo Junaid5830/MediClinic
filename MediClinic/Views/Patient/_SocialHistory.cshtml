@@ -1,0 +1,269 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    <style>
+        select{
+            border:1px solid #cfcfcf !important;
+            text-align-last:center !important;
+            margin-top:17px !important;
+            border-radius:4px !important;
+        }
+    </style>
+<div class="section">
+
+    <div class="card">
+        <div class="card-content">
+            <h5 class="color-blue">
+                Social History
+            </h5>
+
+            <div class="row">
+                <div class="col s12">
+                    <label>Do You Smoke ? </label>
+
+                    <p>
+                        <label>
+                            <input name="group1" type="radio" value="true" class="rbSocialHistory" />
+                            <span>Yes</span>
+                        </label>
+                        <label>
+                            <input name="group1" type="radio" value="false" class="rbSocialHistory" checked />
+                            <span>No</span>
+                        </label>
+                    </p>
+                </div>
+            </div>
+
+            <div id="SocialHistory" style="display:none">
+
+                <partial name="_ManageSocialHistory" />
+
+                <div class="row mt-2">
+                    <h6 class="padding-0-12">Smoking History</h6>
+                    <div class="col m4 l4 s12 pt-1">
+                        <p>Smoking</p>
+                        <select class="display-block">
+                            <option value="" selected>- Select Value -</option>
+                            <option value="1">Current Smoker</option>
+                            <option value="2">Former Smoker</option>
+                            <option value="3">Never Smoked</option>
+                        </select>
+                    </div>
+
+                    <div class="col m4 l4 s12 pt-1">
+                        <p class="mb-0"> Drugs</p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="Currently Taking Drugs">Currently Taking Drugs</option>
+                            <option value="formerly Taking Drugs">formerly Taking Drugs</option>
+                            <option value="Never Take Drugs">Never Take Drugs</option>
+                        </select>
+                    </div>
+                    <div class="col m4 l4 s12 pt-1">
+                        <p class="mb-0"> Tobbaco</p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0"> Tobbaco Type   </p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="Cigarettes">Cigarettes</option>
+                            <option value="Pipe">Pipe</option>
+                            <option value="Cigar">Cigar</option>
+                            <option value="Chewing">Chewing</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0"> Number of Years</p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p >
+                            Amount Per Day
+                        </p>
+                        <div  class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Dose" />
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0">
+                            Year Quit
+                        </p>
+                        <div  class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="Dose Frequency" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row mt-2">
+                    <h6 class="padding-0-12">Caffeine History</h6>
+                    <div class="col m4 l4 s12 pt-1">
+                        <p>Caffeine</p>
+                        <select class="display-block">
+                            <option value="" selected>- Select Value -</option>
+                            <option value="1">Yes</option>
+                            <option value="2">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col m4 l4 s12 pt-1">
+                        <p class="mb-0">
+                            Number Of Caffeinated Drinks Per Day
+                        </p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row mt-2">
+                    <h6 class="padding-0-12">Alcohol History</h6>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p>Alcohol</p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="No">No</option>
+                            <option value="Social">Social</option>
+                            <option value="Almost Daily">Almost Daily</option>
+                            <option value="Former Drinker">Former Drinker</option>
+                            <option value="Former Heavy Drinker">Former Heavy Drinker</option>
+                            <option value="Ocassional Drinker">Ocassional Drinker</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0">
+                            Number Of Drinks Per Week
+                        </p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0">
+                            Preferred Drink
+
+                        </p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="Beer">Beer</option>
+                            <option value="Wine">Wine</option>
+                            <option value="Vodka">Vodka</option>
+                            <option value="Whiskey">Whiskey</option>
+                            <option value="Champaign">Champaign</option>
+                            <option value="Hard Liquor">Hard Liquor</option>
+                            <option value="Moon Shine">Moon Shine</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p>
+                            Year Quit
+                        </p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="year quit" />
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="row mt-2">
+                    <h6 class="padding-0-12">Drugs History</h6>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p>Drugs</p>
+                        <select class="display-block">
+                            <option value="" selected>-- Select Value --</option>
+                            <option value="1">Yes</option>
+                            <option value="2">No</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0">
+                            Type
+                        </p>
+                        <div class="input-field col s12 pl-0">
+                            <input class="text-input" type="text" placeholder="type" />
+
+                        </div>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p class="mb-0">
+                            Amount Per Week
+                        </p>
+                        <select class="display-block">
+                            <option value="">--Select Value--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                    <div class="col m3 l3 s12 pt-1">
+                        <p>
+                            Last Used
+                        </p>
+                        <div class="input-field col s12 m12 pl-0">
+                            <input class="text-input" type="text" placeholder="last used" />
+                        </div>
+                    </div>
+
+
+                    <div class="col s12 m12 right mt-2" style="text-align:right">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn pl-3 blue-background-color-online">Update</a>
+                    </div>
+                </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+
+    $(".rbSocialHistory")
+        .change(function () {
+            debugger;
+            var val = $(this).val();
+            if (val == 'true') {
+                $("#SocialHistory").show();
+
+            }
+            else {
+                $("#SocialHistory").hide();
+            }
+        });
+</script>

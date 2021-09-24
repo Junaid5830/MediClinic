@@ -1,0 +1,701 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "ProviderCalendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var patientInfoId = ViewContext.RouteData.Values["id"];
+    var ProviderID = _sessionManager.GetProviderInfoId();
+}
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+    <style>
+        .select2-container .select2-selection--single {
+            height: 49px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px !important
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 44px;
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none !important;
+        }
+
+        .select2 {
+            margin-top: 16px;
+            width: 100% !important;
+        }
+
+        .modal {
+            background-color: #fff !important
+        }
+
+        #AppointmentModal {
+            width: 65% !important;
+            background-color: #fff !important
+        }
+
+            #AppointmentModal .tabs .tab {
+                margin-right: 5px !important;
+            }
+
+                #AppointmentModal .tabs .tab a {
+                    border: 1px solid #5287e6 !important;
+                }
+
+        ul.ui-autocomplete {
+            z-index: 999999 !important;
+        }
+
+        .display_modal {
+            width: 45% !important;
+        }
+
+        .modal h6 span {
+            color: #6b6f82 !important
+        }
+
+        #slide-out-right {
+            overflow: auto !important
+        }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 93% !important
+        }
+
+        .sidenav a {
+            height: auto !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+
+        table.table-option tbody tr td ul.dropdown-content {
+            height: auto !important
+        }
+
+        .clockpicker-button {
+            line-height: 0px;
+        }
+        /* .ExactAppointment {
+            margin-bottom: 25% !important;
+        }*/
+
+        /* .InBetweenAppointment {
+            margin-bottom: 35% !important;
+        }*/
+
+        .addNewFieldInBetweenAppointment {
+            margin-bottom: 30% !important;
+        }
+
+        #breadcrumbs-wrapper {
+            background: unset !important;
+        }
+
+            #breadcrumbs-wrapper.breadcrumbs-bg-image .breadcrumbs-title {
+                color: #6666ef;
+            }
+
+        span.avatar-status.avatar-50 > i, span.secondary-content.medium-small {
+            display: none;
+        }
+
+        .margin-top-5 {
+            margin-top: 5px;
+        }
+
+        span.avatar-status.avatar-50 {
+            padding-right: 10px;
+        }
+
+
+        .fc-toolbar .fc-center h2 {
+            font-size: 3rem !important;
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        .search-box {
+            width: 78% !important;
+            height: 24px !important;
+            padding: 8px 15px 8px 34px !important;
+            /*margin-left: 19px !important;*/
+        }
+
+        .set_btnpro {
+            padding: 0 1rem !important;
+            margin-right: 5% !important;
+        }
+
+        .set_names {
+            /*padding:10px;*/
+            /*overflow-y: scroll !important;*/
+            color: black;
+            overflow-x: hidden;
+            height: 204px;
+            margin-top: 8px;
+        }
+
+            .set_names p {
+                color: black !important;
+            }
+
+        .card2 {
+            height: 220px !important;
+        }
+
+        .set_listheading {
+            font-size: 1.45rem !important;
+            padding-left: 7px !important;
+        }
+
+        .set_select .input-field .select-wrapper input.select-dropdown {
+            border: 1px solid #3248d1 !important;
+            border-radius: 40px !important;
+            height: 2rem !important;
+            margin: 8px 0 0px 0 !important;
+            color: #3248d1 !important;
+            text-align-last: center !important;
+            font-size: 12px;
+        }
+
+
+
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-squre {
+            height: 13px;
+            width: 13px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .set_r span::after {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+
+        .select-dropdown li img {
+            float: left;
+            width: 20px !important;
+            height: 20px !important;
+            margin: 17px 15px !important;
+        }
+
+        .select-wrapper .caret {
+            fill: #6b6f82 !important;
+        }
+
+        .fc-monthViewButton-button {
+            margin-left: 10px !important;
+        }
+
+        /*.fc-monthListViewButton-button {
+            color: #000;
+            position: absolute;
+            margin-left: 2px;
+            margin-top: 10px;
+            width: 17px;
+            height: 1px;
+            background-color: currentColor;
+        }
+
+            .fc-monthListViewButton-button:before {
+                content: '';
+                position: absolute;
+                top: -5px;
+                left: 0;
+                width: 17px;
+                height: 1px;
+                background-color: currentColor;
+            }
+
+            .fc-monthListViewButton-button:after {
+                content: '';
+                position: absolute;
+                top: 5px;
+                left: 0;
+                width: 17px;
+                height: 1px;
+                background-color: currentColor;
+            }*/
+        @@media only screen and (min-width: 601px) {
+            .datepicker-controls, .datepicker-table, .datepicker-footer {
+                width: 226px !important;
+            }
+
+            .datepicker-day-button {
+                line-height: 22px !important;
+            }
+        }
+
+        .datepicker-table th {
+            padding: 0 5px !important;
+        }
+
+        .datepicker-modal {
+            width: auto !important;
+        }
+
+        .datepicker-date-display {
+            padding: 10px 10px !important;
+        }
+
+            .datepicker-date-display .date-text {
+                font-size: 1rem !important;
+                line-height: 25px !important;
+            }
+
+        .timepicker-modal {
+            width: auto !important;
+            overflow-y: unset;
+        }
+
+        .timepicker-text-container {
+            font-size: 1.5rem !important;
+            position: unset !important;
+        }
+
+        .timepicker-digital-display {
+            padding: 5px !important;
+        }
+
+        .timepicker-display-am-pm {
+            font-size: 1rem !important;
+            margin-top: 0.2rem !important;
+        }
+
+        .d-inline-flex {
+            display: inline-flex
+        }
+
+        .checkmark {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #4bb71b;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #4bb71b;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            position: fixed;
+            top: 12%;
+            right: 2%;
+            float: right;
+            z-index: 9999;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #4bb71b;
+            fill: #fff;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @@keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @@keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @@keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4bb71b;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script>
+
+        var events = [];
+            var appId = 0;
+
+        var check_Btn = false;
+        $('#Doc-calendar').fullCalendar({
+
+            viewRender: function (views, element) {
+                var view = $('#Doc-calendar').fullCalendar('getView');
+                if (view.type == 'listMonth') {
+                    $.each(element.find('.fc-widget-header'), function () {
+                        $(this).attr('colspan', 4);
+
+                    });
+                }
+            },
+            customButtons: {
+                monthViewButton: {
+                    text: 'Month View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'month');
+                    }
+
+                }, calMonth: {
+
+                    click: function () {
+                        $(".fc-month-button").trigger('click');
+                    }
+                },
+                monthListViewButton: {
+                    text: 'List View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'listMonth');
+                    }
+
+                }
+            },
+            renderEvent: function () {
+                $('.fc-list-item-time').htlm("<i class='material-icons'>menu</i>");
+            },
+            header: {
+                left: 'agendaDay , agendaWeek,  month, today',
+                center: 'prev, title , next',
+                right: 'calMonth,listMonth',
+            },
+            editable: true,
+            timeFormat: 'h:mm',
+            events: function (start, end, timezone, callback)
+            {
+                $.ajax({
+                    type: "GET",
+                url: '@Url.Action("GetCalendarsList", "Provider", new {Id= ProviderID })',
+
+                success: function (result)
+                {
+                    events = [];
+                    $.each(result, function (i, v) {
+                        var Date = v.date.split('T');
+
+                        var TypeName = v.appointmentType;
+                        //var provideName = "Dr. " + v.providerInfo.firstName + " " + v.providerInfo.lastName;
+                        if (TypeName == "Exact") {
+                            var Exist = v.exactTime.split('T');
+                            events.push({
+
+                                Name: v.appointmentType,
+                                //description: v.Description,
+                                start: Date[0] + "T" + Exist[1],
+                                description: v.appointmentId,
+                                //providerName: provideName
+                                //startStr: v.startTime,
+                                //endStr: v.endTime,
+                                //exactTime: v.exactTime
+                            });
+                        }
+                        //else if (TypeName == "In Between") {
+                        //    var Time = v.startTime.split('T');
+                        //    var EndTime = v.endTime.split('T');
+                        //    events.push({
+
+                        //        Name: v.appointmentType,
+                        //        //description: v.Description,
+                        //        start: Date[0] + "T" + Time[1],
+                        //        end: Date[0] + "T" + EndTime[1],
+                        //        description: v.appointmentId,
+                        //        providerName: provideName
+                        //    });
+                        //}
+                        else {
+                            var Time = v.startTime.split('T');
+                            var EndTime = v.endTime.split('T');
+
+                            events.push({
+
+                                Name: v.appointmentType,
+                                //description: v.Description,
+                                start: Date[0] + "T" + Time[1],
+                                end: Date[0] + "T" + EndTime[1],
+                                description: v.appointmentId,
+                                //providerName: provideName
+
+                            });
+                        }
+                    })
+                    callback(events);
+                }
+            });
+        },
+            eventLimit: true,
+            eventClick: function (events) {
+
+                debugger;
+                if (events.Name == "Exact") {
+                    var ExactTimeDate = events.start._i.split('T');
+                    $("#modal1").modal('open');
+                    $("#modal1 .modal-content  .modal-title").text(events.Name);
+                    $("#modal1 .modal-content  #start_date").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal1 .modal-content  #Exact_Time").text(moment(ExactTimeDate[1], "h:mm A").format("hh:mm A"));
+                    $("#modal1 .modal-content  #provider").text(events.providerName);
+                    appId = events.description;
+                    //$("#appointId").val(appointmentId);
+
+                }
+                else {
+                    var StartTimeDate = events.start._i.split('T');
+                    var EndTime = events.end._i.split('T');
+                    $("#modal2").modal('open');
+                    $("#modal2 .modal-content  .modal-title").text(events.Name);
+                    $("#modal2 .modal-content  #start_date2").text(moment(events.start).format('DD/MM/YYYY'));
+                    $("#modal2 .modal-content  #start_time2").text(moment(StartTimeDate[1], "h:mm A").format('hh:mm A'));
+                    $("#modal2 .modal-content  #end_time2").text(moment(EndTime[1], "h:mm A").format('hh:mm A'));
+                    $("#modal2 .modal-content  #provider_2").text(events.providerName);
+                    appId = events.description;
+                    //$("#appointId").val(appointmentId);
+
+                }
+
+                //$("#modal1 .modal-content  .modal-title").text(event.title);
+
+
+                //$("#modal1 .modal-content  #Exact_Time").text(moment(event.end).format('DD/MM/YYYY'));
+                //$("#modal1 .modal-content  #end_time").text(moment(event.end).format('HH:mm'));
+
+            },
+            eventMouseover: function (events, jsEvent) {
+                var StartTimeDate = events.start._i.split('T');
+                if (events.Name == "Exact") {
+                    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">Your Appointment Schedule With ' + events.providerName + ' at ' + moment(StartTimeDate[1], "h:mm A").format('hh:mm A') + ' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $tool.fadeIn('500');
+                        $tool.fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $tool.css('top', e.pageY + 10);
+                        $tool.css('left', e.pageX + 20);
+                    });
+
+                }
+                else {
+                    var EndTime = events.end._i.split('T');
+
+                    var tooltip = '<div class="tooltipevent" style="width:250px;height:auto;background:#fff;position:absolute;z-index:10001;padding:15px;box-shadow:1px 1px 12px 1px #e2e2e2 !important"> <span style="color:#333">Your Appointment Schedule With ' + events.providerName + ' is Between ' + moment(StartTimeDate[1], "h:mm A").format('hh:mm A') + ' To ' + moment(EndTime[1], "h:mm A").format('hh:mm A') +' Time. </span></div>'; var $tool = $(tooltip).appendTo('body');
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $tool.fadeIn('500');
+                        $tool.fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $tool.css('top', e.pageY + 10);
+                        $tool.css('left', e.pageX + 20);
+                    });
+                }
+
+
+            },
+            eventMouseout: function (events, jsEvent) {
+                $(this).css('z-index', 8);
+                $('.tooltipevent').remove();
+            }
+        });
+
+
+
+     
+
+    </script>
+    @*<script>
+            //$('<input>', { type: 'checkbox' }).appendTo('.fc-list-item-title');
+            $('<input type="checkbox" name="namehere" />').insertBefore('.fc-list-item-title');
+        </script>*@
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m3 l3">
+                <h5 class="breadcrumbs-title color-blue">Appointments</h5>
+            </div>
+            <div class="col s12 m9 l9">
+
+
+
+                <a class="display-flex right mr-2" data-target="slide-out-chat">
+                    <span class="avatar-status  avatar-50">
+                        <img src="../../../app-assets/images/avatar/avatar-2.png" alt="avatar" />
+                        <i></i>
+                    </span>
+                    <div class="user-content">
+                        <h6 class="line-height-0">Caleb Richards</h6>
+                        <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                    </div>
+                </a>
+                <!-- Modal Structure -->
+                <a href="javascript:void(0)">
+                    <i class="material-icons right mr-2 mt-2">message</i>
+                </a>
+                <a href="javascript:void(0)">
+                    <i class="material-icons right mr-2 mt-2">mail</i>
+                </a>
+                <a href="javascript:void(0)">
+                    <i class="material-icons right mr-2 mt-2">call</i>
+                </a>
+
+                @*<a class="btn add-btn sidenav-trigger right modal-trigger mr-2 sideout" data-target="slide-out-right">Add New Appointment</a>*@
+                @*<a class="waves-effect waves-light btn right add-btn modal-trigger" href="#AppointmentModal">Add New Appointment</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container" id="calendar-hide">
+    <div class="row">
+        <div class="col s12">
+            <div class="card calendar">
+                <div class="card-content">
+                    <h4 class="card-title color-blue">
+                        Schedule Appointments
+                    </h4>
+                    @*<div id="basic-calendar"></div>*@
+                    <div id='Doc-calendar'></div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="modal1" class="modal display_modal">
+    <div class="modal-content">
+        <h5>Appointment Schedule</h5>
+        <input id="AppointId" hidden="hidden" />
+        <hr />
+        <div class="row">
+            <div class="col s12 m6 pl-0" id="Date_show">
+                <h6>Provider Name : <span id="provider"></span></h6>
+            </div>
+            <div class="col s12 m6 pl-0" id="Date_show">
+                <h6>Date : <span id="start_date"></span></h6>
+            </div>
+
+            <div class="col s6 m12 pl-0 mt-2" id="ExactTime_show">
+                <span style="font-size:18px;">Your Appointment With <b style="border-bottom: 1px solid" id="provider"></b> is at <b style="border-bottom:1px solid" id="Exact_Time"></b>. Please Make Sure Your Schedule Time.</span>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col m12">
+                <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate ml-2">Cancel</a>
+
+                <a href="javascript:void(0);" class="right DeleteappointBtn modal-action btn Recreate ">Delete</a>
+
+                <a href="javascript:void(0);" class="right modal-close modal-action EditAppointment modal-close add-btn  btn mr-2">Update</a>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="modal2" class="modal display_modal">
+    <div class="modal-content">
+        <h5>Appointment Schedule</h5>
+        <input id="AppointId" hidden="hidden" />
+        <hr />
+        <div class="row">
+            <div class="col s6 m6 pl-0" id="Date_show2">
+                <h6>Provider Name : <span id="provider_2"></span></h6>
+
+            </div>
+            <div class="col s6 m6 pl-0" id="Date_show2">
+                <h6>Date : <span id="start_date2"></span></h6>
+
+            </div>
+            <div class="col s12 m12 pl-0 mt-2" id="StartTime_show">
+                @*<h6>Start Time : <span id="start_time2"></span></h6>*@
+                <span style="font-size:18px;">Your Appointment With <b style="border-bottom: 1px solid" id="provider_2"></b> in Between <b style="border-bottom:1px solid" id="start_time2"></b> To <b style="border-bottom:1px solid" id="end_time2"></b> Time. Please Make Sure Your Schedule Time.</span>
+
+            </div>
+            @*<div class="col s6 m12 pl-0" id="EndTime_show">
+                    <h6>End Time : <span id="end_time2"></span></h6>
+                </div>*@
+        </div>
+        <div class="row mt-5">
+            <div class="col m12">
+                <a href="javascript:void(0);" class="right modal-close modal-action btn Recreate ml-2">Cancel</a>
+
+                <a href="javascript:void(0);" class="right modal-action DeleteappointBtn  btn Recreate ">Delete</a>
+
+                <a href="javascript:void(0);" class="right modal-close  modal-action EditAppointment add-btn  btn mr-2">Update</a>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

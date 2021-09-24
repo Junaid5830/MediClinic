@@ -1,0 +1,53 @@
+﻿@model MediClinic.Models.SurgeryCenterViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="myTableClaim" class="table dataTables_wrapper">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                </div>
+            </th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Procedure Type</th>
+            <th>Date of Procedure</th>
+            <th>Scan Image</th>
+            <th>Scan Report</th>
+            <th class="all">Action  </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loop in Model.ProceduresList)
+        {
+            <tr class="card" style="cursor: pointer">
+                <th>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="@loop.ProcedureId" value="check">
+                        <label class="custom-control-label" for="@loop.ProcedureId"></label>
+                    </div>
+                </th>
+                <td>@loop.Patient.FirstName @loop.Patient.LastName</td>
+                <td>@loop.Patient.DateOfBirth.Value.ToString("MM/dd/yyyy")</td>
+                <td>@loop.ProcedureType</td>
+                <td>@loop.DateofProcedure</td>
+                <td>@loop.ScanImage</td>
+                <td>@loop.ScanImportant</td>
+                <td class="action">
+                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                        Options
+                        @*<span class="caret"></span>*@
+                    </button>
+                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                        <li><a href="javascript:void(0);">View</a></li>
+                        <li onclick="deleteSurgery(@loop.ProcedureId, this);"><a href="javascript:void(0);">Delete</a></li>
+                        <li><a href="/SurgeryCenter/Add?SurgeryCenterId=@loop.ProcedureId">Edit</a></li>
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

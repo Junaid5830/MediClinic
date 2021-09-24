@@ -1,0 +1,850 @@
+﻿@model MediClinic.Models.ReportsViewModel
+
+@{
+    ViewData["Title"] = "AddClaimVisit";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var PatietId= ViewBag.PatientId;
+
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/microsoft/signalr/notify.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            debugger;
+            var id = getUrlParameter("visitid");
+            $("#viistId").val(id);
+             $(".patientID").val(@ViewBag.PatientId);
+
+
+            $('.patient-btns').each(function () {
+                debugger;
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+
+        });
+        $(".time-picker").hunterTimePicker();
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+        $(".select2").select2();
+        $('#claim_Zip').keyup(function () {
+
+            $zval = $('#claim_Zip').val();
+
+            if ($zval.length == 5) {
+                $jCSval = getclaimCityState($zval, true);
+
+            }
+
+        });
+        function getclaimCityState($zip, $blnUSA) {
+
+            var date = new Date();
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+                if (response.status == "ZERO_RESULTS") {
+                    $("#err_claimzip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+                    $("#claim_city").val(city);
+                    $("#claim_state").val(state);
+                    $("#claim_country").val(country);
+                    //$('#modal3').modal('open');
+                }
+                //find the city and state
+
+
+                //pre-fill the city and state
+
+            });
+        }
+        $(function () {
+
+            $('#ssn').inputmask('999-99-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $('.fax').inputmask('(999) 999-9999');
+            $('.vitalBloodPressure').inputmask("999/99");
+            $('.vitalHeight').inputmask("9'99\"");
+            $('.vitalTemprature').inputmask("999 °F");
+            $('.vitalOxygenSaturation').inputmask("99 %");
+            $('.vitalWeight').inputmask("999 lbs");
+            $('.vitalRespiration').inputmask("99 per/min");
+            $('.vitalPulse').inputmask("99 per/min");
+        });
+        $(document).ready(function () {
+            var id = getUrlParameter("visitid");
+            $('.patient-btns').each(function () {
+                var url = $(this).attr('href');
+                url = url + id;
+                $(this).attr('href', url);
+            });
+            $('#Patient_RoleIncident')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right8\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_incidentReport')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right9\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_nf2Status')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right10\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_claimStatus')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right11\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+            $('#Patient_ProviderName')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right12\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+
+            $('#PI_AttoneyName')
+                .select2()
+                .on('select2:open', () => {
+                    $(".select2-results:not(:has(a))").append('<a class="sideout" href="javascript:void(0);" onclick="ToggleSideBar(\'slide-out-right22\')" style="padding: 6px;height: 20px;display: inline-table;">Add New</a>');
+                });
+        });
+        $(document).on('click', '#btnPatientClaimInfo', function (e) {
+
+            debugger;
+            var nf2ComboVal = $('#Patient_nf2Status').val();
+            var CaseType = $("#Patient_caseType").val();
+            var nf2Date = $("#nf2FilledDateInput").val();
+            if ($("#Patient_nf2Status").val() == '15' && nf2Date == "") {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                e.preventDefault();
+                return false;
+            }
+            if (nf2ComboVal == "") {
+                $("#nf2_err").html("Select Nf2 Status");
+            }
+            else {
+                $("#nf2_err").html("");
+            }
+            if (CaseType == "") {
+                $("#casetype_err").html("Select Case Type");
+            }
+            else {
+                $("#casetype_err").html("");
+            }
+            if (nf2Date == "" && IsRequiredNf2Date) {
+                $("#nf2DateValidationSpan").html("NF2 date is required");
+                e.preventDefault();
+                return false;
+            }
+            else {
+                $("#nf2DateValidationSpan").html("");
+            }
+
+            var isValidForm = $("#patientClaimForm").valid();
+
+            e.preventDefault();
+
+            if (isValidForm) {
+                if (!(nf2ComboVal == "" || CaseType == "")) {
+                    isInfoButtonClick = true;
+                    $("#patientClaimForm").ajaxSubmit({
+
+                        success: function (response) {
+                            //$('#btnPatientClaimInfo').attr('disabled', false);
+                            //$('#btnPatientClaimInfo .waves-ripple').remove();
+                        },
+                        error: function (response) {
+                            console.log('error');
+                        },
+                        complete: function (xhr) {
+
+                            //$('#btnPatientClaimInfo').attr('disabled', false);
+                            //$('#btnPatientClaimInfo .waves-ripple').remove();
+                            onCreateToDoclaim(xhr.responseJSON);
+
+                        }
+                    });
+                }
+
+            }
+
+        });
+
+        function onCreateToDoclaim(data) {
+            debugger;
+            var isErrorMessage = data.isError;
+            if (data.data == "Error") {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Please provide patient info first',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.select2').val('').trigger('change');
+                $('input').val('');
+            }
+
+        };
+        function onCreateAttorneyName(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+
+                $('.addlegalStatus').val('');
+                $('.addlegalStatus').removeClass('valid');
+
+                var statusSelectList = $('.attorneyNameCombo');
+                statusSelectList.append($('<option></option>').val(data.attorneyId).text(data.attorneyName));
+
+            }
+        }
+        function onCreatePatientclaimstatus(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addClaimStatusInfo').val('');
+                $('.addClaimStatusInfo').removeClass('valid');
+                var claimstatusList = $('.claimlist');
+                claimstatusList.append($('<option></option>').val(data.claimStatusId).text(data.claimStatus1));
+            }
+        }
+        function onCreatePatientnf2(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addPatientnf2').val('');
+                $('.addPatientnf2').removeClass('valid');
+                var nf2List = $('.nf2list');
+                nf2List.append($('<option></option>').val(data.nf2Id).text(data.nf2Status1));
+            }
+        }
+        function onCreatePatientIncidentReport(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.incidentReportStatusadd').val('');
+                $('.incidentReportStatusadd').removeClass('valid');
+                var IncidentReportList = $('.incidentReport');
+                IncidentReportList.append($('<option></option>').val(data.incidentReportId).text(data.incidentReportStatus1));
+            }
+        }
+        function onCreatePatientRoleIncident(data) {
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Can not Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+
+            }
+            else {
+                $(".checkmark").show().fadeOut(6000);
+                $('.addpatientRoleIncident').val('');
+                $('.addpatientRoleIncident').removeClass('valid');
+                var IncidentList = $('.incidentRole');
+                IncidentList.append($('<option></option>').val(data.patientIncidentRoleId).text(data.patientRoleInIncident));
+            }
+        }
+
+    </script>
+    <script>
+        $("input[name='nF2AobDto.EverSmilierCondition']").click(function () {
+            var test = $(this).val();
+            if (test === "yes") {
+                $('#ConditionDetail').removeAttr('hidden');
+            } else {
+                $('#ConditionDetail').attr('hidden', '');
+            }
+        });
+        $("input[name='nF2AobDto.ConditionAutoMobileIncident']").click(function () {
+            var test = $(this).val();
+            if (test === "no") {
+                $('#automobileDetail').removeAttr('hidden');
+            } else {
+                $('#automobileDetail').attr('hidden', '');
+            }
+        });
+        $("input[name='nF2AobDto.IsDisfiqurementOrPermanentDisablity']").click(function () {
+            var test = $(this).val();
+            if (test === "yes") {
+                $('#ConditionDueToDetail').removeAttr('hidden');
+            } else {
+                $('#ConditionDueToDetail').attr('hidden', '');
+            }
+        });
+        $('.select2').select2();
+
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+        $(function () {
+
+            $(".fax").inputmask('(999) 999-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $(".licenseno").inputmask('999999');
+            $(".npi").inputmask('9999999999');
+            $('.taxid').inputmask('99-9999999');
+            $('#ssn').inputmask('999-99-9999');
+        });
+        function OnSuccessPatientInfomation(data) {
+            debugger;
+            if (data.success) {
+                $(".checkmark").show().fadeOut(6000);
+                $("input").val('');
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Email is already exist',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+    </script>
+    <script>
+        $('.select2').select2();
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy",
+        });
+        $(function () {
+
+            $(".fax").inputmask('(999) 999-9999');
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $(".licenseno").inputmask('999999');
+            $(".npi").inputmask('9999999999');
+            $('.taxid').inputmask('99-9999999');
+            $('#ssn').inputmask('999-99-9999');
+        });
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 3
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 3
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+        var room = 1;
+
+        function education_fields() {
+
+            room++;
+            var objTo = document.getElementById('BillingInformation_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass" + room);
+            var rdiv = 'removeclass' + room;
+            //'<div class="row"><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" placeholder="School name"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Major" name="Major[]" value="" placeholder="Major"></div></div><div class="col-sm-3 nopadding"><div class="form-group"> <input type="text" class="form-control" id="Degree" name="Degree[]" value="" placeholder="Degree"></div></div><div class="col-sm-3 nopadding"><div class="form-group"><div class="input-group"> <select class="form-control" id="educationDate" name="educationDate[]"><option value="">Date</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option> </select><div class="input-group-append"> <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i> </button></div></div></div></div><div class="clear"></div></row>';
+            divtest.innerHTML = '<section class="tr"><div class="row"><div class="col-sm-2"><div class="row"><div class="col-sm-6"><div class="input-field"><input name="DateForm" class="datepicker text-input td" id="from" type="text" placeholder="MM/DD/YYYY"></div></div>To<div class="col-sm-6"><div class="input-field"><input class="datepicker text-input td input-styling claim_tab patientClaimInfoTxtField" name="DateTo" id="to" type="text" placeholder="MM/DD/YYYY"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="PlaceOfService"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="LeaveBank"/></div></div><div class="col-sm-3"><div class="row"><div class="col-sm-6"><div class="input-field"><input class="text-input td" type="text" name="CPT"></div></div><div class="col-sm-6"><div class="input-field"><input class=" text-input td" type="text" name="Modifier"></div></div></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DisgnosisCode"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Charges"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="DaysOrUnits"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="COB"/></div></div><div class="col-sm-1"><div class="input-field"><input type="text" class="text-input td" name="Zip"/></div></div></div><div class="row"><div class="col"><div class="input-group-append float-right"><button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="ti-minus"></i> </button></div></div></div></div>'
+            objTo.appendChild(divtest)
+        }
+
+        function remove_education_fields(rid) {
+            $('.removeclass' + rid).remove();
+        }
+        function OnSuccessPatientInfomation(data) {
+            debugger;
+            if (data.success) {
+                $(".checkmark").show().fadeOut(6000);
+                $("input").val('');
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Email is already exist',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        $('input[name="reportHistoryDto.InjuryOrillnes"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.InjuryOrillnes"]:checked').val();
+            if (ans1 == "Patient") {
+
+                $('#InjuryOrillnesDetail').hide();
+            }
+            else if (ans1 == "Medical Records") {
+                $('#InjuryOrillnesDetail').hide();
+
+            }
+            else {
+                $('#InjuryOrillnesDetail').show();
+            }
+        });
+        $('input[name="reportHistoryDto.Hopsitaliaztion"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.Hopsitaliaztion"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#HistoryhospitalizatonDetail').hide();
+            }
+
+            else {
+                $('#HistoryhospitalizatonDetail').show();
+            }
+        });
+        $('input[name="reportHistoryDto.WorkRelatedInjury"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="reportHistoryDto.WorkRelatedInjury"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkRelatedDetail').hide();
+            }
+
+            else {
+                $('#WorkRelatedDetail').show();
+            }
+        });
+
+        $('input[name="WorkStatus.IsPatientMissedWork"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="WorkStatus.IsPatientMissedWork"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkStatusinjury').show();
+            }
+
+            else {
+                $('#WorkStatusinjury').hide();
+            }
+        });
+        $('input[name="WorkStatus.IsPatientCurrentlyWorking"]').click(function () {
+            debugger;
+            var ans1 = $('input[name="WorkStatus.IsPatientCurrentlyWorking"]:checked').val();
+            if (ans1 == "Yes") {
+
+                $('#WorkStatusCurrentlyWorking').show();
+            }
+
+            else {
+                $('#WorkStatusCurrentlyWorking').hide();
+            }
+        });
+
+
+        $(document).on('submit', '#ReportBillingInformation', function (e) {
+            var CPT = $("#icdCptCode").val();
+            var charger = $("#charges").val();
+            var Insurance = $("#InsuranceCarrier").val();
+            var PatientName = $("#patientName").val();
+            var codeOne = $("#codeOne").val();
+            if (CPT == "") {
+                $("#HSCPCode").text("Enter Code");
+            }
+            else {
+                $("#HSCPCode").text("");
+            }
+            if (charger == "") {
+                $("#CodeCharge").text("Enter Charges");
+            }
+            else {
+                $("#CodeCharge").text("");
+            }
+            if (Insurance == "") {
+                $("#InsuranceCarrierErr").text("Enter Insurance Carrier");
+            }
+            else {
+                $("#InsuranceCarrierErr").text("");
+            }
+            if (PatientName == "") {
+                $("#PatientNameErr").text("Enter Patient Name");
+            }
+            else {
+                $("#PatientNameErr").text("");
+            }
+            if (codeOne == "") {
+                $("#codeOneErr").text("Enter Code");
+            }
+            else {
+                $("#codeOneErr").text("");
+            }
+            var arrText = [];
+            var CodeObj = {};
+            var MainData = {};
+            $("#invoiceDetail .tr").each(function (index, value) {
+                var obj = {}
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        obj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        obj[$(this).attr('name')] = null;
+                    }
+                });
+                arrText.push(obj);
+            })
+            $(".ICDCode .tr").each(function (index, value) {
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        CodeObj[$(this).attr('name')] = v.value;
+
+                    }
+                    else {
+                        CodeObj[$(this).attr('name')] = null;
+
+                    }
+                });
+            })
+            $(".InfoData .tr").each(function (index, value) {
+
+                $(this).find('.td').each(function (i, v) {
+                    debugger;
+                    if (v.value != "") {
+                        MainData[$(this).attr('name')] = v.value;
+                    }
+                    else {
+                        MainData[$(this).attr('name')] = null;
+                    }
+                });
+            })
+            var formData = ({ reportBillingInvoices: arrText, reportBillingCodeDto: CodeObj, reportBillingInfoDto: MainData });
+            debugger;
+            e.preventDefault();
+            if ($(this).valid()) {
+
+                if (!(CPT == "" || charger == "" || Insurance == "" || PatientName == "" || codeOne == "")) {
+                    $(this).ajaxSubmit({
+                        data: { reportsViewModel: formData },
+                        success: function (response) {
+                            debugger;
+                            if (response.success) {
+                                $(".checkmark").show().fadeOut(6000);
+                                $("input").val('');
+                            }
+                            else {
+                                new PNotify({
+                                    title: 'Error!',
+                                    text: 'Email is already exist',
+                                    delay: 5000,
+                                    type: 'error',
+                                    addclass: 'pnotify-center'
+                                });
+                            }
+                        },
+                        error: function (response) {
+                            //$('#upload').attr('disabled', false);
+                        },
+
+                        complete: function (xhr) {
+                            OnSuccessPatientInfomation();
+                        }
+                    });
+
+                }
+            }
+        })
+
+        //$("#saveBtn").on('click', function () {
+
+        //    var arrText = [];
+
+        //    $("#invoiceDetail .tr").each(function (index, value) {
+        //        var obj = {}
+        //        $(this).find('.td').each(function (i, v) {
+
+        //            obj[$(this).attr('name')] = v.value;
+        //        });
+        //        arrText.push(obj);
+        //    })
+
+        //    debugger;
+        //     $.ajax({
+        //        type: "POST",
+        //         url: "/Reports/BillingInformation",
+        //         data: { reportBillingInvoices: arrText},
+
+        //        success: function (response) {
+        //            debugger;
+        //            if (response) {
+
+        //            }
+        //            $(".checkmark").show().fadeOut(6000);
+        //            $('input').val('');
+        //            $('select').val('').trigger('change');
+
+        //        },
+        //        failure: function (response) {
+        //            alert(response.responseText);
+        //        },
+        //        error: function (response) {
+        //            alert(response.responseText);
+        //        }
+        //    });
+        //})
+
+    </script>
+    <script>
+        $('.select2').select2();
+        $('#case_type').change(function () {
+            debugger
+            var CaseValue = $('#seleciona option:selected').val();
+            CaseValue = $(this).val();
+                if (CaseValue == "No-Fault") {
+                    $(".ClaimForm").hide();
+                    $(".c4form").hide();
+                    $(".nf3form").show();
+                    
+                }
+                else if (CaseValue == "WC" || CaseValue == "Private") {
+                    $(".nf3form").hide();
+                    $(".ClaimForm").hide();
+                    $(".c4form").show();
+                   
+                  
+                }
+                else {
+                    $(".nf3form").hide();
+                    $(".c4form").hide();
+                    $(".ClaimForm").show();
+                   
+            }
+
+            });
+    </script>
+}
+
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper mb-0">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                @*<div class="col">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Add Claim Visit
+                    </h5>
+                </div>*@
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/Appointment/AppointmentListForReceptionist">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-6 ">
+                <p>
+                    Case Type<span class="required"> * </span>
+                </p>
+                <div class="input-field">
+                    <select id="case_type" class="select2" data-placeholder="Select Case Type">
+                        <option selected value="" disabled></option>
+                        <option value="No-Fault">No-Fault</option>
+                        <option value="WC">WC</option>
+                        <option value="Private">Private</option>
+                        <option value="Self/Out of Pocket">Self/Out of Pocket</option>
+                        <option value="Medicare">Medicare</option>
+                        <option value="Tricare">Tricare</option>
+                        <option value="Champva">Champva</option>
+                        <option value="Group Health Plan">Group Health Plan</option>
+                        <option value="Feca Blk Lung">Feca Blk Lung</option>
+                        <option value="Medicaid">Medicaid</option>
+                        <option value="Lien">Lien</option>
+                    </select>
+                    <p class="required" id="casetype_err"></p>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @*<div class="col-2">
+                <partial name="~/Views/Appointment/PartialViews/_VisitsButtons.cshtml" />
+
+            </div>*@
+            <div class="col-12">
+                @*<div class="col">
+                    <h4 class="color-blue">Claims</h4>
+                </div>*@
+                <div class="ClaimForm" style="display:none">
+                    <partial name="~/Views/PatientSideElite/ClaimPartialViews/_ClaimPartialView.cshtml" />
+
+
+                </div>
+                <div class="nf3form" style="display:none">
+                    <partial name="~/Views/PatientSideElite/ClaimPartialViews/_nf3form.cshtml" />
+                </div>
+                <div class="c4form" style="display:none">
+                    <partial name="~/Views/PatientSideElite/ClaimPartialViews/_DoctorInitialReport.cshtml" />
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+   
+   
+   
+</div>
+          

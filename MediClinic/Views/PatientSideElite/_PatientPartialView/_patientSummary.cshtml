@@ -1,0 +1,340 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    var RoleType = _sessionManager.GetRoleId();
+}
+
+<input type="hidden" class="rating-hidden" ratingVal="@Model.patientCompleteInfo.Rating" />
+<div id="cards-extended">
+
+    <div class="row">
+        <div class="col-4 col-sm-4 col-md-6 col-lg-6 col-xl-6">
+            <h5 class="color-blue">Patient</h5>
+        </div>
+        @*<div class="col s8 m4 ">
+
+            </div>*@
+        <div class="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6 right  set_icons">
+            @*@if (Model.PatientSettingDto.Phone)
+                {
+                    <a class="pr-1" href="javascript:void(0);">
+                        <i class="mdi mdi-phone  text-darken-2 ml-20" style="margin-top:15px !important;"></i>
+                    </a>
+                }*@
+
+            @if (Model.PatientSettingDto.Sms)
+            {
+                @*<a class=" pr-1 modal-trigger" href="#modal2" onclick="importNumber();">
+                        <i class="material-icons pr-2  text-darken-2">textsms</i>
+                    </a>*@
+                <a class=" pr-1 modal-trigger" data-toggle="modal" data-target="#myModal" onclick="importNumber();">
+                    <i class="mdi mdi-message-reply-text"></i>
+                </a>
+            }
+            @if (Model.PatientSettingDto.Email)
+            {
+                @*<a class="pr-1 modal-trigger" href="#modal1" onclick="importEmail();">
+                        <i class="material-icons pr-2  text-darken-2">email</i>
+                    </a>*@
+                <a class="pr-1 modal-trigger" data-toggle="modal" data-target="#myModal2" style="cursor:pointer" onclick="importEmail();">
+                    <i class="mdi mdi-email"></i>
+                </a>
+
+            }
+
+            @*<a class="pr-1 " href="@Url.Action("PatientInfo", "PatientSide", new { id = Model.patientCompleteInfo.PatientInfoId, clickfrom = "Editicon"})">
+                    <i class="material-icons  text-darken-2">edit</i>
+
+                </a>*@
+            <a class="pr-1 " href="@Url.Action("PatientInfo", "PatientSideElite", new { id = Model.patientCompleteInfo.PatientInfoId, clickfrom = "Editicon"})">
+                <i class="mdi mdi-pencil"></i>
+
+            </a>
+            @if (Model.PatientSettingDto.Print)
+            {
+                @*<a class="pr-1 modal-trigger" href="#modalprint">
+                        <i class="material-icons  text-darken-2">print</i>
+                    </a>*@
+                <a class="pr-1 modal-trigger" data-toggle="modal" data-target="#myModal3" style="cursor:pointer">
+                    <i class="mdi mdi-printer"></i>
+                </a>
+            }
+
+            @if (RoleType == 2)
+            {
+                <a class="waves-effect waves-light float-right mr-2" href="/patientsideelite/patientlist">
+                    <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                </a>
+            }
+
+        </div>
+    </div>
+
+    <div class="row center">
+        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-2">
+            @if (Model.patientCompleteInfo.PaitentImage != null)
+            {
+                <img src="~/images/@Model.patientCompleteInfo.PaitentImage" alt="patient" class=" patient-image circle" style="border:2px solid @Model.patientCompleteInfo.Color">
+            }
+            else
+            {
+                <div class="circle FLName" style="border:2px solid @Model.patientCompleteInfo.Color">
+                    <h3 class="color-blue">@Model.patientCompleteInfo.FirstNameLetter@Model.patientCompleteInfo.LastNameLetter</h3>
+                </div>
+                @*<img src="~/app-assets/images/user/male-user.png" alt="patient" class=" patient-image circle" style="border:2px solid @Model.patientCompleteInfo.Color">*@
+
+            }
+            @*<div class="center" style="width:100px;height:20px;background-color:@Model.patientCompleteInfo.Color;margin-left:24px;border:1px solid #5a5a5a;">
+                    <span style=""></span>
+                </div>*@
+        </div>
+
+        <div class="col-sm-9 col-md-9 col-lg-9 col-xl-10 patientdataheight">
+            <div class="row">
+                <div class="col-4 col-sm-3 col-md-3">
+                    <p class=" mb-0">Patient ID</p>
+                    <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PatientInfoId </p>
+                </div>
+                @if (!(Model.PatientSettingDto is null))
+                {
+                    @if (Model.PatientSettingDto.FirstName && Model.PatientSettingDto.LastName)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Name</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.FirstName  @Model.patientCompleteInfo.LastName</p>
+                        </div>
+                    }
+                    else if (Model.PatientSettingDto.FirstName)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Name</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.FirstName</p>
+                        </div>
+                    }
+                    else if (Model.PatientSettingDto.LastName)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Name</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.LastName</p>
+                        </div>
+                    }
+
+                    @if (Model.PatientSettingDto.DOB)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Birthday</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.DateOfBirth.ToString("MM/dd/yyyy")</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Age)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Age</p>
+                            <p class="mt-0 black-text font-weight-600"> @Model.patientCompleteInfo.Age</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Address)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Address</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.AddressLine1</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Gender)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Gender</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.Gender</p>
+                        </div>
+                    }
+
+                    @if (Model.PatientSettingDto.MobilePhone)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Mobile Phone</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.MobilePhone</p>
+                            @if (!Model.patientCompleteInfo.MobilePhone.Equals("N/A"))
+                            {
+                                <input type="hidden" id="phoneNo" value="@Model.patientCompleteInfo.MobilePhone" />
+                            }
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.HomePhone)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Home Phone</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.HomePhone</p>
+
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.EmergencyPhone)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Emergency Phone</p>
+                            <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.EmergencyPhone</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Languages)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class="mb-0">Language</p>
+                            <p class="mt-0 black-text font-weight-600" style="word-wrap:break-word;">@Model.patientCompleteInfo.LanguageName</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.CaseType)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Case Type</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CaseTypeName </p>
+                        </div>
+                    }
+
+                    <input type="hidden" id="PatientEmail" value="@Model.patientCompleteInfo.Email" />
+                    @if (Model.PatientSettingDto.ClaimNumber)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Claim  No</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PatientClaimID</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.PolicyNumber)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Policy Number</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PolicyNumber</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.PIAttorney)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">P.I. Attorney</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.AttorneyName</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Paralegal)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Paralegal</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.LeadingParalegalName</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.CollectionAttorney)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Collection Attorney</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CollectionAttorney</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.ReferralName)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Referral Name</p>
+                            <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.ReferralName</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.CurrentLocationInFacility)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Current Location In facility</p>
+                            <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.LastIME)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">I.M.E</p>
+                            <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.LastEUO)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">E.U.O</p>
+                            <p class=" mt-0 font-weight-600 black-text"> N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.PrimaryDr)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Primary Dr</p>
+                            <p class=" mt-0 font-weight-600 black-text">John SMith MD</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.Dispatch)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Dispatch</p>
+                            <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.AssignTransport)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Assign Transport</p>
+                            <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.RouteOptions)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0">Route Options</p>
+                            <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.LastVisit)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0" style="color: #f04f85 !important;">Last Visit</p>
+                            <p class="mt-0 font-weight-600 black-text">  @ViewBag.VisitDate</p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.DateCreated)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+
+                            <p class=" mb-0" style="color: #f04f85 !important;">Date Created</p>
+                            <p class="mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.CreatedDate.ToString("MM/dd/yyyy") </p>
+                        </div>
+                    }
+                    @if (Model.PatientSettingDto.LastExam)
+                    {
+                        <div class="col-4 col-sm-3 col-md-3">
+                            <p class=" mb-0" style="color: #f04f85 !important;">Last Exam</p>
+                            <p class="mt-0 font-weight-600 black-text">  @ViewBag.ExamDate</p>
+                        </div>
+                    }
+            <div class="col-4 col-sm-3 col-md-3">
+                <p class=" mb-0">Rating</p>
+                <div id="halfstarsReview"   style="font-size: 1.1em;"></div>
+                @*<p class=" mt-0 font-weight-600 black-text">N/A</p>*@
+            </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="divider"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script src="~/js/rating.js"></script>
+<script>
+    $("#halfstarsReview").rating();
+</script>
+
+
+
+

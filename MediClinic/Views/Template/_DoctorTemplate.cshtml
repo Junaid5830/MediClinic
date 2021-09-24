@@ -1,0 +1,62 @@
+﻿@model MediClinic.Models.TemplateViewModal
+
+@section styles{
+
+
+}
+@section scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/HunterTimePicker/js/jquery-timepicker.js"></script>
+    <script>
+       
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <div class="row">
+        <div class=" col" margin-top-8">
+            <h5 class="breadcrumbs-title color-blue">Assign Template Detail</h5>
+        </div>
+    </div>
+</div>
+<div class="row">
+    @if (Model.GetDoctorTemplateList != null && Model.GetDoctorTemplateList.Count > 0)
+    {
+        <table id="TemplateTable" class="table dataTables_wrapper">
+            <thead>
+                <tr class="uppercase">
+                    <th>Sr #</th>
+                    <th>Template</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var loop in Model.GetDoctorTemplateList)
+                {
+                <tr class='card'>
+                    <td>@loop.TemplateId</td>
+                    <td>@loop.Name</td>
+                    <td>
+                        <a class='btn add-btn' href="/Template/DoctorPatientTemplate?TemplateId=@loop.TemplateId&DoctorId=@loop.DoctorId&VisitId=@ViewBag.VisitId">View</a>
+                        <a class='btn add-btn ml-2' href="/Template/CreateTemplate/">Edit</a>
+                        @*<a class='btn Recreate ml-2' onclick='deleteNotes(" + DataId[i] + ")'>Delete</a>*@
+                    </td>
+                </tr>
+                }
+                    @*@foreach (var loop in Model.GetDoctorTemplateList)
+                    {
+                        cnt++;
+                        <tr>
+                            <td>@cnt</td>
+                            <td>
+                                <a href="/Template/DoctorPatientTemplate?TemplateId=@loop.TemplateId&DoctorId=@loop.DoctorId&PatientId=2&VisitId=6">@loop.Name</a>
+                            </td>
+                        </tr>
+                    }*@
+                </tbody>
+        </table>
+    }
+</div>

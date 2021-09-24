@@ -1,0 +1,218 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{ 
+
+}
+<div class="content-area content-right">
+<div class="app-wrapper">
+
+    <div class="card card-default scrollspy border-radius-6 fixed-width">
+        <div class="card-content padding-3">
+            <div class="row mb-1">
+
+
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s6 m6">
+                                <h5 class="breadcrumbs-title color-blue">Case Type</h5>
+                            </div>
+                            @*<div class="col s6 m6">
+
+                                <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right4">Add New Case Type</a>
+
+                            </div>*@
+
+
+                        </div>
+                        <form asp-action="PatientCaseType" asp-controller="PatientSide" id="caseTypeFormId" method="post" class="col s12">
+                            <input class="text-input input-styling" asp-for="patientCaseTypeBasicDto.UserId" id="PatientCaseType_UserId" type="text" hidden="hidden">
+                            <input hidden="hidden" asp-for="patientCaseTypeBasicDto.CaseTypeId" />
+                            <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+
+                            @*<input hidden="hidden" id="CTName" asp-for="patientCaseTypeBasicDto.CaseTypeName" />*@
+
+                            <div class="row mt-2 mb-2">
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="noFaultCT" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName" value="No-Fault" />
+                                            <span>No-Fault</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="WCCT" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName" name="patientCaseTypeBasicDto.CaseTypeName" value="WC" />
+                                            <span>WC</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="PrivateCT" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Private" />
+                                            <span>Private</span>
+                                        </label>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="outOfPocketCT" asp-for="patientCaseTypeBasicDto.CaseTypeName" class="with-gap caseTypeRadio"  value="Self/Out of Pocket" />
+                                            <span>Self/Out of Pocket</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="MedicareCT" asp-for="patientCaseTypeBasicDto.CaseTypeName" class="with-gap caseTypeRadio" value="Medicare" />
+                                            <span>Medicare</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="TricareCT" asp-for="patientCaseTypeBasicDto.CaseTypeName" class="with-gap caseTypeRadio"  value="Tricare" />
+                                            <span>Tricare</span>
+                                        </label>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="ChampvaCT" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Champva" />
+                                            <span>Champva</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="GroupHP" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Group Health Plan" />
+                                            <span>Group Health Plan</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="Feca" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Feca Blk Lung" />
+                                            <span>Feca Blk Lung</span>
+                                        </label>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="Medicaid" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Medicaid" />
+                                            <span>Medicaid</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <input type="radio" id="lien" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Lien" />
+                                            <span>Lien</span>
+                                        </label>
+                                    </p>
+                                </div>
+                                <span id="NewList"><partial name="~/Views/_PatientPartialView/_NewCaseList.cshtml" /></span>
+
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s4 m4">
+                                        <p>
+                                            <label>
+                                                <input type="radio" id="other" class="with-gap caseTypeRadio" asp-for="patientCaseTypeBasicDto.CaseTypeName"  value="Other" />
+                                                <span>Other</span>
+                                            </label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            
+
+                            <div class="row mt-2 mb-2">
+                                <div class="col s4 m4">
+                                    <p>
+                                        <label>
+                                            <span class="required" id="caseTypeRadio_error"></span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row set_rowbtn">
+                                <div class="col s12 m12" style="text-align:center">
+                                    <button type="submit" id="patientCaseType" class="waves-effect waves-light add-btn btn">@ViewBag.BtnSubmit</button>
+                                    <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right4" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientNewCaseType" asp-controller="PatientSide" method="post" data-ajax="true"  data-ajax-success="onCreatePatientCaseType(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add New Case Type
+
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input addNewCaseTypeClass" type="text" asp-for="addNewCaseTypeBasicDto.NewCaseTypeName" placeholder="Enter Case Type " />
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+
+@*<script>
+    $(document).ready(function () {
+        debugger;
+        var radioValue = $("input[name='group1']:checked").val();
+        if(radioValue){
+            alert("Your are a - " + radioValue);
+        }
+    });
+</script>*@

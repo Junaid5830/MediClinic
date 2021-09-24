@@ -1,0 +1,437 @@
+﻿
+
+
+@{
+    ViewData["Title"] = "AddNewBill";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+   
+    <style>
+
+
+        
+        .text-align {
+            text-align: right;
+        }
+
+        .total-bill {
+            margin-left: 250px;
+        }
+
+        .color {
+            color: #f04f85 !important;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .top_part {
+            margin-top: 25px;
+        }
+    </style>
+}
+@section scripts{
+   
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+        $(document).ready(function () {
+            $('.dropify').dropify();
+        });
+
+    </script>
+   
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+      
+
+                    <div class="card top_part">
+                        <div class="card-content">
+
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-3 total-bill">
+                                    <h6>Total Billed</h6>
+                                    <p>$300,000.00</p>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <h6>Total Paid</h6>
+                                    <p>$500.000</p>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <h6>Outstanding</h6>
+                                    <p style=" color: #f04f85 !important; ">$200,000.00</p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+        <div id="breadcrumbs-wrapper">                   
+                <div class="row">
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> Add New Bill</h5>
+                    </div>
+                    <div class="col text-align">
+
+                        @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+                            Select Bill Status
+                            @*<span class="caret"></span>*@
+                        </button>
+                        @*<ul class="dropdown-menu batch">*@
+                            <li><a href="#"> All Claims</a></li>
+                            <li><a href="#">Pending Claims </a></li>
+                            <li><a href="#">No Billed Claims </a></li>
+
+                        </ul>
+                    </div>
+
+                </div>           
+        </div>
+            <div class="row">
+                <div class="col">
+                    <h6 >
+                        Bill No : <span class="color">1001</span>
+
+                    </h6>
+                </div>
+                <div class="col">
+                    <h6>
+                        Bill Sent Date : <span class="color">1/12/18</span>
+
+                    </h6>
+                </div>
+            </div>
+        
+                <div class="row">
+                    <form class="col-sm-12  ">
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Bill Date</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Due Date</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Date of Service</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>Duration Of Service</p>
+
+                                <div class="input-field">
+                                    <input type="date" class="text-input" placeholder="select date">
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Type Of Service
+
+                                </p>
+
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Type Of Service </option>
+
+                                        <option value="AK">Dr Aibolt</option>
+                                        <option value="HI">Dr Jack</option>
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>DOS</p>
+                                <div class="row">
+                                    <div class="input-field col-md-2 col-sm-2 col-md-2 col-xl-2 col-2">
+                                        <label>From</label>
+                                    </div>
+                                    <div class="input-field col-md-4 col-sm-4 col-md-4 col-xl-4 col-4">
+                                        <div class="dropdownauto"><input class="text-input input-styling Form" type="text" placeholder="Select From"></div>
+
+                                    </div>
+                                    <div class="input-fieldcol-md-2 col-sm-2 col-md-2 col-xl-2 col-2">
+                                        <label>TO</label>
+                                    </div>
+                                    <div class="input-field col-md-4 col-sm-4 col-md-4 col-xl-4 col-4">
+                                        <div class="dropdownauto"><input class="text-input input-styling Form" type="text" placeholder="Select To"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Place Of Service</p>
+
+                                <div class="input-field">
+                                    <input type="text" class="text-input" placeholder="Enter Reminders">
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>
+                                    Description Of Service
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Description Of Service </option>
+                                        <option value="AK">Fee Schedule</option>
+                                        <option value="AK">Fee Schedule</option>
+                                        <option value="AK">Fee Schedule</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            @*<div class="col ">
+           <p>
+               Reminder by
+            </p>
+        <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+        </div>*@
+
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Case Type
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Case Type </option>
+
+                                        <option value="AK">NFC</option>
+                                        <option value="HI">WC</option>
+                                        <option value="HI">Private</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Fee Schedule
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Fee Schedule </option>
+
+                                        <option value="AK">Bill States</option>
+                                        <option value="HI">$125</option>
+                                        <option value="HI">$146</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    CPT/HSPC Code
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select CPT/HSPC Code </option>
+
+                                        <option value="AK">G768</option>
+                                        <option value="HI">C678</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                                <p>
+                                    Total Bill
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Total Bill </option>
+
+                                        <option value="AK">Bill States</option>
+                                        <option value="HI">$125</option>
+                                        <option value="HI">$146</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Outstanding Balance</p>
+
+                                <div class="input-field">
+                                    <input type="number" class="text-input" placeholder="Enter Outstanding Balance">
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    ICD Code
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select ICD Code </option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Diagnosis Code
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Diagnosis Code </option>
+
+                                        <option value="AK">G768</option>
+                                        <option value="HI">C678</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Referring Provider
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Referring Provider </option>
+
+                                        <option value="AK">Bill States</option>
+                                        <option value="HI">$125</option>
+                                        <option value="HI">$146</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Treating provider
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Treating provider </option>
+
+                                        <option value="AK">G768</option>
+                                        <option value="HI">C678</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Assistant
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Assistant </option>
+
+                                        <option value="AK">Bill States</option>
+                                        <option value="HI">$125</option>
+                                        <option value="HI">$146</option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>
+                                    Bill Status
+                                </p>
+                                <div class="input-field">
+                                    <select class="select2 form-control  text-input" style="width: 100%;">
+                                        <option>Select Bill Status </option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                <p>Tracking No</p>
+
+                                <div class="input-field">
+                                    <input type="number" class="text-input" placeholder="Enter Tracking No">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12">
+                                <div class="center">
+                                    <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                    <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                    <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+    </div>
+</div>
+
+
+
+
+

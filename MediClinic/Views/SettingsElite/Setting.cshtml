@@ -1,0 +1,552 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "Setting";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var patientId = ViewContext.RouteData.Values["id"];
+
+}
+@section Styles
+{
+    <style>
+        .setSize {
+            font-size: 1.4rem !important;
+            line-height: 1.4rem !important;
+        }
+
+        .editOnhover {
+            display: none;
+        }
+
+        .showOnHover:hover .editOnhover {
+            display: block !important;
+        }
+
+        .card .card-content {
+            padding: 24px;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .blue-text.text-darken-2 {
+            color: #547cea !important;
+            font-size: 16px !important;
+        }
+
+        .showOnHover i {
+            color: #6b6f82 !important;
+            font-size: 20px !important;
+        }
+
+        i.left {
+            margin-right: 12px;
+        }
+
+        .breadcrumbs-title {
+            padding: 20px 0 !important;
+        }
+    </style>
+
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div class="breadcrumbs-title color-blue">
+            <div class="col"><h5 class="setSize">Settings</h5></div>
+        </div>
+        <div class="row">
+            <div class="col">
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-settings-box left"></i>
+                                        <a href="@Url.Action("Index","AdministrativeSettings")" class="blue-text text-darken-2 settings">Administrative</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6  col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-outline left"></i>
+                                        <a href="@Url.Action("AssistantListSetting","SettingsElite")" class="blue-text text-darken-2 settings">Assistant</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6  col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-layers left"></i>
+                                        <a href="@Url.Action("Attorenies","Setting")" class="blue-text text-darken-2 settings">Attorneys</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6  col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-receipt left"></i>
+                                        <a asp-action="Billing" class="blue-text text-darken-2 settings">Billing</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6  col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-calendar-range left"></i>
+                                        <a href="@Url.Action("CalendarSetting","SettingsElite")" class="blue-text text-darken-2 settings">Calendar</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-receipt left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Claim</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-code-tags left"></i>
+                                        <a href="@Url.Action("CPTHSPCCodes","SettingsElite")" class="blue-text text-darken-2 settings">CPT/HSPC Codes</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi  mdi-alert-circle left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Custom Report</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-library-plus left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Clinic Location</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-seat-recline-extra left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Clinic Room</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-calendar left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Due Dates</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-script left"></i>
+                                        <a href="@Url.Action("BillList","CompanyBills")" class="blue-text text-darken-2 settings">Company Billing</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-email left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Email</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-multiple left"></i>
+                                        <a href="@Url.Action("Employeelist","Employee",new { Id=patientId})" class="blue-text text-darken-2 settings">Employee</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi  left"><img src="/app-assets/images/Dashboard-icons/euo.png"></i>
+                                        <a href="@Url.Action("Index","EUO",new { Id=patientId})" class="blue-text text-darken-2 settings">EUO</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-hotel left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Facility Beds</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-information left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Facility Info</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-scale-bathroom left"></i>
+                                        <a href="@Url.Action("Index","Departments",new { Id=patientId})" class="blue-text text-darken-2 settings">Facility Room</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-fax left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Fax</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-map-marker left"></i>
+                                        <a href="@Url.Action("Index","ClinicOverView")" class="blue-text text-darken-2 settings">Gps/Map</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-grease-pencil left"></i>
+                                        <a href="/SettingsElite/ICDList" class="blue-text text-darken-2 settings">ICD 10</a>
+                                        <a href="/SettingsElite/ICDList">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi left"><img src="/app-assets/images/Dashboard-icons/ime.png"></i>
+                                        <a href="@Url.Action("IMElist","IME")" class="blue-text text-darken-2 settings">IME</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-hospital-building left"></i>
+                                        <a  href="@Url.Action("index","insuranceCompanies")"  class="blue-text text-darken-2 settings">Insurance Company</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-trending-up  left"></i>
+                                        <a href="@Url.Action("Inventory","SettingsElite")"  class="blue-text text-darken-2 settings">Inventory</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-printer left"></i>
+                                        <a href="@Url.Action("Index","Invoices",new { Id = patientId})" class="blue-text text-darken-2 settings">Invoice</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-square-inc-cash left"></i>
+                                        <a href="@Url.Action("MaterReportingMode","Reports",new { Id = patientId})"  class="blue-text text-darken-2 settings">Marketing/Advertisement</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-settings left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Configration</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-human-handsdown left"></i>
+                                        <a href="/Employee/Employeelist" class="blue-text text-darken-2 settings">User ID</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-message-text left"></i>
+                                        <a href="@Url.Action("Index","Messages",new { Id = patientId})" class="blue-text text-darken-2 settings">Message</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-bell-ring left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Notification</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-tooltip-text left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Other Entities</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi left"><img src="/app-assets/images/Dashboard-icons/patients.png"></i>
+                                        <a href="@Url.Action("SettingPatient","SettingsElite", new {Id = patientId })" class="blue-text text-darken-2 settings">Patient Setting</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        @*<i class="mdi mdi-lock left"></i>*@
+                                        <i class="mdi mdi-information left"></i>
+                                        <a href="@Url.Action("LegalInfoGrid","LegalInfo" ,new {Id = patientId })" class="blue-text text-darken-2 settings">Legal Info</a>
+                                        @*<a href="javascript:void(0)" class="blue-text text-darken-2 settings">Permission</a>*@
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-equal-box left"></i>
+                                        <a href="@Url.Action("PrescriptionListElite","PatientSideElite")" class="blue-text text-darken-2 settings">Prescription</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi  left"><img src="/app-assets/images/Dashboard-icons/provider.png"></i>
+                                        <a href="@Url.Action("ProviderSettings","SettingsElite" ,new {Id = patientId })" class="blue-text text-darken-2 settings">Provider Setting</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-clock-alert left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Reminder</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-block-helper left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Restriction</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                        </div>*@
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-information left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Status</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-multiple left"></i>
+                                        <a href="@Url.Action("SubContractors","SubContractor")" class="blue-text text-darken-2 settings">Sub Contractor</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    @*<div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+            <i class="mdi left"><img src="/app-assets/images/Dashboard-icons/provider.png"></i>
+            <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Provider Session Setting</a>
+            <a href="javascript:void(0);">
+                <i class="mdi mdi-pencil editOnhover right"></i>
+            </a>
+        </div>*@
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-desktop-mac left"></i>
+                                        <a href="javascript:void(0)" class="blue-text text-darken-2 settings">Short Cut</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-newspaper left"></i>
+                                        <a href="/Template/DoctorTemplate" class="blue-text text-darken-2 settings">Template</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-settings-variant left"></i>
+                                        <a href="@Url.Action("Role","SettingsElite" ,new {Id = patientId })" class="blue-text text-darken-2 settings">Restrictions & Permissions</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-cash-usd left"></i>
+                                        <a href="@Url.Action("SubscriptionPackage","SettingsElite" ,new {Id = patientId })" class="blue-text text-darken-2 settings">Subscription Packages</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-multiple left"></i>
+                                        <a href="@Url.Action("UserClient","SettingsElite" ,new {Id = patientId })" class="blue-text text-darken-2 settings">Client Profile</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-account-multiple left"></i>
+                                        <a href="@Url.Action("DMESetting","SettingsElite" ,new {Id = patientId })" class="blue-text text-darken-2 settings">DME/Supplies/Equipment</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-12 col-sm-12 col-xl-12 ">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 col-sm-6  col-xl-6 showOnHover">
+                                        <i class="mdi mdi-ambulance left"></i>
+                                        <a href="@Url.Action("AmbulanceAssign","Ambulance")"class="blue-text text-darken-2 settings">Ambulance Assign</a>
+                                        <a href="javascript:void(0);">
+                                            <i class="mdi mdi-pencil editOnhover right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                       
+                    
+                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+    </div>
+</div>

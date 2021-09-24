@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewData["Title"] = "CaseType";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+@section styles{
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 50px !important;
+            }
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("li.patientheader").addClass("border-bottom-header-active");
+        });
+    </script>
+}
+<div class="row">
+    <div class="content-wrapper-before blue-grey lighten-5"></div>
+    <div class="col s12">
+        <div class="container">
+            <!-- Sidebar Area Starts -->
+            <div class="sidebar-left sidebar-fixed">
+                <div class="sidebar">
+                    <div class="sidebar-content">
+
+                        <div id="sidebar-list" class="sidebar-menu list-group position-relative animate fadeLeft">
+                            <div class="sidebar-list-padding app-sidebar sidenav" id="email-sidenav">
+                                <ul class="email-list display-grid">
+                                    <li class="sidebar-title font-size-1"><a href="~/Home/_AddPatientMain">Add Patient <i class="material-icons padding-left-add-button right"> add </i></a></li>
+                                    <li><a href="~/PatientSide/PatientInfo" data-toggle="tab" class="text-sub"> Patient Info</a></li>
+                                    <li><a href="~/Home/_AddPatientPhone" data-toggle="tab" class="text-sub"> Phone Numbers</a></li>
+                                    <li><a href="~/Home/_AddPatientEmergency" class="text-sub">Emergency Contact</a></li>
+                                    <li><a href="~/Home/_AddPatientSignature" class="text-sub">Patient ID and Signatures</a></li>
+                                    <li class="active"><a href="~/Patient/CaseType" class="text-sub"> Case Type</a></li>
+
+                                    <li><a href="~/Home/_AddPatientClaimInfo" class="text-sub"> Claim Info</a></li>
+                                    <li><a href="~/Home/_AddPatientVehicles" class="text-sub"> Other Vehicles/Entities Involved</a></li>
+                                    <li><a href="~/Home/_AddPatientInsurance" class="text-sub"> Secondary Insurance Provider</a></li>
+                                    <li>
+                                        <a class='dropdown-trigger active btn legal-info-btn' href='#' data-target='dropdown10'><span>Legal Info</span><i class="material-icons dropdown-arrow float-right">keyboard_arrow_down</i></a>
+                                        <ul id='dropdown10' class='dropdown-content dropdown-content-custom'>
+                                            <li><a href="~/Home/_AddPatientPJ" class="text-sub"><span style="font-size:15px;">P.I (Personal Injury)</span></a></li>
+                                            <li><a href="~/Home/_AddPatientCollection" class="text-sub"><span style="font-size:15px;">Collection/Arbitration Attorney</span></a></li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <a href="#" data-target="email-sidenav" class="sidenav-trigger btn btn-floating Recreate hide-on-large-only"><i class="material-icons">menu</i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar Area Ends -->
+            <!-- Content Area Starts -->
+            <div class="app-email" id="pat-info">
+                <div class="row">
+
+
+                    <div class="col s12 right">
+                        <a class="waves-effect waves-light float-right mt-2" href="/PatientSide/PatientList">
+                            <i class="material-icons  right arrow-icon">arrow_back</i>
+
+                        </a>
+                    </div>
+                </div>
+                
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add New Case Type
+
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input" type="text" placeholder="Enter Case Type " />
+                            </div>
+
+                            <a href="javscript:void(0);" class="modal-action btn add-btn right">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

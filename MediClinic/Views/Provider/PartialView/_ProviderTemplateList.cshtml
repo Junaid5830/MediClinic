@@ -1,0 +1,24 @@
+﻿@model MediClinic.Models.ProviderViewModel
+
+@foreach (var item in Model.ProviderTemplateList)
+{
+    <tr class="card">
+
+        <td>
+            @item.ProviderTemplate
+        </td>
+        <td>
+            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1_@item.ProviderTemplateId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1_@item.ProviderTemplateId' class='dropdown-content' style="left: 425.906px">
+                <li><a href="#" onclick="editProviderTemplate(@item.ProviderTemplateId)" class="option-a"><i class="material-icons">remove_red_eye</i>Edit</a></li>
+                <li><a href="#" onclick="deleteProviderTemplate(@item.ProviderTemplateId)" class="option-a"><i class="material-icons">remove_red_eye</i>Delete</a></li>
+                <li><a href="#" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                <li><a href="#" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                <li><a href="#" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+            </ul>
+        </td>
+    </tr>
+
+}

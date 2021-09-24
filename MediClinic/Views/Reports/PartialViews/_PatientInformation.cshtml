@@ -1,0 +1,145 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model MediClinic.Models.ReportsViewModel
+<form asp-action="PatientInformation" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+    <input class="text-input patientID" id="patientId" type="hidden" asp-for="reportPatientDto.PatientId" />
+    <div class="row">
+
+
+        @*<div class="col">
+            <p>Patient Name</p>
+            <select class="select2" id="patientId" data-placeholder="Select Patient Name" asp-for="reportPatientDto.PatientId"
+                    asp-items="@(new SelectList(Model.patientListWithUsers,"PatientInfoId","FullName"))">
+                <option value="" selected disabled></option>
+
+            </select>
+        </div>*@
+    
+        <div class="col">
+            <p>Social Socity No</p>
+            <div class="input-field">
+                <input type="text" class="text-input" id="ssn" asp-for="reportPatientDto.SocialSocityNo" placeholder="Enter SSN" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            <p>Phone No </p>
+            <div class="input-field">
+                <input type="text" class="text-input phoneno" asp-for="reportPatientDto.PhoneNo" placeholder="Enter Phone" />
+            </div>
+        </div>
+        <div class="col">
+            <p>WCB Case No </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.WCBCaseNo" placeholder="Enter WCB Case No" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Carrier Case No </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.CarrierCaseNo" placeholder="Enter Carrier No" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <p>Email</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.Email" placeholder="Enter Mailing Address" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>City</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.City" placeholder="Enter City" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>State</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.State" placeholder="Enter State" />
+
+            </div>
+        </div>
+        <div class="col">
+            <p>Zip</p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="reportPatientDto.zip" placeholder="Enter zip" />
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col">
+            <p>Date Of injury/onset of illness</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="reportPatientDto.DateOfillnessOrInjury" placeholder="Enter Date" />
+            </div>
+        </div>
+        <div class="col">
+            <p>Date of birth</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="reportPatientDto.DOB" placeholder="Enter Date" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-md-6">
+            <p>Gender</p>
+            <select class="select2" asp-for="reportPatientDto.Gender" data-placeholder="select Gender">
+                <option value="" selected disabled></option>
+                <option value="male">Male </option>
+                <option value="female">Female </option>
+                <option value="Other">Other</option>
+            </select>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p> On the date of injury/illness what was the patient's job title or description</p>
+            <div class="input-field">
+                <textarea placeholder="Enter Detail" class="form-control" asp-for="reportPatientDto.JobDescription"></textarea>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>On the date of injury/illness what were the patient's usual work activities</p>
+            <div class="input-field">
+                <textarea placeholder="Enter Detail" class="form-control" asp-for="reportPatientDto.WorkActivitiesDescription"></textarea>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <p>Patient Account No </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Enter Account" asp-for="reportPatientDto.PatientAccountNo" />
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

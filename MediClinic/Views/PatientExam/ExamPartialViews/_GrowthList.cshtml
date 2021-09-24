@@ -1,0 +1,156 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@{
+    var userRole = _sessionManager.GetRoleId();
+    var Empty = "N/A";
+}
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Growth Chart</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>DOB</th>
+                        <th>Weight</th>
+                        <th>Height</th>
+                        <th>Length</th>
+                        <th>Head D.M</th>
+                        <th>Neck D.M</th>
+                        <th>Wrist D.M</th>
+                        <th>Shoulder Width</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.growthChartList is null))
+                    {
+                        var rec = Model.growthChartList.OrderByDescending(x => x.GrowthId).Skip(1).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                @if (rec.DOB != null)
+                                {
+                                    <td>  @rec.DOB.Value.ToString("MM/dd/yyyy")</td>
+
+                                }
+                                else
+                                {
+                                    <td> @Empty</td>
+                                }
+                                <td>@rec.Weight</td>
+                                <td>@rec.Height</td>
+                                <td>@rec.Length</td>
+                                <td>@rec.HeadDiameter</td>
+                                <td>@rec.NeckDiameter</td>
+                                <td>@rec.WaistDiameter</td>
+                                <td>@rec.ShoulderWidth</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.GrowthId,this)"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a href="/GrowthChart/Add?id=@rec.GrowthId">Edit</a></li>
+                                        </ul>
+
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Growth Chart</h4>
+        <div class="table-responsive">
+            <table class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>DOB</th>
+                        <th>Weight</th>
+                        <th>Height</th>
+                        <th>Length</th>
+                        <th>Head D.M</th>
+                        <th>Neck D.M</th>
+                        <th>Wrist D.M</th>
+                        <th>Shoulder Width</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.growthChartList is null))
+                    {
+                        var rec = Model.growthChartList.OrderByDescending(x => x.GrowthId).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+
+                                @if (rec.DOB != null)
+                                {
+                                    <td>  @rec.DOB.Value.ToString("MM/dd/yyyy")</td>
+
+                                }
+                                else
+                                {
+                                    <td> @Empty</td>
+                                }
+
+                                <td>@rec.Weight</td>
+                                <td>@rec.Height</td>
+                                <td>@rec.Length</td>
+                                <td>@rec.HeadDiameter</td>
+                                <td>@rec.NeckDiameter</td>
+                                <td>@rec.WaistDiameter</td>
+                                <td>@rec.ShoulderWidth</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.GrowthId,this)"><a href="javascript:void(0);">Delete</a></li>
+                                            <li><a href="/GrowthChart/Add?id=@rec.GrowthId">Edit</a></li>
+                                        </ul>
+
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

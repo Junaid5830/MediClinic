@@ -1,0 +1,24 @@
+﻿@model MediClinic.Models.SettingViewModel
+
+@foreach (var item in Model.PatientRelationshipList)
+{
+    <tr class="card">
+        <th>
+            <label>
+                <input type="checkbox" />
+                <span></span>
+            </label>
+        </th>
+        <td>@item.RelationshipId</td>
+
+        <td>
+            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1_@item.RelationshipId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1_@item.RelationshipId' class='dropdown-content'>
+                <li><a href="#!" onclick="deletePatientRelationship(@item.RelationshipId)" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                <li><a href="#!" onclick="editPatientRelationship(@item.RelationshipId)" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+            </ul>
+
+        </td>
+    </tr>
+}

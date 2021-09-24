@@ -1,0 +1,393 @@
+﻿@model ReportsViewModel
+@{
+    ViewData["Title"] = "NewExamElite";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles
+{
+
+    <style>
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+    <style>
+        .customtab li a.nav-link {
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .Exams {
+            margin-top: 25px;
+        }
+
+            .Exams p {
+                margin-top: 1rem !important;
+            }
+
+        .DMeSupplies p {
+            margin-top: 1rem !important;
+        }
+
+        .AddReminder {
+            display: none;
+        }
+
+        .prescription {
+            display: none;
+        }
+
+        .Test {
+            display: none;
+        }
+
+            .Test p {
+                margin-top: 1rem !important;
+            }
+
+        .Lab {
+            display: none;
+        }
+
+        .Vitals {
+            display: none;
+        }
+
+        .DMeSupplies {
+            display: none;
+        }
+
+        .Imaging {
+            display: none;
+        }
+    </style>
+}
+@section scripts
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        $(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            $('#PastMedicalProblem').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+
+            });
+            $('#CurrentMedicalProblem').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+
+            });
+            $('#PastPrescription').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+            $('#CurrentPrescription').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+            $('#Test').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 7], "orderable": false }],
+
+            });
+            $('#PastTest').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 7], "orderable": false }],
+
+            });
+            $('#PastDme').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 10], "orderable": false }],
+
+            });
+            $('#CurrentDme').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 10], "orderable": false }],
+
+            });
+            $('#PastImaging').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+            $('#CurrentImaging').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+
+            $('#CurrentLab').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+
+            $('#PastLabExam').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 8], "orderable": false }],
+
+            });
+
+            $('#PastVitals').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+
+            });
+            $('#CurrentVitals').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }],
+
+            });
+        })
+            ;
+
+
+
+    </script>
+    <script>
+        $(function () {
+
+            $(".select2").select2();
+            $('.selectpicker').selectpicker();
+        });
+
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('.dropify').dropify();
+        });
+
+        function OnSuccessPatientInfomation(data) {
+            $(".checkmark").show().fadeOut(6000);
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#medicalproblem_btn").on("click", function () {
+                $(".AddReminder").show();
+            });
+            $("#prescription_btn").on("click", function () {
+                $(".prescription").show();
+            });
+
+            $("#Test_btn").on("click", function () {
+                $(".Test").show();
+            });
+            $("#DMeSupplies_btn").on("click", function () {
+                $(".DMeSupplies").show();
+            });
+            $("#imaging_btn").on("click", function () {
+                $(".Imaging").show();
+            });
+            $("#Vitals_btn").on("click", function () {
+                $(".Vitals").show();
+            });
+            $("#Lab_btn").on("click", function () {
+                $(".Lab").show();
+            });
+
+
+
+        });
+    </script>
+
+
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">New Exam</h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top: -11px" href="/patientsideelite/PatientClaimsExamsElite  ">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nav tabs -->
+        @*<ul class="nav nav-tabs customtab" role="tablist">
+                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home2" role="tab"> <span class="hidden-xs-down">Exam</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile2" role="tab"><span class="hidden-xs-down">Medical Problem</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages2" role="tab"> <span class="hidden-xs-down">Prescription</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#test" role="tab"> <span class="hidden-xs-down">Test</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#DME" role="tab"> <span class="hidden-xs-down">DME Supplies</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#imaging" role="tab"> <span class="hidden-xs-down">Imaging</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#lab" role="tab"> <span class="hidden-xs-down">Lab</span></a> </li>
+                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#vitals" role="tab"><span class="hidden-xs-down">Vitals</span></a> </li>
+            </ul>
+             Tab panes
+            <div class="tab-content">
+                <div class="tab-pane active" id="home2" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_ExamNewAdd.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="profile2" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_MedicalProblem.cshtml" />
+
+                </div>
+                <div class="tab-pane  p-20" id="messages2" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_prescription.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="test" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_Test.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="DME" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_DmeSupplies.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="imaging" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_Imaging.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="lab" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_Lab.cshtml" />
+                </div>
+                <div class="tab-pane  p-20" id="vitals" role="tabpanel">
+                    <partial name="_ExamsElitePartial/_Vitals.cshtml" />
+
+                </div>
+            </div>*@
+
+
+        <partial name="../Reports/PartialViews/_ExamInformation.cshtml" model="Model" />
+
+    </div>
+</div>

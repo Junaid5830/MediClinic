@@ -1,0 +1,880 @@
+﻿@model MediClinic.Models.ReportsViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<form asp-action="NoFaultInsurancelaw" asp-controller="Reports" method="post" data-ajax="true" data-ajax-success="OnSuccessPatientInfomation(data)">
+   <div class="row">
+       <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+           <p>CLAIM INSURER</p>
+           <div class="input-field">
+               <select class="select2   text-input" data-placeholder="Select Insurance Company" asp-for="nF2AobDto.InsuranceCompanyId" asp-items="Model.DropDownListForInuranceCompanies">
+                   <option value="" selected disabled></option>
+
+                   
+               </select>
+           </div>
+       </div>
+   </div>
+    <div class="row">
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                NAME  OF INSURER OR SELFINSURER
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.SelfInsuranceName" placeholder="Enter Name">
+            </div>
+        </div>
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+            <p>ADDRESS OF INSURER OR SELFINSURER</p>
+
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.SelfInsuranceAddress" placeholder="Enter ADDRESS">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                NAME  OF INSURER’S  CLAIMS REPRESENTATIVE
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.InsuranceClaimRepresentiveName" placeholder="Enter Name">
+            </div>
+        </div>
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+            <p>ADDRESS  OF INSURER’S  CLAIMS REPRESENTATIVE</p>
+
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.InsuranceClaimRepresentiveAddress" placeholder="Enter ADDRESS">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Phone Number OF INSURER’S  CLAIMS REPRESENTATIVE
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input phoneno" asp-for="nF2AobDto.PhoneNoOfClaimRepresentive" placeholder="Enter Phone Number">
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Date
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.Date" placeholder="Pick Date ">
+            </div>
+        </div>
+        <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Policy Holder
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.PolicyHolder" placeholder="Enter POLICYHOLDE">
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Policy Number
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input phoneno" asp-for="nF2AobDto.PolicyNumber" placeholder="Enter POLICY NUMBER">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Date Of Incident
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.DateOfIncident" placeholder="Pick Date ">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Provider Name
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.ProviderName" placeholder="Enter  PROVIDER'S NAME ">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Provider Address
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.ProviderAddress" placeholder="Enter  PROVIDER'S ADDRESS ">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <p>
+                KINDLY COMPLETE AND SUBMIT THIS FORM AS SOON AS POSSIBLE.  PLEASE NOTE, THIS COMPLETED FORM MUST BE SUBMITTED TO THE INSURER AS SOON AS REASONABLY POSSIBLE  <u>BUT NO LATER THAN 45 DAYS OR 180 DAYS AFTER THE TREATMENT DATE, DEPENDING UPON THE POLICY ENDORSEMENT IN EFFECT AT THE TIME OF THE ACCIDENT. </u> IF YOU ARE UNSURE OF THE APPLICABLE TIME REQUIREMENT, KINDLY CONTACT THE CLAIMS REPRESENTATIVE TO DETERMINE WHICH DEADLINE IS APPLICABLE TO THIS CLAIM.
+
+            </p>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row">
+        <div>
+            <div class="col">
+                <p>
+                    IF YOU HAVE PREVIOUSLY SUBMITTED AN EARLIER REPORT ON THIS ACCIDENT, YOU NEED ONLY NOTE ANY CHANGES FROM THE INFORMATION PREVIOUSLY FURNISHED AND ADDITIONAL CHARGES.
+
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Patient Name
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.PatientName" placeholder="Enter PATIENT'S NAME ">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Patient Address
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.PatientAddress" placeholder="PATIENT'S ADDRESS">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Patient DOB
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.PatientDOB" placeholder="Pick Date">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Gender
+            </p>
+            <div class="input-field">
+                <select class="select2   text-input" data-placeholder="Select Gender" asp-for="nF2AobDto.PatientGender">
+                    <option value="" selected disabled></option>
+
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+
+
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Occupation (If Known)
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.Occupation" placeholder="Enter OCCUPATION (IF KNOWN)">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Diagnosis And Concurrent Condition
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.DiagnosisCondition" placeholder="Enter DIAGNOSIS AND CONCURRENT CONDITIONS">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                When Did Symptons First Appear?
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.SymptomsFirstDate" placeholder="Pick Date">
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                When did patient first consult yor for this condidtion?
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.ConsutlFirstDate" placeholder="Pic Date">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Has patient ever had same or similar condition?
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="EverSmilierConditionYes" name="nF2AobDto.EverSmilierCondition" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="EverSmilierConditionYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="EverSmilierConditionNo" name="nF2AobDto.EverSmilierCondition" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="EverSmilierConditionNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12 " hidden id="ConditionDetail">
+            <p>
+                If yes, state when and describe
+            </p>
+            <div class="input-field">
+                <input type="date" class="text-input" asp-for="nF2AobDto.EverSmilerConditionDetail" placeholder="Pic Date">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Is condition solely a result of this automobule accident?
+
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ConditionAutoMobileIncidentYes" name="nF2AobDto.ConditionAutoMobileIncident" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="ConditionAutoMobileIncidentYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ConditionAutoMobileIncidentNo" name="nF2AobDto.ConditionAutoMobileIncident" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="ConditionAutoMobileIncidentNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12" hidden id="automobileDetail">
+            <p>
+                IF "NO", explain:
+
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.ConditionAutoMobileIncidentDetail" placeholder="Explain">
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Is Condition due to injury arising out of patient's employment?
+
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsOutOfPatientEmploymentYes" name="nF2AobDto.IsOutOfPatientEmployment" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsOutOfPatientEmploymentYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsOutOfPatientEmploymentNo" name="nF2AobDto.IsOutOfPatientEmployment" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="IsOutOfPatientEmploymentNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Will injury result in significant disfigurement or permanent disability?
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsDisfiqurementOrPermanentDisablityYes" name="nF2AobDto.IsDisfiqurementOrPermanentDisablity" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsDisfiqurementOrPermanentDisablityYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsDisfiqurementOrPermanentDisablityNo" name="nF2AobDto.IsDisfiqurementOrPermanentDisablity" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="IsDisfiqurementOrPermanentDisablityNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12" hidden id="ConditionDueToDetail">
+            <p>
+                IF "YES", describe:
+
+
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.DisfiqurementOrPermanentDisablityDetail" placeholder="Describe">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Patient was disabled (unable ot work)
+            </p>
+
+            <div class="input-field">
+                From: <input type="text" class="text-input datepicker" asp-for="nF2AobDto.isPatientDisableToWorkFrom" />
+            </div>
+            <div class="input-field">
+                Through:<input type="text" class="text-input datepicker" asp-for="nF2AobDto.isPatientDisableToWorkThrough" />
+            </div>
+
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                If still disabled the patient slould be able to return to work on
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" placeholder="Date" asp-for="nF2AobDto.ShouldBeAbleToReturnWork" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p class="text-lowercase">
+                WILL THE PATIENT REQUIRE REHABILITATION AND/OR OCCUPATIONAL THERAPY AS A RESULT OF THE  INJURIES SUSTAINED IN THIS ACCIDENT?
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsInjurySustainedInIncidentYes" name="nF2AobDto.IsInjurySustainedInIncident" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsInjurySustainedInIncidentYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsInjurySustainedInIncidentNo" name="nF2AobDto.IsInjurySustainedInIncident" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="IsInjurySustainedInIncidentNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12" style="display:none" id="sustainedDetail">
+            <p>
+                IF YES, describe your recommendation below
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" asp-for="nF2AobDto.InjurySustainedInIncidentDetail" placeholder="Describe" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p> REPORT OF SERVICES RENDERED -- ATTACH ADDITIONAL SHEETS IF NECESSARY</p>
+
+        </div>
+        <div class="col">
+            <table>
+                <thead>
+                    <tr>
+                        <th>DATE OF SERVICE</th>
+                        <th>PLACE OF SERVICE INCLUDING ZIP CODE</th>
+                        <th>DESCRIPTION OF TREATMENT OR HEALTH SERVICE RENDERED</th>
+                        <th>FEE SCHEDULE TREATMENT CODE</th>
+                        <th>CHARGES</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="date" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><a href="#"><i class="fa fa-plus"></i></a></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total Charges Of Date</td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                IF TREATING PROVIDER IS DIFFERENT THAN BILLING PROVIDER COMPLETE THE FOLLOWING:
+            </p>
+        </div>
+        <div class="col">
+            <table>
+                <thead>
+                    <tr>
+                        <th>TREATING PROVIDER'S NAME</th>
+                        <th>TITLE</th>
+                        <th>LICENSE OR CERTIFICATION NO.</th>
+                        <th>EMPLOYEE</th>
+                        <th>INDEPENDENT CONTRACTOR</th>
+                        <th>OTHER (SPECIFY)</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td><a href="#"><i class="fa fa-plus"></i></a></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                        <td>Total Charges Of Date</td>
+                        <td><input type="text" class="text-input" /></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                IF THE PROVIDER OF SERVICE IS A PROFESSIONAL SERVICE CORPORATION OR DOING BUSINESS       UNDER AN ASSUMED NAME (DBA), LIST THE OWNER AND PROFESSIONAL LICENSING CREDENTIALS OF       ALL OWNERS (Provide an additional attachment if necessary).
+
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="secondaryYes" name="reportDoctorInfoDto.TaxIdSSNOrEIN" class="custom-control-input" value="SSN" autocomplete="off">
+                        <label class="custom-control-label" for="secondaryYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="secondaryNo" name="reportDoctorInfoDto.TaxIdSSNOrEIN" class="custom-control-input" value="EIN" autocomplete="off">
+                        <label class="custom-control-label" for="secondaryNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                ESTIMATED  DURATION OF FUTURE TREATMENT
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>PATIENT:</b>Your health provider may agree to accept payment for health services performed directly from your insurer <b>(Authorization to PayBenefits)</b> so that you are not required to make payment to the health provider at the time of service. Such agreement is optional on the part of the health provider and must be signed by both patient and health provider. You may use the optional authorization language provided below, by checking off the designated spot in item 20 of this form.
+
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>(IF YOU HAVE CHOSEN TO AUTHORIZE THE DIRECT PAYMENT OF BENEFITS BY CHECKING THIS OPTION, YOU MAY NOT ALSO ENTER INTO AN ASSIGNMENT OF BENEFITS CONTAINED IN #21)</b>
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b>AUTHORIZATION TO PAY BENEFITS:</b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                I AUTHORIZE PAYMENT OF HEALTH BENEFITS TO THE UNDERSIGNED HEALTH CARE PROVIDER OR SUPPLIER OF SERVICES DESCRIBED BELOW.  I RETAIN ALL RIGHTS, PRIVILEGES AND REMEDIES TO WHICH I AM ENTITLED UNDER ARTICLE 51 (THE NO-FAULT PROVISION) OF THE INSURANCE LAW.
+
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p>
+                PRINT NAME
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Enter PATIENT NAME" asp-for="nF2AobDto.AuthorizePrintPatient" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                SIGNED
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="PATIENT" asp-for="nF2AobDto.AuthorizePatientSign" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                DATE
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.AuthorizePatientDate" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>PATIENT:</b> Your health provider may agree to have you assign your right to No-Fault benefits from your insurer directly to your health provider (Assignment of Benefits). If you and your health provider agree to an assignment of benefits, you must both sign the agreement contained in # 21 or the prescribed NF-AOB form or its equivalent. The language contained in the assignment of benefits is mandatory and may not be altered or avoided by any other language added to this agreement or other written agreement.
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b> (IF YOU HAVE CHOSEN TO ASSIGN YOUR BENEFITS TO THE HEALTH PROVIDER BY CHECKING THIS OPTION, YOU MAY NOT ALSO ENTER INTO AN AUTHORIZATION TO PAY BENEFITS CONTAINED IN ITEM #20 ABOVE) </b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b>ASSIGNMENT OF NO-FAULT BENEFITS:</b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b>I HEREBY ASSIGN TO THE HEALTH CARE PROVIDER INDICATED BELOW ALL RIGHTS, PRIVILEGES AND REMEDIES TO PAYMENTFOR HEALTH CARE SERVICES PROVIDED BY THE ASSIGNEE TO WHICH I AM ENTITLED UNDER ARTICLE 51 (THE NO-FAULT STATUTE)OF THE INSURANCE LAW. THE ASSIGNEE HEREBY CERTIFIES THATTHEY HAVE NOT RECEIVED ANY PAYMENT FROM OR ON BEHALF OF THE ASSIGNOR AND SHALL NOT PURSUE PAYMENT DIRECTLY FROM THE ASSIGNOR FOR SERVICES PROVIDED BY SAID ASSIGNEE FOR INJURIES SUSTAINED DUE TO THE MOTOR VEHICLE ACCIDENT, NOTWITHSTANDINGANYOTHER AGREEMENTTO THECONTRARY. THISAGREEMENTMAYBE REVOKEDBY THEASSIGNEE WHEN BENEFITSARENOTPAYABLEBASEDUPON THEASSIGNOR'SLACKOF COVERAGEAND/ORVIOLATIONOF APOLICY CONDITION DUE TO THE ACTIONS OR CONDUCT OF THE ASSIGNOR</b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p>
+                PRINT NAME
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Enter PATIENT(Assignor)" asp-for="nF2AobDto.PrintNamePatient" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                SIGNED
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="PATIENT" asp-for="nF2AobDto.PatientSignature" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                DATE
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.PrintDate" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <p>
+                PRINT NAME (Provide Of Health Care Service)
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Provide Of Health Care Service (Assignee)" asp-for="nF2AobDto.ProviderPrintName" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                SIGNED
+
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Provide Of Health Care Service" asp-for="nF2AobDto.ProviderSignature" />
+            </div>
+        </div>
+        <div class="col-4">
+            <p>
+                DATE
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.ProviderDate" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                HAS AN ORIGINAL AUTHORIZATION OR ASSIGNMENT PREVIOUSLY BEEN EXECUTED?
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsHasAnOrginalAuthorizationYes" name="nF2AobDto.IsHasAnOrginalAuthorization" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsHasAnOrginalAuthorizationYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsHasAnOrginalAuthorizationNo" name="nF2AobDto.IsHasAnOrginalAuthorization" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="IsHasAnOrginalAuthorizationNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                IS THE ORIGINAL SIGNATURE OF THE PARTIES ON FILE?
+            </p>
+            <div class="row">
+                <div class="col-sm-5  col-5 col-lg-6 col-xl-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsPatientOrginalSignatureOfFilesYes" name="nF2AobDto.IsPatientOrginalSignatureOfFiles" class="custom-control-input" value="yes" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientOrginalSignatureOfFilesYes">Yes</label>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="IsPatientOrginalSignatureOfFilesNo" name="nF2AobDto.IsPatientOrginalSignatureOfFiles" class="custom-control-input" value="no" autocomplete="off">
+                        <label class="custom-control-label" for="IsPatientOrginalSignatureOfFilesNo">No</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR OTHER PERSON FILES AN APPLICATION FOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLY FALSE INFORMATION, OR CONCEALS FOR THE PURPOSE OF MISLEADING, INFORMATION CONCERNING ANY FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGE OR CONVERSION OF ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND SHALL ALSO BE SUBJECT TO A CIVIL PENALTY NOT TO EXCEED FIVE THOUSAND DOLLARS AND THE VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.</b>
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Date</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" placeholder="Date " />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>PROVIDER'S SIGNATURE </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="PROVIDER'S SIGNATURE" />
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                IRS/TIN IDENTIFICATION NO.
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="IRS/TIN IDENTIFICATION NO." />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>WCB RATING CODE IF NONE, SPECIALTY</p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="WCB RATING CODE IF NONE, SPECIALTY" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                (FOR ACCIDENTS OCCURRING ON AND AFTER 3/1/02)
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Print Patient's Name" asp-for="nF2AobDto.AssignorPrintPatientName" />
+            </div>
+        </div>
+        <div class="col-3">
+            <b> ,("Assignor") hereby assign to </b>
+        </div>
+        <div class="col-3">
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Health Care Provider Name" asp-for="nF2AobDto.AssignorPrintProviderName" />
+            </div>
+        </div>
+        <div class="col-3">
+            <b> ,("Assignee") </b>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b> all rights privileges and remedies to payment for health care services provided by assignee to which I am  entitled under Article 51 (the No-Fault statute) of the Insurance Law.</b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>
+                    The Assignee hereby certifies that they have not received any payment from or on behalf of the Assignor and
+                    shall not pursue payment directly from the Assignor for services provided by said Assignee for injuries sustained due to the motor vehicle accident which occurred on
+                    <input type="text" class="datepicker text-input" asp-for="nF2AobDto.AssignorPrintProviderName" /> ,not withstanding any other agreement to the contrary.
+                </b>
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p><b>This agreement may be revoked by the assignee when benefits are not payable based upon the assignor’s lack of coverage and/or violation of a policy condition due to the actions or conduct of the assignor</b></p>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>
+                <b>
+                    ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR OTHER PERSON FILES AN APPLICATION FOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLY FALSE INFORMATION, OR CONCEALS FOR THE PURPOSE OF MISLEADING, INFORMATION CONCERNING ANY FACT MATERIALTHERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH ANOTHERTO MAKEA FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGEOR CONVERSION OF ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND SHALL ALSO BE SUBJECT TO A CIVIL PENALTY NOT TO EXCEED FIVE THOUSAND DOLLARS AND THE VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                </b>
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Print Name Of Patient</p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Print Name Of Patient" asp-for="nF2AobDto.PrintNameOfPatient" />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Signature of Patient</p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Signature of Patient" asp-for="nF2AobDto.PrintSignatureOfPatient" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Address of Patient Line 1
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Address of Patient Line 1" asp-for="nF2AobDto.PrintAddressOfPatient" />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Address Line 2</p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Address of Patient Line 2" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Date of Signature</p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" placeholder="Signature date" asp-for="nF2AobDto.PrintDateOfSignaturePatient" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Print Name Of Provider
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Print Name Of Provider" asp-for="nF2AobDto.PrintNameOfProvider" />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>Signature Of Provider</p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Signature Of Provider" asp-for="nF2AobDto.PrintSignatureOfProvider" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Date Of Signature
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input datepicker" asp-for="nF2AobDto.PrintDateOfSignatureProvider" />
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Address Of Provider Line 1
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Address Of Provider Line 1" asp-for="nF2AobDto.PrintAddressOfProvider" />
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xl-6 col-12">
+            <p>
+                Address Of Provider Line 2
+            </p>
+            <div class="input-field">
+                <input type="text" class="text-input" placeholder="Address Of Provider Line 2" />
+            </div>
+        </div>
+
+    </div>
+    <div class="row mt-2 mb-2">
+        <div class="col s12">
+            <div class="center">
+                <button type="submit" id="saveBtn" class="btn add-btn">Save</button>
+
+                @*<a href="@Url.Action("Employeelist","employee")" class="Recreate btn">Cancel</a>*@
+            </div>
+        </div>
+    </div>
+</form>

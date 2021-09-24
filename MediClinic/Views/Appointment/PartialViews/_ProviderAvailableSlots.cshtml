@@ -1,0 +1,21 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+
+@using  MedliClinic.Utilities.Utility
+<h6 class="slotText" style="display:none">Available Slots:</h6>
+<div class="row" id="SlotsRow">
+    @if (!(Model.SlotsList is null))
+    {
+        @foreach (var item in Model.SlotsList)
+        {
+            <div class="col-md-3">
+
+                <a class="Slots" onclick="SaveAvailableSlots(@item.SlotId)">
+                    <span>@item.StartTime.Value.ToString(@"hh\:mm")</span>
+                    -
+                    <span>@item.EndTime.Value.ToString(@"hh\:mm")</span>
+                </a>
+            </div>
+        }
+
+    }
+</div>

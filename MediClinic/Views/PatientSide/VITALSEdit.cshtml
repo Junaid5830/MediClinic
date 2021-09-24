@@ -1,0 +1,434 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "VITALS ";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    bool shouldDisableFieldsOrNot = false;
+    if (!(Model.VitalDto is null))
+    {
+        shouldDisableFieldsOrNot = Model.VitalDto.IsDisableFields;
+    }
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        label, input {
+    position: relative;
+    display: block;
+    padding-right: 76px;
+    width: 170px;
+    box-sizing: border-box;
+}
+
+label::after {
+    content: '.' attr(data-domain);
+    position: absolute;
+    top: 4px;
+    left: 94px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    display: block;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+}
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 100% !important
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+    </style>
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="~/app-assets/js/jquery.form.js"></script>*@
+    <script>
+
+
+        $(document).ready(function () {
+            var dateVal = $('.patientDOB').val();
+            if (dateVal == "01-01-0001" || dateVal == "01/01/0001") {
+                $('.patientDOB').val('');
+            }
+            debugger;
+            if ('@shouldDisableFieldsOrNot' == "True") {
+                $('.custom-combobox-input').attr('disabled',true)
+                $('.disableIncasesOfView').attr('disabled', true);
+            }
+           
+        });
+
+        function onCreatePatientExamType(data) {
+            debugger;
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Cannot Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                $('.patientExamType').val('');
+                $('.patientExamType').removeClass('valid');
+
+                var examTypeSelectList = $('#typeofExam');
+                examTypeSelectList.append($('<option></option>').val(data.examTypeId).text(data.examName));
+            }
+        };
+
+        function onCreateExamReason(data) {
+            debugger;
+            var msg = data.success;
+            if (data.isError) {
+
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Cannot Save, Already In Drop Down',
+                    delay: 5000,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+            else {
+
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record Save',
+                    delay: 5000,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+                $('.ExamReasonNameVal').val('');
+                $('.ExamReasonNameVal').removeClass('valid');
+
+                var examReasonSelectList = $('#resonOfExam');
+                examReasonSelectList.append($('<option></option>').val(data.examReasonId).text(data.reasonName));
+            }
+        };
+
+
+        $('#vitalForm').on('submit', function (e) {
+
+           var examinerVal = $('#comboboxExaminer').val();
+           var examReasonVal = $('#resonOfExam').val();
+
+            if (examinerVal == "") {
+              $("#combobox_ExaminerErr").html("Examiner field is required");
+            }
+            else {
+              $("#combobox_ExaminerErr").html("");
+            }
+            if (examReasonVal == "") {
+              $("#combobox_Reasonerr").html("Reason field is required");
+            }
+            else {
+              $("#combobox_Reasonerr").html("");
+            }
+
+            if ($(this).valid()) {
+                if (!(examinerVal == "" || examReasonVal == "")) {
+                    $(this).ajaxSubmit({
+                    success: function (response) {
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    },
+                    complete: function (xhr) {
+                        // console.log(xhr.responseText);
+                    }
+                });
+                }
+            }
+        });
+
+
+        $(document).on("click", "#examinerDiv", function () {
+            var examinerVal = $('#comboboxExaminer').val();
+            if (examinerVal) {
+                $('#combobox_ExaminerErr').html("");
+            }
+        });
+        $(document).on("click", "#resonDiv", function () {
+           var examReasonVal = $('#resonOfExam').val();
+            if (examReasonVal) {
+                $('#combobox_Reasonerr').html("");
+            }
+        });
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m2 l3">
+                <h5 class="breadcrumbs-title  color-blue">Vitals</h5>
+            </div>
+            <div class="col s6 m9">
+                <a class="waves-effect waves-light float-right" onclick="goBack()">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+
+    @*New Exam*@
+
+    <div class="row">
+        <div class="col s12">
+            <form asp-action="VITALSEdit" asp-controller="PatientSide" id="vitalForm" method="post" class="form-inline">
+                <input hidden="hidden" id="hiddenPatientInfoId" asp-for="VitalDto.PatientVitalId" />
+                <input hidden="hidden" id="HiddenPatientUserId" asp-for="VitalDto.PatientInfoId" />
+                <div class="row current">
+
+                    <div class="col s12 m6">
+                        <p>Date of Exam<span class="required"> * </span></p>
+                        <div class="col s12 m12 l12 pl-0">
+                            <input type="text" class="datepicker text-input testDate patientDOB disableIncasesOfView" asp-for="VitalDto.ExamTime" placeholder="MM/DD/YYYY">
+                            <span class="required" asp-validation-for="VitalDto.ExamTime"></span>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m6 " id="examinerDiv">
+                        <p class="mb-0">Examiner <span class="required"> * </span></p>
+                        <div class="ui-widget">
+                            <select id="comboboxExaminer" class="combobox disableIncasesOfView" asp-for="VitalDto.ExaminerId"
+                                    asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                <option></option>
+                            </select>
+                            <span class="required" id="combobox_ExaminerErr"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6" id="resonDiv">
+                        <p class="mb-0">Reason of Exam <span class="required"> * </span></p>
+                        <div class="ui-widget">
+                            <select id="resonOfExam" class="combobox disableIncasesOfView" asp-for="VitalDto.ReasonForExamId"
+                                    asp-items="@(new SelectList(Model.PatientExamReasonList,"ExamReasonId","ReasonName"))">
+                                <option></option>
+                            </select>
+                            <span class="required" id="combobox_Reasonerr"></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row current">
+                    <div class="col s6 m2 l3">
+                        <h5 class="breadcrumbs-title  color-blue">Exam types</h5>
+                    </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+                        <p>
+                            Blood Pressure
+                        </p>
+                        <input class="text-input input-styling vitalBloodPressure disableIncasesOfView" type="text" asp-for="VitalDto.BloodPressure" placeholder="Enter Blood Pressure">
+                    </div>
+                    <div class="col s12 m6">
+                        <p>Pulse</p>
+                        <input class="text-input input-styling vitalPulse disableIncasesOfView" type="text" asp-for="VitalDto.Pulse" placeholder="Enter Pulse">
+                    </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+
+                        <p>
+                            Respiration
+                        </p>
+                        <input class="text-input input-styling vitalRespiration disableIncasesOfView" type="text" asp-for="VitalDto.Respiration" placeholder="Enter Respiration">
+                    </div>
+                    
+                            <div class="col s12 m6">
+                                <p>Height</p>
+                                <input class="text-input input-styling vitalHeight disableIncasesOfView" type="text" asp-for="VitalDto.Height" placeholder="Enter Height">
+                            </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+                        <p>Weight</p>
+                        <input class="text-input input-styling vitalWeight disableIncasesOfView" type="text" asp-for="VitalDto.Weight" placeholder="Enter Weight">
+                    </div>
+                    <div class="col s12 m6">
+                        <p>
+                            Temp Method
+                        </p>
+                        <input class="text-input input-styling vitalTempMethod disableIncasesOfView" type="text" asp-for="VitalDto.TempMethod" placeholder="Enter Temp Method">
+                    </div>
+
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+                        <p>BMI Status</p>
+                        <input class="text-input input-styling vitalBMIStatus disableIncasesOfView" type="text" asp-for="VitalDto.BMIStatus" placeholder="Enter BMI Status">
+                    </div>
+                    <div class="col s12 m6">
+                        <p>
+                            BMI
+                        </p>
+                        <input class="text-input input-styling vitalBMI disableIncasesOfView" type="text" asp-for="VitalDto.BMI" placeholder="Enter BMI">
+                    </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+                        <p>Oxygen Saturation</p>
+                        <input class="text-input input-styling vitalOxygenSaturation disableIncasesOfView" type="text" asp-for="VitalDto.OxygenSaturation" placeholder="Enter Oxygen Saturation">
+                    </div>
+                    <div class="col s12 m6">
+                        <p>Allergies</p>
+                        <input class="text-input input-styling vitalAllergies disableIncasesOfView" type="text" asp-for="VitalDto.Allergies" placeholder="Enter Allergies" onkeypress="return /[a-z]/i.test(event.key)">
+                    </div>
+                </div>
+                <div class="row current">
+                    <div class="col s12 m6">
+                        <p>Temperature</p>
+                        <input class="text-input input-styling vitalTemprature disableIncasesOfView" type="text" asp-for="VitalDto.Temprature" placeholder="Enter Temperature">
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <button type="submit" class="btn add-btn disableIncasesOfView">Save</button>
+                        <a href="@Url.Action("VITALS", "PatientSide",new {Id = patientInfoId })" class="Recreate btn disableIncasesOfView">Cancel</a>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+        <aside id="right-sidebar-nav">
+            <div id="slide-out-right2" class="slide-out-right-sidenav sidenav rightside-navigation">
+                <div class="row">
+                    <div class="slide-out-right-title">
+                        <div class="col s12 border-bottom-1 pb-0 pt-1">
+                            <div class="row">
+                                <div class="col s2 pl-0 center">
+                                    <i class="material-icons vertical-text-middle"><a href="javascript:void(0);" class="sidenav-close">clear</a></i>
+                                </div>
+                                <div class="col s10 pl-0 mt-2">
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+                                <form asp-action="ExamType" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientExamType(data)" class="col s12">
+                                    <h5 class="mb-10 blue-text">
+                                        Patient Exam Type Name
+                                        <span class="required"> * </span>
+                                    </h5>
+                                    <div class="input-field col s12 mb-10">
+
+                                        <input class="text-input patientExamType" type="text" asp-for="PatientExamTypeDto.ExamName" placeholder="Enter exam name " />
+                                        <span class="required" asp-validation-for="PatientExamTypeDto.ExamName"></span>
+                                    </div>
+                                    <button type="submit" class="modal-action btn add-btn right">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <aside id="right-sidebar-nav">
+            <div id="slide-out-right3" class="slide-out-right-sidenav sidenav rightside-navigation">
+                <div class="row">
+                    <div class="slide-out-right-title">
+                        <div class="col s12 border-bottom-1 pb-0 pt-1">
+                            <div class="row">
+                                <div class="col s2 pl-0 center">
+                                    <i class="material-icons vertical-text-middle"><a href="javascript:void(0);" class="sidenav-close">clear</a></i>
+                                </div>
+                                <div class="col s10 pl-0 mt-2">
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+                                <form asp-action="ExamReason" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateExamReason(data)" class="col s12">
+                                    <h5 class="mb-10 blue-text">
+                                        Patient Exam Reason Name
+                                        <span class="required"> * </span>
+                                    </h5>
+                                    <div class="input-field col s12 mb-10">
+
+                                        <input class="text-input employementTitleval ExamReasonNameVal" type="text" asp-for="PatientExamReasonDto.ReasonName" placeholder="Enter Exam Reason " />
+                                        <span class="required" asp-validation-for="PatientExamReasonDto.ReasonName"></span>
+                                    </div>
+                                    <button type="submit" class="modal-action btn add-btn right">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </aside>

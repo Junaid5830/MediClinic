@@ -1,0 +1,217 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    @*<div class="container">
+        <div class="row">
+            <div class="col s12">
+                <h6 class="color-blue">Past Exam</h6>
+                <table id="Exam-table" class="display">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="Exam-table" />
+                                    <span></span>
+                                </label>
+                            </th>
+                            <th>Date/Time of Exam</th>
+                            <th>Examiner</th>
+                            <th>Type of Exam</th>
+                            <th>Reason for Exam</th>
+                            <th>Diagnosis </th>
+                            <th>Report </th>
+                            <th>Signed </th>
+                            <th class="all">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="card">
+                            <th>
+                                <label>
+                                    <input type="checkbox" />
+                                    <span></span>
+                                </label>
+                            </th>
+                            <td>07/07/2020 11:20pm</td>
+                            <td>Dr John</td>
+                            <td>Initial</td>
+                            <td>Auto Accident</td>
+                            <td>Amnisia</td>
+                            <td>YES</td>
+                            <td>YES</td>
+                            <td>
+                                <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown1'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                                 Dropdown Structure 
+                                <ul id='dropdown1' class='dropdown-content'>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                                </ul>
+
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+                </table>
+                <a href="@Url.Action("PatientClaimsExams","Home")" class="right exam_viewmore">View More</a>
+                <h6 class="color-blue">Current Exam</h6>
+                <table id="CurrentExam-table" class="display">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <label>
+                                    <input type="checkbox" class="CurrentExam-table" />
+                                    <span></span>
+                                </label>
+                            </th>
+                            <th>Date/Time of Exam</th>
+                            <th>Examiner</th>
+                            <th>Type of Exam</th>
+                            <th>Reason for Exam</th>
+                            <th>Diagnosis </th>
+                            <th>Report </th>
+                            <th>Signed </th>
+                            <th class="all">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="card">
+                            <th>
+                                <label>
+                                    <input type="checkbox" />
+                                    <span></span>
+                                </label>
+                            </th>
+                            <td>07/07/2020 11:20pm</td>
+                            <td>Dr John</td>
+                            <td>Initial</td>
+                            <td>Auto Accident</td>
+                            <td>Amnisia</td>
+                            <td>YES</td>
+                            <td>YES</td>
+                            <td>
+                                <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                                 Dropdown Structure 
+                                <ul id='dropdown2' class='dropdown-content'>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>View</a></li>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                    <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                                </ul>
+
+                            </td>
+
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>*@
+
+@*<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mb-1" id="examform_btn">Add New Exam</button>
+        </div>
+    </div>
+</div>*@
+
+<div class="container" id="exam_form" >
+    @*New Exam*@
+    <div class="row">
+        <form class="form-inline col s12">
+            <div class="row">
+                <div class="col s12 m6">
+                 
+                    <div class="input-field pl-0 ">
+                        <p>Medical History Template</p>
+                        <div class="dropdownauto"><input class="text-input input-styling " type="text" id="Template" placeholder="Select Type of Template"></div>
+                    </div>
+                </div>
+
+                <div class="col s12 m6">
+                   
+                    <div class="input-field  pl-0">
+                        <p>Date</p>
+                        <input type="text" class="datepicker text-input" placeholder="Select Date">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                   
+                    <div class="input-field  pl-0">
+                        <p>Date Of Incident</p>
+                        <input type="text" class="datepicker text-input" placeholder="Select Date">
+                    </div>
+                </div>
+
+                <div class="col s12 m6">
+                   
+                    <div class="input-field  pl-0">
+                        <p>Date Of 1st Simptoms</p>
+                        <input type="text" class="datepicker text-input" placeholder="Select Date">
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class=" col s12 m6 l6 ">
+                   
+                    <div class="input-field pl-0">
+                        <p>Time</p>
+                        <input type="text" class="timepicker text-input" placeholder="Select Time">
+                    </div>
+                </div>
+
+            </div>
+            <h5 class="color-blue">Examiner</h5>
+            <div class="row">
+                <div class=" col s12 m6">
+                  
+
+                    <div class="input-field pl-0 ">
+                        <p>Type Of Exam</p>
+                        <div class="dropdownauto"><input class="text-input input-styling " id="Exam" type="text" placeholder="Select Type of Exam"></div>
+                    </div>
+                </div>
+                <div class=" col s12 m6 ">
+                    <div class="input-field pl-0 ">
+                        <p>Open Exam Template</p>
+                        <div class="dropdownauto"><input class="text-input input-styling " id="OpenExam" type="text" placeholder="Select Type of Open Exam Template"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>Open Prescription Templates</p>
+                    <div class="input-field pl-0 ">
+                        <div class="dropdownauto"><input class="text-input input-styling " id="Prescription" type="text" placeholder="Select Type of Open Prescription Template"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <a href="javascript:void(0);" class="btn add-btn">Save</a>
+
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+</div>

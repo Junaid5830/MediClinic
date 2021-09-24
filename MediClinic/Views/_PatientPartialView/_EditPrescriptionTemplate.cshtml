@@ -1,0 +1,104 @@
+﻿@model MediClinic.Models.ProviderViewModel
+
+    <div class="row">
+        <input type="hidden" asp-for="medicationsTemplate.Id" />
+        <div class="col s12 m6">
+            <div class="input-field">
+                <p>Medication Name <span class="required"> * </span> </p>
+                <select id="MedicationName" asp-for="medicationsTemplate.MedicineId" class="select2" data-placeholder="Select Medication"
+                        asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))">
+                    <option value=""></option>
+                </select>
+               <span asp-validation-for="medicationsTemplate.MedicineId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col s12 m6">
+            <div class="input-field ">
+                <p>Quantity <span class="required"> * </span></p>
+                <input class="text-input" type="text" min="0" id="quantity" asp-for="medicationsTemplate.Quantity" placeholder="Quantity">
+                <span class="required" id="errmsg_work"></span>
+                <span id="quantcheck" class="text-danger" style="display:none;">Quantity is required</span>
+
+            </div>
+        </div>
+    </div>
+<div class="row">
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>Frequency</p>
+            <select id="Frequency" asp-for="medicationsTemplate.FrequencyId" class="select2" data-placeholder="Select Medication"
+                    asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Once", Value="Once"},
+                                                new SelectListItem() {Text = "Daily", Value="Daily"},
+                                                new SelectListItem() {Text = "Two Times a day", Value="Two Times a day"},
+                                                new SelectListItem() {Text = "Three Times a day", Value="Three Times a day"},
+                                                new SelectListItem() {Text = "Four Times a day", Value="Four Times a day"},
+                                                new SelectListItem() {Text = "Five Times a day", Value="Five Times a day"},
+                                                new SelectListItem() {Text = "Six Times a day", Value="Six Times a day"},
+                                                new SelectListItem() {Text = "Before Bed", Value="Before Bed"},
+                                                new SelectListItem() {Text = "Before Breakfast", Value="Before Breakfast"},
+                                                new SelectListItem() {Text = "Before Lunch", Value="Before Lunch"},
+                                                new SelectListItem() {Text = "Before Dinner", Value="Before Dinner"},
+                                                new SelectListItem() {Text = "Before meals", Value="Before meals"},
+                                                new SelectListItem() {Text = "Every 1 hour", Value="Every 1 hour"},
+                                                new SelectListItem() {Text = "Every 2 hour", Value="Every 2 hour"},
+                                                new SelectListItem() {Text = "Every 3 hour", Value="Every 3 hour"},
+                                                new SelectListItem() {Text = "Every 4 hour", Value="Every 4 hour"},
+                                                new SelectListItem() {Text = "Every 5 hour", Value="Every 5 hour"},
+                                                new SelectListItem() {Text = "Every 6 hour", Value="Every 6 hour"},
+                                                new SelectListItem() {Text = "Every 7 hour", Value="Every 7 hour"},
+                                                new SelectListItem() {Text = "Every week", Value="Every week"},
+                                                new SelectListItem() {Text = "Once a month", Value="Once a month"}
+                                         })">
+                <option value=""></option>
+            </select>
+            <span asp-validation-for="medicationsTemplate.FrequencyId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>Dose</p>
+            <input class="text-input" type="text" id="dose" asp-for="medicationsTemplate.Dose" placeholder="Dose">
+            <span class="required" id="errmsg_dose"></span>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>Unit</p>
+            <select id="Unit" asp-for="medicationsTemplate.Unit" class="select2" data-placeholder="Select Medication"
+                    asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "mg", Value="mg"},
+                                                new SelectListItem() {Text = "ml", Value="ml"}
+                                         })">
+                <option value=""></option>
+            </select>
+            <span asp-validation-for="medicationsTemplate.Unit" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>Start Date <span class="required"> * </span></p>
+            <input type="text" class="text-input" id="startDate" asp-for="StartDate" placeholder="Start Date">
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>End Date <span class="required"> * </span></p>
+            <input type="text" class="text-input" asp-for="EndDate" id="endDate" placeholder="End Date">
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+
+        </div>
+    </div>
+    <div class="col s12 m6">
+        <div class="input-field">
+            <p>Medication Comments</p>
+            <input class="text-input" type="text" id="comments" asp-for="medicationsTemplate.Notes" placeholder="Medication Comments">
+        </div>
+    </div>
+</div>

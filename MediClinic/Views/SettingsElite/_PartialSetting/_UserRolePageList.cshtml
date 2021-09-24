@@ -1,0 +1,114 @@
+﻿@model MediClinic.Models.DTOs.UsersDto.AuthUserDto
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table class="table dataTables_wrapper UserRolePagesList">
+    <thead>
+        <tr class="uppercase">
+            <th class="disable">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllRoleModule">
+                        <label class="custom-control-label" for="selectAllRoleModule"></label>
+                    </div>
+
+                </th>
+            <th>Page No</th>
+            <th>Page Name</th>
+            <th>Active</th>
+            <th>Sub Page Name</th>
+            <th>Active</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.UserRolePagesList.Where(x => x.ParentId is null))
+        {
+            <tr class="card" style="cursor: pointer">
+                <th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="Id_@item.MainMenuId" value="check">
+                            <label class="custom-control-label" for="Id_@item.MainMenuId"></label>
+                        </div>
+                    </th>
+                <td>@item.MainMenuId</td>
+
+                <td>@item.PageName</td>
+                <td>
+
+                    @if (item.IsActive == true)
+                    {
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="MPActive_@item.MainMenuId" onclick="DeleteUserRolePage(@item.MainMenuId,this)" checked>
+                            <label class="custom-control-label" for="MPActive_@item.MainMenuId"></label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input MainId" id="MPActive_@item.MainMenuId" onclick="AddUserRolePage(@item.MainMenuId,this)">
+                            <label class="custom-control-label" for="MPActive_@item.MainMenuId"></label>
+                        </div>
+                    }
+                </td>
+                @if (!(item.SubMenuRole is null))
+                {
+                    <td>
+                        @foreach (var Sub in item.SubRolePage)
+                        {
+                            @Sub.PageName <br />
+                        }
+                    </td>
+                    <td>
+                        @foreach (var Sub in item.SubRolePage)
+                        {
+                            if (item.IsActive == true)
+                            {
+                                if (Sub.UserRolePageId > 0)
+                                {
+                        <div class="custom-control custom-checkbox">
+                            
+                            <input type="checkbox" class="custom-control-input" id="PActive_@Sub.MainMenuId" onclick="SubDeleteAddUserRolePage(@Sub.MainMenuId,this)" checked>
+                            <label class="custom-control-label" for="PActive_@Sub.MainMenuId"></label>
+                        </div>
+                                }
+                                else
+                                {
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="PActive_@Sub.MainMenuId" onclick="SubAddUserRolePage(@Sub.MainMenuId,this)">
+                                        <label class="custom-control-label" for="PActive_@Sub.MainMenuId"></label>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                @*if (Sub.IsActive == true)
+                                {
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="PActive_@Sub.MainMenuId" onclick="SubAddUserRolePage(@Sub.MainMenuId)" >
+                                        <label class="custom-control-label" for="PActive_@Sub.MainMenuId"></label>
+                                    </div>
+                                }
+                                else
+                                {*@
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="PActive_@Sub.MainMenuId" onclick="SubAddUserRolePage(@Sub.MainMenuId)" disabled>
+                                        <label class="custom-control-label" for="PActive_@Sub.MainMenuId"></label>
+                                    </div>
+                                //}
+                            }
+
+                        }
+                    </td>
+                }
+                else
+                {
+                    <td>N/A</td>
+                    <td>N/A</td>
+                }
+
+
+                
+            </tr>
+        }
+    </tbody>
+</table>

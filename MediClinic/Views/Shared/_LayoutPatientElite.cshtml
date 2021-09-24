@@ -1,0 +1,512 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var curUser = _sessionManager.GetUserId();
+    var RoleId = _sessionManager.GetRoleId();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="apple-touch-icon" href="~/Elite/images/Dashboard-icons/hippa.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/Elite/images/Dashboard-icons/hippa.png">
+    <title>@ViewData["Title"] | Medi Clinic</title>
+    <!-- This page CSS -->
+    <link href="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <!-- chartist CSS -->
+    <link href="~/Elite/_node_modules/morrisjs/morris.css" rel="stylesheet" />
+    <!--Toaster Popup message CSS -->
+    <link href="~/Elite/_node_modules/toast-master/css/jquery.toast.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/calendar/dist/fullcalendar.css" rel="stylesheet" />
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="~/Elite/css/style.min.css" rel="stylesheet">
+    <link href="~/Elite/css/custom.css" rel="stylesheet">
+    <link href="~/Elite/_node_modules/morrisjs/morris.css" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="~/Elite/css/pages/timeline-vertical-horizontal.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/datatables.net-bs4/css/responsive.dataTables.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+    <link href="~/Elite/_node_modules/dropify/dist/css/dropify.min.css" rel="stylesheet" />
+
+    <style>
+        .wp-menu .sidebar-nav {
+            box-shadow: none !important;
+        }
+        @@media (min-width: 768px) {
+            .wp-menu .sidebar-nav #sidebarnav > li > a {
+                width: 250px;
+            }
+        }
+
+        @@media (min-width: 1024px) {
+            .footer, .page-wrapper {
+                margin-left: 220px;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+                left: -250px;
+            }
+        }
+
+        @@media (min-width: 768px) {
+            .mini-sidebar .sidebar-nav #sidebarnav > li > a {
+                width: 70px;
+            }
+        }
+
+        @@media (min-width: 768px) {
+            .mini-sidebar .sidebar-nav #sidebarnav > li:hover > a {
+                width: 290px;
+            }
+        }
+    </style>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <    <![endif]-->
+    @RenderSection("styles", false)
+    <style>
+        .mailbox ul li .drop-title {
+            font-weight: 500;
+            padding: 11px 20px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .mailbox .message-center a {
+            border-bottom: 1px solid #e9ecef;
+            display: block;
+            text-decoration: none;
+            padding: 9px 15px;
+        }
+
+            .message-box .message-widget a div, .mailbox .message-center a div {
+                white-space: normal;
+            }
+
+            .mailbox .message-center a .mail-contnet {
+                display: inline-block;
+                width: 75%;
+                padding-left: 10px;
+                vertical-align: middle;
+            }
+
+        .message-center .btn-circle {
+            border-radius: 100%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: inline-block;
+            box-shadow: none !important
+        }
+
+        .message-center .mdi {
+            color: #00bcd4 !important;
+            font-size: 24px !important;
+        }
+
+        .mailbox .message-center a .mail-contnet .mail-desc, .mailbox .message-center a .mail-contnet .time {
+            font-size: 12px;
+            display: block;
+            margin: 1px 0;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: #212529;
+            white-space: nowrap;
+        }
+
+        span.badge {
+            line-height: 22px;
+            float: right;
+            box-sizing: border-box;
+            min-width: 3rem;
+            height: 22px;
+            margin-left: 14px;
+            padding: 0 6px;
+            text-align: center;
+        }
+
+            span.badge.new {
+                font-size: .8rem;
+                font-weight: 300;
+                border-radius: 2px;
+                background-color: #03a9f4;
+                color: #fff;
+            }
+
+        .badge-all {
+            font-size: .8rem;
+            font-weight: 300;
+            color: #fff;
+            border-radius: 2px;
+            background-color: #03a9f4;
+            padding: 2px 6px;
+            float: right;
+        }
+    </style>
+</head>
+
+<body class="wp-menu skin-blue-dark fixed-layout ">
+
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">MediClinic</p>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <partial name="_LayoutHeaderElitePatient" />
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <partial name="_LayoutSideNavPatientElite" />
+        @RenderBody()
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- End Container fluid  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <partial name="_LayoutFooterElite" />
+    <!-- ============================================================== -->
+    <!-- End footer -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+
+    <script src="~/Elite/_node_modules/jquery/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap popper Core JavaScript -->
+    <script src="~/Elite/_node_modules/popper/popper.min.js"></script>
+    <script src="~/Elite/_node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="~/Elite/js/perfect-scrollbar.jquery.min.js"></script>
+    <!--Wave Effects -->
+    <script src="~/Elite/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="~/Elite/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="~/Elite/_node_modules/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/Elite/_node_modules/sparkline/jquery.sparkline.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="~/Elite/js/custom.min.js"></script>
+    <script src="/app-assets/vendors/fullcalendar/lib/moment.min.js"></script>
+
+    <!-- ============================================================== -->
+    <!-- This page plugins -->
+    <!-- ============================================================== -->
+    <!--morris JavaScript -->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="~/Elite/_node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/Elite/_node_modules/datatables.net-bs4/js/dataTables.responsive.min.js"></script>
+    <script src="~/Elite/_node_modules/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/Elite/_node_modules/dropify/dist/js/dropify.min.js"></script>
+    <script src="~/lib/pnotify.custom.min.js"></script>
+    <script src="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script>
+
+
+    @RenderSection("scripts", false)
+    <script>
+        $(document).ready(function () {
+            if (@RoleId == 1) {
+                $('.addNewNotForPatient').hide();
+
+            }
+            else {
+                $('.addNewNotForPatient').show();
+
+            }
+        })
+        //$(function () {
+        //    $('.select2').select2();
+        //});
+        $(function () {
+            /*
+            * We need to turn it into a function.
+            * To apply the changes both on document ready and when we resize the browser.
+            */
+
+            function mediaSize() {
+                / Set the matchMedia /
+                if (window.matchMedia("(max-width: 1075px)").matches) {
+                    / Changes when we reach the min-width /
+                    $(".sideout").click(function () {
+                        debugger
+
+                        $(".sideout").addClass("disabled");
+
+
+                    });
+                    $(".right-side-close").click(function () {
+                        $(".right-sidebar").removeClass("shw-rside");
+
+                        $(".sideout").removeClass("disabled");
+
+                    })
+                }
+                else {
+                    $(".sideout").click(function () {
+
+
+
+                    });
+                    $(".right-side-close").click(function () {
+                        $("#main-wrapper").css("padding-right", "0px");
+                        $(".navbar-header a.sidebartoggler").trigger("click");
+                        $(".right-sidebar").removeClass("shw-rside");
+
+                        $(".sideout").removeClass("disabled");
+
+                    })
+                }
+            }
+
+            mediaSize();
+            window.addEventListener("resize", mediaSize, false);
+        });
+
+        $(document).on('click', '.sideout', function () {
+            $("body").addClass("sidebarflow");
+            $(".navbar-header a.sidebartoggler").trigger("click");
+            $("#main-wrapper").css("padding-right", "300px");
+            $(".sideout").addClass("disabled");
+
+        });
+        if ($('body').hasClass("mini-sidebar")) {
+            $(".sidebartoggler").removeClass("ml-4");
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.notification-badge').css('visibility', 'hidden');
+        });
+        var sweet3 = {
+            title: "Confirmation!",
+            text: "Do you want to delete this record?",
+            type: "errro",
+            showCloseButton: false,
+            showCancelButton: true,
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            confirmButtonText:
+                'Yes',
+            cancelButtonText:
+                'No',
+            cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            cancelButtonClass: 'btn btn-dark ml-1',
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Notification/GetNotifications",
+                data: { userId:@curUser},
+                success: function (data) {
+                    if (data.length > 0) {
+                        var readcount = 0;
+                        for (var notification of data) {
+                            if (notification.isRead == false) {
+                                readcount++;
+                            };
+                            $("#notifications-dropdown").append('<li class="showNotifyTs" notificationType=' + notification.notificationType + ' appointmentId=' + notification.appointmentId + '><div class="message-center"><a href="javascript:void(0);"> <div class="btn  btn-circle"><i class="mdi mdi-information"></i></div><div class="mail-contnet"><span class="mail-desc">' + notification.notificationInfo + '</span> <span class="time">' + notification.notificationTime + '</span></div></a></div></li>');
+                            $('.notification-badge').css('visibility', 'visible');
+
+                        }
+                        if (readcount > 0) {
+                            $('.badge-count').html(parseInt(readcount));
+                            $('.notification-badge').css('visibility', 'visible');
+                        }
+                        else {
+                            $('.badge-count').css('display', 'none');
+                            $('.notification-badge').css('visibility', 'hidden');
+                        }
+                    }
+                    else {
+                        $('.badge-all').css('visibility', 'hidden');
+                        $('.badge-count').css('visibility', 'hidden');
+                        $("#notifications-dropdown").append('<li><a href="javascript:void(0);" class="grey-text text-darken-2">No Notification</a></li>');
+                    }
+                }
+            });
+
+        });
+
+    </script>
+    <script>
+        function readNotification() {
+            $.ajax({
+                type: "POST",
+                url: "/Notification/UpdateNotifications",
+                data: { Id: @curUser },
+                success: function (data) {
+                    window.location.href = '/Notification/Notifications';
+                }
+            });
+        }
+    </script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/NotificationHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().then(() => {
+            connection.on("ReceiveMessage", (userId, articleContent) => {
+                 var sessionUserId = @curUser;
+                if (userId == sessionUserId) {
+                    showNotificationToUser(articleContent);
+                }
+            });
+        });
+        const startSignalRConnection = connection => connection.start().then(() => {
+            connection.on("ReceiveMessage", (articleContent) => {
+                showNotificationToUser(articleContent);
+            });
+        });
+        connection.onclose(() => setTimeout(startSignalRConnection(connection), 5000));
+    </script>
+    <script>
+        function showNotificationToUser(content) {
+            if (!window.Notification) {
+                console.log('Browser does not support notifications.');
+            } else {
+                if (Notification.permission === 'granted') {
+                    var notify = new Notification('Hi there!', {
+                        body: content,
+                        tag: "Mediclinic",
+                        icon: 'https://cdn1.iconfinder.com/data/icons/rounded-set-1/512/Appointment-512.png',
+                    });
+                } else {
+                    Notification.requestPermission().then(function (p) {
+                        if (p === 'granted') {
+                            var notify = new Notification('Hi there!', {
+                                body: content,
+                                tag: "Mediclinic",
+                                icon: 'https://cdn1.iconfinder.com/data/icons/rounded-set-1/512/Appointment-512.png',
+                            });
+                        }
+                        else {
+                            console.log('User blocked notifications.');
+                        }
+                    }).catch(function (err) {
+                        console.error(err);
+                    });
+                }
+            }
+        }
+    </script>
+    <script>
+        $(document).on('click', '.showNotifyTs', function () {
+            debugger;
+            var type = $(this).attr('notificationType');
+            var id = parseInt($(this).attr('appointmentId')) || 0;
+
+            if (type === "Appointment" && id !== 0) {
+                window.location.href = "../../Appointment/GetAppointmentId?appointId=" + id;
+            }
+        });    </script>
+
+    <div id="AppointmentDetailModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="exact-appointment">
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">Appointment Details</legend>
+
+                            <div class="row">
+                                <div class="col">
+                                    <p><b>Doctor Name</b> : <span id="doctorName"></span></p>
+                                    <p><b>Appointment Date</b> : <span id="appointmentDate"></span></p>
+                                    <p><b>Appointment Time</b> : <span id="appointmentTime"></span></p>
+                                    <p><b>Note</b> : <span>Your appointment has been scheduled.If you have any questions regarding your upcoming appointment, please feel free to reach out. Our representatives are here to answer any of your inquiries. We are here to help and look forward to hearing from you! </span></p>
+                                    <p>Thank you and have a wonderful day!</p>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div id="between-appointment">
+                        <div class="row">
+                            <div class="col s12">
+                                <div class="row">
+                                    <div class="col">
+                                        <fieldset class="scheduler-border">
+                                            <legend class="scheduler-border">Appointment Details</legend>
+
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p><b>Doctor Name</b> : <span id="doctorName"></span></p>
+                                                    <p><b>Appointment Date</b> : <span id="appointDate"></span></p>
+                                                    <p><b>Start Time</b> : <span id="startTime"></span></p>
+                                                    <p><b>End Time</b> : <span id="endTime"></span></p>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="right modal-close modal-action btn Recreate ml-2" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>

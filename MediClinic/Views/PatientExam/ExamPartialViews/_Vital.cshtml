@@ -1,0 +1,131 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{ 
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var concateResult = string.Empty;
+    var userRole = _sessionManager.GetRoleId();
+}
+
+<div id="Vitaltable">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_VitalListing.cshtml" />
+
+</div>
+
+
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="vitalField">
+            Add New Vitals
+        </a>
+    </div>
+</div>
+<div id="vitalForm" style="display:none">
+    <form asp-action="AddVitalsElite" asp-controller="PatientExam" id="vitalForm" method="post" data-ajax="true" data-ajax-success="onCreatePatientExamType(data)">
+        <input hidden="hidden" id="hiddenVisitId" asp-for="VitalDto.VisitId" />
+        <input hidden="hidden" id="hiddenPatientInfoId" asp-for="VitalDto.PatientVitalId" />
+        <input hidden="hidden" id="HiddenPatientUserId" asp-for="VitalDto.PatientInfoId" />
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <p>Date of Exam</p>
+                <input type="text" class="datepicker text-input testDate patientDOB disableIncasesOfView" asp-for="VitalDto.ExamTime" placeholder="MM/DD/YYYY">
+                <span class="required" asp-validation-for="VitalDto.ExamTime"></span>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <p>
+                    Examiner
+                </p>
+                <select data-placeholder="Select Examiner Name" id="comboboxExaminer" class="combobox disableIncasesOfView" asp-for="VitalDto.ExaminerId"
+                        asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                    <option></option>
+                </select>
+                <span class="required" id="combobox_ExaminerErr"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xl-6 col-12 ">
+                <p>
+                    Reason Of Exam
+
+                </p>
+                <select data-placeholder="Select Reason Of Exam" id="resonOfExam" class="combobox disableIncasesOfView" asp-for="VitalDto.ReasonForExamId"
+                        asp-items="@(new SelectList(Model.PatientExamReasonList,"ExamReasonId","ReasonName"))">
+                    <option></option>
+                </select>
+                <span class="required" id="combobox_Reasonerr"></span>
+            </div>
+        </div>
+        <div id="breadcrumbs-wrapper" class="pb-0">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class=" col">
+                    <h5 class="breadcrumbs-title color-blue"> Exam Types</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>Blood Pressure</p>
+                <input class="text-input input-styling vitalBloodPressure disableIncasesOfView" type="text" asp-for="VitalDto.BloodPressure" placeholder="Enter Blood Pressure">
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>Pulse</p>
+                <input class="text-input input-styling vitalPulse disableIncasesOfView" type="text" asp-for="VitalDto.Pulse" placeholder="Enter Pulse">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>Respiration</p>
+                <input class="text-input input-styling vitalRespiration disableIncasesOfView" type="text" asp-for="VitalDto.Respiration" placeholder="Enter Respiration">
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>Height</p>
+                <input class="text-input input-styling vitalHeight disableIncasesOfView" type="text" asp-for="VitalDto.Height" placeholder="Enter Height">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>Weight</p>
+                <input class="text-input input-styling vitalWeight disableIncasesOfView" type="text" asp-for="VitalDto.Weight" placeholder="Enter Weight">
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>Temp Method</p>
+                <input class="text-input input-styling vitalTempMethod disableIncasesOfView" type="text" asp-for="VitalDto.TempMethod" placeholder="Enter Temp Method">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>BMI Status</p>
+                <input class="text-input input-styling vitalBMIStatus disableIncasesOfView" type="text" asp-for="VitalDto.BMIStatus" placeholder="Enter BMI Status">
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>BMI</p>
+                <input class="text-input input-styling vitalBMI disableIncasesOfView" type="text" asp-for="VitalDto.BMI" placeholder="Enter BMI">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>Oxygen Saturation</p>
+                <input class="text-input input-styling vitalOxygenSaturation disableIncasesOfView" type="text" asp-for="VitalDto.OxygenSaturation" placeholder="Enter Oxygen Saturation">
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>Allergies</p>
+                <input class="text-input input-styling vitalAllergies disableIncasesOfView" type="text" asp-for="VitalDto.Allergies" placeholder="Enter Allergies" onkeypress="return /[a-z]/i.test(event.key)">
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-sm-12 col-md-6">
+                <p>Temperature</p>
+                <input class="text-input input-styling vitalTemprature disableIncasesOfView" type="text" asp-for="VitalDto.Temprature" placeholder="Enter Temperature">
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-sm-12 col-md-12">
+                <div class="center">
+                    <button type="submit" class="btn add-btn disableIncasesOfView">Save</button>
+                    @*<a href="@Url.Action("VITALS", "PatientSide",new {Id = patientInfoId })" class="Recreate btn disableIncasesOfView">Cancel</a>*@
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

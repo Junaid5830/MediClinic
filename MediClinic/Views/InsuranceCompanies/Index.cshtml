@@ -1,0 +1,229 @@
+﻿@model InsuranceCompaniesViewModel;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        $(function () {
+            var table = $('#insuranceCompanies').DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 1], "orderable": false }]
+
+            });
+
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+
+
+        function deleteCompany(companyId, event) {
+
+            event.closest('tr').remove();
+            $.get("/InsuranceCompanies/Delete", { Id: companyId }).done(function (data) {
+            });
+            $(".checkmark").show().fadeOut(6000);
+        }
+        
+        function editComapny(companyId) {
+            debugger
+          //companyName
+            $.get("/InsuranceCompanies/GetById", { Id: companyId }).done(function (data) {
+                debugger
+                console.log(data.company);
+                
+                $("#comapnyID").val(data.company.comapnyID);
+                $("#companyName").val(data.company.insuranceCompanyName);
+                $("#insuranceCompanyModal").modal("show");
+            });
+          
+        }
+        function onSuccessCompany(data) {
+            $("#insuranceCompanyModal").modal("hide");
+            $(".checkmark").show().fadeOut(6000);
+        }
+
+
+        $('.select-all').click(function () {
+            debugger;
+            $('.table  input').prop('checked', this.checked);
+        });
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class="col-sm-5 col-md-3 col-lg-3" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Insurance Companies
+                    </h5>
+                </div>
+                <div class="col-sm-7 col-md-6 col-lg-6" display-block">
+
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input data-search type="text" class="form-control set_Place search-box z-depth-2 search_box2" placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+
+                    <a href="#" data-toggle="modal" data-target="#insuranceCompanyModal" class="btn  float-right add-btn set_smallscreen">
+                        Add New Company
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="insuranceCompanies" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                    </div>
+                                </th>
+                                <th>Insurance Company Name</th>
+                                <th class="all">Action  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.InsuranceCompaniesList)
+                            {
+                                <tr class="card">
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input select-all" data-val="all" id="@item.ComapnyID">
+                                            <label class="custom-control-label" for="@item.ComapnyID" style="--bubble-color:#5a5a5a"></label>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        @item.InsuranceCompanyName
+                                    </td>
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="editComapny(@item.ComapnyID)"><a href="javascript:void(0);">Edit</a></li>
+                                            <li onclick="deleteCompany(@item.ComapnyID,this)"><a href="javascript:void(0);">Delete</a></li>
+
+
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="insuranceCompanyModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="row modal-title">
+                    <h6 class="color-blue">Add Insurance Company</h6>
+
+
+                </div>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+
+            <form asp-controller="InsuranceCompanies" asp-action="AddNewCompany"  method="post" data-ajax="true" data-ajax-success="onSuccessCompany(data)" id="insuranceCompanyForm">
+                <input type="hidden" id="comapnyID" asp-for="InsuranceCompany.ComapnyID" />
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                            <p>Insurance Company</p>
+                            <div class="input-field">
+                                <textarea id="companyName" asp-for="InsuranceCompany.InsuranceCompanyName" placeholder="Insurance Company Information" class="text-input"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="saveIncomeBtn" class="modal-action btn add-btn left">Save</button>
+                    <button type="button" class="btn Recreate waves-effect text-left right" data-dismiss="modal">Close</button>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+</div>

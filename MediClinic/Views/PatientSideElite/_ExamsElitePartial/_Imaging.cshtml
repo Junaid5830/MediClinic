@@ -1,0 +1,258 @@
+﻿<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Past Imaging</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="PastImaging" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th>DATE/Time OF IMAGING</th>
+                        <th>IMAGING FACILITY</th>
+                        <th>REPORT BY</th>
+                        <th>TYPE OF IMAGE</th>
+                        <th>REPORT Status</th>
+                        <th>IMAGE FILM</th>
+                        <th>DIAGNOSIS</th>
+                        <th class="all">Action  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+                        <td>07/07/2020 11:20pm</td>
+                        <td>SOUTH BEACH</td>
+                        <td>Dr. Imagon</td>
+                        <td>Created</td>
+                        <td>Shoulder X-Ray</td>
+                        <td>YES</td>
+                        <td>Tear</td>
+
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <h6 class="color-blue" style="padding-left:23px">Current Imaging</h6>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="CurrentImaging" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <input type="checkbox" class="select-all">
+
+
+
+                        </th>
+                        <th>DATE/Time OF IMAGING</th>
+                        <th>IMAGING FACILITY</th>
+                        <th>REPORT BY</th>
+                        <th>TYPE OF IMAGE</th>
+                        <th>REPORT Status</th>
+                        <th>IMAGE FILM</th>
+                        <th>DIAGNOSIS</th>
+                        <th class="all">Action  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card" style="cursor: pointer">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all">
+                                <span></span>
+                            </label>
+
+                        </th>
+                        <td>07/07/2020 11:20pm</td>
+                        <td>SOUTH BEACH</td>
+                        <td>Dr. Imagon</td>
+                        <td>Created</td>
+                        <td>Shoulder X-Ray</td>
+                        <td>YES</td>
+                        <td>Tear</td>
+
+                        <td class="action">
+                            <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                Options
+                                @*<span class="caret"></span>*@
+                            </button>
+                            <ul class="dropdown-menu Table_Drop ul_Caim">
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Print</a></li>
+                                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mt-1" id="imaging_btn">Add New Imaging</button>
+        </div>
+    </div>
+
+<section class="Imaging">
+    
+        <div class="row">
+            <form class="col-sm-12  ">
+                <div class="row">
+                    <div class=" col-md-6">
+                        <p>Date of Imaging</p>
+
+                        <div class="input-field">
+                            <input type="date" class="text-input" placeholder="select date">
+                        </div>
+                    </div>
+                    <div class=" col-md-6 ">
+                        <p>Time of Imaging</p>
+
+                        <div class="input-field">
+                            <input type="time" class="text-input" placeholder="select time">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Reported By
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select  Reported By</option>
+
+                                <option value="AK">Bronx NY</option>
+                                <option value="HI">New Jersy</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Type of Image
+
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select  Type of Image</option>
+
+                                <option value="AK">Smart Guy, Esq</option>
+                                <option value="HI">Rosy</option>
+
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Report Status
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Report Status</option>
+                                <option value="AK">Yes</option>
+                                <option value="AK">No</option>
+
+
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6 ">
+                        <p>
+                            Image Film
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Image Film</option>
+
+                                <option value="AK">N/A</option>
+
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 ">
+                        <p>
+                            Diagnosis
+                        </p>
+
+                        <div class="input-field">
+                            <select class="select2 form-control  text-input" style="width: 100%;">
+                                <option>Select Diagnosis</option>
+
+                                <option value="AK">No show</option>
+
+
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="text-right">
+                            <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    
+</section>

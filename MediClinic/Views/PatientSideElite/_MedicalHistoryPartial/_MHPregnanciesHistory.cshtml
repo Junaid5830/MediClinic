@@ -1,0 +1,131 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col s12 m6 l10">
+                                <h4 class="card-title">PREGNANCIES HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="SaveMHPregnanciesHistory" asp-controller="PatientMedicalHistory" method="post" id="PregnanciesHistoryForm">
+                        <input type="hidden" asp-for="MHPregnanciesHistory.Id" />
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    Mammogram (Approx)
+                                </p>
+                                <input class="text-input datepicker" asp-for="MHPregnanciesHistory.Mammogram" type="text" placeholder="Mammogram" autocomplete="off">
+                                <span class="required" asp-validation-for="MHPregnanciesHistory.Mammogram"></span>
+                            </div>
+
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    Breast Exam (Approx)
+                                </p>
+                                <input class="text-input datepicker" asp-for="MHPregnanciesHistory.BreastExam" type="text" placeholder="Breast Exam" autocomplete="off">
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    Pap Smear (Approx)
+                                </p>
+                                <input class="text-input datepicker" asp-for="MHPregnanciesHistory.PapSmear" type="text" placeholder="Pap Smear" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <p>
+                                    Do You Use Contraception?
+                                </p>
+
+                                <select data-placeholder="Select Contraception" class="select2" asp-for="MHPregnanciesHistory.Contraception" asp-items="@( new List<SelectListItem>{
+                                                               new SelectListItem() {Text = "Yes", Value="Yes"},
+                        new SelectListItem() {Text = "No", Value="No"}
+                                         })">
+                                    <option value="" selected disabled>
+                                        
+                                    </option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    What Kind Of Contraception?
+
+                                </p>
+                                <input class="text-input" asp-for="MHPregnanciesHistory.ContraceptionDetail" type="text" placeholder="What Kind Of Contraception?">
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <p class="content-p">
+                                    What Was Your Age At First Menses?
+                                </p>
+                                <input class="text-input" asp-for="MHPregnanciesHistory.FirstMensesAge" type="text" placeholder="What Was Your Age At First Menses?">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p>
+                                    Menstrual Periods
+                                </p>
+
+                                <select data-placeholder="Select Mestrual Periods" class="select2" asp-for="MHPregnanciesHistory.MenstrualPeriods" asp-items="@( new List<SelectListItem>{
+                                                                new SelectListItem() {Text = "Regular", Value="Regular"},
+                        new SelectListItem() {Text = "Irregular", Value="Irregular"},
+                        new SelectListItem() {Text = "Menopausal", Value="Menopausal"}
+                                         })">
+                                    <option value="" selected disabled>
+                                        
+                                    </option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Age At Menopause?
+                                </p>
+                                <input class="text-input" asp-for="MHPregnanciesHistory.MenopauseAge" type="text" placeholder="Age At Menopause?">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Any Gynecological Conditions Or Problems?
+                                </p>
+                                <input class="text-input" type="text" asp-for="MHPregnanciesHistory.GynecologicalConditions" placeholder="Any Gynecological Conditions Or Problems?">
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <p class="content-p">
+                                    Do You Have Hot Flashes Or Other Symptoms (Specify)?
+                                </p>
+                                <input class="text-input" type="text" asp-for="MHPregnanciesHistory.HotFlashesOrOther" placeholder="Do You Have Hot Flashes Or Other Symptoms (Specify)?">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">Notes</p>
+                                <input class="text-input" asp-for="MHPregnanciesHistory.Notes" type="text" placeholder="Notes">
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12 m12" style="text-align:center">
+                                <button type="submit" id="MHPregnanciesHistoryFormBtn" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,870 @@
+﻿@model MediClinic.Models.EmployeeViewModal
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Employee Widget</title>
+    <link rel="apple-touch-icon" href="~/app-assets/images/favicon/apple-touch-icon-152x152.png">
+    <link rel="shortcut icon" type="image/x-icon" href="~/app-assets/images/favicon/favicon-32x32.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- BEGIN: VENDOR CSS-->
+
+    <link href="~/Elite/_node_modules/wizard/steps.css" rel="stylesheet" />
+    <link href="~/Elite/_node_modules/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    <link href="~/cropper/croppie.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+
+    <link href="~/Elite/css/style.min.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/css/pnotify.custom.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" />
+
+    <style>
+        .form-control {
+            cursor: auto !important
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e9ecef !important;
+        }
+
+        .page-wrapper {
+            margin: 0 18% 0 18% !important;
+            padding-top: 20px !important;
+        }
+
+        .danger {
+            color: red;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .img-preview {
+            margin: 0 auto;
+            height: 250px;
+            width: 250px;
+            border-radius: 50% !important;
+        }
+
+        .remove-image {
+            /* display: none; */
+            position: absolute;
+            top: 0;
+            right: 22%;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #FFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 43%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .mdi {
+            font-size: 24px !important;
+        }
+
+        .text a, .text p {
+            color: #fff;
+            font-size: 17px;
+        }
+
+        #result {
+            cursor: pointer;
+        }
+
+        .panel-body .btn-info {
+            margin-top: 5px;
+            background-image: linear-gradient(135.42deg,#1790ea 0,#6078ea 100%) !important;
+        }
+
+        #result-wrapper:hover .middle {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .add-btn {
+            padding: 0 1rem !important;
+            line-height: 36px !important;
+            height: 38px !important;
+            background: #547cea !important;
+            color: white !important;
+        }
+
+        .modal-dialog {
+            max-width: 700px !important;
+        }
+
+        .imageModel input.custom-file-input {
+            width: 5rem;
+            right: 17px;
+            height: 38px !important;
+            top: -40px;
+            cursor: pointer !important;
+        }
+
+        .actionUpload {
+            width: 5rem;
+        }
+    </style>
+</head>
+<body class="wp-menu skin-blue-dark fixed-layout">
+    <div id="main-wrapper">
+        <div class="page-wrapper">
+            <div class="container-fluid">
+                <div class="row" id="validation">
+                    <div class="col-12">
+                        <div class="card wizard-content">
+                            <div class="card-body">
+                                <h4 class="card-title">Fill the form for login</h4>
+                                <form asp-action="EmployeeWidget" asp-controller="PatientWidget" id="EmployeeWidgetForm" method="post" class="validation-wizard wizard-circle">
+                                    <input class="text-input input-styling" name="User.UserId" id="PatientInfo_UserId" type="text" hidden="hidden">
+                                    <input type="text" hidden="hidden" asp-for="employeeBasicDto.Employee_id" />
+                                    <input type="text" hidden="hidden" asp-for="employeeBasicDto.EmploymentRoleId" />
+                                    <input type="text" hidden="hidden" asp-for="employeeBasicDto.Email" />
+                                    <input type="text" hidden="hidden" asp-for="employeeBasicDto.createdById" />
+                                    <input type="text" hidden="hidden" asp-for="employeeBasicDto.CreatedDate" />
+                                    <h6>Personal Info</h6>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wfirstName2"> First Name <span class="danger">*</span> </label>
+                                                    <input type="text" class="form-control required" id="wfirstName2" asp-for="employeeBasicDto.FirstName" name="employeeBasicDto.FirstName">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wMiddleName2"> Middle Name</label>
+                                                    <input type="text" class="form-control" id="wMiddleName2" asp-for="employeeBasicDto.MiddleName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wlastName2"> Last Name <span class="danger">*</span> </label>
+                                                    <input type="text" class="form-control required" id="wlastName2" asp-for="employeeBasicDto.LastName" name="employeeBasicDto.LastName">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wdate2">Date of Birth</label>
+                                                    <input type="text" class="form-control" asp-for="employeeBasicDto.DOB" id="wdate2" placeholder="Select Date">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wlocation2"> Gender<span class="danger"> * </span> </label>
+                                                    <select class="custom-select form-control select2 required" id="wlocation2" name="employeeBasicDto.GenderId"
+                                                            data-placeholder="Select Gender" asp-for="employeeBasicDto.GenderId" asp-items="@(new SelectList(Model.gender,"LookupId","LookupValue"))">
+
+                                                        @*<select class="custom-select form-control requried select2" id="wlocation2">*@
+                                                        <option value="" selected disabled></option>
+
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+
+
+                                                <div class="form-group">
+                                                    <label for="wMarital2"> Marital Status<span class="danger"> * </span> </label>
+                                                    <select data-placeholder="Select Marital Status" class="custom-select form-control required select2" id="wMarital2"
+                                                            asp-for="employeeBasicDto.MaritalStatusId" name="employeeBasicDto.MaritalStatusId" asp-items="@(new SelectList(Model.maritalStatus,"LookupId","LookupValue"))">
+                                                        <option value="" selected disabled>Select Marital Status</option>
+
+
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wRace2"> Race/Ethnicity </label>
+                                                    <select data-placeholder="Select Race/Ethnicity" class="custom-select form-control select2" id="wRace2" asp-for="employeeBasicDto.RaceEthnicityId" asp-items="@(new SelectList(Model.RaceEthnicity,"LookupId","LookupValue"))">
+                                                        <option value="" selected disabled></option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wAddress1">Address Line1 <span class="danger">*</span></label>
+                                                    <input type="text" class="form-control required" id="wAddress1" asp-for="employeeBasicDto.Addressline1" name="employeeBasicDto.Addressline1">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wAddress2">Address Line2 </label>
+                                                    <input type="text" class="form-control" id="wAddress2" asp-for="employeeBasicDto.Addressline2">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="wAddress3">Address Line3</label>
+                                                    <input type="text" class="form-control" id="wAddress3" asp-for="employeeBasicDto.Addressline3">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="info_Zip">Zip Code  <span class="danger">*</span></label>
+                                                    <input type="text" class="form-control required" maxlength="5" asp-for="employeeBasicDto.ZipCode" id="info_Zip" name="employeeBasicDto.ZipCode" placeholder="Enter Zip Code">
+                                                    <span class="required" id="err_infozip"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="info_city">City</label>
+                                                    <input type="text" class="form-control" id="info_city" asp-for="employeeBasicDto.City" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="info_state">State</label>
+                                                    <input type="text" class="form-control" id="info_state" asp-for="employeeBasicDto.State" readonly>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="info_country">Country</label>
+                                                    <input type="text" class="form-control" id="info_country" asp-for="employeeBasicDto.Country" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <!-- Step 2 -->
+                                    <h6>Account Info</h6>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="User2">User Name <span class="danger">*</span></label>
+                                                    <input type="text" class="form-control" asp-for="employeeBasicDto.UserName" id="User2">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="Email2">Email <span class="danger">*</span></label>
+                                                    <input type="text" class="form-control" asp-for="employeeBasicDto.Email" id="Email2">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Password <span class="danger">*</span></label>
+                                                    <input type="password" class="form-control " asp-for="employeeBasicDto.Password" value="@ViewBag.Password">
+                                                    <span class="danger" asp-validation-for="employeeBasicDto.Password"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Confirm Password <span class="danger">*</span></label>
+                                                    <input type="password" class="form-control " asp-for="employeeBasicDto.ConfirmPassword" value="@ViewBag.Password">
+                                                    <span class="required" asp-validation-for="employeeBasicDto.Password"></span>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Phone No <span class="danger">*</span></label>
+                                                    <input type="text" class="form-control phoneno" asp-for="employeeBasicDto.MobNo">
+                                                    <span class="required" asp-validation-for="employeeBasicDto.MobNo"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <!-- Step 3 -->
+                                    <h6>Upload Photo</h6>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+                                                    <div class="center">
+
+                                                        <div class="docs-preview clearfix">
+                                                            <div class="img-preview preview-lg">
+                                                                <div id="result-wrapper">
+
+
+                                                                    <a class="remove-image removebtn-show" href="javascript:void(0)" style="display: inline;display:none;">&#215;</a>
+                                                                    <div class="middle">
+                                                                        <div class="text">
+                                                                            <a class=" modal-trigger" data-toggle="modal" data-target="#modal1"><i class="mdi mdi-camera"></i></a>
+                                                                            <p>Upload</p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <img src="~/app-assets/images/user/male-user.png" class="empty_img" id="result" style=" width: 250px; height: 250px; border-radius:50%;border:2px solid #f5f5f5">
+
+                                                                </div>
+                                                                <div class="panel panel-default" id="captureImageFromCam">
+                                                                    <div class="panel-heading">Camera</div>
+                                                                    <div class="panel-body">
+                                                                        <div id="my_camera"></div>
+                                                                        <a class="btn btn-info" onClick="take_snapshot()"> Take Snapshot</a>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div id="modal1" class="modal imageModel bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div id="main-cropper"></div>
+
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 center">
+                                                                        <a class="btn add-btn button actionUpload" data-toggle="tooltip" data-placement="top" title="" data-original-title="Upload Image">
+                                                                            <i class="mdi mdi-cloud-upload"></i>
+                                                                            <input type="file" class="custom-file-input" id="upload">
+                                                                        </a>
+                                                                        <a id="rotateLeft" class="btn add-btn" data-deg="-90"><i class="mdi mdi-rotate-left"></i></a>
+                                                                        <a id="rotateRight" class="btn add-btn" data-deg="90"><i class="mdi mdi-rotate-right"></i></a>
+                                                                        <a class="btn modal-close add-btn disabled" id="showResult">Save</a>
+                                                                        @*<a class="btn add-btn" disabled id="RemoveResult">Remove</a>*@
+                                                                        <a class="btn modal-close add-btn" data-dismiss="modal">Cancel</a>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <input id="HidenProfilePic" hidden="hidden" asp-for="employeeBasicDto.HiddenPicture" />
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col s12">
+                                                <button type="submit" id="saveBtn" class="btn add-btn right" hidden="hidden">Save</button>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <!-- Step 4 -->
+                                    @*<h6>Write a signature</h6>
+                                        <section>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                                        <div class="m-signature-pad--body">
+                                                            <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                                        </div>
+                                                        <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                            <div class="description">Save Your signature before submit the form</div>
+                                                            <button type="button" class="btn add-btn uploadImageFromSignatureBox">
+                                                                Upload Image
+                                                            </button>
+                                                            <button type="button" class="btn Recreate clear signature_pad_clear" id="pad_clear" data-action="clear">
+                                                                Clear
+                                                            </button>
+                                                            <button type="button" id="accept" class="btn add-btn btn-info save1" data-action="save">
+                                                                Save Signature
+                                                            </button>
+
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </section>*@
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Elite/_node_modules/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/Elite/_node_modules/popper/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Elite/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Elite/js/waves.js"></script>
+    <script src="~/Elite/js/sidebarmenu.js"></script>
+    <script src="~/Elite/_node_modules/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="~/Elite/_node_modules/sparkline/jquery.sparkline.min.js"></script>
+    <script src="~/cropper/croppie.js"></script>
+    @*<script src="~/app-assets/signature-pad/signature-pad/jquery/signature_pad.umd.js"></script>
+        <script src="~/app-assets/signature-pad/signature-pad/jquery/app.js"></script>*@
+    <script src="~/Elite/js/custom.min.js"></script>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+
+    <script src="~/Elite/_node_modules/moment/moment.js"></script>
+    <script src="~/Elite/_node_modules/wizard/jquery.steps.min.js"></script>
+    <script src="~/Elite/_node_modules/wizard/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/Elite/_node_modules/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+    <script src="~/Elite/js/pages/mask.init.js"></script>
+    <script src="~/lib/pnotify.custom.min.js"></script>
+
+    <script>
+        $(function () {
+            $('.phoneno').inputmask('1 (999) 999-9999');
+            $('.EmailOrPhone').inputmask('9999');
+
+        })
+        //Custom design form example
+        $(document).ready(function () {
+            $('#captureImageFromCam').hide();
+
+        })
+        $(function () {
+
+            $('body').on('keydown', 'input', function (e) {
+
+                //console.log(this.value);
+
+                if (e.which === 32 && this.value === '') {
+                    return false;
+                }
+
+            });
+
+        });
+        $(function () {
+            $('#Email2').attr('disabled', true);
+            $(".select2").select2();
+            $("#wlocation2").select2();
+
+            $("#wdate2").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-100:c+10",
+                showButtonPanel: true,
+                dateFormat: "mm/dd/yy"
+            });
+        });
+
+
+        $(function () {
+
+            $(".remove-image").on('click', function () {
+                $(".list_image").attr('src', '/app-assets/images/user/male-user.png');
+                $(".remove-image").hide();
+            })
+
+            $(".removebtn-show").on('click', function () {
+                $(".empty_img").attr('src', '/app-assets/images/user/male-user.png');
+                $(".removebtn-show").hide();
+            })
+        });
+
+        var form = $(".validation-wizard").show();
+
+        $(".validation-wizard").steps({
+            headerTag: "h6",
+            bodyTag: "section",
+            transitionEffect: "fade",
+            titleTemplate: '<span class="step">#index#</span> #title#',
+            labels: {
+                finish: "Submit"
+            },
+            onStepChanging: function (event, currentIndex, newIndex) {
+                return currentIndex > newIndex || !(3 === newIndex && Number($("#age-2").val()) < 18) && (currentIndex < newIndex && (form.find(".body:eq(" + newIndex + ") label.error").remove(), form.find(".body:eq(" + newIndex + ") .error").removeClass("error")), form.validate().settings.ignore = ":disabled,:hidden", form.valid())
+            },
+            onFinishing: function (event, currentIndex) {
+                return form.validate().settings.ignore = ":disabled", form.valid()
+            },
+            onFinished: function (event, currentIndex) {
+                //swal("Form Submitted!", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed lorem erat eleifend ex semper, lobortis purus sed.");
+                $('#saveBtn').trigger('click');
+            }
+        }),
+            $(".validation-wizard").validate({
+                ignore: "input[type=hidden]",
+                errorClass: "text-danger",
+                successClass: "text-success",
+                highlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass)
+                },
+                unhighlight: function (element, errorClass) {
+                    $(element).removeClass(errorClass)
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element)
+                },
+                rules: {
+                    email: {
+                        email: !0
+                    }
+                }
+            })
+    </script>
+    <script>
+
+        var IsCapturedScreen = false;
+        var IsRequiredNf2Date = false;
+        var basic = $("#main-cropper").croppie({
+            viewport: { width: 250, height: 250, type: 'circle' },
+            boundary: { width: 280, height: 280 },
+            showZoomer: true,
+            url: "/app-assets/images/user/male-user.png",
+            enableExif: true,
+            enableOrientation: true
+        });
+
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        //WebCam Section Script
+        function OpenImageSection() {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            $('#result-wrapper').hide();
+            $('#captureImageFromCam').show();
+            Webcam.init();
+
+
+            Webcam.set({
+                width: 320,
+                height: 240,
+                image_format: 'jpeg',
+                jpeg_quality: 90
+            });
+
+            Webcam.attach('#my_camera');
+        }
+
+
+
+        function take_snapshot() {
+            IsCapturedScreen = true;
+            // take snapshot and get image data
+            $('#modal1').modal('show');
+            $('#showResult').removeClass('disabled');
+            Webcam.snap(function (data_uri) {
+                // display results in page
+
+                var result = dataURLtoFile(data_uri, "crop");
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#main-cropper").croppie("bind", {
+                        url: e.target.result
+                    });
+                };
+
+                reader.readAsDataURL(result);
+
+            });
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        //Usage example:
+        //var file = dataURLtoFile('data:text/plain;base64,aGVsbG8gd29ybGQ=','hello.txt');
+
+
+        $(".actionUpload input").on("change", function () {
+            $("#showResult").removeClass("disabled");
+            $("#RemoveResult").removeAttr("disabled");
+            readFile(this);
+        });
+        $(".actionDone").on("click", function () {
+            $(".actionDone").toggle();
+            $(".actionUpload").toggle();
+        });
+
+        $("#showResult").click(function () {
+            if (IsCapturedScreen) {
+                $('#result-wrapper').show();
+                $('#captureImageFromCam').hide();
+            }
+            $("#main-cropper")
+                .croppie("result", {
+                    type: "canvas",
+                    size: "viewport",
+                    circle: true
+                })
+                .then(function (resp) {
+                    $("#result").attr("src", resp);
+                });
+            $(".removebtn-show").show();
+            $(".remove-image").show();
+            $('#modal1').modal('hide');
+
+        });
+        $("#rotateLeft").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+
+        $("#rotateRight").click(function () {
+            basic.croppie('rotate', parseInt($(this).data('deg')));
+        });
+        $('.uploadImageFromSignatureBox').click(function () { $('#SignatureImageUpload').trigger('click'); });
+
+
+    </script>
+    <script>
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    debugger;
+                    //Signdata = e.target.result;
+                    $('#savetarget').attr('src', e.target.result);
+                    $('#savetarget').show();
+                    $('#UpdateCaseSignature').hide();
+
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#SignatureImageUpload").change(function () {
+            readURL(this);
+        });
+
+    </script>
+    <script>
+        @*$(document).on('submit', '#EmployeeWidgetForm', function (e) {
+            debugger;
+            if (@ViewBag.RoleId == 4) {
+                Swal.fire('You Will Be Able to login within 24 hours')
+            }
+            var ProfileSrc = $("#result").attr('src');
+            debugger;
+            //e.preventDefault();
+            if ($(this).valid()) {
+
+                //$('#accept').trigger('click');
+
+                ////debugger;
+                //////isSignatureButtonClick = true;
+                //////$('#upload').attr('disabled', true);
+                ////$(this).ajaxSubmit({
+                ////    data: { profileImage: ProfileSrc },
+                ////    success: function (response) {
+                ////        //$('#upload').attr('disabled', false);
+                ////        //$('#upload .waves-ripple').remove();
+                ////    },
+                ////    error: function (response) {
+                ////        //$('#upload').attr('disabled', false);
+                ////    },
+
+                ////    complete: function (xhr) {
+                ////        //disablePatientSignatureFields();
+
+                ////        //$('#upload').attr('disabled', false);
+                ////        //$('#upload .waves-ripple').remove();
+                ////        //onCreateSignatureForm(xhr.responseJSON);
+                ////    }
+                ////});
+
+
+
+
+
+
+
+
+            }
+        })*@
+
+
+        $("#EmployeeWidgetForm").submit(function (e) {
+                debugger;
+                e.preventDefault();
+                var flag = $("#EmployeeWidgetForm").valid();
+                if (!(flag)) {
+                e.preventDefault();
+                }
+                else {
+
+                var formData = new FormData(this);
+                $.ajax({
+                url: '@Url.Action("EmployeeWidget", "PatientWidget")',
+                type: 'POST',
+                data: formData,
+                    success: function (data) {
+                        if (data.isError) {
+                            new PNotify({
+                            title: 'Error!',
+                            text: 'UserName is already exist',
+                            delay: 5000,
+                            type: 'error',
+                            addclass: 'pnotify-center'
+                        });
+                        }
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+                });
+                }
+                });
+
+
+
+        var city = '';
+        var hascity = 0;
+        var hassub = 0;
+        var state = '';
+        var nbhd = '';
+        var subloc = '';
+        var country = '';
+        var hascountry = 0;
+        $('#info_Zip').keyup(function () {
+            $zval = $('#info_Zip').val();
+            if ($zval.length == 5) {
+                $jCSval = getCityState($zval, true);
+            }
+        });
+        function getCityState($zip, $blnUSA) {
+
+            $.getJSON('https://maps.googleapis.com/maps/api/geocode/json?address=' + $zip + '&key=AIzaSyDBlodDGZJdKI6epWtg8hZtKv-NQXv7aRc', function (response) {
+                if (response.status == "ZERO_RESULTS") {
+                    $("#err_infozip").html("Enter Valid & Only US zip code").show().fadeOut(2200);
+                }
+                else {
+                    var address_components = response.results[0].address_components;
+                    $.each(address_components, function (index, component) {
+
+                        var types = component.types;
+                        $.each(types, function (index, type) {
+                            if (type == 'locality') {
+                                city = component.long_name;
+                                hascity = 1;
+                            }
+                            else if (type == 'sublocality') {
+                                city = component.long_name;
+                            }
+                            if (type == 'administrative_area_level_1') {
+                                state = component.long_name;
+                            }
+                            if (type == 'country') {
+                                country = component.long_name;
+
+                            }
+                            if (type == 'neighborhood') {
+                                nbhd = component.long_name;
+                            }
+                            if (type == 'sublocality') {
+                                subloc = component.long_name;
+                                hassub = 1;
+                            }
+                        });
+                    });
+
+                    $("#info_city").val(city);
+                    $("#info_state").val(state);
+                    $("#info_country").val(country);
+                    //$('#modal1').modal('open');
+                }
+                //find the city and state
+
+
+                //pre-fill the city and state
+
+            });
+        }
+    </script>
+</body>
+</html>

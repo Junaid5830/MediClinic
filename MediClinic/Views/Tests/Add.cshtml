@@ -1,0 +1,154 @@
+﻿
+@model MediClinic.Models.TestsViewModel
+@{
+    ViewData["Title"] = "Add Test";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+}
+
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+        $(".select2").select2();
+        $('.selectpicker').selectpicker();
+
+        $(document).ready(function () {
+            $('.dropify').dropify();
+            //var id = getUrlParameter("VisitId");
+            //$("#VisitId").val(id);
+            //$('.patient-btns').each(function () {
+            //    debugger;
+            //    var url = $(this).attr('href');
+            //    url = url + id;
+            //    $(this).attr('href', url);
+            //});
+           
+        });
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "c-100:c+10",
+            showButtonPanel: true,
+            dateFormat: "mm/dd/yy"
+        });
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+                @*<div class="col-md-2">
+                    @Html.Partial("~/Views/Appointment/PartialViews/_VisitsButtons.cshtml")
+                </div>*@
+                    <div class=" col" margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue"> New Test</h5>
+                    </div>
+                    <div class="row">
+                        <form class="col-sm-12" asp-action="Add" asp-controller="Tests" method="post" id="TestsForm">
+                            <input type="hidden" class="text-input" asp-for="TestsDto.TestId" placeholder="id">
+                            <input type="hidden" class="text-input" asp-for="TestsDto.CreatedBy" />
+                            <input type="hidden" class="text-input" asp-for="TestsDto.CreatedDate" />
+                            <input type="hidden" class="text-input" id="VisitId" asp-for="TestsDto.VisitId" />
+                            <div class="row">
+                                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                    <p>
+                                        Visit/Procedure Category
+                                        <span asp-validation-for="TestsDto.VisitProcedureCategory" class="text-danger"></span>
+                                    </p>
+                                    <div class="input-field">
+                                        <select id="VisitProCat" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="TestsDto.VisitProcedureCategory"
+                                                asp-items="@(new SelectList(Model.VisitProcedureCategoryDtoList,"LookupId","LookupValue"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                    <p>
+                                        Date/Time
+                                        <span asp-validation-for="TestsDto.DateTime" class="text-danger"></span>
+                                    </p>
+                                    <div class="input-field">
+                                        <input type="text" asp-for="TestsDto.DateTime" class="datepicker text-input mr-number-input" placeholder="Enter Date">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                    <p>
+                                        Physician
+                                        <span asp-validation-for="TestsDto.ProviderInfoId" class="text-danger"></span>
+                                    </p>
+                                    <div class="input-field">
+                                        @*<select id="DoctorInfoId" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="TestsDto.DoctorInfoId"
+                                                asp-items="@(new SelectList(Model.DoctorsNamesDtoList,"DoctorInfoId","FirstName"))">
+                                            <option value="" selected disabled></option>
+
+                                        </select>*@
+                                        <select id="DoctorInfoId" class="select2" data-placeholder="--Select--" asp-for="TestsDto.ProviderInfoId"
+                                                asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                    <p>
+                                        ICDCode
+                                        <span asp-validation-for="TestsDto.ICDCode" class="text-danger"></span>
+                                    </p>
+                                    <div class="input-field">
+                                        <select id="ICDCode" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="TestsDto.ICDCodeId"
+                                                asp-items="@(new SelectList(Model.ICDCodesDtoList,"ICDCodeId","Name"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                                    <p>
+                                        CPTCode
+                                        <span asp-validation-for="TestsDto.CPTCode" class="text-danger"></span>
+                                    </p>
+
+                                    <div class="input-field">
+                                        <select id="CPTCode" data-placeholder="--Select--" class="select2 form-control  text-input" asp-for="TestsDto.CPTCodeId"
+                                                asp-items="@(new SelectList(Model.CPTCodesDtoList,"CPTCodeId","Name"))">
+                                            <option value="" selected disabled></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col s12">
+                                    <div class="center">
+                                        <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                                        @*<a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>*@
+                                        <a href="@Url.Action("Index","Tests")" class="waves-effect waves-light Recreate btn">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              
+                @*<div class="col">
+                    <a href="@Url.Action("Index","Tests")" class="waves-effect waves-light float-right" style="margin-top:-11px">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>*@
+            </div>
+        </div>
+     

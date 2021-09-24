@@ -1,0 +1,507 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3">
+                <div class="row mb-1">
+
+
+                    <div class="col s12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h5 class="breadcrumbs-title color-blue">Collection Attorney</h5>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col s12">
+                                    <form asp-action="PatientArbitrationAttorney" id="patientArbitrationAttorneyForm" asp-controller="PatientSide" method="post">
+                                        <input hidden="hidden" asp-for="patientArbitrationAttorney.ArbitrationAttorneyID" />
+                                        <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+                                        <input hidden="hidden" asp-for="patientArbitrationAttorney.UserId" />
+                                        
+                                        <div class="row mt-2 mb-2">
+                                            <div class="col s4 m3">
+                                                <p>
+                                                    <label>
+                                                        <input type="radio" class="filled-in patientCollectionTxtField" asp-for="patientArbitrationAttorney.AttorneyFields" value="From" />
+                                                        <span>From-Attorney</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                            <div class="col s4 m3">
+                                                <p>
+                                                    <label>
+                                                        <input type="radio" class="filled-in patientCollectionTxtField" asp-for="patientArbitrationAttorney.AttorneyFields" value="To" />
+                                                        <span>To Attorney</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                            <div class="col s4 m3">
+                                                <p>
+                                                    <label>
+                                                        <input type="radio" class="filled-in patientCollectionTxtField" asp-for="patientArbitrationAttorney.AttorneyFields" value="OF" />
+                                                        <span>Of Attorney</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Firm Name<span class="required"> * </span></p>
+
+                                                <div class="ui-widget collectionSelect_tab col s9 m10 pl-0">
+                                                    <select id="FirmName" class="FirmNameComboCollection genericClassForDD CollectionDropDListBeforeEditDisabled" asp-for="patientArbitrationAttorney.FirmId"
+                                                            asp-items="@(new SelectList(Model.legalInfoFirmNameList,"FirmId","FirmName"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="legalInfoFirmName_err"></p>
+                                                </div>
+                                               
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right19"><i class="material-icons ">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Attorney Name</p>
+
+                                                <div class="ui-widget collectionSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_AttoneyName" class="attorneyNameCombo genericClassForDD CollectionDropDListBeforeEditDisabled" asp-for="patientArbitrationAttorney.AttorneyId"
+                                                            asp-items="@(new SelectList(Model.legalInfoAttorneyNameList,"AttorneyId","AttorneyName"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right20"><i class="material-icons ">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Attorney Name</p>
+
+                                                <div class="ui-widget collectionSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_leadingAttorneyName" class="leadingAttorneyName genericClassForDD CollectionDropDListBeforeEditDisabled" asp-for="patientArbitrationAttorney.LeadingAttorneyId"
+                                                            asp-items="@(new SelectList(Model.legalInfoLeadingAttorneysList,"LeadingAttorneyId","LeadingAttorneyName"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right21"><i class="material-icons ">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Leading Attorney Phone</p>
+
+                                                <div class="input-field  pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno collection_tab patientCollectionTxtField" asp-for="patientArbitrationAttorney.LeadingAttorneyPhone" type="text" placeholder="Enter Address Line 2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Attorney Extension</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField"  asp-for="patientArbitrationAttorney.LeadingAttorneyExtension" type="text" placeholder="Enter Address Line 1">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Leading Attorney Fax</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling fax collection_tab patientCollectionTxtField"  asp-for="patientArbitrationAttorney.LeadingAttorneyFax" type="text" placeholder="Enter Address Line 2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Attorney Email</p>
+
+                                                <div class="input-field  pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField"  onkeypress="return AvoidSpace(event)" asp-for="patientArbitrationAttorney.LeadingAttorneyEmail" type="text" placeholder="Enter Address Line 1">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Address Line 1<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling CollectionAddressLine1 FirstSaveNotAllow collection_tab patientCollectionTxtField"  asp-for="patientArbitrationAttorney.AddressLine1" type="text" placeholder="Enter Address Line 1">
+                                                    <span class="required" asp-validation-for="patientArbitrationAttorney.AddressLine1"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Address Line 2</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField"  asp-for="patientArbitrationAttorney.AddressLine2" type="text" placeholder="Enter Address Line 2">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Address Line 3</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField" asp-for="patientArbitrationAttorney.AddressLine3" type="text" placeholder="Enter Address Line 3">
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m3">
+                                                <p>ZIP Code<span class="required"> * </span></p>
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling CollectionZipCode collection_tab patientCollectionTxtField" maxlength="5" id="collection_Zip" onkeypress="return AvoidSpace(event)" asp-for="patientArbitrationAttorney.Zip" type="text" placeholder="Enter ZIP Code">
+                                                    <span class="required" asp-validation-for="patientArbitrationAttorney.Zip"></span>
+                                                    <span class="required" id="err_collectionzip"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m3">
+                                                <p>City</p>
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling CollectionCity city patientCollectionTxtField" id="collection_city" asp-for="patientArbitrationAttorney.City" type="text" readonly>
+                                                    @*<span class="required" asp-validation-for="patientArbitrationAttorney.City"></span>*@
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>State</p>
+                                                    <div class="input-field">
+
+                                                        <input class="text-input input-styling state CollectionState patientCollectionTxtField" id="collection_state" asp-for="patientArbitrationAttorney.State" type="text" readonly>
+                                                        @*<span class="required" asp-validation-for="patientArbitrationAttorney.State"></span>*@
+
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>Country</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling CollectionCountry country patientCollectionTxtField" id="collection_country" asp-for="patientArbitrationAttorney.Country" type="text" readonly>
+                                                        @*<span class="required" asp-validation-for="patientArbitrationAttorney.Country"></span>*@
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6 ">
+                                                <p>Phone Number</p>
+
+                                                <div class="input-field  pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno collection_tab patientCollectionTxtField" id="Collection_phone" asp-for="patientArbitrationAttorney.PhoneNumber" type="text" placeholder="Enter Phone Number">
+                                                    <span class="required" id="errmsg_Collection_phone"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Fax</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling fax collection_tab patientCollectionTxtField" id="Collection_fax" type="text" asp-for="patientArbitrationAttorney.Fax" placeholder="Enter Fax Number">
+                                                    <span class="required" id="errmsg_Collection_fax"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Email<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling CollectionEmail collection_tab patientCollectionTxtField" type="email" onkeypress="return AvoidSpace(event)" asp-for="patientArbitrationAttorney.Email" placeholder="Enter Email Address">
+                                                    <span class="required" asp-validation-for="patientArbitrationAttorney.Email"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Website</p>
+                                                <div class="input-field webUrlDiv">
+                                                    <input class="text-input input-styling ColwebPageUrl collection_tab patientCollectionTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientArbitrationAttorney.Website" placeholder="Enter Website">
+                                                    <span class="required" id="Colweb_err"></span>
+                                                </div>
+                                                @*<div class="input-field col s2 m2">
+                                                    <a href="javascript:void(0);" id="collectionFormWebsite" class="btn form-add-btn" onclick="openColUrlOnTab();"><i class="material-icons">arrow_forward</i></a>
+                                                </div>*@
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Paralegal Name Or Initials<span class="required"> * </span></p>
+
+                                                <div class="ui-widget collectionSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patinet_leadingParalegalName" class="leadingParalegalNameComboCollection genericClassForDD CollectionDropDListBeforeEditDisabled" asp-for="patientArbitrationAttorney.LeadingParalegalId"
+                                                            asp-items="@(new SelectList(Model.LegalInfoLeadingParalegallist,"LeadingParalegalId","LeadingParalegalName"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="leadingParalegalName_err"></p>
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right22"><i class="material-icons ">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Leading Paralegal Phones<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0 numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno collection_tab patientCollectionTxtField" type="text" id="CollectionLeadingParalegalPhone" asp-for="patientArbitrationAttorney.LeadingParalegalPhone" placeholder="Enter Leading Paralegal Phone">
+                                                    <span class="required" asp-validation-for="patientArbitrationAttorney.LeadingParalegalPhone"></span>
+                                                    <span class="required" id="errmsg_CollectionLeadingParalegalPhone"></span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Paralegal Extension</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField"  type="text" asp-for="patientArbitrationAttorney.LeadingParalegalExtension" placeholder="Enter Leading Paralegal Extension">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Leading Paralegal Email<span class="required"> * </span></p>
+
+                                                <div class="input-field  pl-0 importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling collection_tab patientCollectionTxtField" onkeypress="return AvoidSpace(event)" type="email" asp-for="patientArbitrationAttorney.LeadingParalegalEmail" placeholder="Enter Leading Paralegal Email">
+                                                    <span class="required" asp-validation-for="patientArbitrationAttorney.LeadingParalegalEmail"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p>Leading Paralegal Fax</p>
+
+                                                <div class="input-field  pl-0">
+                                                    <input class="text-input input-styling fax collection_tab patientCollectionTxtField" id="CollectionLeadingParalegalfax" type="text" asp-for="patientArbitrationAttorney.LeadingParalegalFax" placeholder="Enter Leading Paralegal Fax">
+                                                    <span class="required" id="errmsg_CollectionLeadingParalegalfax"></span>
+
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>Legal status</p>
+
+                                                <div class="ui-widget collectionSelect_tab col s9 m10 pl-0">
+                                                    <select id="Collection_LegalStatus" class="PatientLegalStatusCombo genericClassForDD CollectionDropDListBeforeEditDisabled" asp-for="patientArbitrationAttorney.LegalStatus"
+                                                            asp-items="@(new SelectList(Model.legalInfoLegalStatusList,"legalStatusId","LegalStatus"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right11"><i class="material-icons ">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row set_rowbtn">
+                                            <div class="col s12 m12" style="text-align:center">
+                                                <button type="submit" id="btnPatientCollection" class="btn add-btn">Save</button>
+
+                                                @if (ViewBag.Action == "Update")
+                                                {
+                                                    <button type="button" data-val="CollectionForm" id="collectionEdit_Btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                    <button type="button" data-val="CollectionForm" id="collectionCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                                }
+                                                else
+                                                {
+                                                    @*<a href="javascript:void(0);" data-val="NewForm" id="emergenyEdit_btn"  class="btn Recreate">Edit</a>*@
+                                                    <a href="javascript:void(0);" data-val="NewForm" id="collectionCancel_btn" onclick="emptyPatientCollectionFields();" class="Recreate btn">Cancel</a>
+                                                }
+
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right11" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="LegalInfoLegalStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePILegalInfo(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add Legal Status <span class="required"> * </span></h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input colletionlegal_status addlegalStatus"  asp-for="LegalInfoLegalStatus.LegalStatus" type="text" placeholder="Enter Legal Status " />
+                                <span class="required" asp-validation-for="LegalInfoLegalStatus.LegalStatus"></span>
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right19" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="FirmName" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientInfoLegalStatus(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add New Firm Name <span class="required"> * </span></h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input Firm_name addlegalStatus" asp-for="LegalInfoFirmNameBasicDto.FirmName" type="text" placeholder="Enter Firm Name" />
+                                <span class="required" asp-validation-for="LegalInfoFirmNameBasicDto.FirmName"></span>
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right20" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="AttorneyName" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateAttorneyName(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add New Attorney Name <span class="required"> * </span></h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input attorney_name addlegalStatus"  asp-for="LegalInfoAttorneyNameBasicDto.AttorneyName" type="text" placeholder="Enter Attorney Name" />
+                                <span class="required" asp-validation-for="LegalInfoAttorneyNameBasicDto.AttorneyName"></span>
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right21" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientLeadingAttorney" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateLeadingAttorney(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add Attorney Name <span class="required"> * </span></h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input leadingAttoney_name addlegalStatus"  asp-for="legalInfoLeadingAttorneyBasicDto.LeadingAttorneyName" type="text" placeholder="Enter Leading Attorney Name " />
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right22" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="LeadingParalegal" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreateLeadingParalegal(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add Leading Paralegal Name <span class="required"> * </span></h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input leadingParalegal_name addlegalStatus"  asp-for="LegalInfoLeadingParalegalBasicDto.LeadingParalegalName" type="text" placeholder="Enter Leading Paralegal Name " />
+                            </div>
+
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</aside>

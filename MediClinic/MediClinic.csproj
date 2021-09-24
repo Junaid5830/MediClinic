@@ -1,0 +1,250 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject></StartupObject>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Message\**" />
+    <Compile Remove="Views\Patient\AddPatient\**" />
+    <Content Remove="Views\Message\**" />
+    <Content Remove="Views\Patient\AddPatient\**" />
+    <EmbeddedResource Remove="Views\Message\**" />
+    <EmbeddedResource Remove="Views\Patient\AddPatient\**" />
+    <None Remove="Views\Message\**" />
+    <None Remove="Views\Patient\AddPatient\**" />
+    <TypeScriptCompile Remove="Views\Message\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Shared\_PatientLayout.cshtml" />
+    <Content Remove="wwwroot\lib\pnotify.custom.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.7.19" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Home\PatientPartialViews\" />
+    <Folder Include="Views\_PatientPartialView\NewFolder\" />
+    <Folder Include="wwwroot\Clinical\img\" />
+    <Folder Include="wwwroot\DriverImage\" />
+    <Folder Include="wwwroot\Files\" />
+    <Folder Include="wwwroot\DmeQRImages\" />
+    <Folder Include="wwwroot\BarCodes\" />
+    <Folder Include="wwwroot\SignatureImages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\app-assets\signature-pad\signature-pad\jquery\app.js" />
+    <None Include="wwwroot\app-assets\signature-pad\signature-pad\jquery\signature_pad.umd.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales-all.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales-all.min.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\af.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-dz.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-kw.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-ly.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-ma.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-sa.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar-tn.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ar.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\az.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\bg.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\bs.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ca.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\cs.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\da.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\de.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\el.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\en-au.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\en-gb.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\en-nz.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\es-us.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\es.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\et.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\eu.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\fa.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\fi.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\fr-ca.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\fr-ch.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\fr.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\gl.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\he.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\hi.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\hr.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\hu.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\id.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\is.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\it.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ja.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ka.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\kk.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ko.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\lb.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\lt.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\lv.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\mk.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ms.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\nb.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ne.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\nl.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\nn.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\pl.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\pt-br.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\pt.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ro.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ru.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sk.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sl.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sq.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sr-cyrl.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sr.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\sv.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\th.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\tr.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\ug.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\uk.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\uz.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\vi.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\zh-cn.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\locales\zh-tw.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\main.js" />
+    <None Include="wwwroot\Elite\FullCalendar\lib\main.min.js" />
+    <None Include="wwwroot\Elite\js\custom.js" />
+    <None Include="wwwroot\Elite\js\custom.min.js" />
+    <None Include="wwwroot\Elite\js\dashboard1.js" />
+    <None Include="wwwroot\Elite\js\dashboard2.js" />
+    <None Include="wwwroot\Elite\js\dashboard3.js" />
+    <None Include="wwwroot\Elite\js\dashboard4.js" />
+    <None Include="wwwroot\Elite\js\pages\bootstrap-table.init.js" />
+    <None Include="wwwroot\Elite\js\pages\chat.js" />
+    <None Include="wwwroot\Elite\js\pages\flot-data.js" />
+    <None Include="wwwroot\Elite\js\pages\footable-init.js" />
+    <None Include="wwwroot\Elite\js\pages\jasny-bootstrap.js" />
+    <None Include="wwwroot\Elite\js\pages\jquery.PrintArea.js" />
+    <None Include="wwwroot\Elite\js\pages\jsgrid-init.js" />
+    <None Include="wwwroot\Elite\js\pages\mask.init.js" />
+    <None Include="wwwroot\Elite\js\pages\morris-data.js" />
+    <None Include="wwwroot\Elite\js\pages\toastr.js" />
+    <None Include="wwwroot\Elite\js\pages\validation.js" />
+    <None Include="wwwroot\Elite\js\pages\widget-charts.js" />
+    <None Include="wwwroot\Elite\js\pages\widget-data.js" />
+    <None Include="wwwroot\Elite\js\perfect-scrollbar.jquery.min.js" />
+    <None Include="wwwroot\Elite\js\sidebarmenu.js" />
+    <None Include="wwwroot\Elite\js\waves.js" />
+    <None Include="wwwroot\Elite\scss\colors\blue-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\blue.scss" />
+    <None Include="wwwroot\Elite\scss\colors\default-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\default.scss" />
+    <None Include="wwwroot\Elite\scss\colors\green-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\green.scss" />
+    <None Include="wwwroot\Elite\scss\colors\megna-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\megna.scss" />
+    <None Include="wwwroot\Elite\scss\colors\purple-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\purple.scss" />
+    <None Include="wwwroot\Elite\scss\colors\red-dark.scss" />
+    <None Include="wwwroot\Elite\scss\colors\red.scss" />
+    <None Include="wwwroot\Elite\scss\core\animation.scss" />
+    <None Include="wwwroot\Elite\scss\core\app.scss" />
+    <None Include="wwwroot\Elite\scss\core\buttons.scss" />
+    <None Include="wwwroot\Elite\scss\core\core.scss" />
+    <None Include="wwwroot\Elite\scss\core\custom-iconmind.scss" />
+    <None Include="wwwroot\Elite\scss\core\form-pages.scss" />
+    <None Include="wwwroot\Elite\scss\core\header.scss" />
+    <None Include="wwwroot\Elite\scss\core\other-common.scss" />
+    <None Include="wwwroot\Elite\scss\core\pagination.scss" />
+    <None Include="wwwroot\Elite\scss\core\perfect-scrollbar.scss" />
+    <None Include="wwwroot\Elite\scss\core\right-sidebar.scss" />
+    <None Include="wwwroot\Elite\scss\core\scafholding.scss" />
+    <None Include="wwwroot\Elite\scss\core\sidebar.scss" />
+    <None Include="wwwroot\Elite\scss\core\spinner.scss" />
+    <None Include="wwwroot\Elite\scss\core\table-pages.scss" />
+    <None Include="wwwroot\Elite\scss\core\theme-settings.scss" />
+    <None Include="wwwroot\Elite\scss\custom.scss" />
+    <None Include="wwwroot\Elite\scss\pages\bootstrap-switch.scss" />
+    <None Include="wwwroot\Elite\scss\pages\breadcrumb-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\chat-app-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\contact-app-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\dashboard1.scss" />
+    <None Include="wwwroot\Elite\scss\pages\dashboard2.scss" />
+    <None Include="wwwroot\Elite\scss\pages\dashboard3.scss" />
+    <None Include="wwwroot\Elite\scss\pages\dashboard4.scss" />
+    <None Include="wwwroot\Elite\scss\pages\easy-pie-chart.scss" />
+    <None Include="wwwroot\Elite\scss\pages\error-pages.scss" />
+    <None Include="wwwroot\Elite\scss\pages\file-upload.scss" />
+    <None Include="wwwroot\Elite\scss\pages\float-chart.scss" />
+    <None Include="wwwroot\Elite\scss\pages\floating-label.scss" />
+    <None Include="wwwroot\Elite\scss\pages\footable-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\form-icheck.scss" />
+    <None Include="wwwroot\Elite\scss\pages\google-vector-map.scss" />
+    <None Include="wwwroot\Elite\scss\pages\icon-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\inbox.scss" />
+    <None Include="wwwroot\Elite\scss\pages\login-register-lock.scss" />
+    <None Include="wwwroot\Elite\scss\pages\other-pages.scss" />
+    <None Include="wwwroot\Elite\scss\pages\pricing-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\progressbar-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\register3.scss" />
+    <None Include="wwwroot\Elite\scss\pages\ribbon-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\stylish-tooltip.scss" />
+    <None Include="wwwroot\Elite\scss\pages\tab-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\timeline-vertical-horizontal.scss" />
+    <None Include="wwwroot\Elite\scss\pages\ui-bootstrap-page.scss" />
+    <None Include="wwwroot\Elite\scss\pages\user-card.scss" />
+    <None Include="wwwroot\Elite\scss\pages\widget-page.scss" />
+    <None Include="wwwroot\Elite\scss\responsive.scss" />
+    <None Include="wwwroot\Elite\scss\style.scss" />
+    <None Include="wwwroot\Elite\scss\variable.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\activity.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\blog.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\calendar.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\carousel.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\chat-widget.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\comment.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\common-widget.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\contact.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\feed.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\msg-box.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\news-slide.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\product-review.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\profile.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\social.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\steamline.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\to-do.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\topbar-mail.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\weather-widget.scss" />
+    <None Include="wwwroot\Elite\scss\widgets\widgets.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediClinic.Models\MediClinic.Models.csproj" />
+    <ProjectReference Include="..\MediClinic.Services\MediClinic.Services.csproj" />
+    <ProjectReference Include="..\MedliClinic.Utilities\MedliClinic.Utilities.csproj" />
+  </ItemGroup>
+
+
+
+</Project>

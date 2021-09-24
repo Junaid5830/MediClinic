@@ -1,0 +1,291 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "VITALS";
+    //Layout = "~/Views/Shared/_PatientLayout/_PatientLayout.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var concateResult = string.Empty;
+}
+
+
+@section styles{
+
+    <style>
+
+
+        .dropdown-select {
+            background-color: #fff !important;
+            color: #6b6f82 !important;
+            border: 1px solid #6b6f82 !important;
+            margin-top: 0px !important;
+            padding: 5px 1rem;
+            border-radius: 4px;
+            height: 41px;
+            line-height: 27px;
+            box-shadow: 0px 0px 3px #6b6f82;
+        }
+
+
+        .dropbody {
+            margin-top: 40px !important;
+        }
+
+        #breadcrumbs-wrapper {
+            background: unset !important;
+        }
+
+            #breadcrumbs-wrapper.breadcrumbs-bg-image .breadcrumbs-title {
+                color: #6666ef;
+            }
+    </style>
+
+    <style>
+
+
+
+
+        .content-area .app-wrapper .avatar-contact img {
+            width: 38px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+        }
+
+        .list-img img {
+            width: 40px;
+            border-radius: 50%;
+            background-color: #f5f5f5;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12);
+        }
+
+
+
+        .list-img {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#Vitals-table").DataTable({ "info": false, responsive: true, lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0, 5], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+        });
+
+
+
+        function deleteVital(VitalId, event) {
+            debugger;
+
+            $.get("/PatientSide/DeleteVital", { patientVitalId: VitalId }).done(function (data) {
+                debugger;
+
+                if (data) {
+                    event.closest('tr').remove();
+
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Record deleted successfully',
+                        delay: 2500,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Something went wron',
+                        delay: 2500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+
+            });
+        }
+    </script>
+
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s3 m3 l2 margin-top-8">
+                <h5 class="breadcrumbs-title color-blue">Vitals</h5>
+            </div>
+            <div class="col s9 m6 l6 display-block">
+                <div class="header-search-wrapper display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" name="Search" placeholder="Search">
+                    <a class="btn ml-2 search-btn">
+                        Search
+                    </a>
+                </div>
+            </div>
+
+            <div class="col s12 m3 l4">
+                <a href="@Url.Action("VITALSEdit","PatientSide",new {Id = patientInfoId })" class="btn waves-effect waves-light float-right add-btn">
+                    Add New Vitals
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown5'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown5' class='dropdown-content dropbody'>
+                    <li><a href="javascript:void(0);">Option 1</a></li>
+                    <li><a href="javascript:void(0);">Option 2</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+    <div class="row">
+        <div class="col m12">
+            <table id="Vitals-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="select-all" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Date of Exam</th>
+                        <th>Examinar</th>
+
+                        <th>REASON FOR EXAM</th>
+                        <th>Results</th>
+
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Vitallist != null)
+                    {
+                        @foreach (var item in Model.Vitallist)
+                        {
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>@item.ExamTime.ToString("MM/dd/yyyy")</td>
+                        <td>Dr. @item.Examiner.FirstName @item.Examiner.LastName</td>
+                        <td>@item.ReasonForExam.ReasonName</td>
+                            @if (item.Temprature != null && item.BloodPressure != null && item.Pulse != null && item.Respiration != null && item.Height != null && item.Weight != null && item.TempMethod != null && item.BMIStatus != null && item.BMI != null && item.OxygenSaturation != null && item.Allergies != null )
+                            {
+                                concateResult = " Temp : " + item.Temprature + " BP : " + item.BloodPressure;
+                            }
+                            @if (!(item.Temprature is null))
+                            {
+                                concateResult = " Temp : " + item.Temprature;
+                            }
+                            else if (!(item.BloodPressure is null))
+                            {
+                                concateResult = " Bp : " + item.BloodPressure;
+                            }
+                            else if (!(item.Pulse is null))
+                            {
+                                concateResult = " Pulse : " + item.Pulse;
+                            }
+                            else if (!(item.Respiration is null))
+                            {
+                                concateResult = " Resp : " + item.Respiration;
+                            }
+                            else if (!(item.Height is null))
+                            {
+                                concateResult = " Height : " + item.Height;
+                            }
+                            else if (!(item.Weight is null))
+                            {
+                                concateResult = " Weight : " + item.Weight;
+                            }
+                            else if (!(item.TempMethod is null))
+                            {
+                                concateResult = " Tem Meth : " + item.TempMethod;
+                            }
+                            else if (!(item.BMIStatus is null))
+                            {
+                                concateResult = " BMI Status : " + item.BMIStatus;
+                            }
+                            else if (!(item.BMI is null))
+                            {
+                                concateResult = " BMI : " + item.BMI;
+                            }
+                            else if (!(item.OxygenSaturation is null))
+                            {
+                                concateResult = " Oxygen Sat : " + item.OxygenSaturation;
+                            }
+                            else if (!(item.Allergies is null))
+                            {
+                                concateResult = " Allergies : " + item.Allergies;
+                            }
+                        <td>@concateResult</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown_@item.PatientVitalId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <!-- Dropdown Structure -->
+                            <ul id='dropdown_@item.PatientVitalId' class='dropdown-content'>
+                                @if (item.IsEditableOrNot)
+                                {
+                                    <li><a href="@Url.Action("VITALSEdit","PatientSide",new { patientVitalId = item.PatientVitalId , actionType = "edit"})" class="option-a"><i class="material-icons">edit</i>Edit</a></li>
+                                }
+                                else
+                                {
+                                    <li><a href="@Url.Action("VITALSEdit","PatientSide",new { patientVitalId = item.PatientVitalId, actionType = "view"})" class="option-a"><i class="material-icons">view</i>View</a></li>
+                                }
+
+                                <li onclick="deleteVital(@item.PatientVitalId, this);"><a href="javascript:void(0);" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+                        }
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+

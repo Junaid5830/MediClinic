@@ -1,0 +1,322 @@
+﻿
+@{
+    ViewData["Title"] = "Hippa Release";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+
+
+@section styles{
+
+    <style>
+
+
+
+
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .mainText {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+
+
+        .addIcon {
+            margin-right: 0px !important;
+        }
+
+        .dateRow {
+            margin-top: -6px;
+        }
+
+        .textMargin {
+            margin-top: -2px;
+        }
+
+        .addBtn {
+            padding: 0 63px !important;
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+                $('.Typeofservice').autocomplete({
+                data: {
+                    "Rental": null,
+                    "Service": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.Form').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                        "All Bill": null,
+                        "Non-Billed Visits": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.AssistantSelect').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                        "All Bill": null,
+                        "Non-Billed Visits": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.caseType').autocomplete({
+                data: {
+                    "NF": null,
+                        "WC": null,
+                        "Private": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.feeSchedule').autocomplete({
+                data: {
+                    "Bill Stats": null,
+                        "$125": null,
+                        "$236": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+
+                $('.cptCode').autocomplete({
+                data: {
+                        "C265": null,
+                        "Q236": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.ICDCode').autocomplete({
+                data: {
+                        "A265": null,
+                        "B265": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+                $('.DiagnosisCode').autocomplete({
+                data: {
+                        "c210": null,
+                        "c203": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+             $('.ReferringProvider').autocomplete({
+                data: {
+                        "Physic PLLC": null,
+                     "Drmd PC": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+
+             $('.TreatingProvider').autocomplete({
+                data: {
+                        "Physic PLLC": null,
+                     "Drmd PC": null,
+                },
+                limit: 10,
+                 minLength: 0
+            });
+
+             $('.BillStatus').autocomplete({
+                data: {
+                        "Create": null,
+                     "Pending": null,
+                     "Due": null,
+
+                },
+                limit: 10,
+                 minLength: 0
+			 });
+
+             $('.HippaState').autocomplete({
+                data: {
+                        "Dr.Aibolit Template": null,
+                     "Dr.John": null,
+                     "Dr.Brown": null,
+
+                },
+                limit: 10,
+                 minLength: 0
+			 });
+             $('.BlankForm').autocomplete({
+                data: {
+                        "Option 1": null,
+                     "Option 2": null,
+                     "Option 3": null,
+
+                },
+                limit: 10,
+                 minLength: 0
+			 });
+              $('.PrefilledForm').autocomplete({
+                data: {
+                        "Option 1": null,
+                     "Option 2": null,
+                     "Option 3": null,
+
+                },
+                limit: 10,
+                 minLength: 0
+            });
+
+            $('.datepicker').datepicker();
+
+
+        });
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m3 l3">
+                <h5 class="breadcrumbs-title color-blue">Hipaa Release</h5>
+            </div>
+            <div class="col s12 m6 l6 display-block">
+                <div class="header-search-wrapper display-flex position-relative">
+                    <i class="material-icons position-absolute search-icons">search</i>
+                    <input class="header-search-input z-depth-2 search-box" type="text" name="Search" placeholder="Search">
+                    <button class="btn ml-2 search-btn">
+
+
+                        Search
+
+                    </button>
+                </div>
+            </div>
+
+            <div class="col s12 m3 l3 ">
+
+                <a class="btn add-btn  right  sidenav-trigger sideout" href="javascript:void(0);" data-target="slide-out-right">Add New Hipaa</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+
+    <!-- Search for small screen-->
+
+
+
+    <div class="row">
+        <div class="col s12">
+            <form>
+                <div class="row">
+                    <div class="col s12 m4">
+                        <div class="input-field">
+                            <p>
+                                Choose Hipaa State
+                            </p>
+                            <div class="dropdownauto"><input class="text-input input-styling HippaState" type="text" placeholder="Select Hipaa State"></div>
+
+                        </div>
+                       
+                    </div>
+                    <div class="col s12 m4">
+                        <div class="input-field">
+                            <p>
+                                Open Prefilled Form
+                            </p>
+                            <div class="dropdownauto"><input class="text-input input-styling PrefilledForm" type="text" placeholder="Select Prefilled Form"></div>
+
+
+                        </div>
+                    
+                    </div>
+                    <div class="col s12 m4">
+                        <div class="input-field">
+                            <p>
+                                Open Blank Form
+                            </p>
+                            <div class="dropdownauto"><input class="text-input input-styling BlankForm" type="text" placeholder="Select Blank Form"></div>
+
+                        </div>
+                     
+
+                    </div>
+                </div>
+                <div class="row mt-2 mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <a href="javascript:void(0);" class="waves-effect waves-light btn  add-btn">Save</a>
+                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn ">Edit</a>
+                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn ">Cancel</a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+
+                        <form class="col s12">
+                            <h5 class="mb-5 blue-text">Add Hipaa Release</h5>
+
+                            <div class="input-field col s12 mb-1">
+                                <input class="text-input" type="text" placeholder="Enter Hippa Release" />
+                            </div>
+                            <div class="input-field col s12 mb-1">
+                                <p>
+                                    Open Prefilled Form
+
+                                </p>
+
+                                <textarea id="textarea2" class="materialize-textarea text-input"></textarea>
+                            </div>
+                            <div class="input-field col s12 mb-1">
+                                <p>Open Blank Form</p>
+
+                                <textarea id="textarea2" class="materialize-textarea text-input"></textarea>
+                            </div>
+
+                            <a href="javascript:void(0);" class="waves-effect waves-light btn  add-btn right">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

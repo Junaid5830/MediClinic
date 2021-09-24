@@ -1,0 +1,74 @@
+﻿
+@model MediClinic.Models.PatientViewModel
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">SURGICAL HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="MHSurgicalHistoryGrid">
+                        @*<partial name="../_PatientPartialView/_ManageMHSurgicalHistory.cshtml" />*@
+                        <partial name="../_MedicalHistoryPartial/_ManageMHSurgicalHistory.cshtml" />
+
+                    </div>
+                    <form asp-action="SaveMHSurgicalHistory" asp-controller="PatientMedicalHistory" method="post" data-ajax="true" data-ajax-success="onMHSurgicalHistory(data)" id="MHSurgicalHistoryForm">
+                        @Html.TextBoxFor(model => model.MHSurgicalHistory.PatientId, new { @class = "form-control", @Id = "", @style = "display:none" })
+                        @Html.TextBoxFor(model => model.MHSurgicalHistory.Id, new { @class = "form-control", @Id = "MHSurgicalHistoryId", @style = "display:none" })
+
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">
+                                    Surgery Type <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHSurgicalHistory.SurgeryType" type="text" id="MHSurgicalHistorySurgeryType" placeholder="Surgery Type">
+                                <span class="required" asp-validation-for="MHSurgicalHistory.SurgeryType"></span>
+                            </div>
+
+                            <div class="col">
+                                <p class="content-p">
+                                    Surgeon Name
+                                </p>
+                                <input class="text-input" asp-for="MHSurgicalHistory.SurgeonName" type="text" id="MHSurgicalSurgeonName" placeholder="Surgeon Name">
+                                <span class="required" asp-validation-for="MHSurgicalHistory.SurgeonName"></span>
+                            </div>
+                            <div class="col">
+
+                                <p>
+                                    Year
+                                </p>
+                                <div id="surgicalYearId">
+                                    <select data-placeholder="Select Year" class="select2 yearselector" asp-for="MHSurgicalHistory.Year" id="MHSurgicalHistoryYear">
+                                        <option value="" selected disabled></option>
+                                    </select>
+                                    <span class="required" asp-validation-for="MHSurgicalHistory.Year"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col ">
+                                <p class="content-p">Notes</p>
+                                <input class="text-input" asp-for="MHSurgicalHistory.Notes" type="text" placeholder="Notes" id="MHSurgicalHistoryNotes">
+                                <span class="required" asp-validation-for="MHSurgicalHistory.Notes"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12 m12" style="text-align:center">
+                                <button class="btn add-btn surgicalh1" id="SaveSurgicalHistory" type="submit">Save</button>
+                                <button class="Recreate btn" type="reset">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

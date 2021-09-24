@@ -1,0 +1,349 @@
+﻿
+@{
+    ViewData["Title"] = "AttorneySettingAdd";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+    </style>
+}
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('.dropify').dropify();
+        });
+      
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper mb-0">
+            <!-- Search for small screen-->
+
+            <div class="row">
+                <div class="col">
+                    <h5 class="breadcrumbs-title color-blue">
+                        Attorney
+                    </h5>
+                </div>
+
+                <div class="col">
+                    <a class="waves-effect waves-light float-right" style="margin-top:-11px" href="/SettingsElite/Setting">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col s12 m6">
+                <p>Upload Picture</p>
+                <input type="file" class="dropify" />
+
+            </div>
+            <div class="col s12 m6">
+                <p>TYPE OF ATTORNEY	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter type">
+                </div>
+                <p>FIRM NAME	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter firm name">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 m6">
+                <p>FIRM ASSOCIATED ATTORNEYS	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter firm associated attorneys">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>FIRM ASSOCIATED PARALEGALS	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter firm associated paralegals">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col s12 m6">
+                <p>FIRM ASSOCIATED CASE MANAGERS	</p>
+                <div class="input-field col s12 m12 pl-0">
+                    <input class="text-input input-styling doctorSpeciality" type="text" placeholder="Select firm associated case managers">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>FIRM ASSOCIATED CASE SECRETARIES	</p>
+                <div class="input-field col s12 m12 pl-0">
+                    <input class="text-input input-styling doctorTitle" type="text" placeholder="Select firm associated case secrateries">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12 m6">
+                <p>FIRM INFORMATIONS	</p>
+                <div class="input-field col s12 m12 pl-0">
+                    <input class="text-input input-styling doctorSuffix" type="text" placeholder="Select firm informations">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>UI	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter UI">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6">
+                <p>PASSWORD	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter password">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>GENERATE AUTHENTICATION CODE	</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter generate authentication code">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m6">
+                <p>AUTHORIZED TO REFER CLIENTS</p>
+
+                <div class="input-field col s12 pl-0">
+                    <input class="text-input" type="text" placeholder="Enter Room No">
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>AUTHORIZED TO VIEW RECORDS</p>
+                <div class="input-field">
+                    <select class="text-input">
+                        <option value="" disabled selected>AUTHORIZED TO VIEW RECORDS</option>
+                        <option value="1">YES, W/HIPAA AUTHORIZATION</option>
+                        <option value="2">NO</option>
+                        <option value="3">YES, WITH REFERRED CLIENTS</option>
+                        <option value="4">LIST OF RECORDS AUTHORIZED</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col s12 m6">
+                <p>AUTHORIZED TO ORDER RECORDS</p>
+                <div class="input-field col s12 m12 pl-0">
+                    <select class="text-input">
+                        <option value="" disabled selected>AUTHORIZED TO ORDER RECORDS</option>
+                        <option value="1">YES, W/HIPAA AUTHORIZATION</option>
+                        <option value="2">NO</option>
+                        <option value="3">YES, WITH REFERRED CLIENTS</option>
+                        <option value="4">LIST OF RECORDS AUTHORIZED</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <p>AUTHORIZED TO EDIT PROFILE</p>
+                <div class="input-field">
+                    <select class="text-input">
+                        <option value="" disabled selected>AUTHORIZED TO EDIT PROFILE</option>
+                        <option value="1">Yes</option>
+                        <option value="2">NO</option>
+                        <option value="3">Firm Info</option>
+                        <option value="4">Login</option>
+                        <option value="5">Full Access of Editing</option>
+                        <option value="6">Deleting</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col s12 m6 ">
+                <p>CHANGE STATUS</p>
+                <div class="input-field col s12 pl-0">
+
+                    <div class="dropdownauto">
+                        <input class="text-input input-styling changeS" type="text" placeholder="Select Speciality">
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 ">
+                <div class="input-field col s12 pl-0">
+                    <p>MEDICAL RECORD FEE SCHEDULE</p>
+                    <div class="input-field col s12 pl-0">
+
+                        <div class="dropdownauto">
+                            <input class="text-input input-styling recordF" type="text" placeholder="Select Speciality">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col">
+                <p>AUTHORIZED TO SEND INTERNAL MESSAGE</p>
+                <div class="row">
+
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryYes" class="with-gap" name="yes" value="1" />
+                                <span>Yes</span>
+                            </label>
+                        </p>
+
+                    </div>
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryNo" class="with-gap" name="yes" value="0" />
+                                <span>No</span>
+                            </label>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6 ">
+                <p>AUTHORIZES FACE ID RECOGNITION</p>
+                <div class="row">
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryYes" class="with-gap" name="yes" value="1" />
+                                <span>Yes</span>
+                            </label>
+                        </p>
+
+                    </div>
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryNo" class="with-gap" name="yes" value="0" />
+                                <span>No</span>
+                            </label>
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12 col-md-6">
+                <p>AUTHORIZES BIOMETRIC RECOGNITION</p>
+                <div class="row">
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryYes" class="with-gap" name="yes" value="1" />
+                                <span>Yes</span>
+                            </label>
+                        </p>
+                    </div>
+                    <div class="col-4">
+                        <p class="check-btn">
+                            <label>
+                                <input type="radio" id="secondaryNo" class="with-gap" name="yes" value="0" />
+                                <span>No</span>
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m9  pr-0">
+                <p>Write Signature</p>
+                <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                    <div class="m-signature-pad--body">
+                        <canvas width="500" height="200"></canvas>
+                    </div>
+                    <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                        <div class="description">Save Your signature before submit the form</div>
+                        <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m3  pr-0">
+                <p>Upload Signature Image</p>
+                <input type="file" id="input-file-now-custom-2" class="dropify" data-height="100" />
+            </div>
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <div class="col s12 m12" style="text-align:center">
+                <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+            </div>
+        </div>
+    </div>
+</div>

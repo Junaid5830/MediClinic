@@ -1,0 +1,1505 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using  MedliClinic.Utilities.Utility
+@using MediClinic.Models.DTOs
+
+@{
+    ViewData["Title"] = "ProviderSummary";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+
+
+}
+
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+        .select2 {
+            width: 100% !important;
+        }
+
+        .tab-content .container {
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        h3, h4 {
+            color: #333 !important
+        }
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+    <style>
+        textarea {
+            resize: none;
+            width: 100%;
+            border: 1px solid #e9ecef !important;
+            border-radius: 4px;
+            height: 175px !important;
+            padding: .375rem .75rem !important;
+            font-size: .875rem !important;
+            line-height: 1.5 !important;
+        }
+
+        .red-text {
+            color: red
+        }
+
+        .patient-image {
+            width: 100px;
+        }
+
+        .p-image {
+            width: 130px !important;
+        }
+
+        .set_icons i {
+            font-size: 24px !important;
+            padding-right: 8px;
+        }
+
+        .set_icons a {
+            color: #6b6f82 !important;
+        }
+
+        .set_icons {
+            margin: .5rem 0 .656rem 0;
+            text-align: right !important;
+        }
+
+
+
+
+        .modal-open .modal {
+            max-height: 85% !important
+        }
+
+        #myModal3 .modal-body {
+            overflow-y: scroll !important;
+            height: 385px;
+        }
+
+        .modal h5 {
+            margin: 0 !important
+        }
+
+        .container {
+            padding: 0 1.5rem !important
+        }
+
+        .set_icons a {
+            color: #6b6f82 !important;
+        }
+
+        .set_icons i {
+            font-size: 24px !important;
+            padding-right: 8px;
+        }
+
+        .set_icons {
+            margin: .82rem 0 .656rem 0;
+            text-align: right !important;
+        }
+
+        .patient-image {
+            width: 150px;
+            height: 150px;
+        }
+
+        .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+            .card .card-content {
+                padding: 24px;
+                border-radius: 0 0 2px 2px;
+            }
+
+        .card {
+            overflow: hidden;
+            margin: 1rem 0 1rem 0;
+        }
+
+        .doc_Infor_Card {
+            padding: 10px !important;
+        }
+
+            .doc_Infor_Card p {
+                margin: 0px !important;
+                font-weight: 300 !important;
+            }
+
+        /*  .modal {
+                    position: fixed;
+                    right: 0;
+                    left: 0;
+                    overflow-y: auto;
+                    width: 55%;
+                    max-height: 70%;
+                    margin: auto;
+                    padding: 0;
+                    border-radius: 2px;
+                    background-color: #fafafa;
+                    will-change: top, opacity;
+                }
+        */
+        /*@@media (max-width: 576px) {
+                    .modal-dialog {
+                        max-width: 577px;
+                        margin: 1rem auto;
+                    }
+                }
+        */
+        .modal-dialog {
+            max-width: 52% !important;
+            margin-bottom: 24px !important;
+            margin-top: 30px !important;
+        }
+
+        .change_size {
+            font-size: 1.64rem !important;
+        }
+
+
+        .btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #ccc;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+
+        .toggle {
+            margin: 10px auto;
+        }
+
+        .modal-contentset {
+            margin-left: 43px;
+        }
+
+        .add-btn {
+            padding: 0 2rem !important;
+            line-height: 41px !important;
+            height: 41px !important;
+            background: #547cea !important;
+            text-transform: none !important;
+            color: white;
+            float: right;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+
+        .FLNameLetter {
+            background: #f1f1f1;
+            padding: 23px;
+            border-radius: 50%;
+            color: #547cea;
+            width: 30px;
+            font-weight: bold;
+        }
+
+        .collection .collection-item.avatar {
+            min-height: 55px !important;
+            position: relative;
+            line-height: 1.5rem;
+            margin: 0;
+            padding: 10px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+
+        div.avatar-status.avatar-50 {
+            padding-right: 10px;
+            line-height: 0;
+            width: 50px;
+            position: relative;
+            display: inline-block;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-radius: 50px;
+        }
+
+            div.avatar-status.avatar-50 img {
+                border-radius: 50%;
+            }
+
+        .blue-grey-text.text-lighten-3 {
+            margin: 0 !important;
+        }
+
+        .line-height-0 {
+            line-height: 0.5 !important
+        }
+
+        .FLName {
+            margin: 0 auto !important;
+            width: 150px;
+            padding: 30px !important;
+            background-color: #f1f1f1 !important;
+        }
+
+            .FLName h3 {
+                line-height: 110%;
+                font-size: 2.92rem;
+                margin: 1.168rem 0 1.168rem 0 !important;
+            }
+
+        #AppointmentModalSlots .Slots {
+            cursor: not-allowed;
+        }
+
+        .bg-success {
+            color: #fff !important;
+        }
+
+        #SlotsRow .col-md-3 {
+            margin: 10px 0 !important;
+        }
+
+        .Slots {
+            border: 1px solid #cfcfcf !important;
+            padding: 6px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .Slots {
+            border: 1px solid #cfcfcf !important;
+            padding: 6px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+            .Slots:hover {
+                background-color: #03a9f3;
+                color: #fff !important;
+            }
+
+                .Slots:hover span {
+                    color: #fff !important;
+                }
+
+
+            .Slots:hover {
+                background-color: #03a9f3;
+                color: #fff !important;
+            }
+
+                .Slots:hover span {
+                    color: #fff !important;
+                }
+
+        .tabs {
+            height: auto !important;
+        }
+
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js.map"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#Patient-table").DataTable({
+                "lengthMenu": [5]
+            });
+            //Booked-table
+            $("#Booked-table").DataTable({
+                "lengthMenu": [5]
+            });
+            $("#Schedule-table").DataTable({
+                "info": false,
+                responsive: true,
+                lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [], "orderable": false }]
+            });
+        });
+
+        $('#smsForm').on('submit', function (e) {
+            debugger;
+            $('#phoneNoField').attr('disabled', false);
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        onSendSmsSuccess(response);
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+
+                    }
+                });
+
+            }
+            else {
+                $('#phoneNoField').attr('disabled', true);
+            }
+        });
+
+
+        function onSendSmsSuccess(data) {
+            $('#phoneNoField').val('');
+            $('#msgTxt').val('');
+            $('#myModal').modal('hide');
+            debugger;
+            if (data) {
+                $(".checkmark").show().fadeOut(6000);
+
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+        function importNumber() {
+            debugger;
+            $('#phoneNoField').attr('disabled', true);
+            $('.removeValidation').html("");
+            var phone = $('#phoneNo').val();
+            if (phone) {
+                $('#phoneNoField').val(phone);
+                $('#phoneNoField').attr('disabled', true);
+            }
+        }
+        function importEmail() {
+            $("#email").attr('disabled', true);
+            $('.removeValidation').html("");
+            var email = $('#ProviderEmail').val();
+            if (email) {
+                $('#email').val(email);
+            }
+        }
+        $('#EmailForm').on('submit', function (e) {
+            debugger;
+            $("#email").attr('disabled', false);
+            e.preventDefault();
+            debugger;
+
+            if ($(this).valid()) {
+                $('#emailbtn').attr('disabled', true);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        $('#emailbtn').attr('disabled', false);
+                    },
+                    error: function (response) {
+                        $('#emailbtn').attr('disabled', false);
+
+                    },
+                    complete: function (xhr) {
+                        $('#emailbtn').attr('disabled', false);
+
+                        onEmailSendSuccess(xhr.responseJSON);
+                        //console.log(xhr.responseText);
+                    }
+                });
+
+            }
+            else {
+                $("#email").attr('disabled', true);
+            }
+        });
+
+        function onEmailSendSuccess(data) {
+            $('#email').val('');
+            $('#subject').val('');
+            $('#textarea2').val('');
+            $('.file-path').val('');
+            $('#attachment_file').val('');
+            $('#myModal2').modal('hide');
+            debugger;
+            if (data) {
+                $(".checkmark").show().fadeOut(6000);
+
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+        function SlotsView(ProviderId, date, dpt) {
+            debugger;
+            $.post("/Appointment/GetProviderAvailableSlotsView", { ProviderId: ProviderId, SlotDate: date, dpt: dpt }).done(function (data) {
+                debugger;
+                $('#AvailableSlots').html('');
+                $('#AvailableSlots').html(data);
+                $("#AvailableSlots").show();
+                $("#AppointmentModalSlots").modal('show');
+
+            });
+        }
+        function checkVisitExist(patientId) {
+            $.get('/PatientSideElite/GetLatestVisitID', { patientId: patientId }).done(function (data) {
+              
+               // window.location.href = '/patientsideelite/PatientSummary2/' + patientId , '_blank'
+               window.open( '/patientsideelite/PatientSummary2/' + patientId, '_blank');
+                
+            })
+        }
+    </script>
+    <script>
+        function checkBoxChangeListSettings() {
+            debugger;
+            var listValues = {};
+            listValues.EntityName = $('#EntityNameCheckBox').is(':checked');
+            listValues.Name = $('#NameCheckBox').is(':checked');
+            listValues.Email = $('#EmailCheckBox').is(':checked');
+            listValues.LicenseNo = $('#licenseNoCheckBox').is(':checked');
+            listValues.NpiNumber = $('#NpiNumberCheckBox').is(':checked');
+            listValues.AssignRoomNo = $('#AssignRoomNoCheckBox').is(':checked');
+            listValues.PhoneNo = $('#PhoneNoCheckBox').is(':checked');
+            listValues.MobileNo = $('#MobileNoCheckBox').is(':checked');
+            listValues.FaxNo = $('#FaxNoCheckBox').is(':checked');
+            listValues.Address = $('#AddressCheckBox').is(':checked');
+            listValues.TaxId = $('#TaxIdCheckBox').is(':checked');
+            listValues.FirstName = $('#FirstNameCheckBox').is(':checked');
+            listValues.LastName = $('#LastNameCheckBox').is(':checked');
+            listValues.ProviderIdPrint = $('#ProviderIdCheckBox').is(':checked');
+            listValues.ScheduleListing = $('#ScheduleListCheckBox').is(':checked');
+            listValues.Speciality = $('#SpecialityCheckBox').is(':checked');
+            listValues.Title = $('#TitleCheckBox').is(':checked');
+            listValues.Suffix = $('#SuffixCheckBox').is(':checked');
+            listValues.DateCreated = $('#DateCreatedCheckBox').is(':checked');
+            listValues.UserId = $('#UserIdHidden').val();
+
+
+            $("input").prop("disabled", true);
+            submitProviderListSettings(listValues);
+        }
+        function submitProviderListSettings(summaryObj) {
+            $.post("/Setting/SaveProviderSummarySettings", { printSettingValues: summaryObj }).done(function (data) {
+                debugger
+                location.href='/Provider/PrintProviderSummary/@ProviderInfoId'
+            });
+        }
+        function PatientPrintModel(PatientUserId) {
+            $.get("/Provider/PrintPaitentOption", { userId: PatientUserId }).done(function (data) {
+                debugger
+
+                $("#PatientPrint .modal-body").html('');
+                $("#PatientPrint .modal-body").html(data);
+                $("input[data-toggle=toggle]").bootstrapToggle();
+                $("#PatientPrint").modal('show');
+                $(".PatientInfoIdPrint").val(PatientUserId);
+
+            });
+
+        }
+        function printPatient() {
+            $('#hiddenBtnForm').trigger('click');
+        }
+           function  GetCheckBoxValues() {
+            debugger;
+             var printValues = {};
+             printValues.FirstName = $('#firstNameBox').is(':checked');
+             printValues.LastName = $('#lastNameBox').is(':checked');
+             printValues.DOB = $('#DOBPrintCheckBox').is(':checked');
+             printValues.Age = $('#agePrintCheckBox').is(':checked');
+             printValues.Address = $('#AddressPrintCheckBox').is(':checked');
+             printValues.SSNumber = $('#SSNPrintCheckBox').is(':checked');
+             printValues.Gender = $('#GenderPrintCheckBox').is(':checked');
+             printValues.MaritalStatus = $('#MSCheckBox').is(':checked');
+             printValues.MobilePhone = $('#MPhoneCheckBox').is(':checked');
+             printValues.HomePhone = $('#HPhoneCheckBox').is(':checked');
+             printValues.EmergencyPhone = $('#EmergencyPhoneCheckBox').is(':checked');
+             printValues.Languages = $('#LanguagesPhoneCheckBox').is(':checked');
+             printValues.CaseType = $('#CaseTypeCheckBox').is(':checked');
+             printValues.ClaimNumber = $('#ClaimNumberCheckBox').is(':checked');
+             printValues.PolicyNumber = $('#PolicyNumberCheckBox').is(':checked');
+             printValues.WCBNumber = $('#WCBCheckBox').is(':checked');
+             printValues.CarrierCaseNumber = $('#CCNumberCheckBox').is(':checked');
+             printValues.PolicyHolderName = $('#PHNameCheckBox').is(':checked');
+             printValues.EmployerInfo = $('#EmployerInfoCheckBox').is(':checked');
+             printValues.DOA = $('#DOACheckBox').is(':checked');
+             printValues.PlaceTimeOfAccident = $('#PTOIncidentCheckBox').is(':checked');
+             printValues.FullInsuranceInfo = $('#FullInsurancInfotCheckBox').is(':checked');
+             printValues.FullClaimInfo = $('#FullClaimInfotCheckBox').is(':checked');
+             printValues.Nf2fillingDate = $('#NF2FillingCheckBox').is(':checked');
+             printValues.DateCreated = $('#CreatedDateCheckBox').is(':checked');
+             printValues.PrimaryDr = $('#PrimaryDrCheckBox').is(':checked');
+             printValues.FirstVisit = $('#FirstVisitPrintCheckBox').is(':checked');
+             printValues.LastVisit = $('#LastVisitCheckBox').is(':checked');
+             printValues.LastExam = $('#LastExamCheckBox').is(':checked');
+             printValues.Vitals = $('#vitalsPrintCheckBox').is(':checked');
+             printValues.BodyStatus = $('#bodyStatusPrintCheckBox').is(':checked');
+             printValues.Tests = $('#testsPrintCheckBox').is(':checked');
+             printValues.Reminder = $('#remainderPrintCheckBox').is(':checked');
+             printValues.Missing = $('#MissingPrintCheckBox').is(':checked');
+             printValues.FullPIAttorneyinfo = $('#FullPIAttorneyPrintCheckBox').is(':checked');
+             printValues.Paralegal = $('#ParalegalPrintCheckBox').is(':checked');
+             printValues.CollectionAttorney = $('#CollectionAttorneyPrintCheckBox').is(':checked');
+             printValues.ReferralName = $('#ReferralNamePrintCheckBox').is(':checked');
+             printValues.CurrentLocationInFacility = $('#CurrentlocationInFacilityPrintCheckBox').is(':checked');
+             printValues.LastIME = $('#lastIMEPrintCheckBox').is(':checked');
+             printValues.LastEUO = $('#lastEUOPrintCheckBox').is(':checked');
+             printValues.LastVisit = $('#allVisitPrintCheckBox').is(':checked');
+             printValues.NumberOfVisits = $('#NumberOfVisits').is(':checked');
+             printValues.RelatedPatientList = $('#RelatedPatientList').is(':checked');
+
+               printValues.PatientId = $(".PatientInfoIdPrint").val();
+               $("input").prop("disabled", true);
+            submitSettings(printValues);
+        }
+        var htmlData;
+        var win;
+        function submitSettings(summaryObj) {
+            $.post("/Setting/PrintPreview", { printValues: summaryObj }).done(function (data) {
+                 //htmlData = data;
+                 //$("#hack").trigger("click");
+            });
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div id="myModal3" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Print Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <input type="hidden" id="UserIdHidden" asp-for="ProviderSummarySettingDto.UserId" />
+            <div class="modal-body">
+                <div class="row">
+
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>First Name</p>
+                        <div class="switch">
+                            <input type="checkbox" id="FirstNameCheckBox"  data-val="FirstName" asp-for="ProviderSummarySettingDto.FirstName" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Last Name</p>
+                        <div class="switch">
+                            <input type="checkbox" id="LastNameCheckBox"  data-val="LastName" asp-for="ProviderSummarySettingDto.LastName" data-toggle="toggle" />
+                        </div>
+                    </div>*@
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Provider ID</p>
+                        <div class="switch">
+                            <input type="checkbox" id="ProviderIdCheckBox" data-val="ProviderIdPrint" asp-for="ProviderSummarySettingDto.ProviderIdPrint" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Entity Name</p>
+                        <div class="switch">
+                            <input type="checkbox" id="EntityNameCheckBox" data-val="EntityName" asp-for="ProviderSummarySettingDto.EntityName" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Name</p>
+                        <div class="switch">
+                            <input type="checkbox" id="NameCheckBox" data-val="Name" asp-for="ProviderSummarySettingDto.Name" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                            <p>Email</p>
+                            <div class="switch">
+                                <input type="checkbox" id="EmailCheckBox"  data-val="Email" asp-for="ProviderSummarySettingDto.Email" data-toggle="toggle" />
+                            </div>
+                        </div>*@
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>License No</p>
+                        <div class="switch">
+                            <input type="checkbox" id="licenseNoCheckBox" data-val="LicenseNo" asp-for="ProviderSummarySettingDto.LicenseNo" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>NPI No</p>
+                        <div class="switch">
+                            <input type="checkbox" id="NpiNumberCheckBox" data-val="NpiNumber" asp-for="ProviderSummarySettingDto.NpiNumber" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Phone No</p>
+                        <div class="switch">
+                            <input type="checkbox" id="PhoneNoCheckBox" data-val="PhoneNo" asp-for="ProviderSummarySettingDto.PhoneNo" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                            <p>Mobile No</p>
+                            <div class="switch">
+                                <input type="checkbox" id="MobileNoCheckBox"  data-val="MobileNo" asp-for="ProviderSummarySettingDto.MobileNo" data-toggle="toggle" />
+                            </div>
+                        </div>*@
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                            <p>Assign Room No</p>
+                            <div class="switch">
+                                <input type="checkbox" id="AssignRoomNoCheckBox" data-val="AssignRoomNo" asp-for="ProviderSummarySettingDto.AssignRoomNo" data-toggle="toggle" />
+                            </div>
+                        </div>*@
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                            <p>Fax No</p>
+                            <div class="switch">
+                                <input type="checkbox" id="FaxNoCheckBox"  data-val="FaxNo" asp-for="ProviderSummarySettingDto.FaxNo" data-toggle="toggle" />
+                            </div>
+                        </div>*@
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Address</p>
+                        <div class="switch">
+                            <input type="checkbox" id="AddressCheckBox" data-val="Address" asp-for="ProviderSummarySettingDto.Address" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    @*<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                            <p>TaxId</p>
+                            <div class="switch">
+                                <input type="checkbox" id="TaxIdCheckBox"  data-val="TaxId" asp-for="ProviderSummarySettingDto.TaxId" data-toggle="toggle" />
+                            </div>
+                        </div>*@
+
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Schedule List</p>
+                        <div class="switch">
+                            <input type="checkbox" id="ScheduleListCheckBox" data-val="ScheduleListing" asp-for="ProviderSummarySettingDto.ScheduleListing" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Specialty</p>
+                        <div class="switch">
+                            <input type="checkbox" id="SpecialityCheckBox" data-val="Speciality" asp-for="ProviderSummarySettingDto.Speciality" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Title</p>
+                        <div class="switch">
+                            <input type="checkbox" id="TitleCheckBox" data-val="Title" asp-for="ProviderSummarySettingDto.Title" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Suffix</p>
+                        <div class="switch">
+                            <input type="checkbox" id="SuffixCheckBox" data-val="Suffix" asp-for="ProviderSummarySettingDto.Suffix" data-toggle="toggle" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3 col-6 ">
+                        <p>Date Created</p>
+                        <div class="switch">
+                            <input type="checkbox" id="DateCreatedCheckBox" data-val="DateCreated" asp-for="ProviderSummarySettingDto.DateCreated" data-toggle="toggle" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="checkBoxChangeListSettings()" class="btn add-btn">View</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-12 col-xl-12">
+                <!--Gradient Card-->
+                <div id="cards-extended">
+
+                    <div class="row">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-6">
+                            <h5 class="color-blue">Provider</h5>
+                        </div>
+
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-6 right  set_icons">
+                            <a class="pr-1 modal-trigger right" data-toggle="modal" data-target="#myModal3" style="cursor:pointer">
+                                <i class="mdi mdi-printer"></i>
+                            </a>
+                            <a class="pr-1 right " href="@Url.Action("ProviderEliteAdd", "Provider", new { id = ProviderInfoId, clickfrom = "Editicon"})">
+                                <i class="mdi mdi-pencil"></i>
+
+                            </a>
+                            <a class="pr-1 modal-trigger right" data-toggle="modal" data-target="#myModal2" style="cursor:pointer" onclick="importEmail();">
+                                <i class="mdi mdi-email"></i>
+                            </a>
+
+                            <a class=" pr-1 modal-trigger right" data-toggle="modal" data-target="#myModal" onclick="importNumber();">
+                                <i class="mdi mdi-message-reply-text"></i>
+                            </a>
+                            <a class="waves-effect waves-light right" href="@Url.Action("ProviderEliteList","provider", new {Id = ProviderInfoId })">
+                                <i class="mdi mdi-arrow-left right arrow-icon"></i>
+                            </a>
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+                            @if (Model.ProviderSummary.ProviderProfilePic != null)
+                            {
+
+                                <img src="~/images/@Model.ProviderSummary.ProviderProfilePic" class=" patient-image circle responsive-img grey lighten-1 padding-4" />
+                            }
+                            else
+                            {
+                                <img src="~/app-assets/images/user/male-user.png" class=" patient-image circle responsive-img grey lighten-1 padding-4" />
+                            }
+                        </div>
+                        <div class="col-xs-12 col-md-10 col-lg-10">
+                            <div class="row">
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class=" mb-0">Name</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.FullName</p>
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">Specialty</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.Speciality</p>
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">Title</p>
+                                    <p class="mt-0 black-text font-weight-600">@Model.ProviderSummary.Title</p>
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">Suffix</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.Suffix</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class=" mb-0">License No</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.LicenseNo</p>
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">NPI No</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.NpiNumber</p>
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">Phone Number</p>
+                                    <p class="mt-0 black-text font-weight-600">@Model.ProviderSummary.PhoneNo</p>
+                                    <input type="hidden" id="phoneNo" value="@Model.ProviderSummary.PhoneNo" />
+                                </div>
+                                <div hidden class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">Email</p>
+                                    <p class="mt-0 black-text font-weight-600">@Model.ProviderSummary.Email</p>
+                                    <input type="hidden" id="ProviderEmail" value="@Model.ProviderSummary.Email" />
+                                </div>
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class="mb-0">PC/EntityName</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.EntityName</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class=" mb-0">Address</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.AddressLine1</p>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3">
+                                    <p class=" mb-0">Date Created</p>
+                                    <p class=" mt-0 font-weight-600 black-text">@Model.ProviderSummary.CreatedDate.ToString("MM/dd/yyyy")</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider mt-2"></div>
+                </div>
+                <!--Gradient Card-->
+                <div id="cards-extended">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <ul class="nav nav-tabs customtab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#tab1" role="tab"> <span class="hidden-xs-down">Provider Patient List</span></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab2" role="tab"> <span class="hidden-xs-down">Provider Schedule</span></a> </li>
+                                <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab3" role="tab"> <span class="hidden-xs-down">Booked Appointments</span></a> </li>
+
+
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane p-10 active" id="tab1" role="tabpanel">
+
+                                    <div class="row ">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="Patient-table" class="table">
+                                                    <thead>
+                                                        <tr class="uppercase">
+                                                            <th>Patient Name</th>
+                                                            <th>Home Phone</th>
+                                                            <th>Cell Phone</th>
+                                                            <th>Address</th>
+                                                            <th>DOB</th>
+                                                            <th>Attorney</th>
+                                                            <th>Paralegal</th>
+                                                            <th>Ref Name/No</th>
+                                                            <th>Option</th>
+                                                            @*<th data-searchable="false" data-orderable="false">Active</th>*@
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (!(Model.ProviderPatientsLists is null))
+                                                        {
+                                                            @foreach (var item in Model.ProviderPatientsLists)
+                                                            {
+                                                        <tr class="card">
+                                                            <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.FirstName @item.LastName</td>
+                                                            @if (!(item.HomeNo is null))
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.HomeNo</td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">N/A</td>
+                                                            }
+                                                            @if (!(item.MobNo is null))
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.MobNo</td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">N/A</td>
+                                                            }
+                                                            <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.AddressLine1</td>
+
+                                                            <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.DateOfBirth.Value.ToString("MM/dd/yyyy")</td>
+                                                            @if (!(item.FirmAttorneyName is null))
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.FirmAttorneyName</td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">N/A</td>
+                                                            }
+                                                            @if (!(item.LeadingParalegal is null))
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.LeadingParalegal</td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">N/A</td>
+                                                            }
+                                                            @if (!(item.ReferralName is null))
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">@item.ReferralName</td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <td onclick="checkVisitExist(@item.PatientInfoId)" style="cursor: pointer;">N/A</td>
+                                                            }
+
+                                                            <td class="action">
+                                                                <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                                    Options
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                                                                    @*<li><a href="javascript:void(0);" class="option-a">Edit</a></li>*@
+                                                                    @*<li><a href="javascript:void(0);" class="option-a">Delete</a></li>*@
+                                                                    <li><a href="javascript:void(0);" onclick="PatientPrintModel(@item.PatientInfoId)" class="option-a">Print</a></li>
+
+
+                                                                </ul>
+
+                                                            </td>
+                                                        </tr>
+                                                            }
+                                                        }
+
+
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane  p-10" id="tab2" role="tabpanel">
+
+
+                                    <div class="row ">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="Schedule-table" class="table">
+                                                    <thead>
+                                                        <tr class="uppercase">
+                                                            <th>Date</th>
+                                                            <th>Name of day</th>
+                                                            <th>Start Time</th>
+                                                            <th>End Time</th>
+                                                            <th>Department</th>
+                                                            <th data-searchable="false" data-orderable="false">Active</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (!(Model.ScheduleList is null))
+                                                        {
+                                                            @foreach (var item in Model.ScheduleList)
+                                                            {
+                                                                <tr class="card">
+                                                                    <td>@item.WeekDate.Value.ToString(SystemFormat.DateFormat())</td>
+
+                                                                    <td>@item.WeekDayName</td>
+                                                                    <td>@item.STime</td>
+                                                                    <td>@item.ETime</td>
+                                                                    <td>@item.DepartmentName</td>
+                                                                    <td class="action">
+                                                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                                                            Options
+                                                                            <span class="caret"></span>
+                                                                        </button>
+                                                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                                                                            @*<li><a href="javascript:void(0);" class="option-a">Edit</a></li>*@
+                                                                            @*<li><a href="javascript:void(0);" class="option-a">Delete</a></li>*@
+                                                                            <li onclick="SlotsView(@ProviderInfoId,'@item.WeekDate.Value.ToString("MM/dd/yyyy")','@item.DepartmentName')"><a href="javascript:void(0);" class="option-a">View</a></li>
+                                                                            @*<li><a href="javascript:void(0);" class="option-a">Share</a></li>*@
+
+
+                                                                        </ul>
+
+                                                                    </td>
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane  p-10" id="tab3" role="tabpanel">
+
+                                    <div class="row ">
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive">
+                                                <table id="Booked-table" class="table">
+                                                    <thead>
+                                                        <tr class="uppercase">
+                                                            <th>Patient Name</th>
+                                                            <th>Appointment Type</th>
+
+                                                            <th>Start Time </th>
+                                                            <th>End Time</th>
+                                                            <th>Appointment Date</th>
+
+                                                            @*<th data-searchable="false" data-orderable="false">Active</th>*@
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (!(Model.patientAppointmentBasicsList is null))
+                                                        {
+                                                            @foreach (var item in Model.patientAppointmentBasicsList)
+                                                            {
+                                                                <tr class="card">
+                                                                    <td>@item.PatientFullName</td>
+                                                                    <td>@item.AppointmentType</td>
+                                                                    @if (@item.StartTime is null)
+                                                                    {
+                                                                        <td>N/A</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@item.StartTime</td>
+                                                                    }
+                                                                    @if (item.EndTime == item.StartTime)
+                                                                    {
+                                                                        <td>N/A</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>@item.EndTime</td>
+                                                                    }
+
+                                                                    <td>@item.Date.Value.ToString("MM/dd/yyyy")</td>
+
+
+
+
+
+                                                                </tr>
+                                                            }
+                                                        }
+
+
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                @*<div id="cards-extended">
+
+
+                        <div class="row">
+                            <div class="col s12 m6">
+                                <h5 class="color-blue">Reminders</h5>
+                            </div>
+
+                        </div>
+                        <div class="row ">
+                            <div class="col s12 m2 center">
+                                <img src="~/app-assets/images/avatar/avatar-1.png" class=" patient-image circle responsive-img grey lighten-3 padding-4" />
+                            </div>
+
+                            <div class="col s12 m10">
+
+                                <div class="row">
+
+                                    <div class="col s12 m6 l3">
+                                        <a href="javascript:void(0);" style="cursor:pointer;">
+                                            <div class="card blue darken-4">
+                                                <div class="card-content doc_Infor_Card">
+                                                    <p class="white-text font-weight-bold center">Missing Signed</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col s12 m6 l3">
+                                        <a href="javascript:void(0);" style="cursor:pointer;">
+                                            <div class="card blue darken-4">
+                                                <div class="card-content doc_Infor_Card">
+                                                    <p class="white-text font-weight-bold center">Appointment</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col s12 m6 l3">
+                                        <a href="javascript:void(0);" style="cursor:pointer;">
+                                            <div class="card blue darken-4">
+                                                <div class="card-content doc_Infor_Card">
+                                                    <p class="white-text font-weight-bold center">Others</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12">
+                                        <a href="javascript:void(0);" class="right">See More</a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="myModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Compose New Text</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <form asp-action="EmailSms" asp-controller="Provider" id="smsForm" method="get">
+                <div class="modal-body">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12">
+                            <input id="phoneNoField" class="form-control" asp-for="SmsDto.PhoneNo" type="text">
+                            <span class="required removeValidation" asp-validation-for="SmsDto.PhoneNo"></span>
+
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+
+                        <div class="col-sm-12 col-md-12">
+                            <textarea id="msgTxt" class="materialize-textarea" asp-for="SmsDto.TextMsg" placeholder="Message"></textarea>
+                            <span class="required removeValidation" asp-validation-for="SmsDto.TextMsg"></span>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button id="smsBtn" class="right btn btn-primary waves-effect waves-green">Send</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div id="myModal2" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Compose New Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EmailSend" asp-controller="Provider" method="post" id="EmailForm" enctype="multipart/form-data">
+                    <div class="form-group">
+
+                        <input id="email" type="email" class="form-control" asp-for="EmailBasicDto.ToEmails" placeholder="To:" disabled>
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.ToEmails"></span>
+                    </div>
+                    <div class="form-group">
+                        <input id="subject" type="text" class="form-control" asp-for="EmailBasicDto.Subject" placeholder="Subject:" />
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.Subject"></span>
+
+
+                    </div>
+                    <div class="form-group">
+                        <textarea id="textarea2" class="materialize-textarea" rows="6" placeholder="Message:" asp-for="EmailBasicDto.Body"></textarea>
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.Body"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="input-group">
+
+                            <div class="custom-file">
+                                <input type="file" id="attachment_file" asp-for="EmailBasicDto.attachmentFilename">
+                                <label class="custom-file-label" for="attachment_file">Upload one or more files</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="emailbtn" class="right btn btn-primary">Send</button>
+                        <a class="right btn btn-primary modal-close  mr-2" data-dismiss="modal">Cancel</a>
+                    </div>
+                </form>
+            </div>
+            @*<div class="footer_model">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div id="PatientPrint" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Print Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button onclick="printPatient()"  class="btn add-btn">View</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+@*<div class="col l3 m3 s12 padding-right-0 hide-on-med-and-down">
+        <div class="card card-default margin-top-0 margin-bottom-0" style="height:1024px !important;">
+            <div class="card-content card-padding-0">
+                <div class="collection border-none">
+                    <div class="col s12">
+                        <h5 class="card-title" style="margin:7px 0 !important">Patient Data  <i class="material-icons right color-blue">add</i></h5>
+                        <input class="header-search-input mt-4 mb-2" type="text" name="Search" placeholder="Search Patient" />
+
+                    </div>
+
+                    <ul class="collection p-0">
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Elizabeth Elliott</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.00 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Mary Adams</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-2.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Caleb Richards</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-3.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Caleb Richards</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">9.00 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-4.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">June Lane</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.14 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-5.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Edward Fletcher</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.15 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-6.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Crystal Bates</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">8.00 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-7.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Nathan Watts</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">9.53 PM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-8.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Willard Wood</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">4.20 AM</span>
+                        </li>
+                        <li class="collection-item sidenav-trigger display-flex avatar pl-5 pb-0" data-target="slide-out-chat">
+                            <span class="avatar-status  avatar-50">
+                                <img src="../../../app-assets/images/avatar/avatar-1.png" alt="avatar" />
+                                <i></i>
+                            </span>
+                            <div class="user-content">
+                                <h6 class="line-height-0">Ronnie Ellis</h6>
+                                <p class="medium-small blue-grey-text text-lighten-3 pt-3">31 year old &#8729;<span> male</span></p>
+                            </div>
+                            <span class="secondary-content medium-small">5.20 AM</span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+<div id="AppointmentModalSlots" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>Doctor slots</h4>
+                <hr />
+
+
+
+                <div id="AvailableSlots" style="display:none">
+
+                    <partial name="~/Views/Appointment/PartialViews/_ProviderSlotsView.cshtml" />
+                </div>
+                <div class="row">
+                    <div class="col s12 m12">
+                        <a href="javascript:void(0);" class="modal-action modal-close cancel_btn Recreate ml-2 btn mt-2 right" data-dismiss="modal">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

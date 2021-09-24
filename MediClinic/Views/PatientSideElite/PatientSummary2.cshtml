@@ -1,0 +1,1956 @@
+﻿@model MediClinic.Models.PatientViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum;
+@using  MediClinic.Services.Interfaces.SessionManager
+@using  MedliClinic.Utilities.Utility
+@{
+    ViewData["Title"] = "PatientSummary";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var RoleType = _sessionManager.GetRoleId();
+    var patientVitalId = ViewContext.RouteData.Values["id"];
+    var patientId = _sessionManager.GetPatientInfoId();
+    var remainderCountMissingFields = 0;
+    var totalCountMissingFields = 0;
+}
+@section styles{
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
+
+    <style>
+        #halfstarsReview {
+            pointer-events: none;
+        }
+        textarea {
+            width: 100%;
+            border: 1px solid #e9ecef !important;
+            border-radius: 4px;
+            height: 175px !important;
+            padding: .375rem .75rem !important;
+            font-size: .875rem !important;
+            line-height: 1.5 !important;
+        }
+
+        .mdi {
+            cursor: pointer;
+        }
+
+        #accordion button {
+            width: 100% !important;
+            box-shadow: none !important;
+            text-align: left;
+            padding: 1rem;
+            font-size: 18px !important;
+        }
+
+            #accordion button:hover {
+                color: #547cea !important;
+                text-decoration: none !important;
+            }
+
+        #collapseOne .col-md-4 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .blue-text.text-darken-4 {
+            color: #0d47a1 !important;
+        }
+
+        .bodyStatusValue {
+            margin-top: 0px !important;
+        }
+
+        .collapse {
+            border-top: 1px solid #b0c5d8;
+        }
+
+        #accordion [data-toggle="collapse"]:after {
+            font-family: 'FontAwesome';
+            content: "\f062"; /* "play" icon */
+            float: right;
+            color: #b0c5d8;
+            font-size: 18px;
+            line-height: 22px; /* rotate "play" icon from > (right arrow) to down arrow */
+            -webkit-transform: rotate(0deg);
+            -moz-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -o-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        #accordion [data-toggle="collapse"].collapsed:after {
+            /* rotate "play" icon from > (right arrow) to ^ (up arrow) */
+            -webkit-transform: rotate(180deg);
+            -moz-transform: rotate(180deg);
+            -ms-transform: rotate(180deg);
+            -o-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .black-text {
+            color: #000 !important
+        }
+
+        #RelatedPatient {
+            margin: 0 !important;
+            height: 900px;
+            min-height: 500px;
+        }
+
+        .modal-open .modal {
+            max-height: 85% !important
+        }
+
+        #myModal3 .modal-body {
+            overflow-y: scroll !important;
+            height: 385px;
+        }
+
+        .modal h5 {
+            margin: 0 !important
+        }
+
+        .container {
+            padding: 0 1.5rem !important
+        }
+
+        .set_icons a {
+            color: #6b6f82 !important;
+        }
+
+        .set_icons i {
+            font-size: 24px !important;
+            padding-right: 8px;
+        }
+
+        .set_icons {
+            margin: .82rem 0 .656rem 0;
+            text-align: right !important;
+        }
+
+        .patient-image {
+            width: 150px;
+            height: 150px;
+        }
+
+        .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+            .card .card-content {
+                padding: 24px;
+                border-radius: 0 0 2px 2px;
+            }
+
+        .card {
+            overflow: hidden;
+            margin: 1rem 0 1rem 0;
+        }
+
+        .doc_Infor_Card {
+            padding: 10px !important;
+        }
+
+            .doc_Infor_Card p {
+                margin: 0px !important;
+                font-weight: 300 !important;
+            }
+
+        /*  .modal {
+                    position: fixed;
+                    right: 0;
+                    left: 0;
+                    overflow-y: auto;
+                    width: 55%;
+                    max-height: 70%;
+                    margin: auto;
+                    padding: 0;
+                    border-radius: 2px;
+                    background-color: #fafafa;
+                    will-change: top, opacity;
+                }
+        */
+        /*@@media (max-width: 576px) {
+                    .modal-dialog {
+                        max-width: 577px;
+                        margin: 1rem auto;
+                    }
+                }
+        */
+        .modal-dialog {
+            max-width: 52% !important;
+            margin-bottom: 24px !important;
+            margin-top: 30px !important;
+        }
+
+        .change_size {
+            font-size: 1.64rem !important;
+        }
+
+
+        .btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #ccc;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+
+        .toggle {
+            margin: 10px auto;
+        }
+
+        .modal-contentset {
+            margin-left: 43px;
+        }
+
+        .add-btn {
+            padding: 0 2rem !important;
+            line-height: 41px !important;
+            height: 41px !important;
+            background: #547cea !important;
+            text-transform: none !important;
+            color: white;
+            float: right;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+
+        .FLNameLetter {
+            background: #f1f1f1;
+            padding: 23px;
+            border-radius: 50%;
+            color: #547cea;
+            width: 30px;
+            font-weight: bold;
+        }
+
+        .collection .collection-item.avatar {
+            min-height: 55px !important;
+            position: relative;
+            line-height: 1.5rem;
+            margin: 0;
+            padding: 10px 10px;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: #fff;
+        }
+
+        div.avatar-status.avatar-50 {
+            padding-right: 10px;
+            line-height: 0;
+            width: 50px;
+            position: relative;
+            display: inline-block;
+            vertical-align: bottom;
+            white-space: nowrap;
+            border-radius: 50px;
+        }
+
+            div.avatar-status.avatar-50 img {
+                border-radius: 50%;
+            }
+
+        .blue-grey-text.text-lighten-3 {
+            margin: 0 !important;
+        }
+
+        .line-height-0 {
+            line-height: 0.5 !important
+        }
+
+        .FLName {
+            margin: 0 auto !important;
+            width: 150px;
+            padding: 30px !important;
+            background-color: #f1f1f1 !important;
+        }
+
+            .FLName h3 {
+                line-height: 110%;
+                font-size: 2.92rem;
+                margin: 1.168rem 0 1.168rem 0 !important;
+            }
+
+        @@media screen and (max-width:766px) {
+        }
+    </style>
+}
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js.map"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <script type="text/javascript">
+         var clickfrom =null;
+        function populateSummary(patientInfoId) {
+            debugger;
+            $.get("/PatientSideELite/getSummary", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+                $("#patientSummaryDiv").empty();
+                $('#patientSummaryDiv').html(data);
+
+            });
+        }
+
+        $('#smsForm').on('submit', function (e) {
+            debugger;
+            $('#phoneNoField').attr('disabled', false);
+            e.preventDefault();
+
+            if ($(this).valid()) {
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                    onSendSmsSuccess(response);
+                    },
+                    error: function (response) {
+
+                    },
+                    complete: function (xhr) {
+
+                    }
+                });
+
+            }
+            else {
+                $('#phoneNoField').attr('disabled', true);
+            }
+        });
+        function onSendSmsSuccess(data) {
+            $('#phoneNoField').val('');
+            $('#msgTxt').val('');
+            $('#myModal').modal('hide');
+
+            if (data) {
+                $(".checkmark").show().fadeOut(6000);
+
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+        function importNumber() {
+            debugger;
+             $('#phoneNoField').attr('disabled', true);
+            $('.removeValidation').html("");
+            var phone = $('#phoneNo').val();
+            if (phone) {
+                $('#phoneNoField').val(phone);
+                $('#phoneNoField').attr('disabled', true);
+            }
+        }
+        function importEmail() {
+            $("#email").attr('disabled', true);
+            $('.removeValidation').html("");
+            var email = $('#PatientEmail').val();
+            if (email) {
+                $('#email').val(email);
+            }
+        }
+        $('#EmailForm').on('submit', function (e) {
+            debugger;
+            $("#email").attr('disabled', false);
+            e.preventDefault();
+                        debugger;
+
+            if ($(this).valid()) {
+                $('#emailbtn').attr('disabled', true);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        $('#emailbtn').attr('disabled', false);
+                    },
+                    error: function (response) {
+                        $('#emailbtn').attr('disabled', false);
+
+                    },
+                    complete: function (xhr) {
+                        $('#emailbtn').attr('disabled', false);
+
+                        onEmailSendSuccess(xhr.responseJSON);
+                        //console.log(xhr.responseText);
+                    }
+                });
+
+            }
+            else {
+                $("#email").attr('disabled', true);
+            }
+        });
+        function onEmailSendSuccess(data) {
+            $('#email').val('');
+            $('#subject').val('');
+            $('#textarea2').val('');
+            $('.file-path').val('');
+            $('#attachment_file').val('');
+            $('#myModal2').modal('hide');
+            debugger;
+            if (data) {
+                $(".checkmark").show().fadeOut(6000);
+
+            }
+            else {
+                new PNotify({
+                    title: 'Error!',
+                    text: 'Something went wrong',
+                    delay: 2500,
+                    type: 'error',
+                    addclass: 'pnotify-center'
+                });
+            }
+        }
+
+          function myFillNowFunction(controller,action,patientId,tabNo) {
+              debugger;
+
+            // var route = "@Url.Action("PatientInfo", "PatientSide", new {id=patientId, clickfrom = ""})";
+            var route = "/" + controller + "/" + action + "/" + patientId + "/" + "";
+            var Tabname = tabNo;
+            var uri = route + decodeURIComponent(Tabname);
+            window.location.href = uri;
+        }
+
+        function print() {
+            $('#hiddenBtnForm').trigger('click');
+        }
+
+           function  GetCheckBoxValues() {
+            debugger;
+             var printValues = {};
+             printValues.FirstName = $('#firstNameBox').is(':checked');
+             printValues.LastName = $('#lastNameBox').is(':checked');
+             printValues.DOB = $('#DOBPrintCheckBox').is(':checked');
+             printValues.Age = $('#agePrintCheckBox').is(':checked');
+             printValues.Address = $('#AddressPrintCheckBox').is(':checked');
+             printValues.SSNumber = $('#SSNPrintCheckBox').is(':checked');
+             printValues.Gender = $('#GenderPrintCheckBox').is(':checked');
+             printValues.MaritalStatus = $('#MSCheckBox').is(':checked');
+             printValues.MobilePhone = $('#MPhoneCheckBox').is(':checked');
+             printValues.HomePhone = $('#HPhoneCheckBox').is(':checked');
+             printValues.EmergencyPhone = $('#EmergencyPhoneCheckBox').is(':checked');
+             printValues.Languages = $('#LanguagesPhoneCheckBox').is(':checked');
+             printValues.CaseType = $('#CaseTypeCheckBox').is(':checked');
+             printValues.ClaimNumber = $('#ClaimNumberCheckBox').is(':checked');
+             printValues.PolicyNumber = $('#PolicyNumberCheckBox').is(':checked');
+             printValues.WCBNumber = $('#WCBCheckBox').is(':checked');
+             printValues.CarrierCaseNumber = $('#CCNumberCheckBox').is(':checked');
+             printValues.PolicyHolderName = $('#PHNameCheckBox').is(':checked');
+             printValues.EmployerInfo = $('#EmployerInfoCheckBox').is(':checked');
+             printValues.DOA = $('#DOACheckBox').is(':checked');
+             printValues.PlaceTimeOfAccident = $('#PTOIncidentCheckBox').is(':checked');
+             printValues.FullInsuranceInfo = $('#FullInsurancInfotCheckBox').is(':checked');
+             printValues.FullClaimInfo = $('#FullClaimInfotCheckBox').is(':checked');
+             printValues.Nf2fillingDate = $('#NF2FillingCheckBox').is(':checked');
+             printValues.DateCreated = $('#CreatedDateCheckBox').is(':checked');
+             printValues.PrimaryDr = $('#PrimaryDrCheckBox').is(':checked');
+             printValues.FirstVisit = $('#FirstVisitPrintCheckBox').is(':checked');
+             printValues.LastVisit = $('#LastVisitCheckBox').is(':checked');
+             printValues.LastExam = $('#LastExamCheckBox').is(':checked');
+             printValues.Vitals = $('#vitalsPrintCheckBox').is(':checked');
+             printValues.BodyStatus = $('#bodyStatusPrintCheckBox').is(':checked');
+             printValues.Tests = $('#testsPrintCheckBox').is(':checked');
+             printValues.Reminder = $('#remainderPrintCheckBox').is(':checked');
+             printValues.Missing = $('#MissingPrintCheckBox').is(':checked');
+             printValues.FullPIAttorneyinfo = $('#FullPIAttorneyPrintCheckBox').is(':checked');
+             printValues.Paralegal = $('#ParalegalPrintCheckBox').is(':checked');
+             printValues.CollectionAttorney = $('#CollectionAttorneyPrintCheckBox').is(':checked');
+             printValues.ReferralName = $('#ReferralNamePrintCheckBox').is(':checked');
+             printValues.CurrentLocationInFacility = $('#CurrentlocationInFacilityPrintCheckBox').is(':checked');
+             printValues.LastIME = $('#lastIMEPrintCheckBox').is(':checked');
+             printValues.LastEUO = $('#lastEUOPrintCheckBox').is(':checked');
+             printValues.LastVisit = $('#allVisitPrintCheckBox').is(':checked');
+             printValues.NumberOfVisits = $('#NumberOfVisits').is(':checked');
+             printValues.RelatedPatientList = $('#RelatedPatientList').is(':checked');
+
+            printValues.PatientId = @patientId;
+            $("input").prop("disabled", true);
+            submitSettings(printValues);
+        }
+        var htmlData;
+        var win;
+        function submitSettings(summaryObj) {
+            $.post("/Setting/PrintPreview", { printValues: summaryObj }).done(function (data) {
+                 //htmlData = data;
+                 //$("#hack").trigger("click");
+            });
+        }
+
+        //$("#hack").on("click", function () {
+        //win = window.open("", "_blank");
+        //win.document.body.innerHTML = htmlData;
+
+        //});
+
+//        function print() {
+//	printJS({
+//    printable: 'printElement',
+//    type: 'html',
+//    targetStyles: ['*']
+// })
+//}
+
+
+//document.getElementById('printButton').addEventListener ("click", print)
+        //$(document).ready(function () {
+        //    $('.collapsible').collapsible();
+        //    $(".collapsible-header").click(function () {
+        //        $(".more", this).toggle()
+        //        $(".less", this).toggle()
+        //    });
+
+        //});
+        $(function() {
+  $('.black-text').addClass('expand');
+});
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="container">
+                <!--Gradient Card-->
+                <input type="button" hidden="hidden" id="hack">
+
+                @if (Model.patientCompleteInfo != null)
+                {
+                    <span id="patientSummaryDiv">
+                        @*<partial name="~/Views/_PatientPartialView/_patientSummary.cshtml" />*@
+                        <partial name="~/Views/PatientSideElite/_PatientPartialView/_patientSummary.cshtml" />
+
+                    </span>
+                }
+                @if (Model.PatientSettingDto != null)
+                {
+                    @if (Model.PatientSettingDto.Reminders)
+                    {
+
+                        <!--Gradient Card-->
+                        <div id="cards-extended">
+
+
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <h5 class="color-blue">Reminders</h5>
+                                </div>
+
+                            </div>
+                            <div class="row ">
+                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 center">
+                                    @if (Model.patientCompleteInfo.PaitentImage != null)
+                                    {
+                                        <img src="~/images/@Model.patientCompleteInfo.PaitentImage" class=" patient-image circle responsive-img lighten-3 padding-4" style="border:2px solid @Model.patientCompleteInfo.Color" />
+                                    }
+                                    else
+                                    {
+                                        <div class="circle FLName" style="border:2px solid @Model.patientCompleteInfo.Color">
+                                            <h3 class="color-blue">@Model.patientCompleteInfo.FirstNameLetter@Model.patientCompleteInfo.LastNameLetter</h3>
+                                        </div>
+                                    }
+                                    @*<img src="~/app-assets/images/avatar/avatar-1.png" class=" patient-image circle responsive-img grey lighten-3 padding-4" />*@
+                                </div>
+
+                                <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+
+                                    <div class="row">
+                                        @if (!(Model.PatientMissingsListDto is null) && Model.PatientMissingsListDto.Count > 0)
+                                        {
+                                            foreach (var item in Model.PatientMissingsListDto)
+                                            {
+                                                totalCountMissingFields = item.MissingFieldsList.Count;
+
+                                                remainderCountMissingFields++;
+                                                if (remainderCountMissingFields <= 4)
+                                                {
+                                                    <div class="col-4 col-sm-4 col-md-6 col-lg-3">
+                                                        <a onclick="myFillNowFunction('@item.ControllerName','@item.ActionName',@item.PatientId,'@item.TabNumber');" style="cursor:pointer;">
+                                                            <div class="card blue darken-4">
+                                                                <div class="card-content doc_Infor_Card">
+
+                                                                    <p class="white-text font-weight-bold center">@item.CardHeading</p>
+
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+
+                                                }
+                                            }
+                                        }
+
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+
+                                            <a href="@Url.Action("MissingElite","PatientSideElite",new {Id = Model.patientCompleteInfo.PatientInfoId })" class="right">See More</a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="divider mt-2"></div>
+
+                    }
+
+                }
+
+                <!--Gradient Card-->
+                <!--Gradient Card-->
+                <div id="accordion">
+                    <div class="card">
+                        <div id="headingOne">
+                            <h5 class="mb-0 mt-0">
+                                <button class="btn btn-link collapsed color-blue" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Body Status
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row ">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Temprature != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class="mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Temperature
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Temprature</p>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Temperature
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Temprature</p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            }
+                                        }
+
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.BloodPressure != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+
+
+
+                                                <div class="card " onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Bloot Pressure
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BloodPressure</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Bloot Pressure
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BloodPressure</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        }
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Pulse != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Pulse
+
+                                                            </p>
+
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Pulse</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Pulse
+
+                                                            </p>
+
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Pulse</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+
+                                    </div>
+
+
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Respiration != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Respiration
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Respiration</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Respiration
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Respiration</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Height != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/height.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Height
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Height</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/height.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Height
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Height</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Weight != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/weight.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Weight
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Weight</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/weight.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Weight
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Weight</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+
+                                    </div>
+
+
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.TempMethod != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Temp Method:
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.TempMethod</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Temp Method:
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.TempMethod</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.BMIStatus != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                BMI Status:
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BMIStatus</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/bp.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                BMI Status:
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BMIStatus</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.BMI != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                BMI
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BMI</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                BMI
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.BMI</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+
+                                    </div>
+
+
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.OxygenSaturation != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Oxygen Saturation
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.OxygenSaturation</p>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/oxygen.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Oxygen Saturation
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.OxygenSaturation</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-4 card-width">
+                                        @if (Model.VitalDto.Allergies != null)
+                                        {
+                                            if (Model.VitalDto.IsEditableOrNot)
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "Edit"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/height.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Allergies
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Allergies</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="card" onclick="location.href='@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = Model.VitalDto.PatientVitalId , actionType = "view"})'" style="cursor: pointer">
+                                                    <div class="row">
+                                                        <div class="col-4 col-sm-4 col-md-4">
+                                                            <i>
+                                                                <img src="~/app-assets/images/PatientProfileicon/height.png" />
+                                                            </i>
+                                                        </div>
+                                                        <div class="col-8 col-sm-8 col-md-8">
+                                                            <p class=" mb-0 blue-text text-darken-4 font-weight-bold bodyStatusCardTitle">
+                                                                Allergies
+
+                                                            </p>
+                                                            <p class="no-margin bodyStatusValue">@Model.VitalDto.Allergies</p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            }
+                                        }
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!(Model.PatientSettingDto is null))
+                    {
+                        @if (Model.PatientSettingDto.FullClaimInfo)
+                        {
+
+                            <div class="card">
+                                <div id="headingTwo">
+                                    <h5 class="mb-0 mt-0">
+                                        <button class="btn btn-link collapsed color-blue" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Claim Info
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <div class="row">
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Claim ID</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PatientClaimID </p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Primary Insurance Provider</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PrimaryInsuranceProvider</p>
+                                            </div>
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Address</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.ClaimInfoAddress</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">State</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.ClaimInfoState</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Zip</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.ClaimInfoZip</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Country</p>
+                                                <p class="mt-0 black-text font-weight-600"> @Model.patientCompleteInfo.ClaimInfoCountry</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Web Page</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.ClaimInfoWebPage</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Primary Number</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PrimaryPhone</p>
+                                            </div>
+
+
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Fax</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.ClaimInfoFax</p>
+
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Email</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.Email</p>
+
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Adjuster Id</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.AdjusterID</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class="mb-0">Adjuster Extension</p>
+                                                <p class="mt-0 black-text font-weight-600">@Model.patientCompleteInfo.AdjusterExtension</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Adjuster Fax</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.AdjusterFax </p>
+                                            </div>
+
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Adjuster Email</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.AdjusterEmail</p>
+                                            </div>
+
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Date of incident Number</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.DateOfIncident.ToString(SystemFormat.DateFormat())</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Time of incident</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.TimeOfIncident</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Incident in Course</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.IncidentInCourse</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Place of Incident</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PlaceOfIncident</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Case Type</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.CaseTypeName</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Was Cause of Incident</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.WasCasuseOfEmployment</p>
+                                            </div>
+
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Policy Limit</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.PolicyLimits</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Group Number</p>
+                                                <p class=" mt-0 font-weight-600 black-text"> @Model.patientCompleteInfo.GroupNumber</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">CoPay</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.CoPay</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Accept Assingment</p>
+                                                <p class=" mt-0 font-weight-600 black-text">N/A</p>
+                                            </div>
+
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Policy Effective Date</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PolicyEffectiveDate.ToString(SystemFormat.DateFormat())</p>
+                                            </div>
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">RelationShip to Policy Holder</p>
+                                                <p class="mt-0 font-weight-600 black-text">  @Model.patientCompleteInfo.RelationShipToPolicyHolder</p>
+                                            </div>
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+                                                <p class=" mb-0">Policy Effective Incident Time</p>
+                                                <p class=" mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PolicyEffectAtIncidentTime</p>
+                                            </div>
+                                            <div class="col-4 col-sm-3 col-md-3 col-lg-3">
+
+                                                <p class=" mb-0">Policy Effective Incident End Date</p>
+                                                <p class="mt-0 font-weight-600 black-text">@Model.patientCompleteInfo.PolicyEffectEndDate.ToString(SystemFormat.DateFormat())</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                    <div class="card">
+                        <div id="headingThree">
+                            <h5 class="mb-0 mt-0">
+                                <button class="btn btn-link collapsed color-blue" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Patient Balance
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-3">
+                                        <h6>Billed</h6>
+                                        <p style="color:#6b6f82 !important">$300,000.00</p>
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-3">
+                                        <h6>Paid</h6>
+                                        <p style="color:#6b6f82 !important">$500.000</p>
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-5">
+                                        <div class="float-right">
+                                            <h6>Balance</h6>
+                                            <p style="color: #f04f85 !important;">-$200,000.00</p>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        @*<div class="col-lg-3 col-md-3 col-sm-12 col-xl-3 hide-on-small-and-down">
+                <div class="card card-default margin-top-0 margin-bottom-0" id="RelatedPatient">
+                    <div class="card-content card-padding-0" style="padding: 0px;">
+                        <div class="collection border-none">
+                            <div class="col s12">
+                                <h5 class="card-title" style="margin:7px 0 !important">Patient Data <i class="mdi mdi-plus color-blue right" style="    font-size: 22px;"></i></h5>
+                                <input type="text" name="" class="form-control" placeholder="Search Patients">
+
+                            </div>
+                            <hr />
+                            @if (Model.PatientSettingDto != null)
+                            {
+                                @if (Model.PatientSettingDto.RelatedPatientList)
+                                {
+                                    <ul class="collection p-0">
+                                        @if (Model.patientListWithUsers != null)
+                                        {
+                                            foreach (var item in Model.patientListWithUsers)
+                                            {
+                                                <li class="collection-item  display-flex avatar" onclick="populateSummary(@item.PatientInfoId);" style="cursor: pointer" data-target="slide-out-chat">
+                                                    <div class="avatar-status  avatar-50">
+                                                        @if (item.PaitentImage != null)
+                                                        {
+                                                            <img src="~/images/@item.PaitentImage" alt="patient" width="45" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="FLNameLetter">
+                                                                <span style="margin-left:-10px">@item.FirstNameLetter@item.LastNameLetter</span>
+                                                            </div>
+                                                        }
+
+                                                        <i></i>
+                                                    </div>
+                                                    <div class="user-content">
+                                                        <h6 class="line-height-0">@item.FullName</h6>
+                                                        <p class="medium-small blue-grey-text text-lighten-3">@item.Age year old &#8729;<span> male</span></p>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+
+
+                                    </ul>
+                                }
+
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>*@
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<div id="myModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Compose New Text</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <form asp-action="EmailSms" asp-controller="PatientSide" id="smsForm" method="get">
+                <div class="modal-body">
+
+
+                    <div class="row">
+
+                        <div class="col-sm-12 col-md-12">
+                            <input id="phoneNoField" class="form-control" asp-for="SmsDto.PhoneNo" type="text">
+                            <span class="required removeValidation" asp-validation-for="SmsDto.PhoneNo"></span>
+
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+
+                        <div class="col-sm-12 col-md-12">
+                            <textarea id="msgTxt" class="materialize-textarea" asp-for="SmsDto.TextMsg" placeholder="Message"></textarea>
+                            <span class="required removeValidation" asp-validation-for="SmsDto.TextMsg"></span>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
+                            <button id="smsBtn" class="right btn btn-primary waves-effect waves-green">Send</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div id="myModal2" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Compose New Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="EmailSend" asp-controller="PatientSide" method="post" id="EmailForm" enctype="multipart/form-data">
+                    <div class="form-group">
+
+                        <input id="email" type="email" class="form-control" asp-for="EmailBasicDto.ToEmails" placeholder="To:" disabled>
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.ToEmails"></span>
+                    </div>
+                    <div class="form-group">
+                        <input id="subject" type="text" class="form-control" asp-for="EmailBasicDto.Subject" placeholder="Subject:" />
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.Subject"></span>
+
+
+                    </div>
+                    <div class="form-group">
+<textarea id="textarea2" class="materialize-textarea" rows="6" placeholder="Message:" asp-for="EmailBasicDto.Body"></textarea>
+                        <span class="required removeValidation" asp-validation-for="EmailBasicDto.Body"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="input-group">
+
+                            <div class="custom-file">
+                                <input type="file" id="attachment_file" asp-for="EmailBasicDto.attachmentFilename">
+                                <label class="custom-file-label" for="attachment_file">Upload one oe more files</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button id="emailbtn" class="right btn btn-primary">Send</button>
+                        <a class="right btn btn-primary modal-close  mr-2" data-dismiss="modal">Cancel</a>
+                    </div>
+                </form>
+            </div>
+            @*<div class="footer_model">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+<div id="myModal3" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title color-blue"> Print Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="PrintPreview" asp-controller="Setting" method="post">
+                    <input hidden="hidden" id="PatientInfoId" value="@patientId" asp-for="PatientPrintSettingDto.PatientId" />
+
+                    <div class="row">
+                        @if (Model.PatientPrintSettingDto.FIrstName)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>First Name</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="firstNameBox" asp-for="PatientPrintSettingDto.FIrstName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+
+                        @if (Model.PatientPrintSettingDto.LastName)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Last Name</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="lastNameBox" asp-for="PatientPrintSettingDto.LastName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.DOB)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>DOB</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="DOBPrintCheckBox" asp-for="PatientPrintSettingDto.DOB" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Age)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Age</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="agePrintCheckBox" asp-for="PatientPrintSettingDto.Age" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Address)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Address</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="AddressPrintCheckBox" asp-for="PatientPrintSettingDto.Address" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.SSNumber)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>SS Number</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="SSNPrintCheckBox" asp-for="PatientPrintSettingDto.SSNumber" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Gender)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Gender</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="GenderPrintCheckBox" asp-for="PatientPrintSettingDto.Gender" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.MaritalStatus)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Marital Status</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="MSCheckBox" asp-for="PatientPrintSettingDto.MaritalStatus" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.MobilePhone)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Mobile Phone</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="MPhoneCheckBox" asp-for="PatientPrintSettingDto.MobilePhone" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.HomePhone)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Home Phone</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="HPhoneCheckBox" asp-for="PatientPrintSettingDto.HomePhone" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.EmergencyPhone)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Emergency Phone</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="EmergencyPhoneCheckBox" asp-for="PatientPrintSettingDto.EmergencyPhone" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.languages)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Languages</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LanguagesPhoneCheckBox" asp-for="PatientPrintSettingDto.languages" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.CaseType)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Case Type</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CaseTypeCheckBox" asp-for="PatientPrintSettingDto.CaseType" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.ClaimNumber)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Claim Number</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="ClaimNumberCheckBox" asp-for="PatientPrintSettingDto.ClaimNumber" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.PolicyNumber)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Policy Number</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="PolicyNumberCheckBox" asp-for="PatientPrintSettingDto.PolicyNumber" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.WCBNumber)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>WCB Number</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="WCBCheckBox" asp-for="PatientPrintSettingDto.WCBNumber" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.CarrierCaseNumber)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Carrier Case Number</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CCNumberCheckBox" asp-for="PatientPrintSettingDto.CarrierCaseNumber" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.PolicyHolderName)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Policy Holder Name</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="PHNameCheckBox" asp-for="PatientPrintSettingDto.PolicyHolderName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.EmployerInfo)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Employer Info</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="EmployerInfoCheckBox" asp-for="PatientPrintSettingDto.EmployerInfo" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.DOA)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>DOA</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="DOACheckBox" asp-for="PatientPrintSettingDto.DOA" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.PlaceTimeOfAccident)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Place/Time Of Incident</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="PTOIncidentCheckBox" asp-for="PatientPrintSettingDto.PlaceTimeOfAccident" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.FullInsuranceInfo)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Full Insurance Info</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FullInsurancInfoCheckBox" asp-for="PatientPrintSettingDto.FullInsuranceInfo" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.FullClaimInfo)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Full Claim Info</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FullClaimInfoCheckBox" asp-for="PatientPrintSettingDto.FullClaimInfo" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Nf2fillingDate)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>NF2 Filling Date</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="NF2FillingCheckBox" asp-for="PatientPrintSettingDto.Nf2fillingDate" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.DateCreated)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Created Date</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CreatedDateCheckBox" asp-for="PatientPrintSettingDto.DateCreated" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.PrimaryDr)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Primary Dr</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="PrimaryDrCheckBox" asp-for="PatientPrintSettingDto.PrimaryDr" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.FirstVisit)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>First Visit</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FirstVisitPrintCheckBox" asp-for="PatientPrintSettingDto.FirstVisit" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.LastVisit)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Last Visit</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LastVisitCheckBox" asp-for="PatientPrintSettingDto.LastVisit" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.LastExam)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Last Exam</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="LastExamCheckBox" asp-for="PatientPrintSettingDto.LastExam" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Vitals)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Vitals</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="vitalsPrintCheckBox" asp-for="PatientPrintSettingDto.Vitals" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.BodyStatus)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Body Status</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="bodyStatusPrintCheckBox" asp-for="PatientPrintSettingDto.BodyStatus" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Tests)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Tests</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="testsPrintCheckBox" asp-for="PatientPrintSettingDto.Tests" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Reminder)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Reminders</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="remainderPrintCheckBox" asp-for="PatientPrintSettingDto.Reminder" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Missing)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Missing</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="MissingPrintCheckBox" asp-for="PatientPrintSettingDto.Missing" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.FullPIAttorneyinfo)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Full P.I. Attorney</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="FullPIAttorneyPrintCheckBox" asp-for="PatientPrintSettingDto.FullPIAttorneyinfo" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.Paralegal)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Paralegal</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="ParalegalPrintCheckBox" asp-for="PatientPrintSettingDto.Paralegal" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.CollectionAttorney)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Collection Attorney</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CollectionAttorneyPrintCheckBox" asp-for="PatientPrintSettingDto.CollectionAttorney" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.ReferralName)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Referral Name</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="ReferralNamePrintCheckBox" asp-for="PatientPrintSettingDto.ReferralName" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.CurrentLocationInFacility)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Current Location in Facility</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="CurrentlocationInFacilityPrintCheckBox" asp-for="PatientPrintSettingDto.CurrentLocationInFacility" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.LastIME)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Last I.M.E</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="lastIMEPrintCheckBox" asp-for="PatientPrintSettingDto.LastIME" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.LastEUO)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Last E.U.O</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="lastEUOPrintCheckBox" asp-for="PatientPrintSettingDto.LastEUO" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.AllVisits)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>All Visits</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="allVisitPrintCheckBox" asp-for="PatientPrintSettingDto.AllVisits" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.NumberOfVisits)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3">
+                                <p>Number Of Visits</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="numberVisitPrintCheckBox" asp-for="PatientPrintSettingDto.NumberOfVisits" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                        @if (Model.PatientPrintSettingDto.RelatedPatientList)
+                        {
+                            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                                <p>Related Patient List</p>
+                                <div class="switch">
+                                    <input type="checkbox" id="relatedPatientPrintCheckBox" asp-for="PatientPrintSettingDto.RelatedPatientList" data-toggle="toggle" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <button type="submit" id="hiddenBtnForm" style="display:none;" class="btn btn-info">Print</button>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button onclick="print();" class="btn add-btn">View</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,1173 @@
+﻿
+@{
+    ViewData["Title"] = "PatientCalendar";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles{
+  
+}
+@section scripts{
+    <script src="~/app-assets/vendors/fullcalendar/lib/jquery-ui.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/lib/moment.min.js"></script>
+    <script src="~/app-assets/vendors/fullcalendar/js/fullcalendar.min.js"></script>
+
+    <script>
+        let calendarData = [];
+
+        var jsonObj;
+        var allData = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-03',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-02',
+                end: '2020-03-04',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-06T16:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-11',
+                end: '2020-04-13',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-18T10:30:00',
+                end: '2020-04-20T12:30:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-19T07:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-28',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'All Day Event',
+                start: '2020-03-10',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-07',
+                end: '2020-03-09',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-17T16:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-20',
+                end: '2020-03-21',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-12T10:30:00',
+                end: '2020-03-12T12:30:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-15T07:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'All Day Event',
+                start: '2020-04-01',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-07',
+                end: '2020-03-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-3T16:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-5',
+                end: '2020-03-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-10T10:30:00',
+                end: '2020-03-11T12:30:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-14T20:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-10T07:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-20',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'All Day Event',
+                start: '2020-03-03',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-29',
+                end: '2020-03-30',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-06T16:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-11',
+                end: '2020-03-13',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-15T10:30:00',
+                end: '2020-03-17T12:30:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-23T07:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'All Day Event',
+                start: '2020-03-01',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-07',
+                end: '2020-03-10',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-16T16:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-11',
+                end: '2020-03-13',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-12T10:30:00',
+                end: '2020-04-12T12:30:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-13T07:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'black',
+                textColor: 'white'
+            }
+        ];
+        var yellowJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-03',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-02',
+                end: '2020-04-04',
+                color: 'yellow',
+                textColor: 'black'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-06T16:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-11',
+                end: '2020-04-13',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-18T10:30:00',
+                end: '2020-04-20T12:30:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-04-12T20:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-04-19T07:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-04-28',
+                color: 'yellow',
+                textColor: 'black'
+            }
+        ];
+        var blueJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-10',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-07',
+                end: '2020-04-09',
+                color: 'blue',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-17T16:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-20',
+                end: '2020-04-21',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-12T10:30:00',
+                end: '2020-04-12T12:30:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-15T07:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-28',
+                color: 'blue',
+                textColor: 'white'
+            }
+        ];
+        var brownJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-01',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-07',
+                end: '2020-04-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-3T16:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-5',
+                end: '2020-04-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-10T10:30:00',
+                end: '2020-04-11T12:30:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-04-14T20:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-04-10T07:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-04-20',
+                color: '#974a02',
+                textColor: 'white'
+            }
+        ];
+        var redJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-03',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-29',
+                end: '2020-04-30',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-06T16:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-11',
+                end: '2020-03-13',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-15T10:30:00',
+                end: '2020-03-17T12:30:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-23T07:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'red',
+                textColor: 'white'
+            }
+        ];
+        var blackJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-01',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-07',
+                end: '2020-04-10',
+                color: 'black',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-16T16:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-11',
+                end: '2020-04-13',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-12T10:30:00',
+                end: '2020-04-12T12:30:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-04-12T20:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-04-13T07:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-04-28',
+                color: 'black',
+                textColor: 'white'
+            }
+        ];
+        var FrankGoodman = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-01',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-07',
+                end: '2020-04-10',
+                color: 'black',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-16T16:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-11',
+                end: '2020-04-13',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-12T10:30:00',
+                end: '2020-04-12T12:30:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-04-12T20:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-13T07:00:00',
+                color: 'black',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-28',
+                color: 'black',
+                textColor: 'white'
+            }
+        ];
+        FrankGoodman.name = "0";
+        var LuizaAlesJson = [
+            {
+                title: 'All Day Event',
+                start: '2020-04-03',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-04-29',
+                end: '2020-04-30',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-04-06T16:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-04-11',
+                end: '2020-04-13',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-04-15T10:30:00',
+                end: '2020-04-17T12:30:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-04-12T20:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-04-23T07:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'red',
+                textColor: 'white'
+            }
+        ];
+        LuizaAlesJson.name = "1";
+        var RobbinDrummo = [
+            {
+                title: 'All Day Event',
+                start: '2020-03-03',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-02',
+                end: '2020-03-04',
+                color: 'yellow',
+                textColor: 'black'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-06T16:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-11',
+                end: '2020-03-13',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-18T10:30:00',
+                end: '2020-03-20T12:30:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-19T07:00:00',
+                color: 'yellow',
+                textColor: 'black'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-28',
+                color: 'yellow',
+                textColor: 'black'
+            }
+        ];
+        RobbinDrummo.name = "2";
+        var Frank = [
+            {
+                title: 'All Day Event',
+                start: '2020-03-10',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-07',
+                end: '2020-03-09',
+                color: 'blue',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-17T16:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-20',
+                end: '2020-03-21',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-12T10:30:00',
+                end: '2020-03-12T12:30:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-15T07:00:00',
+                color: 'blue',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-28',
+                color: 'blue',
+                textColor: 'white'
+            }
+        ];
+        Frank.name = "3";
+        var Luiza = [
+            {
+                title: 'All Day Event',
+                start: '2020-03-01',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-07',
+                end: '2020-03-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-3T16:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-5',
+                end: '2020-03-10',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-10T10:30:00',
+                end: '2020-03-11T12:30:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-14T20:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-10T07:00:00',
+                color: '#974a02',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                url: 'http://google.com/',
+                start: '2020-03-20',
+                color: '#974a02',
+                textColor: 'white'
+            }
+        ];
+        Luiza.name = "4";
+        var Robbin = [
+            {
+                title: 'All Day Event',
+                start: '2020-03-03',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Long Event',
+                start: '2020-03-29',
+                end: '2020-03-30',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+
+                title: 'Repeating Event',
+                start: '2020-03-06T16:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Conference',
+                start: '2020-03-11',
+                end: '2020-03-13',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Meeting',
+                start: '2020-03-15T10:30:00',
+                end: '2020-03-17T12:30:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Dinner',
+                start: '2020-03-12T20:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Birthday Party',
+                start: '2020-03-23T07:00:00',
+                color: 'red',
+                textColor: 'white'
+            },
+            {
+                title: 'Click for Google',
+                start: '2020-03-28',
+                color: 'red',
+                textColor: 'white'
+            }
+        ];
+        Robbin.name = "5";
+
+
+        var check_Btn = false;
+        var calendar = $('#Doc-calendar').fullCalendar({
+
+            //          eventRender: function (view, element) {
+            //	element.find(".fc-list-item-time").after("<td>Extra column 1 here</td>");
+            //   element.find(".fc-list-item-time").after("<td>Extra column 2 here</td>");
+            //		element.find(".fc-list-item-time").after("<td>Etc</td>");
+            //              element.find(".fc-list-item-time").after("<td>Etc</td>");
+
+            //},
+
+            viewRender: function (views, element) {
+                //var cols = element.find('.fc-list-item')[0].children.length;
+
+                //element.find(".fc-list-item-time").after("<td><label> <input type='checkbox' class='chkPassport' value='3'><span></span></label></td>");
+                $('.fc-list-item-time').before("<td><label> <input type='checkbox' class='chkPassport' value='3'><span></span></label></td>");
+                // element.find(".fc-list-item-time").after("<td>Extra column 2 here</td>");
+                //element.find(".fc-list-item-time").after("<td>Etc</td>");
+                //            element.find(".fc-list-item-time").after("<td>Etc</td>");
+                var view = $('#Doc-calendar').fullCalendar('getView');
+
+                if (view.type == 'listMonth') {
+                    $.each(element.find('.fc-widget-header'), function () {
+                        $(this).attr('colspan', 4);
+
+                    });
+                    //var input = $('<a class="btn add-btn sidenav-trigger sideout ight" href="javascript:void(0);" data-target="slide-out-right">Delete Appointment</a>');
+                    ////alert(check_Btn);
+                    ////if (check_Btn == false) {
+                    ////	alert(check_Btn);
+                    //input.appendTo($(".fc-list-view"));
+                    //check_Btn = true;
+                }
+
+
+
+            },
+
+            customButtons: {
+                monthViewButton: {
+                    text: 'Month View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'month');
+                    }
+
+                }, calMonth: {
+
+                    click: function () {
+                        $(".fc-month-button").trigger('click');
+                    }
+                },
+                monthListViewButton: {
+                    text: 'List View',
+                    click: function () {
+                        $('#Doc-calendar').fullCalendar('changeView', 'listMonth');
+                    }
+
+                }
+            },
+            renderEvent: function () {
+                $('.fc-list-item-time').htlm("<i class='material-icons'>menu</i>");
+            }
+            ,
+
+
+            //views: {
+            //	listMonth: {
+            //		buttonText: '',
+            //                  icon: "right-single-arrow",
+            //                 //img: 'fontawesome-icon-name'
+            //	},
+
+            //},
+            //          eventRender: function(info) {
+            //   info.replace('$ICON', "<i class='material-icons'>menu</i>");
+            //},
+            header: {
+                left: 'agendaDay , agendaWeek,  month, today',
+                center: 'prev, title , next',
+                right: 'calMonth,listMonth',
+            },
+            editable: true,
+            events: allData,
+            eventClick: function (event) {
+                $("#modal1").modal('open');
+                $("#modal1 .modal-content  .modal-title").text(event.title);
+                $("#modal1 .modal-content  #start_date").text(moment(event.start).format('DD/MM/YYYY'));
+                $("#modal1 .modal-content  #start_time").text(moment(event.start).format('HH:mm'));
+                $("#modal1 .modal-content  #end_date").text(moment(event.end).format('DD/MM/YYYY'));
+                $("#modal1 .modal-content  #end_time").text(moment(event.end).format('HH:mm'));
+            },
+
+
+
+        });
+
+
+
+        function addDataInArray(value) {
+
+            if (value === '0') {
+                calendarData.push(FrankGoodman);
+            }
+            if (value == "1") {
+                calendarData.push(LuizaAlesJson);
+            }
+            if (value == "2") {
+                calendarData.push(RobbinDrummo);
+            }
+            if (value == "3") {
+                calendarData.push(Frank);
+            }
+            if (value == "4") {
+                calendarData.push(Luiza);
+            }
+            if (value == "5") {
+                calendarData.push(Robbin);
+            }
+
+
+        }
+
+        function deleteDataFromArray(value) {
+            for (i = 0; i < calendarData.length; i++) {
+                if (calendarData[i].name == value) {
+                    calendarData.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        function updateDataInCalendar() {
+            calendar.fullCalendar('removeEvents');
+            for (element in calendarData) {
+                calendar.fullCalendar('addEventSource', calendarData[element]);
+            }
+        }
+
+        //$(document).ready(function () {
+        //	var lenght = $('[class="fc-list-item"]').length;
+        //	for (i = 0; i < length; i++){
+        //	var row = '<td style="background-color:red">b_' + i + '</td>';
+        //	$('[class="fc-list-item"]:eq(' + (i) + ')').before(row);
+        //}
+        //});
+
+        $(document).ready(function () {
+            var exist = $("#exist-appoint").html();
+
+            //$('<input type="checkbox" name="namehere" />').insertBefore('.fc-list-item-title');
+
+            $("select.icons").change(function () {
+                var selectedCountry = $(this).children("option:selected").val();
+                if (selectedCountry === "All") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', allData);
+                }
+                if (selectedCountry === "Reminders") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', redJson);
+                }
+                if (selectedCountry === "Appointments") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', yellowJson);
+                }
+                if (selectedCountry === "PastDue") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', blackJson);
+                }
+                if (selectedCountry === "ScheduleConference") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', brownJson);
+                }
+                if (selectedCountry === "Procedures") {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', blueJson);
+                }
+            });
+            //$(" ").before( "<label><input type='checkbox' class='chkPassport'> <span></span>  </label>");
+
+
+            $(".chkPassport").click(function () {
+                if ($(this).is(":checked")) {
+                    let value = $(this).attr('value');
+                    addDataInArray(value);
+                    updateDataInCalendar();
+                } else {
+                    let value = $(this).attr('value');
+                    deleteDataFromArray(value);
+                    updateDataInCalendar();
+                }
+            });
+            $(".chkAll").click(function () {
+                if ($(this).is(":checked")) {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', allData);
+
+                } else {
+                    calendar.fullCalendar('removeEvents');
+                    calendar.fullCalendar('addEventSource', blueJson);
+
+                }
+            });
+
+
+
+            $('select').formSelect();
+
+
+            $("li.calendarheader").addClass("border-bottom-header-active");
+            $("select.appointment").change(function () {
+                var selectedappointment = $(this).children("option:selected").val();
+                if (selectedappointment === "ExistTime") {
+                    $("#exist-appoint").show();
+                    $("#frame-appoint").hide();
+                    $("#hide1").hide();
+                    $("#hide2").hide();
+
+                }
+                if (selectedappointment === "Timeframe") {
+                    $("#frame-appoint").show();
+                    $("#exist-appoint").hide();
+                    $("#slide-out-right").css("overflow-y", "auto");
+                    $("#hide3").hide();
+                    $("#hide4").hide();
+                    $("#hide5").hide();
+                }
+            });
+
+            $(".addNewFieldExactAppointment").click(function (event) {
+                $("#ExactAppointment").addClass("ExactAppointment");
+                $("#slide-out-right").css("overflow-y", "auto");
+                $("#hide1").show();
+                $("#hide2").show();
+                $(this).parent().hide();
+            });
+
+            $(".addNewFieldInBetweenAppointment").click(function (event) {
+                $("#InBetweenAppointment").addClass("InBetweenAppointment");
+                $("#slide-out-right").css("overflow-y", "auto");
+                $("#hide3").show();
+                $("#hide4").show();
+                $("#hide5").show();
+                $(this).parent().hide();
+            });
+
+
+
+
+            //$("#exist-btn").on("click", function () {
+            //    var select = $("#append-type").html();
+            //    $(".appent-form").append(select)
+            //});
+        });
+
+
+
+
+
+    </script>
+}
+<div class="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="container">
+                <div class="card-body b-l calender-sidebar">
+                    <div id='Doc-calendar'></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

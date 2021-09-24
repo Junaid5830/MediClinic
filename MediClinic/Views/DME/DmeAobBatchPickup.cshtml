@@ -1,0 +1,871 @@
+﻿@model MediClinic.Models.DTOs.DMESuppliesDto.DMEAOBDeliveryTemplateDto
+
+@{
+    Layout = null;
+    var empty = "N/A";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DmeAobPickup</title>
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/custom/custom.css">
+
+    <!-- END: VENDOR CSS-->
+    <!-- BEGIN: Page Level CSS-->
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/materialize.css">
+    <link rel="stylesheet" type="text/css" href="~/app-assets/css/themes/vertical-dark-menu-template/style.css">
+    <style>
+        .patient-image {
+            width: 200px;
+            height: 200px;
+            margin: 0 75px;
+        }
+
+        p.text-dark {
+            font-weight: 600 !important;
+        }
+
+        hr {
+            overflow: hidden;
+            height: 1px;
+            background-color: #e0e0e0;
+            width: 100%;
+        }
+
+        .card {
+            padding: 15px !important;
+        }
+
+        .card-content {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+        .btn-success:hover {
+            color: rgb(255, 255, 255);
+            background-color: rgb(33, 136, 56);
+            border-color: rgb(30, 126, 52);
+        }
+
+        .btn-success {
+            margin-right: 20px;
+            background-color: rgb(33, 136, 56);
+            border-color: rgb(30, 126, 52);
+        }
+
+        .btn:focus, .btn-large:focus, .btn-small:focus, .btn-floating:focus {
+            background-color: rgb(33, 136, 56) !important;
+            border-color: rgb(30, 126, 52) !important;
+        }
+
+        [type='checkbox']:checked + span:not(.lever):before {
+            margin-top: 14px !important;
+        }
+
+        .set_Checkbox p {
+            margin-top: 12px !important;
+            margin-bottom: 12px !important;
+        }
+
+        [type='checkbox'] + span:not(.lever):before {
+            margin-top: 14px !important;
+        }
+
+        .margin-top-8 {
+            margin-top: 15px !important;
+        }
+
+        [type='radio']:disabled:not(:checked) + span:before, [type='radio']:disabled:checked + span:before {
+            margin-top: 12px;
+        }
+
+        [type='radio']:disabled:not(:checked) + span:before, [type='radio']:disabled:checked + span:after {
+            margin-top: 12px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+     
+    <script type="text/javascript">
+            $(document).ready(function () {
+            debugger;
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            $('#currentDate').html(today);
+
+                var itemNames = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Items));
+                for (var i = 0; i < itemNames.length; i++) {
+
+                  $('#prescribedItemsDiv').append("<div class='col s6 m6'><div class='input-field'> <p> "+itemNames[i]+" :  <span><b>Duration: N/A</b> </span></p></div></div>")
+
+                }
+
+            })
+
+        function printdiv() {
+            $("#arrowIcon").hide();
+            $(".btn-success").hide();
+            window.print();
+            $("#arrowIcon").show();
+            $(".btn-success").show();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="content-area content-right">
+        <div class="app-wrapper">
+
+
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m10  margin-top-8">
+                        <h5 class="breadcrumbs-title color-blue card-title center">
+                            New York Motor Vehicle No-Fault Insurance Law Assignment of Benefits from (For Accidents Occuring on After 3/1/02)
+                        </h5>
+                    </div>
+
+
+                    <div class="col s3 m2 margin-top-8">
+                        <a id="arrowIcon" class="waves-effect waves-light float-right mr-2 mt-2" href="DmeSupplies">
+                            <i class="material-icons right arrow-icon">arrow_back</i>
+
+                        </a>
+                    </div>
+                </div>
+                <div class="container" id="Pickup" style="">
+                    <div class="row">
+
+                        <div class="input-field col s12 m12">
+                            <p>Claim Number: <span><b>@empty</b></span> </p>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col m12">
+                            <div class="row">
+                                <div class="col s12 m12">
+                                    <p>
+                                        <span>
+                                            I, <b>@Model.PatientName</b>, ("Assignor") hereby assign to <b>@Model.ProviderName</b>
+                                        </span>, ("Assignee") all rights privileges and remedies to payment for
+                                        health care services provided by assignee to which I am entitled under Article 51 (the No-Fault statute) of
+                                        the Insurance Law. The Assignee hereby certifies that they have not received any payment from or on
+                                        behalf of the Assignor and shall not pursue payment directly from the Assignor for services provided by
+                                        said Assignee for injuries sustained due to the motor vehicle accident which occurred on
+                                        <b>
+                                            @empty
+                                        </b>, notwithstanding any other agreement to the contrary.
+                                        This agreement may be revoked by the assignee when benefits are not payable based upon the assignor’s
+                                        lack of coverage and/or violation of a policy condition due to the actions or conduct of the assignor
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col m12">
+                                    <p>
+                                        <b>
+                                            ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR
+                                            OTHER PERSON FILES AN APPLICATION FOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM
+                                            FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLY FALSE
+                                            INFORMATION, OR CONCEALS FOR THE PURPOSE OF MISLEADING, INFORMATION CONCERNING ANY
+                                            FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR
+                                            CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH
+                                            ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGE OR CONVERSION OF
+                                            ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES
+                                            OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND
+                                            SHALL ALSO BE SUBJECT TO A CIVIL PENALTY NOT TO EXCEED FIVE THOUSAND DOLLARS AND THE
+                                            VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                                        </b>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>Provider Name: <span><b>@Model.ProviderName</b></span></p>
+                                    </div>
+                                </div>
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>Patient Name: <span><b>@Model.ProviderName</b></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>Provider's Signature: <img src="~/SignatureImages/@Model.ProviderSignature" style="width:300px" class="ml-1" alt="provider signature" /></p>
+                                    </div>
+                                </div>
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>Patient's Signature: <img src="~/SignatureImages/@Model.PatientSignature" style="width:300px" class="ml-1" alt="patient signature" /></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col m6">
+                                    <div class="input-field">
+                                        <p>
+                                            Provider's Address: <span>
+                                                <b>
+                                                    @Model.ProviderAddress
+                                                </b>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>
+                                            Patient's Address:<span>
+                                                <b>
+                                                    @Model.PatientAddress
+                                                </b>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>
+                                            Signature Date:<span>
+                                                <b>
+                                                    @empty
+                                                </b>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col s6 m6">
+                                    <div class="input-field">
+                                        <p>
+                                            Signature Date:<span>
+                                                <b>
+                                                    @empty
+                                                </b>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col  s12 m12">
+                                    <h6 class=" color-blue ">Patient's Info</h6>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    First & Last Name: <span>
+                                                        <b>
+                                                            @Model.PatientName
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    D.O.B: <span>
+                                                        <b>
+                                                            @Model.PatientDOB
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    SS#: <span>
+                                                        <b>
+                                                            @Model.SSN
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    MARITAL STATUS:<span>
+                                                        <b>
+                                                            Single
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    HOME PHONE: <span>
+                                                        <b>
+                                                            +@Model.PatientHomePhone
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    MOBILE:<span>
+                                                        <b>
+                                                            +@Model.PatientMobilePhone
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    BUSINESS PHONE:<span>
+                                                        <b>
+                                                            +@Model.BusinessPhone
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    EMERGENCY CONTACT NAME & #:<span>
+                                                        <b>
+                                                            @Model.PatientEmergencyPerson
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    ADDRESS: <span>
+                                                        <b>
+                                                            @Model.PatientAddress
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    ADDRESS OF DELIVERY IF DIFFERENT FROM ABOVE:<span>
+                                                        <b>
+                                                            @empty
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s6 m6">
+                                            <div class="input-field">
+                                                <p>
+                                                    DIAGNOSIS: <span>
+                                                        <b>
+                                                            @empty
+                                                        </b>
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col s12  m12  ">
+                                <h6 class=" color-blue ">Prescribed Supplies/Equipment</h6>
+                                <div class="row" id="prescribedItemsDiv">
+                                   
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12  m12  ">
+                                <h6 class=" color-blue ">Prescribing Physician :</h6>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Address: <span>
+                                                    <b>
+                                                        @Model.ProviderAddress
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Phone: <span>
+                                                    <b>
+                                                        @Model.ProviderPhone
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Fax:<span>
+                                                    <b>
+                                                        @Model.ProviderFax
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                License No: <span>
+                                                    <b>
+                                                        @Model.ProviderLicense
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12  m12  ">
+                                <h6 class=" color-blue ">INSURANCE INFO</h6>
+                                <div class="row">
+                                    <div class="col s12 m1">
+
+                                        <p>
+                                            Type:
+                                        </p>
+                                    </div>
+                                    <div class="col s3 m2 mt-1">
+                                        <label>
+                                            <input type="radio" name="Gender" class="filled-in" />
+                                            <span>NF</span>
+                                        </label>
+                                    </div>
+                                    <div class="col s3 m2 mt-1">
+                                        <label>
+                                            <input type="radio" name="Gender" class="filled-in" />
+                                            <span>WC</span>
+                                        </label>
+                                    </div>
+                                    <div class="col s3 m2 mt-1">
+                                        <label>
+                                            <input type="radio" name="Gender" class="filled-in" />
+                                            <span>COMMERCIAL</span>
+                                        </label>
+                                    </div>
+                                    <div class="col s3 m2 mt-1">
+                                        <label>
+                                            <input type="radio" name="Gender" class="filled-in" />
+                                            <span>PVT</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col s12  m12  ">
+                                <h6 class=" color-blue ">Insurance Provider</h6>
+
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Insurance Provider: <span>
+                                                    <b>
+                                                        NATIONWIDE INSURANCE CO
+                                                        P.O.BOX 2655
+                                                        HARRISBURG PA 17105
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Phone: <span>
+                                                    <b>
+                                                        (800) 354-0715
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Adjuster: <span>
+                                                    <b>
+                                                        Isec
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Accident Date: <span>
+                                                    <b>
+                                                        April 09, 2009
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Policy No: <span>
+                                                    <b>
+
+                                                        2655
+
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Claim No: <span>
+                                                    <b>
+                                                        0715
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12  ">
+                                <h6 class=" color-blue ">Insurance Info</h6>
+                                <div class="row">
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">     <p>Device Clean</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>Device Working</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3  center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8  s9">    <p>Hand Control Accessible</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>Patient Has To Call Cpm Solutions Ny If Any Problems</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">     <p>Patient Or Caregiver Has Demonstrated Competency In Using The Device</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>Person Taught If Other Than Patient</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3  center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8  s9">    <p>Bill Of Rights</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>Device Protocols</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">     <p> How To Reach Cpm Solutions Ny With Questions And Problems</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>Device Operation</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3  center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8  s9">    <p>When To Contact Doctor</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col m3 s6">
+                                        <div class="row">
+                                            <div class="col  m4 s3 center">
+                                                <label>
+                                                    <input type="checkbox">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="col  m8 s9 ">  <p>To Call Cpm Solutions Ny As Instructed</p></div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12">
+                                        <p>
+                                            BY SIGNING BELOW PATIENT KNOWS AND UNDERSTANDS ALL OF THE CONTENTS OF THIS ASSIGNMENT.
+                                            I ALSO ACKNOWLEDGE THAT I HAVE RECEIVED ABOVE MENTIONED EQUIPMENT AND UNDERSTAND MY RIGHTS AND
+                                            RESPONSIBILITIES AND UNDERSTAND HOW TO PROPERLY OPERATE THE DEVICE. I ALSO AGREE TO ALLOW ABSOLUTE
+                                            MEDICAL & SURGICAL SUPPLIES, INC. TO USE MY PROTECTED HEALTH INFORMATION (PHI) FOR HEALTH INCLUDING
+                                            PAYMENTS OF CLAIMS, OBTAINING INFORMATION FROM MY DESIGNATED HEALTH CARE PROVIDER AND FOR
+                                            QUALITY ASSURANCE IMPROVEMENTS. IF I CHOOSE NOT TO ALLOW ABSOLUTE MEDICAL & SURGICAL SUPPLIES, INC.,
+                                            TO RELEASE MY PHI, I WILL BE RESPONSIBLE FOR PAYMENT OF ALL PRODUCTS, SERVICES I RECEIVED FROM
+                                            ABSOLUTE MEDICAL & SURGICAL SUPPLIES, INC.. RELEASE OF MY PHI WILL TERMINATE WHEN MY ACCOUNT
+                                            BALANCE WITH ABSOLUTE MEDICAL & SURGICAL SUPPLIES, INC., INC IS AT ZERO DOLLARS FOR MORE THAN 60
+                                            (SIXTY) DAYS. FOR RENTAL EQUIPMENT I UNDERSTAND HOW TO ARRANGE FOR EQUIPMENT RETURN AND
+                                            UNDERSTAND THAT IF THIS EQUIPMENT IS DAMAGED, LOST, MISLAID, STOLEN, OR DESTROYED, I AM RESPONSIBLE
+                                            FOR THE REPAIR CHARGES OR THE PURCHASE PRICE, WHICHEVER IS LESS.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Patient Or Authorized Representative Name: <span>
+                                                    <b>
+                                                        @Model.PatientName
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+
+
+                                        <div class="input-field">
+                                            <p>Patient Or Authorized Representative Signature:<img src="~/SignatureImages/@Model.PatientSignature" style="width:300px" class="ml-1" /></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>
+                                                Date Of Execution/delivery: <span>
+                                                    <b>
+                                                        @empty
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+
+
+                                        <div class="input-field">
+                                            <p>
+                                                Relationship To Patient/reason For Signing: <span>
+                                                    <b>
+                                                        Brother
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s6 m6">
+                                        <div class="input-field">
+                                            <p>@Model.ProviderName. Rep. Signature: <img src="~/SignatureImages/@Model.ProviderSignature" style="width:300px" class="ml-1" /></p>
+                                        </div>
+                                    </div>
+                                    <div class="col s6 m6">
+
+
+                                        <div class="input-field">
+                                            <p>
+                                                Date: <span>
+                                                    <b id="currentDate">
+
+                                                    </b>
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <button class="btn btn-success float-right" onclick="printdiv();">Print</button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

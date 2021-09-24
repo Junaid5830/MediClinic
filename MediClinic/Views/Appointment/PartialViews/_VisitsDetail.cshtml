@@ -1,0 +1,1015 @@
+﻿@using MedliClinic.Utilities.Utility
+@model MediClinic.Models.AppointmentViewModel
+@*
+
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    if (ViewBag.IsForPrint == "isForPrint")
+    {
+        Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+
+    }
+    var concateResult = string.Empty;
+    DateTime Date = DateTime.Now;
+}
+
+
+
+<script>
+    $(document).ready(function () {
+        //  setTimeout(function () { window.print(); }, 1000);
+
+    });
+
+
+    //  setTimeout(function () { window.print(); }, 1000);
+
+
+    $('#selectAllVitalTab').click(function () {
+        if ($(this).is(':checked')) {
+            $('.selectAllVitalTab').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.selectAllVitalTab').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+
+
+    $('#selectAllmyTableEUO').click(function () {
+        if ($(this).is(':checked')) {
+            $('.selectAllmyTableEUO').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.selectAllmyTableEUO').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+
+    $('#selectAllImmunization').click(function () {
+        if ($(this).is(':checked')) {
+            $('.selectAllImmunization').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.selectAllImmunization').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    //selectAllPrescriptionTab
+    $('#selectAllPrescriptionTab').click(function () {
+        if ($(this).is(':checked')) {
+            $('.selectAllPrescriptionTab').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.selectAllPrescriptionTab').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    $('#selectAllLabsTable').click(function () {
+        if ($(this).is(':checked')) {
+            $('.selectAllLabsTable').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.selectAllLabsTable').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    $('#SelectAllImagingTable').click(function () {
+        if ($(this).is(':checked')) {
+            $('.SelectAllImagingTable').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.SelectAllImagingTable').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    $('#SelectAllDME').click(function () {
+        if ($(this).is(':checked')) {
+            $('.SelectAllDME').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.SelectAllDME').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+
+    $('#SelectAllmyTableClaim').click(function () {
+        if ($(this).is(':checked')) {
+            $('.SelectAllmyTableClaim').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.SelectAllmyTableClaim').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    $('#SelectAllMessagesReceive').click(function () {
+        if ($(this).is(':checked')) {
+            $('.SelectAllMessagesReceive').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.SelectAllMessagesReceive').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+    //SelectAllInvoiceTable
+    $('#SelectAllInvoiceTable').click(function () {
+        if ($(this).is(':checked')) {
+            $('.SelectAllInvoiceTable').each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.SelectAllInvoiceTable').each(function () {
+                this.checked = false;
+            });
+        }
+    });
+
+    var checkboxes = [];
+    var txtToPrint = "";
+    function removeA(arr) {
+        var what, a = arguments, L = a.length, ax;
+        while (L > 1 && arr.length) {
+            what = a[--L];
+            while ((ax = arr.indexOf(what)) !== -1) {
+                arr.splice(ax, 1);
+            }
+        }
+        return arr;
+    }
+    $(".select-all").change(function () {
+        debugger
+        if ($(this).is(':checked')) {
+
+            checkboxes.push($(this).closest("table").attr('id'));
+            console.log(checkboxes);
+            if (checkboxes.length > 0) {
+
+                $('#specific-print-btn').removeClass("no-print");
+            }
+            else {
+                $('#specific-print-btn').addClass("no-print");
+            }
+
+
+
+        } else {
+
+            // checkboxes.splice($(this).closest("table").attr('id'));
+            removeA(checkboxes, $(this).closest("table").attr('id'));
+            console.log(checkboxes);
+            if (checkboxes.length > 0) {
+
+                $('#specific-print-btn').removeClass("no-print");
+            }
+            else {
+                $('#specific-print-btn').addClass("no-print");
+            }
+        }
+    });
+    var printpage = document.getElementById('specific_div');
+
+    function printdiv(printpage) {
+
+        window.print("#specific_div");
+
+
+    }
+
+    $("#specific-print-btn").click(function () {
+        debugger
+        
+        checkboxes.forEach(myFunction);
+       // window.location.href = "/Appointment/PrintTables?Id=" + 0 + "&IsForPrint=" + txtToPrint;
+        $.post("/Appointment/PrintTables", { data: txtToPrint }, function (result) {
+            debugger
+            checkboxes = [];
+            var a = window.open('', '', 'height=100%, width=100%');
+            //a.document.write('<html>');
+            a.document.write(txtToPrint);
+            a.document.write('<style > .checkClassForUnPrint{display:none!important; }');
+            a.document.write('</style>');
+           
+            
+            
+            a.document.close();
+            a.print();
+            //$("body").html("");
+            //$("body").html(result);
+            //window.print();
+            
+            
+        });
+     
+    });
+
+    function myFunction(value) {
+       var tableHtml= $('#' + value).html();
+        txtToPrint =  txtToPrint + "<table>" + tableHtml + "</table>"+ "<hr />";
+    }
+
+    //$(".select-all").change(function () {
+    //    debugger
+    //    if ($(this).is(':checked')) {
+    //        $('#InvoiceTable').addClass("no-print");
+    //        $('#MessagesReceive').addClass("no-print");
+    //        $('#myTableClaim').addClass("no-print");
+    //        $('#DME-table').addClass("no-print");
+    //        $('#ImagingTable').addClass("no-print");
+    //        $('#LabsTable').addClass("no-print");
+    //        $('#PrescriptionTab').addClass("no-print");
+    //        $('#Immunization').addClass("no-print");
+    //        $('#myTableEUO').addClass("no-print");
+    //        $('#VitalTab').addClass("no-print");
+    //        $("h4").addClass("no-print");
+    //        $(this).closest("h4").removeClass("no-print");
+    //        $(this).closest("table").removeClass("no-print");
+    //        setTimeout(function () { window.print(); }, 1000);
+
+
+    //    } else {
+    //        $('#InvoiceTable').removeClass("no-print");
+    //        $('#MessagesReceive').removeClass("no-print");
+    //        $('#myTableClaim').removeClass("no-print");
+    //        $('#DME-table').removeClass("no-print");
+    //        $('#ImagingTable').removeClass("no-print");
+    //        $('#LabsTable').removeClass("no-print");
+    //        $('#PrescriptionTab').removeClass("no-print");
+    //        $('#Immunization').removeClass("no-print");
+    //        $('#myTableEUO').removeClass("no-print");
+    //        $('#VitalTab').removeClass("no-print");
+    //        $("h4").removeClass("no-print");
+    //    }
+    //});
+
+</script>
+<style>
+    #specific_div{
+        display:block!important;
+    }
+    .card .card-content .card-title {
+        line-height: 32px;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .chip {
+        color: white;
+        background-color: #ff8376;
+    }
+
+    .chip {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 32px;
+        display: inline-block;
+        height: 32px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 0 12px;
+        border-radius: 16px;
+    }
+
+    .card .card-content {
+        padding: 24px;
+        border-radius: 0 0 2px 2px;
+    }
+
+    .chip i {
+        font-size: 16px;
+        line-height: 32px;
+        float: right;
+        padding-left: 8px;
+        cursor: pointer;
+    }
+
+    .card {
+        border-radius: 5px !important;
+        box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+  
+
+
+
+</style>
+
+<div id="specific_div">
+
+</div>
+<hr />
+
+<div class="row tablee table-parent-div" id="VitalTabD">
+    <h4 class="color-blue" id="table-heading1">Vitals</h4>
+    <div class="col-md-12">
+        <table id="VitalTab" class="table dataTables_wrapper ">
+            <thead>
+                <tr class="uppercase">
+                    <th class="checkClassForUnPrint">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllVitalTab">
+                            <label class="custom-control-label" for="selectAllVitalTab"></label>
+                        </div>
+
+                    </th>
+                    <th>Date of Exam</th>
+                    <th>Examinar</th>
+                    <th>REASON FOR EXAM</th>
+                    <th>Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vitallist != null)
+                {
+                    @foreach (var item in Model.Vitallist)
+                    {
+                        <tr class="card">
+                            <td class="checkClassForUnPrint">
+
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input selectAllVitalTab" id="@item.PatientVitalId">
+                                    <label class="custom-control-label" for="@item.PatientVitalId"></label>
+                                </div>
+                            </td>
+                            <td>@item.ExamTime.ToString("MM/dd/yyyy")</td>
+                            <td>Dr. @item.Examiner.FirstName @item.Examiner.LastName</td>
+                            <td>@item.ReasonForExam.ReasonName</td>
+                            @if (item.Temprature != null && item.BloodPressure != null && item.Pulse != null && item.Respiration != null && item.Height != null && item.Weight != null && item.TempMethod != null && item.BMIStatus != null && item.BMI != null && item.OxygenSaturation != null && item.Allergies != null)
+                            {
+                                concateResult = " Temp : " + item.Temprature + " BP : " + item.BloodPressure;
+                            }
+                            @if (!(item.Temprature is null))
+                            {
+                                concateResult = " Temp : " + item.Temprature;
+                            }
+                            else if (!(item.BloodPressure is null))
+                            {
+                                concateResult = " Bp : " + item.BloodPressure;
+                            }
+                            else if (!(item.Pulse is null))
+                            {
+                                concateResult = " Pulse : " + item.Pulse;
+                            }
+                            else if (!(item.Respiration is null))
+                            {
+                                concateResult = " Resp : " + item.Respiration;
+                            }
+                            else if (!(item.Height is null))
+                            {
+                                concateResult = " Height : " + item.Height;
+                            }
+                            else if (!(item.Weight is null))
+                            {
+                                concateResult = " Weight : " + item.Weight;
+                            }
+                            else if (!(item.TempMethod is null))
+                            {
+                                concateResult = " Tem Meth : " + item.TempMethod;
+                            }
+                            else if (!(item.BMIStatus is null))
+                            {
+                                concateResult = " BMI Status : " + item.BMIStatus;
+                            }
+                            else if (!(item.BMIStatus is null))
+                            {
+                                concateResult = " BMI : " + item.BMI;
+                            }
+                            else if (!(item.OxygenSaturation is null))
+                            {
+                                concateResult = " Oxygen Sat : " + item.OxygenSaturation;
+                            }
+                            else if (!(item.Allergies is null))
+                            {
+                                concateResult = " Allergies : " + item.Allergies;
+                            }
+                            <td>@concateResult</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+<hr />
+
+<div id="myTableEUOD">
+    <h4 class="color-blue" id="table-heading2">Growth Chart</h4>
+    <table id="myTableEUO" class="table dataTables_wrapper table-parent-div">
+        <thead>
+            <tr class="uppercase">
+                <th class="checkClassForUnPrint">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllmyTableEUO">
+                        <label class="custom-control-label" for="selectAllmyTableEUO"></label>
+                    </div>
+                </th>
+
+                <th>DOB</th>
+                <th>Weight</th>
+                <th>Height</th>
+                <th>Length</th>
+                <th>Head D.M</th>
+                <th>Neck D.M</th>
+                <th>Weist D.M</th>
+                <th>Shoulder Width</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.growthChartList)
+            {
+                <tr class="card" style="cursor: pointer">
+                    <th class="checkClassForUnPrint">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input selectAllmyTableEUO" id="@item.GrowthId">
+                            <label class="custom-control-label" for="@item.GrowthId"></label>
+                        </div>
+                    </th>
+
+                    <td>@item.DOB.Value.ToString(SystemFormat.DateFormat())</td>
+                    <td>@item.Weight</td>
+                    <td>@item.Height</td>
+                    <td>@item.Length</td>
+                    <td>@item.HeadDiameter</td>
+                    <td>@item.NeckDiameter</td>
+                    <td>@item.WaistDiameter</td>
+                    <td>@item.ShoulderWidth</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<div class="row tablee table-parent-div" id="ImmunizationD">
+    <h4 class="color-blue" id="table-heading3">Immunization</h4>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="Immunization" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th class="disable" class="checkClassForUnPrint">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllImmunization">
+                                <label class="custom-control-label" for="selectAllImmunization"></label>
+                            </div>
+                        </th>
+                        <th>Vaccine</th>
+                        <th>Abbreviations</th>
+                        <th>Age</th>
+                        <th>Dose</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Listimmunization)
+                    {
+                        <tr class="card" style="cursor: pointer">
+                            <th class="checkClassForUnPrint">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input selectAllImmunization" id="@item.ImmunizationId" value="check">
+                                    <label class="custom-control-label" for="@item.ImmunizationId"></label>
+                                </div>
+                            </th>
+
+                            <td>
+                                @item.VaccineName
+                            </td>
+                            <td>
+                                @item.VaccineAbberivation
+                            </td>
+                            <td>
+                                @item.PatientCurrentAge.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @item.DoesInRouten
+                            </td>
+
+                            @if (item.RouteOfAdministration < Date)
+                            {
+                                <td>Past</td>
+
+                            }
+                            else if (item.RouteOfAdministration > Date)
+                            {
+                                <td>Future</td>
+                            }
+                            else
+                            {
+                                <td>Current</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr />
+<h4 class="color-blue">CLinical Notes</h4>
+@if (!(Model.TemplateList is null))
+{
+    @foreach (var item in Model.TemplateList)
+    {
+        <div class="row tablee">
+            <div class="col-md-12">
+
+                <h6 class="dark-color">Template Name : @item.Name </h6>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var loop in item.VisitDetails)
+            {
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><span class="dark-color">@loop.Label</span> : <span style="color:#000 !important">@loop.Value</span></p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <span class="center">No data available</span>
+
+        </div>
+    </div>
+}
+<hr />
+
+<div id="PrescriptionTabD">
+    <h4 class="color-blue">Prescription</h4>
+    <table id="PrescriptionTab" class="table dataTables_wrapper table-parent-div">
+        <thead>
+            <tr class="uppercase">
+                <th class="checkClassForUnPrint">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllPrescriptionTab">
+                        <label class="custom-control-label" for="selectAllPrescriptionTab"></label>
+                    </div>
+                </th>
+                <th>Medication Name</th>
+                <th>Quantity</th>
+                <th>Frequency</th>
+                <th>Dose</th>
+                <th>Unit</th>
+                <th>Start Date</th>
+                <th>Stop Date</th>
+                <th>Medication Comments</th>
+                <th data-searchable=false data-orderable="false" class="all">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.prescriptionBasicsList != null)
+            {
+                foreach (var item in Model.prescriptionBasicsList)
+                {
+                    <tr class="card">
+                        <td class="checkClassForUnPrint">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input selectAllPrescriptionTab" id="@item.Id" value="check">
+                                <label class="custom-control-label" for="@item.Id"></label>
+                            </div>
+
+                        </td>
+                        <td>@item.Medication.Name</td>
+
+                        <td>@item.Quantity</td>
+                        <td>@item.FrequencyId</td>
+                        <td>@item.Dose</td>
+                        <td>@item.Unit</td>
+                        <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                        <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                        <td>@item.Notes</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<hr />
+
+<div class="row tablee table-parent-div" id="LabsTableD">
+    <h4 class="color-blue">
+        Labs
+    </h4>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="LabsTable" class="table  ">
+                <thead>
+                    <tr class="uppercase">
+                        <th class="checkClassForUnPrint">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAllLabsTable">
+                                <label class="custom-control-label" for="selectAllLabsTable"></label>
+                            </div>
+                        </th>
+                        <th>Visit Id</th>
+                        <th> DATE/TIME OF EXAM</th>
+                        <th>EXAMINER</th>
+                        <th>TYPE OF EXAM</th>
+                        <th>REASON FOR EXAM</th>
+                        <th>RESULTS</th>
+                        <th>REPORT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.getLabList)
+                    {
+                        <tr class="card" style="cursor: pointer">
+                            <th class="checkClassForUnPrint">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input selectAllLabsTable" id="@item.LabId" value="check">
+                                    <label class="custom-control-label" for="@item.LabId"></label>
+                                </div>
+                            </th>
+                            <td>@item.VisitId</td>
+                            <td>@item.DateTime</td>
+                            <td>@item.Examiner</td>
+                            <td>@item.TypeOfExam</td>
+                            <td>@item.ReasonForExam</td>
+                            <td>@item.Results</td>
+                            <td>@item.Report</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr />
+<div  id="ImagingTable">
+    <h4 class="color-blue">Imaging</h4>
+    <div class="row tablee table-parent-div">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="ImagingTable" class="table dataTables_wrapper ">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="SelectAllImagingTable">
+                                    <label class="custom-control-label" for="SelectAllImagingTable"></label>
+                                </div>
+
+                            </th>
+                            <th>Patient Name</th>
+                            <th>Date OfI maging</th>
+                            <th>Timming Of Imaging</th>
+                            <th>Reported By</th>
+                            <th>Type Of Image</th>
+                            <th>Report Status</th>
+                            <th>Image Film</th>
+                            <th>Diagnosis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.getImagingDto)
+                        {
+
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input SelectAllImagingTable" id="@item.ImagingId">
+                                        <label class="custom-control-label" for="@item.ImagingId"></label>
+                                    </div>
+                                </th>
+                                <td>@item.PatientName</td>
+                                <td>@item.DateOfImaging</td>
+                                <td>@item.TimmingOfImaging</td>
+                                <td>@item.ReportedBy</td>
+                                <td>@item.TypeOfImage</td>
+                                <td>@item.ReportStatus</td>
+                                <td>@item.ImageFilm</td>
+                                <td>@item.Diagnosis</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row table-parent-div" id="DME-tableD">
+    <h4 class="color-blue">DME</h4>
+    <div class="col-sm-12 col-md-12">
+        <table id="DME-table" class="table display table-option">
+            <thead>
+                <tr class="uppercase">
+                    <th>
+                        @*<label>
+                                <input type="checkbox" data-val="all" id="selectAll" class="select-all" />
+                                <span></span>
+                            </label>*@
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input select-all" data-val="all" id="SelectAllDME-table">
+                            <label class="custom-control-label" for="SelectAllDME-table"></label>
+                        </div>
+
+                    </th>
+                    <th>Doc image</th>
+                    <th>Date of prescription</th>
+                    <th>items</th>
+                    <th>cpt code</th>
+                    <th>icd code</th>
+                    <th>prescriber</th>
+                    <th>barcode no</th>
+                    <th>prescription REF. NO</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+                @if (!(Model.DMEVisitList is null))
+                {
+                    foreach (var item in Model.DMEVisitList)
+                    {
+                        <tr class="card">
+                            <th>
+                                @*<label>
+                                        <input type="checkbox" data-val="@item.DMEEquipSupId" />
+                                        <span></span>
+                                    </label>*@
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input SelectAllDME checkbox-table" id="@item.DMEEquipSupId" data-val="@item.DMEEquipSupId">
+                                    <label class="custom-control-label" for="@item.DMEEquipSupId"></label>
+                                </div>
+                            </th>
+                            <td>
+                                <span class="list-img">
+                                    <img src="~/images/@item.ImageUrl"
+                                         alt="document">
+                                </span>
+                            </td>
+                            <td>@item.PrescriptionDate?.ToString("MM/dd/yyyy")</td>
+
+                            <td>@item.Item.ItemOrGroupName</td>
+                            <td>@item.CPTCode.Name</td>
+                            <td>@item.ICDCode.Name</td>
+                            <td>Dr.@item.Prescriber.FirstName @item.Prescriber.LastName</td>
+
+                            <td>@item.BarcodeNo</td>
+                            <td>@item.PrescriptionRefNo</td>
+                        </tr>
+                    }
+                }
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+<hr />
+<div id="myTableClaimD">
+    <h4 class="color-blue">Procedure</h4>
+    <div class="row tablee table-parent-div">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="myTableClaim" class="table dataTables_wrapper">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="SelectAllmyTableClaim">
+                                    <label class="custom-control-label" for="SelectAllmyTableClaim" style="--bubble-color:#5a5a5a"></label>
+                                </div>
+                            </th>
+                            <th>VISIT/PROCEDURE</th>
+                            <th>DATE/TIME</th>
+                            <th>PHYSICIAN</th>
+                            <th>ICDCODE</th>
+                            <th>CPTCODE</th>
+                            <th class="all">Action  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loop in Model.TestsDtoList)
+                        {
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input SelectAllmyTableClaim" id="@loop.TestId" value="check">
+                                        <label class="custom-control-label" for="@loop.TestId"></label>
+                                    </div>
+
+                                </th>
+                                <td>@loop.VPCategory</td>
+                                <td>@loop.DateTime</td>
+                                <td>@loop.DoctorName</td>
+                                <td>@loop.DescriptionICD</td>
+                                <td>@loop.DescriptionCPT</td>
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div id="Alergies">
+    <h4 class="color-blue">Allergies</h4>
+    <div class="row tablee table-parent-div">
+        <div class="col-12">
+            <div class="row">
+                @foreach (var item in Model.AlergyTypeList)
+                {
+                    <div class="col-sm-6 col-md-6 col-lg-3 col">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col-sm-12 col">
+                                        <h6 class="card-title">@item.Name</h6>
+                                    </div>
+                                    <div class="col-sm-12 col delete allergy_36">
+                                        @foreach (var subType in Model.AlergyList)
+                                        {
+                                            if (subType.AllergyTypeId == item.AllergyTypeId)
+                                            {
+                                                <div class="chip">
+                                                    @subType.Name
+
+                                                </div>
+                                            }
+
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<hr />
+<div id="MessagesReceiveD">
+    <h4>Message</h4>
+    <div class="row tablee table-parent-div">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="MessagesReceive" class="table dataTables_wrapper ">
+                    <thead>
+                        <tr class="uppercase">
+                            <th class="checkClassForUnPrint">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" id="SelectAllMessagesReceive">
+                                    <label class="custom-control-label" for="SelectAllMessagesReceive"></label>
+                                </div>
+                            </th>
+                            <th>From</th>
+                            @*<th>Status</th>*@
+                            <th>Message</th>
+                            <th class="all">Action  </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.receiveMessages)
+                        {
+
+                            <tr class="card" style="cursor: pointer">
+                                <th class="checkClassForUnPrint">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@item.MessageId" value="check">
+                                        <label class="custom-control-label" for="@item.MessageId"></label>
+                                    </div>
+
+                                </th>
+                                <td>@item.DoctorName</td>
+
+
+                                <td>@item.Message</td>
+
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                                        <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+
+                                    </ul>
+                                </td>
+                            </tr>
+
+
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div id="InvoiceTableD">
+    <h4 class="color-blue">Invoice</h4>
+    <div class="row tablee table-parent-div">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="InvoiceTable" class="table dataTables_wrapper ">
+                    <thead>
+                        <tr class="uppercase">
+                            <th class="checkClassForUnPrint">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="SelectAllInvoiceTable">
+                                    <label class="custom-control-label" for="SelectAllInvoiceTable"></label>
+                                </div>
+
+                            </th>
+                            <th>INVOICE NO</th>
+                            <th>PATIENT NAME</th>
+                            <th>PATIENT EMAIL</th>
+                            <th>Create DATE </th>
+                            <th>Invoice DATE</th>
+                            <th>Message On Invoice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.invoicesList)
+                        {
+                            <tr class="card" style="cursor: pointer">
+                                <th class="checkClassForUnPrint">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input SelectAllInvoiceTable" id="@item.InvoiceId">
+                                        <label class="custom-control-label" for="@item.InvoiceId"></label>
+                                    </div>
+                                </th>
+                                <td>@item.InvoiceId</td>
+                                <td>@item.Name</td>
+                                <td>@item.Email</td>
+                                <td>@item.InvoiceDate</td>
+                                <td>@item.DueDate</td>
+                                <td>@item.MessageOnInvoice</td>
+                                @*<td>@item.InvoiceId</td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-success waves-effect text-left no-print " id="specific-print-btn">Custom Print</a>

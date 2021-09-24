@@ -1,0 +1,250 @@
+﻿@model MediClinic.Models.ClaimViewModal
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager
+
+@{
+    ViewData["Title"] = "Claims";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var userRole = _sessionManager.GetRoleId();
+
+}
+@section styles
+{
+
+    <style>
+        .top_part .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .text-align {
+            text-align: right;
+        }
+
+        .batch_button {
+            margin-right: 20px;
+        }
+    </style>
+
+}
+@section scripts{
+
+    <script>
+        $(function () {
+            $('#myTableClaim').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+
+        });
+
+        function deleteClaim(claimId, event) {
+            debugger;
+            event.closest('tr').remove();
+
+            $.get("/Provider/DeleteClaim", { Id: claimId }).done(function (data) {
+                debugger;
+                if (data == "Sucessfull") {
+                    $(".checkmark").show().fadeOut(6000);
+
+                }
+            });
+        }
+    </script>
+}
+<div class="page-wrapper">
+    <div class="container">
+        @*<div class="row">
+            <div class="col-sm-12">
+                <div class="card top_part">
+                    <div class="card-content">
+
+                        <div class="row">
+                            <div class="col-4 col-sm-3 col-md-4 col-lg-3">
+                                <h6>Total Billed</h6>
+                                <p>$300,000.00</p>
+                            </div>
+                            <div class="col-4 col-sm-3 col-md-4 col-lg-3">
+                                <h6>Total Paid</h6>
+                                <p>$500.000</p>
+                            </div>
+                            <div class="col-4 col-sm-6 col-md-4 col-lg-5">
+                                <div class="float-right">
+                                    <h6>Outstanding</h6>
+                                    <p style=" color: #f04f85 !important; ">$200,000.00</p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div id="breadcrumbs-wrapper">
+
+            <div class="row">
+                <div class="col-md-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Claims</h5>
+                </div>
+                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                {
+                    <div class="col-md-10 text-align">
+
+                        <a href="@Url.Action("AddNewClaim","provider")" class="btn  float-right add-btn set_smallscreen">
+                            Add New Claim
+                        </a>
+
+                    </div>
+                }
+              
+            </div>
+        </div>
+        <!--<div class="row">
+
+            <div class="col-sm-9 col-md-9 col-lg-9">-->
+        @*<button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">*@
+        @*Batch Actions*@
+        @*<span class="caret"></span>*@
+        <!--</button>-->
+        @*<ul class="dropdown-menu batch">*@
+        @*<li><a href="#">Option 1</a></li>*@
+        @*<li><a href="#">Option 2</a></li> Comment batch action*@
+
+        <!--</ul>
+
+            </div>
+
+
+        </div>-->
+
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="myTableClaim" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th class="disable">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                        <label class="custom-control-label" for="selectAll"></label>
+                                    </div>
+
+                                </th>
+                                <th>Bill No </th>
+                                <th>Bill Date</th>
+                                <th> Bill Status</th>
+                                <th>Due Date</th>
+                                <th>Sent On</th>
+                                <th>Dos From-Dos To</th>
+                                <th>Provider</th>
+                                <th>CPT/HSPC Code</th>
+                                <th>Balance </th>
+                                <th>Paid</th>
+                                <th>Billed</th>
+                                <th>Duration</th>
+                                <th>Service Type</th>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <th data-orderable="false" class="all">Action  </th>
+                                }
+                                </tr>
+                        </thead>
+                        <tbody>
+                            @if (!(Model.Claimlist is null))
+                            {
+                                foreach (var item in Model.Claimlist)
+                                {
+                            <tr class="card" style="cursor: pointer">
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@item.Claim_Id" value="check">
+                                        <label class="custom-control-label" for="@item.Claim_Id"></label>
+                                    </div>
+                                </th>
+
+                                <td>@item.Claim_Id</td>
+                                <td>@item.BillDate.Value.ToString(SystemFormat.DateFormat())</td>
+                                <td>@item.BillStatus</td>
+                                <td>@item.DueDate.Value.ToString(SystemFormat.DateFormat())</td>
+                                <td>5.30.20</td>
+                                <td>@item.DosFrom.Value.ToString(SystemFormat.DateFormat())-@item.DosTo.Value.ToString(SystemFormat.DateFormat())</td>
+                                <td>@item.TreatingProvider</td>
+                                <td>@item.CPTCodeNavigation.Name</td>
+                                <td>N/A</td>
+                                <td>n?A</td>
+                                <td>@item.TotalBill</td>
+                                <td>@item.DurationOfService.Value.ToString(SystemFormat.DateFormat())</td>
+
+                                <td>@item.TypeOfService</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li><a href="@Url.Action("AddNewClaim","Provider",new { Id=item.Claim_Id})">Edit</a></li>
+                                            <li onclick="deleteClaim(@item.Claim_Id, this);"><a href="javascript:void(0);">Delete</a></li>
+
+                                        </ul>
+
+                                    </td>
+                                }
+
+                            </tr>
+                                }
+                            }
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

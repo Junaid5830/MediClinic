@@ -1,0 +1,158 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h6 class="color-blue">Past Medical Problem</h6>
+            <table id="PastProblemMedical-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="PastProblemMedical-table" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Type</th>
+                        <th>Date/year</th>
+                        <th>Current Status</th>
+                        <th>Report/Documents</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>Cancer</td>
+                        <td>1920</td>
+                        <td>Remission</td>
+                        <td>Yes</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown3'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown3' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+            <a href="@Url.Action("MedicalProblem","Patient")" class="right exam_viewmore">View More</a>
+            <h6 class="color-blue">Current Medical Problem</h6>
+            <table id="CurrentProblemMedical-table" class="display">
+                <thead>
+                    <tr class="uppercase">
+                        <th>
+                            <label>
+                                <input type="checkbox" class="CurrentProblemMedical-table" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <th>Type</th>
+                        <th>Date/year</th>
+                        <th>Current Status</th>
+                        <th>Report/Documents</th>
+                        <th class="all">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="card">
+                        <th>
+                            <label>
+                                <input type="checkbox" />
+                                <span></span>
+                            </label>
+                        </th>
+                        <td>Mental</td>
+                        <td>1920</td>
+                        <td>Remission</td>
+                        <td>N/A</td>
+                        <td>
+                            <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown2'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                            <ul id='dropdown2' class='dropdown-content'>
+                                <li><a href="#!" class="option-a"><i class="material-icons">remove_red_eye</i>Preview</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">print</i>Print</a></li>
+                                <li><a href="#!" class="option-a"><i class="material-icons">share</i>Share</a></li>
+
+                            </ul>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <button class="add-btn btn right mb-1" id="medicalproblem_btn">Add New Medical Problem</button>
+        </div>
+    </div>
+</div>
+<div class="row" id="medical_problemform" style="display:none">
+    <div class="col s12">
+        <div class="container">
+            <div class="row">
+                <form class="form-inline col s12 pr-0">
+                    <div class="row">
+                        <div class=" col s12 m6 l6">
+                            
+                            <div class="input-field pl-0">
+                                <p>Type</p>
+                                <div class="dropdownauto"><input class="text-input input-styling " id="CPT" type="text" placeholder="Select Type"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="col m6 l6 s12 ">
+                            <div class="input-field pl-0">
+                                <p> Date/Year</p>
+                               <input type="text" class="datepicker text-input" placeholder="Select Date/Year">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col s12 m6">
+                            <div class=" input-field pl-0">
+                                <p>Current Stats</p>
+                                <div class="dropdownauto"><input class="text-input input-styling " id="ICD" type="text" placeholder="Select Current Status"></div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6">
+                            <div class="input-field pl-0">
+                                <p>Report/Documents</p>
+                               <div class="dropdownauto"><input class="text-input input-styling " id="Prescriber" type="text" placeholder="Select Report/Documents"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12 m12" style="text-align:center">
+                            <a href="javascript:void(0);" class="btn add-btn">Save</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

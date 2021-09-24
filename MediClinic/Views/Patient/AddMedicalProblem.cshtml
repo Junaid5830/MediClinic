@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewData["Title"] = "AddMedicalProblem";
+    Layout = "~/Views/Shared/_PatientLayout.cshtml";
+}
+@section styles{ 
+    <style>
+        .input-field{
+            margin:0 auto
+        }
+    </style>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            
+            $('.CPT').autocomplete({
+                data: {
+                    "Cancer": null,
+                    "Diabeties": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            $('.ICD').autocomplete({
+                data: {
+                    "Remission": null,
+                    "Completed": null,
+
+                },
+                limit: 10,
+                minLength: 0
+            });
+            
+            $('.Prescriber').autocomplete({
+                data: {
+                    "Yes": null,
+                    "No": null,
+                },
+                limit: 10,
+                minLength: 0
+            });
+            
+        });
+    </script>
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6 ">
+                <h5 class="breadcrumbs-title color-blue mt-0">Medical Problem</h5>
+            </div>
+
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="/Patient/MedicalProblem">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+
+    <div class="col s12">
+        <div class="container">
+
+        
+                <form>
+                    <div class="row">
+                        <div class=" col s12 m6">
+
+                            <div class="input-field">
+                                <p>Type</p>
+
+                                <div class="dropdownauto"><input class="text-input input-styling CPT" type="text" placeholder="Select Type"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="col m6  s12 ">
+                            <div class="input-field">
+                                <p> Date/Year</p>
+
+                                <input type="text" class="datepicker text-input" placeholder="Select Date/Year">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class=" col s12 m6">
+
+                            <div class="input-field">
+                                <p>Current Stats</p>
+                                <div class="dropdownauto"><input class="text-input input-styling ICD" type="text" placeholder="Select Current Status"></div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6">
+
+                            <div class="input-field ">
+                                <p>Report/Documents</p>
+                                <div class="dropdownauto"><input class="text-input input-styling Prescriber" type="text" placeholder="Select Report/Documents"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12 m12" style="text-align:center">
+                            <a href="javascript:void(0);" class="btn add-btn">Save</a>
+                            <a href="javascript:void(0);" class="Recreate btn">Edit</a>
+                            <a href="@Url.Action("MedicalProblem", "Patient")" class="Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+          
+
+        </div>
+    </div>
+</div>

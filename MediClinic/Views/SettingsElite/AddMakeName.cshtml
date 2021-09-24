@@ -1,0 +1,86 @@
+﻿@model DmeInvetoryViewModel
+@{
+    ViewData["Title"] = "AddMakeName";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section scripts{
+
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+        function onMakeNameModelCreate(data) {
+            debugger
+            $(".checkmark").show().fadeOut(6000);
+        }
+    </script>
+
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class=" col" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue"> Add New Make/Name</h5>
+                </div>
+
+            </div>
+            <div class="col">
+                <a href="@Url.Action("DMESetting","SettingsElite")" class="waves-effect waves-light float-right" style="margin-top: -11px">
+                    <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <form class="col-sm-12" asp-controller="SettingsElite" asp-action="AddMakeName" method="post" data-ajax="true" data-ajax-success="onMakeNameModelCreate(data)">
+                <input type="hidden" asp-for="MakeNameModel.Id" />
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+                        <p>
+                            Make
+                        </p>
+                        <div class="input-field">
+                            <input type="text" asp-for="MakeNameModel.Make" class="text-input" placeholder="Enter Make">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Name</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for="MakeNameModel.Name" class="text-input" placeholder="Enter Name">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12 ">
+                        <p>Model</p>
+
+                        <div class="input-field">
+                            <input type="text" asp-for="MakeNameModel.Model" class="text-input" placeholder="Enter Model">
+                        </div>
+                    </div>
+                    <div class=" col-sm-6 col-md-6 col-xl-6 col-12">
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="row mt-2 mb-2">
+                    <div class="col s12">
+                        <div class="center">
+                            <button type="submit" class="waves-effect waves-light btn add-btn">Save</button>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                            <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

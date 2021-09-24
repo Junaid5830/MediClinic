@@ -1,0 +1,244 @@
+﻿@model MediClinic.Models.PatientIncidentViewModel
+@{
+    ViewData["Title"] = "PatientRoleIncidentSetting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section scripts{
+
+    @*    <script src="~/lib/jquery/dist/jquery.js"></script>*@
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+
+
+    @*<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>*@
+
+
+    <script>
+            
+            function onCreateIncidentSuccess(data) {
+                debugger;
+                //alert('its on create succes');
+                //getIncidentlist();
+                window.location.href = '../Setting/PatientRoleIncidentSetting';
+            }
+
+
+            //function DeleteIncident(id) {
+            //    debugger;
+            //    $.post("../Setting/DeletePatientRoleIncidentSetting", { patientIncidentRoleId: id }, function (response) {
+            //        debugger;
+            //        //getIncidentlist();
+            //        //$("#resultData").empty();
+            //       // $("#resultData").html(response);
+            //    });
+
+            //     new PNotify({
+            //                    title: 'Success!',
+            //                    text: 'Record Deleted',
+            //                    delay: 5000,
+            //                    type: 'success',
+            //                    addclass: 'pnotify-center'
+            //                });
+            //}
+
+            function DeleteIncident(id) {
+                debugger;
+                $.ajax({
+                    type: "POST",
+                    url: '/Setting/DeletePatientRoleIncidentSetting',
+                    data: { patientIncidentRoleId: id },
+                    dataType: 'json',
+                    success: function (response) {
+                        debugger;
+                        new PNotify({
+                        title: 'Success!',
+                        text: 'Record deleted successfully',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+                        location.reload();
+                        //getIncidentlist();
+                    },
+                    failure: function (response) {
+                    },
+                    complete: function (xhr) {
+                    }
+
+                });
+            }
+
+            function EditIncident(id, Name) {
+                debugger;
+                $('#incidentRoleIdVal').val('');
+                $('#incidentRoleNameVal').val('');
+
+                //$('#incidentRoleIdVal').val(id);
+                //$('#incidentRoleNameVal').val(Name);
+
+
+                $.get("../Setting/GetEditIncidentRoleDetails", { patientIncidentRoleId: id }, function (response) {
+                    debugger;
+                    if (response != null) {
+                        $('#incidentRoleIdVal').val(response.patientIncidentRoleId);
+                        $('#incidentRoleNameVal').val(response.patientRoleInIncident);
+
+                        console.log(response);
+
+                    } else {
+                        console.log("Error");
+                    }
+                });
+            }
+
+
+
+            $(document).ready(function () {
+
+
+                $('#incidentForm').on('submit', function (e) {
+                    debugger;
+                    e.preventDefault();
+                    if ($(this).valid()) {
+                        $(this).ajaxSubmit({
+
+                            success: function (response) {
+                                debugger;
+                                //getIncidentlist();
+                            },
+                            complete: function (xhr) {
+                                onCreateToDoSuccessId(xhr.responseJSON);
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    }
+                });
+                function onCreateToDoSuccessId(data) {
+                    window.location.href = '../Setting/PatientRoleIncidentSetting';
+                    new PNotify({
+                        title: 'Success!',
+                        text: 'Record Save',
+                        delay: 5000,
+                        type: 'success',
+                        addclass: 'pnotify-center'
+                    });
+
+                    //getIncidentlist();
+
+                };
+
+            });
+
+
+
+            //function getIncidentlist() {
+            //    debugger;
+            //    $.get("../Setting/GetIncidentList", function (response) {
+            //        debugger;
+            //        $("#resultData").empty();
+            //        $("#resultData").html(response);
+            //    });
+            //}
+
+            function getIncidentlist() {
+                debugger;
+                $.get("../Setting/GetIncidentList").done(function (data) {
+                    debugger;
+                    $("#resultData").empty();
+                    $("#resultData").html(data);
+
+                });
+
+                //$.ajax({
+                //    type: "GET",
+                //    url: '/Setting/GetIncidentList',
+                //    success: function (response) {
+                //        debugger;
+
+                //    },
+                //    failure: function (response) {
+                //    },
+                //    complete: function (xhr) {
+                //        debugger;
+                //    }
+
+                //});
+
+            }
+
+
+    </script>
+
+}
+<div id="breadcrumbs-wrapper">
+    <!-- Search for small screen-->
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6">
+                <h5 class="breadcrumbs-title color-blue mt-0">
+                    Patient Role in the Incident
+
+                </h5>
+            </div>
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="/Home/Settings">
+                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="batch_action">
+    <div class="container">
+        <div class="row">
+
+            <div class="col s9 m9 l9">
+                <a class='dropdown-trigger dropdown-select float-left' href='javascript:void(0);' data-target='dropdown10'>Batch Action<i class="material-icons right select-drop-icon">keyboard_arrow_down</i></a>
+                <ul id='dropdown10' class='dropdown-content dropbody'>
+                    <li><a href="javascript:void(0);">Option 1</a></li>
+                    <li><a href="javascript:void(0);">Option 2</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col s12 m6">
+        <div class="container" id="resultData">
+            <partial name="~/Views/Setting/_IncidentList.cshtml" />
+            @*@Html.Partial("~/Views/Setting/_IncidentList.cshtml")*@
+
+        </div>
+    </div>
+    <div class="col s12 m6 mt-4">
+        <div class="container">
+            <form class="form-inline" id="incidentForm" asp-action="CreatePatientRoleIncidentSetting" asp-controller="Setting" method="post">
+                <h6>Add New Role in Incident</h6>
+                <div class="input-field">
+                    <input class="text-input Role-report" asp-for="PatientRoleInIncident" id="incidentRoleNameVal" type="text" placeholder="Enter Patient Role in Incident ">
+                    <span class="text-danger" asp-validation-for="PatientRoleInIncident"></span>
+                    <input class="text-input Role-report" id="incidentRoleIdVal" asp-for="PatientIncidentRoleId" type="hidden">
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col s12 m12" style="text-align:center">
+                        <button type="submit" id="incident" class="waves-effect waves-light add-btn btn">Save</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+

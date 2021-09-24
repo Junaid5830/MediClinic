@@ -1,0 +1,321 @@
+﻿@*@model MediClinic.Models.ClinicalViewModel*@
+@model MediClinic.Models.TemplateViewModal
+@using MedliClinic.Utilities.Utility.Enum
+
+@using MediClinic.Services.Interfaces.SessionManager;
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "Clinical Notes";
+    //Layout = "~/Views/Shared/_PatientLayout/_LayoutPatientElite.cshtml";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+    var userRole = _sessionManager.GetRoleId();
+
+}
+
+@section styles{
+
+    <style>
+
+
+
+        .search-icons {
+            left: 12px;
+            top: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+        .addNewNotForPatient .dropdown-menu {
+            top: auto !important;
+            transform-origin: 0px 0px !important;
+            left: auto !important;
+            transform: scaleX(1) scaleY(1) !important;
+            max-height: 125px !important;
+            height: auto !important;
+            overflow-y: auto !important;
+            width: auto !important;
+            min-width: 8rem !important;
+            padding: 0px;
+            position: relative !important;
+        }
+        .addNewNotForPatient .Table_Drop li {
+            position: relative;
+            display: block;
+            width: 100%;
+            float: left;
+        }
+        }
+    </style>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('.select-all').click(function () {
+                debugger;
+                $('.table  input').prop('checked', this.checked);
+            });
+            $('#seaarchBtn').val('');
+            var table = $("#ClinicalNote-Table").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+
+        function deleteClinicalNote(clinicalNoteId, event) {
+            debugger;
+
+            $.get("/ClinicalNote/DeleteClinicalNotes", { clinicalNoteId: clinicalNoteId }).done(function (data) {
+                debugger;
+
+                if (data) {
+                    event.closest('tr').remove();
+
+                    $(".checkmark").show().fadeOut(6000);
+
+                }
+                else {
+                    new PNotify({
+                        title: 'Error!',
+                        text: 'Something went wrong',
+                        delay: 2500,
+                        type: 'error',
+                        addclass: 'pnotify-center'
+                    });
+                }
+
+
+            });
+        }
+
+        function showModal(clinicalNoteId, patientId) {
+            $('#hiddenClinicalNoteId').val('');
+            $('#hiddenPatientId').val('');
+
+            $('#hiddenClinicalNoteId').val(clinicalNoteId);
+            $('#hiddenPatientId').val(patientId);
+
+            $('#signModal').modal('open');
+        }
+        function closeModal() {
+            $('#signModal').modal('close');
+            $('#passord_error').html('');
+            $('.SignaturePasswordFeild').val('');
+        }
+
+
+        function validatePassword() {
+            debugger;
+            var password = $('.SignaturePasswordFeild').val();
+            if (password) {
+                $('#passord_error').html('');
+                $.get("/ClinicalNote/MarkNoteAsSigned", { electronicPass: password, clinicalNoteId: parseInt($('#hiddenClinicalNoteId').val()) }).done(function (data) {
+                    debugger;
+
+                    if (data) {
+                        new PNotify({
+                            title: 'Success!',
+                            text: 'Note signed successfully',
+                            delay: 2500,
+                            type: 'success',
+                            addclass: 'pnotify-center'
+                        });
+                        closeModal();
+                        setTimeout(function () {
+                            location.reload();
+                        }, 500);
+                        //loadTableData();
+                    }
+                    else {
+                        $('#passord_error').html('');
+                        $('#passord_error').html("Password is not correct");
+                    }
+
+                });
+            }
+            else {
+                $('#passord_error').html('Please provide password');
+            }
+        }
+
+
+        function loadTableData() {
+
+            $.get("/ClinicalNote/ClinicalListData", { patientId: parseInt($('#hiddenPatientId').val()) }).done(function (data) {
+                debugger;
+                $('#listBody').html('');
+                $('#listBody').html(data);
+            });
+        }
+        function TemplateDetail(VisitId, event) {
+            $.get("/ClinicalNote/CLinicVisitDetail", { Id: VisitId }).done(function (data) {
+                debugger;
+                $('#TemplateNote .modal-body').html('');
+                $('#TemplateNote .modal-body').html(data);
+                $("#TemplateNote").modal('show');
+
+            });
+        }
+    </script>
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+
+            <div class="row">
+
+                <div class="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <h5 class="breadcrumbs-title color-blue">Clinical Notes</h5>
+                </div>
+                <div class="col-9 col-sm-9 col-md-5 col-lg-6">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control search-box" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                {
+            <div class="col-12 col-sm-12 col-md-4 col-lg-3 addNewNotForPatient">
+                @*<a class="btn waves-effect waves-light float-right add-btn " href="/Template/DoctorTemplate">
+            Add New Notes
+        </a>*@
+                <button class="btn btn-primary add-btn dropdown-toggle right" type="button" data-toggle="dropdown">
+                    Select Notes type
+                </button>
+
+                <ul class='dropdown-menu Table_Drop ul_Caim'>
+
+                    <li><a href="/Template/DoctorTemplate" class="option-a">Add Template</a></li>
+                    <li><a href="/ClinicalNote/ClinicalNotes" class="option-a">Add Voice Templates</a></li>
+                    @*<li><a href="javascript:void(0)" class="option-a">Print</a></li>
+            <li><a href="javascript:void(0)" class="option-a">Share</a></li>*@
+
+                </ul>
+            </div>
+                  
+                }
+
+
+            </div>
+        </div>
+        @*<div class="row">
+                <div class="col-sm-9 col-md-9 col-lg-9">
+                    <button class="btn btn-primary dropdown-toggle batch_button" type="button" data-toggle="dropdown">
+                    Batch Actions
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu batch">
+                    <li><a href="#">Option 1</a></li>
+                    <li><a href="#">Option 2</a></li> Comment batch action
+                    </ul>
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-lg-12">
+                <table id="ClinicalNote-Table" class="table display table-option">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                    <label class="custom-control-label" for="selectAll"></label>
+                                </div>
+
+                            </th>
+                            @*<th>DATE</th>*@
+                            <th>NOTE Name</th>
+                            <th>Created Date</th>
+                            @*<th>NOTE BY</th>
+                                <th>NOTE TYPE</th>
+                                <th>NOTE DESCRIPTION</th>*@
+
+
+                            <th data-searchable="false" data-orderable="false" class="all">ACTION</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="listBody">
+                        <partial name="~/Views/ClinicalNote/_ClinicalListPartialView.cshtml" />
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal" id="signModal">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Electronic Signature Password</h4>
+
+            </div>
+            <input type="hidden" id="hiddenClinicalNoteId" />
+            <input type="hidden" id="hiddenPatientId" />
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col s12">
+                        <div class="row">
+                            <div class="col s12 m8 ">
+                                <div class="input-field  pl-0">
+                                    <p>Electronic Signature Password <span class="required"> * </span></p>
+
+                                    <input class="text-input mt-2 SignaturePasswordFeild" type="password" placeholder="Enter Electronic Signature">
+                                    <span id="passord_error" class="required"></span>
+                                    <br />
+                                </div>
+                                <button type="button" id="submitPassword" onclick="validatePassword();" class="btn add-btn">Verify</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModal();" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="TemplateNote">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title color-blue">Clincal Notes</h4>
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,728 @@
+﻿@model MediClinic.Models.PatientViewModel
+<div class="content-area content-right">
+    <div class="app-wrapper">
+
+        <div class="card card card-default scrollspy border-radius-6 fixed-width">
+            <div class="card-content padding-3">
+                <div class="row mb-1">
+
+
+                    <div class="col s12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col s12">
+                                    <h5 class="breadcrumbs-title color-blue">Claim Info</h5>
+                                </div>
+
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col s12">
+                                    <form asp-action="PatientClaimInfo" asp-controller="PatientSide" id="patientClaimForm" method="post">
+                                        <input class="text-input input-styling" asp-for="patientClaimInfo.UserId" id="Patientclaim_UserId" type="text" hidden="hidden">
+                                        <input hidden="hidden" asp-for="patientInfoBasicDto.UserId" />
+                                        <input hidden="hidden" id="hiddenClaimInfoBasicUserid" asp-for="patientClaimInfo.PatientClaimID" />
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Primary Insurance Provider<span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling primaryInsuranceProvider claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PrimaryInsuranceProvider" type="text" placeholder="Enter Primary Insurance Provider">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.PrimaryInsuranceProvider"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Address line 1<span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling primaryInsuranceAddress claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.Addressline1" type="text" placeholder="Enter Addressline 1">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.Addressline1"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s12 m6">
+
+                                                <p>Address line 2</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.Addressline2" placeholder="Enter Addressline 2">
+                                                </div>
+                                            </div>
+                                            <dsiv class="col s12 m6">
+                                                <p>Address line 3</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.Addressline3" placeholder="Enter Address line 3">
+                                                </div>
+                                            </dsiv>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s12 m6">
+
+                                                <div class=" col s6 m6 pl-0">
+                                                    <p>ZIP Code</p>
+                                                    <div class="input-field">
+
+                                                        <input class="text-input input-styling primaryInsuranceZipCode claim_tab patientClaimInfoTxtField" maxlength="5" id="claim_Zip" onkeypress="return AvoidSpace(event)" asp-for="patientClaimInfo.Zip" type="text" placeholder="Enter ZIP Code">
+                                                        <span class="required" asp-validation-for="patientClaimInfo.Zip"></span>
+                                                        <span class="required" id="err_claimzip"></span>
+                                                    </div>
+                                                </div>
+                                                <div class=" col s6 m6 pl-0 pr-0">
+                                                    <p>City</p>
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling primaryInsuranceCity city patientClaimInfoTxtField" id="claim_city" type="text" asp-for="patientClaimInfo.City" readonly>
+                                                        @*<span class="required" asp-validation-for="patientClaimInfo.City"></span>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col s12 m3 pr-0">
+
+                                                <p>State</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling primaryInsuranceState state patientClaimInfoTxtField" id="claim_state" type="text" asp-for="patientClaimInfo.State" readonly>
+                                                    @*<span class="required" asp-validation-for="patientClaimInfo.State"></span>*@
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m3">
+
+                                                <p>Country</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling primaryInsuranceCountry country patientClaimInfoTxtField" id="claim_country" type="text" asp-for="patientClaimInfo.Country" readonly>
+                                                    @*<span class="required" asp-validation-for="patientClaimInfo.Country"></span>*@
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+                                            <div class=" col s12 m6">
+                                                <p>Web Page</p>
+                                                    <div class="input-field webUrlDiv">
+                                                        <input class="text-input input-styling webPageUrl claim_tab patientClaimInfoTxtField" onkeypress="return AvoidSpace(event)" type="text" asp-for="patientClaimInfo.WebPage" placeholder="Enter Web Page">
+                                                        <span class="required" id="web_err"></span>
+                                                    </div>
+                                                @*<div class="input-field col s2 m2">
+                                                    <a href="javascript:void(0);" id="webPageOnNextTab" class="btn form-add-btn" onclick="openUrlOnTab();"><i class="material-icons">arrow_forward</i></a>
+                                                </div>*@
+                                            </div>
+
+                                            <div class="col s12 m6">
+
+                                                <p>Primary Phone</p>
+                                                <div class="input-field numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno claim_tab patientClaimInfoTxtField" type="text" id="claim_number" asp-for="patientClaimInfo.PrimaryPhone" placeholder="Enter Primary Phone Number">
+                                                    <span class="required" id="claim_errmsg_number"></span>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Fax</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling fax claim_tab patientClaimInfoTxtField" id="claim_fax" type="text" asp-for="patientClaimInfo.Fax" placeholder="Enter Fax Number">
+                                                    <span class="required" id="claim_errmsg_fax"></span>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Email<span class="required"> * </span></p>
+                                                <div class="input-field importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="claimInfoEmail" onkeypress="return AvoidSpace(event)" type="email" asp-for="patientClaimInfo.Email" placeholder="Enter Email Address">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.Email"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster Name<span class="required"> * </span></p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="ClaimInfoadjusterName" type="text" asp-for="patientClaimInfo.AdjusterName" placeholder="Enter adjuster Name">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.AdjusterName"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster ID</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.AdjusterID" type="text" placeholder="Enter adjuster ID">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster Phone<span class="required"> * </span></p>
+                                                <div class="input-field numberModalDiv phoneDiv">
+                                                    <input class="text-input input-styling phoneno claim_tab patientClaimInfoTxtField" id="adjust_claim_num" asp-for="patientClaimInfo.AdjusterPhone" type="text" id="adjusterPhone" placeholder="Enter adjuster Phone">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.AdjusterPhone"></span>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster Extension</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.AdjusterExtension" placeholder="Enter adjuster Extension">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster Fax</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling fax claim_tab patientClaimInfoTxtField" id="adjust_claim_fax" asp-for="patientClaimInfo.AdjusterFax" type="text" placeholder="Enter adjuster fax">
+                                                    <span class="required" id="adjust_claim_errmsg_fax"></span>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Adjuster Email<span class="required"> * </span></p>
+                                                <div class="input-field importEmailToModal EmailDiv">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="climInfoAdjusterEmail" onkeypress="return AvoidSpace(event)" asp-for="patientClaimInfo.AdjusterEmail" type="email" placeholder="Enter adjuster Email">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.AdjusterEmail"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class=" col s12 m6">
+                                                <p>NF2 Filled Date<span class="required"> * </span></p>
+
+
+                                                <div class="input-field col s12 m12 l12 pl-0">
+                                                    <input type="text" id="nf2FilledDateInput" class="datepicker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.NF2FillingDate" placeholder="MM/DD/YYYY">
+                                                    <span id="nf2DateValidationSpan" class="required" asp-validation-for="patientClaimInfo.NF2FillingDate"></span>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>
+
+                                                    Case Type <span class="required"> * </span>
+                                                </p>
+
+
+                                                <div class="ui-widget claimSelect_tab col s12 pl-0">
+                                                    <select id="Patient_caseType" class="combobox patientClaimInfoTxtField genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.CaseType">
+                                                        <option></option>
+                                                        <option value="No-Fault">No-Fault</option>
+                                                        <option value="WC">WC</option>
+                                                        <option value="Private">Private</option>
+                                                        <option value="Self/Out of Pocket">Self/Out of Pocket</option>
+                                                        <option value="Medicare">Medicare</option>
+                                                        <option value="Tricare">Tricare</option>
+                                                        <option value="Champva">Champva</option>
+                                                        <option value="Group Health Plan">Group Health Plan</option>
+                                                        <option value="Feca Blk Lung">Feca Blk Lung</option>
+                                                        <option value="Medicaid">Medicaid</option>
+                                                        <option value="Lien">Lien</option>
+                                                    </select>
+                                                    <p class="required" id="casetype_err"></p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row">
+                                            <div class="col s12 m6 mt-2">
+                                                <p>Date of Incident<span class="required"> * </span></p>
+                                                <div class="input-field col s12 m12 l12 pl-0">
+                                                    <input type="text" class="datepicker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.DateOfIncident" placeholder="MM/DD/YYYY">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.DateOfIncident"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6 mt-2">
+                                                <p>Time of Incident</p>
+                                                <div class="input-field col s12 m12 l12 pl-0">
+                                                    <input type="text" class="timepicker text-input claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.TimeOfIncident" placeholder="Select Time">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+                                                <p> Was the Incident In the course of employment?</p>
+                                                <div class="col s4 m4 input-field pl-0 mt-3">
+                                                    <p>
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="1" />
+                                                            <span>Yes</span>
+                                                        </label>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col s4 m4 input-field pl-0 mt-3">
+                                                    <p>
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" asp-for="patientClaimInfo.WasCasuseOfEmployment" value="0" />
+                                                            <span>No</span>
+                                                        </label>
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col s12 m6">
+                                                <p>Patient Role in the Incident</p>
+
+                                                @*<div class="input-field col s9 m10 pl-0">
+                                                        <div class="dropdownauto">
+                                                            <input class="text-input input-styling " id="PatientRoleIncident" type="text" placeholder="Select Legal Status">
+                                                            <input type='hidden' id='PatientRoleIncident_ids' asp-for="patientClaimInfo.PatientIncidentRoleId" value='' />
+
+                                                        </div>
+                                                    </div>*@
+                                                <div class="ui-widget claimSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_RoleIncident" class="incidentRole genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.PatientIncidentRoleId"
+                                                            asp-items="@(new SelectList(Model.IncidentList,"PatientIncidentRoleId","PatientRoleInIncident"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="#" data-target="slide-out-right5"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col s12 m6">
+                                                <p>
+                                                    Incident Report Status
+                                                </p>
+
+                                                @*<div class="input-field col s9 m10 pl-0">
+                                                        <div class="dropdownauto">
+                                                            <input class="text-input input-styling " id="incidentreport" type="text" placeholder="Select Legal Status">
+                                                            <input type='hidden' id='incidentreport_ids' asp-for="patientClaimInfo.IncidentReportId" value='' />
+
+                                                        </div>
+                                                    </div>*@
+                                                <div class="ui-widget claimSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_incidentReport" class=" incidentReport genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.IncidentReportId"
+                                                            asp-items="@(new SelectList(Model.IncidentReportStatusList,"IncidentReportId","IncidentReportStatus1"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="#" data-target="slide-out-right6"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <p>
+
+                                                    NF2 Status<span class="required"> * </span>
+                                                </p>
+
+                                                @*<div class="input-field col s9 m10 pl-0">
+                                                        <div class="dropdownauto">
+                                                            <input class="text-input input-styling " id="nf2status" type="text" placeholder="Select Legal Status">
+                                                            <input type='hidden' id='nf2status-ids' asp-for="patientClaimInfo.Nf2Id" value='' />
+
+                                                        </div>
+                                                    </div>*@
+                                                <div class="ui-widget claimSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_nf2Status" class="genericClassForDD nf2list claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.Nf2Id"
+                                                            asp-items="@(new SelectList(Model.Nf2list,"Nf2Id","Nf2Status1"))">
+                                                        <option></option>
+                                                    </select>
+                                                    <p class="required" id="nf2_err"></p>
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="#" data-target="slide-out-right7"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class=" col s12 m6">
+                                                <p>Place of Incident</p>
+                                                <div class="input-field">
+                                                    <input class="text-input claim_tab patientClaimInfoTxtField"  type="text" asp-for="patientClaimInfo.PlaceOfIncident" placeholder="Enter place of incident">
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6 ">
+                                                <p>
+
+                                                    Claim Status
+                                                </p>
+
+                                                @*<div class="input-field col s9 m10 pl-0">
+                                                        <div class="dropdownauto">
+                                                            <input class="text-input input-styling " id="claimStatus" type="text" placeholder="Select Legal Status">
+                                                            <input type='hidden' id='claimStatus_ids' asp-for="patientClaimInfo.ClaimStatusId" value='' />
+
+                                                        </div>
+                                                    </div>*@
+
+
+                                                <div class="ui-widget claimSelect_tab col s9 m10 pl-0">
+                                                    <select id="Patient_claimStatus" class="claimlist genericClassForDD claimDropDListBeforeEditDisabled" asp-for="patientClaimInfo.ClaimStatusId"
+                                                            asp-items="@(new SelectList(Model.ClaimStatusList,"ClaimStatusId","ClaimStatus1"))">
+                                                        <option></option>
+                                                    </select>
+
+                                                </div>
+                                                <div class="input-field col s3 m2 pr-0">
+                                                    <a class="btn form-add-btn right sidenav-trigger sideout" href="#" data-target="slide-out-right8"><i class="material-icons">add</i></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Policy Number</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PolicyNumber" type="text" placeholder="Enter Policy Number">
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Policy Holder Name</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.PolicyHolderName" placeholder="Enter Policy Holder Name">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Policy Limits</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.PolicyNumber" type="text" placeholder="Enter Policy Limits">
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Claim Number</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.ClaimNumber" placeholder="Enter Claim Number">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>WCB Number</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.WCBNumber" type="text" placeholder="Enter WCB Number">
+                                                    <span class="required" id="adjust_claim_errmsg_num"></span>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>WCB Case Number</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.WCBCaseNumber" placeholder="Enter WCB Case Number">
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Group Number</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.GroupNumber" type="text" placeholder="Enter Group Number">
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>$CoPay</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling copay claim_tab patientClaimInfoTxtField" type="text" asp-for="patientClaimInfo.CoPay" placeholder="Enter $CoPay">
+                                                    <span class="required" asp-validation-for="patientClaimInfo.CoPay"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>Accept Assignement?</p>
+                                                <div class="col s6  pl-0">
+
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.AcceptAssignment" value="1" />
+                                                            <span>Yes</span>
+
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                <div class="col s6 pl-0">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.AcceptAssignment" value="0" />
+                                                            <span>No</span>
+
+                                                        </label>
+                                                    </p>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Policy Effective Date</p>
+                                                <div class="col s5 pl-0">
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="PolicyStartDate" type="text" asp-for="patientClaimInfo.PolicyEffectiveDate" placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="col s2 mt-6">
+                                                    <span>To</span>
+                                                </div>
+                                                <div class="col s5 pr-0">
+                                                    <div class="input-field">
+                                                        <input class="text-input input-styling claim_tab patientClaimInfoTxtField" id="PolicyEndDate" type="text" asp-for="patientClaimInfo.PolicyEffectEndDate" placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6">
+
+                                                <p>RelationShip To Policy Holder</p>
+                                                <div class="input-field">
+                                                    <input class="text-input input-styling claim_tab patientClaimInfoTxtField" asp-for="patientClaimInfo.RelationShipToPolicyHolder" type="text" placeholder="Enter RelationShip To Policy Holder">
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col s12 m6">
+
+                                                <p>Was Policy in effect at the time of incident?</p>
+                                                <div class="col s6  pl-0">
+
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="1" />
+                                                            <span>Yes</span>
+
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                                <div class="col s6 pl-0">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" class="with-gap patientClaimInfoTxtField" group="IsBilledAmountVisible" asp-for="patientClaimInfo.PolicyEffectAtIncidentTime" value="0" />
+                                                            <span>No</span>
+
+                                                        </label>
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row set_rowbtn">
+                                            <div class="col s12 m12" style="text-align:center">
+                                                <button type="submit" id="btnPatientClaimInfo" class="btn add-btn">Save</button>
+
+                                                @if (ViewBag.Action == "Update")
+                                                {
+                                                    <button type="button" data-val="claimForm" id="claimEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                                    <button type="button" data-val="claimForm" id="claimCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                                }
+                                                else
+                                                {
+                                                    @*<a href="javascript:void(0);" data-val="NewForm" id="claimCancel_btn"  class="btn Recreate">Edit</a>*@
+                                                    <a href="javascript:void(0);" data-val="NewForm" id="claimCancel_btn" onclick="emptyPatientClaimFields();" class="Recreate btn">Cancel</a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right5" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="patientRoleIncident" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientRoleIncident(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">Add new Patient Role in the Incident <span class="required">*</span></h5>
+                            <div class="input-field col s12 mb-10">
+
+
+                                <input class="text-input  addpatientRoleIncident" asp-for="patientIncidentRole.PatientRoleInIncident" type="text" placeholder="Add new patient role in the incident">
+                                <span class="required" asp-validation-for="patientIncidentRole.PatientRoleInIncident"> </span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right6" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="IncidentReportStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientIncidentReport(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add new Incident Report Status
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+                                <input class="text-input input-styling incidentReportStatusadd" asp-for="IncidentReportStatusBasicDto.IncidentReportStatus1" type="text" placeholder=" Add new incident report status">
+                                <span class="required" asp-validation-for="IncidentReportStatusBasicDto.IncidentReportStatus1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right7" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="nf2Status" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientnf2(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add new NF2 Status
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+
+                                <input class="text-input input-styling addPatientnf2" asp-for="nf2Status.Nf2Status1" type="text" placeholder="Add new NF2 status">
+                                <span class="required" asp-validation-for="nf2Status.Nf2Status1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+<aside id="right-sidebar-nav">
+    <div id="slide-out-right8" class="slide-out-right-sidenav sidenav rightside-navigation">
+        <div class="row">
+            <div class="slide-out-right-title">
+                <div class="col s12 border-bottom-1 pb-0 pt-1">
+                    <div class="row">
+                        <div class="col s2 pl-0 center">
+                            <i class="material-icons vertical-text-middle"><a href="#" class="sidenav-close">clear</a></i>
+                        </div>
+                        <div class="col s10 pl-0 mt-2">
+
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+                        <form asp-action="PatientClaimStatus" asp-controller="PatientSide" method="post" data-ajax="true" data-ajax-success="onCreatePatientclaimstatus(data)" class="col s12">
+                            <h5 class="mb-10 blue-text">
+                                Add new Claim Status
+                                <span class="required"> * </span>
+                            </h5>
+                            <div class="input-field col s12 mb-10">
+
+
+                                <input class="text-input input-styling addClaimStatusInfo" asp-for="claimStatusBasicDto.ClaimStatus1" type="text" placeholder="Add new claim status">
+                                <span class="required" asp-validation-for="claimStatusBasicDto.ClaimStatus1"></span>
+                            </div>
+                            <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

@@ -1,0 +1,8 @@
+﻿@model MediClinic.Models.AppointmentViewModel
+
+
+            <select id="Exactprovider_name" data-placeholder="Select Provider Name" class="Modelselect2 select2"
+                    asp-items="@(new SelectList(Model.ProviderList,"ProviderInfoId","FullName"))">
+                <option value="" selected disabled></option>
+            </select>
+        

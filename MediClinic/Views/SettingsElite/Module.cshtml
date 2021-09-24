@@ -1,0 +1,215 @@
+﻿@model MediClinic.Models.DTOs.UsersDto.AuthUserDto
+
+@{
+    ViewData["Title"] = "Module";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section styles{
+
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+
+
+}
+@section scripts{
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script src="~/lib/microsoft/signalr/notify.js"></script>
+    <script>
+        var RoleId;
+        var RoleModuletable;
+
+        $(document).ready(function () {/*$("#myTable").DataTable({ "info": false, responsive: true, lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 'order': [], 'columnDefs': [{ "targets": [0,10], "orderable": false }] });*/
+            RoleModuletable = $("#RoleModuleTab").DataTable({ "info": false, responsive: true, lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]], 'order': [[3, 'asc']], 'columnDefs': [{ "targets": [0, 4], "orderable": false }] });
+            $('[data-search]').on('keyup', function () {
+                table.search(this.value).draw();
+
+            });
+            $('#selectAll').on('click', function () {
+                // Check/uncheck all checkboxes in the table
+                var rows = RoleModuletable.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+            });
+
+            })
+            $('.select2').select2();
+
+            function InActivePage(Id) {
+                debugger;
+
+
+                $.post("/SettingsElite/PageListForPageInActive", { Id: Id }).done(function (data) {
+                    $('.table-responsive').html('');
+                    $('.table-responsive').html(data);
+
+                    $(".checkmark").show().fadeOut(6000);
+
+
+                });
+
+            }
+            function ActivePage(Id) {
+                debugger;
+
+
+                $.post("/SettingsElite/PageListForPageActive", { Id: Id }).done(function (data) {
+                    $('.table-responsive').html('');
+                    $('.table-responsive').html(data);
+
+                    $(".checkmark").show().fadeOut(6000);
+
+
+                })
+
+            }
+
+            function AddUserRolePage(Id, event) {
+                debugger;
+                //$(this).closest('tr').find('input[type="checkbox"]').attr('checked', false);
+
+                $.post("/SettingsElite/UserRolePageAdd", { PageId: Id, RoleId: RoleId }).done(function (data) {
+                    $('.table-responsive').hide();
+                    $('#rolePageList').html('');
+                    $('#rolePageList').html(data);
+                    $('#rolePageList').show();
+                    $(".checkmark").show().fadeOut(6000);
+                    $(".UserRolePagesList").DataTable({ "info": false, responsive: true, lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]], 'order': [[3, 'asc']], 'columnDefs': [{ "targets": [0, 4], "orderable": false }] });
+
+
+                });
+
+            }
+
+            function DeleteUserRolePage(Id) {
+                debugger;
+
+                $.get("/SettingsElite/UserRolePageDelete", { PageId: Id, RoleId: RoleId }).done(function (data) {
+                    $('.table-responsive').hide();
+                    $('#rolePageList').html('');
+                    $('#rolePageList').html(data);
+                    $('#rolePageList').show();
+                    $(".checkmark").show().fadeOut(6000);
+
+                });
+
+            }
+
+            $('.select2').on('change', function () {
+                RoleId = $(".select2 option:selected").val();
+                $.get("/SettingsElite/GetUserRolePagesList", { Id: RoleId }).done(function (data) {
+                    $('.table-responsive').hide();
+                    $('#rolePageList').html('');
+                    $('#rolePageList').html(data);
+                    $('#rolePageList').show();
+                    $(".UserRolePagesList").DataTable({ "info": false, responsive: true, lengthMenu: [[7, 25, 50, -1], [7, 25, 50, "All"]], 'order': [[3, 'asc']], 'columnDefs': [{ "targets": [0, 4], "orderable": false }] });
+                    
+                });
+              
+            })
+    </script>
+
+}
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+
+<div class="page-wrapper">
+    <div class="container mb-3">
+        <div id="breadcrumbs-wrapper">
+            <!-- Search for small screen-->
+            <div class="row">
+                <div class="col-4 col-sm-4 col-md-4 col-lg-3">
+                    <h5 class="breadcrumbs-title color-blue">Roles</h5>
+                </div>
+                <div class="col-8 col-sm-8 col-md-5 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                @*<div class="col-12 col-sm-12 col-md-3 col-lg-3">
+
+                        <a class="btn  float-right add-btn set_smallscreen" data-toggle="modal" data-target="#RoleModal">
+                            Add New Page
+                        </a>
+                    </div>*@
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <p>Select Role</p>
+
+                <select class="select2" data-placeholder="Select Role"
+                        asp-items="@(new SelectList(Model.UserRoleTypes,"UserRoleId","RoleType"))">
+                    <option value="" selected disabled></option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+
+                   
+                    <partial name="~/Views/SettingsElite/_PartialSetting/_AllPagesList.cshtml" />
+
+
+                </div>
+                <div id="rolePageList" style="display:none;">
+                 
+                    <partial name="~/Views/SettingsElite/_PartialSetting/_UserRolePageList.cshtml" />
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+@*<div id="RoleModal" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title color-blue">Role Name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="mdi mdi-close color-blue change_size"></i></button>
+                </div>
+                <form asp-action="Role" asp-controller="Auth" method="post" data-ajax="true" data-ajax-success="onCreateRole(data)">
+                    <input type="text" hidden="hidden" id="UserRole_Id" asp-for="UserRoleTypesDto.UserRoleId" />
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <div class="input-field">
+                                    <p>Role Name<span class="required"> * </span></p>
+                                    <input type="text" class="text-input RoleName" asp-for="UserRoleTypesDto.RoleType" placeholder="Enter Role Name">
+                                    <span class="required" asp-validation-for="UserRoleTypesDto.RoleType"></span>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                                <div class="input-field" style="margin-top:58px;">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" name="UserRoleTypesDto.IsActive" id="Active">
+                                        <label class="custom-control-label" for="Active">Is Active</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="modal-action btn add-btn right">Save</button>
+                        <button type="button" class="btn Recreate waves-effect text-left" data-dismiss="modal">Close</button>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+    </div>*@

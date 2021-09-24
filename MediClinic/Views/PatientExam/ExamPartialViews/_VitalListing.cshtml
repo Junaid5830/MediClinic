@@ -1,0 +1,249 @@
+﻿
+@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@{
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var concateResult = string.Empty;
+    var userRole = _sessionManager.GetRoleId();
+}
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Body Status</h4>
+        <table class="table dataTables_wrapper">
+            <thead>
+                <tr class="uppercase">
+
+                    <th>Date of Exam</th>
+                    <th>Examinar</th>
+                    <th>REASON FOR EXAM</th>
+                    <th>Results</th>
+                    <th>Visist id</th>
+                    @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                    {
+                        <th data-searchable="false" data-orderable="false" class="all">Action</th>
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vitallist != null)
+                {
+                    var rec = Model.Vitallist.OrderByDescending(x => x.PatientVitalId).Skip(1).FirstOrDefault();
+                    if (!(rec is null))
+                    {
+                        <tr class="card">
+
+                            <td>@rec.ExamTime.ToString("MM/dd/yyyy")</td>
+                            <td>Dr. @rec.Examiner.FirstName @rec.Examiner.LastName</td>
+                            <td>@rec.ReasonForExam.ReasonName</td>
+                            @if (rec.Temprature != null && rec.BloodPressure != null && rec.Pulse != null && rec.Respiration != null && rec.Height != null && rec.Weight != null && rec.TempMethod != null && rec.BMIStatus != null && rec.BMI != null && rec.OxygenSaturation != null && rec.Allergies != null)
+                            {
+                                concateResult = " Temp : " + rec.Temprature + " BP : " + rec.BloodPressure;
+                            }
+                            @if (!(rec.Temprature is null))
+                            {
+                                concateResult = " Temp : " + rec.Temprature;
+                            }
+                            else if (!(rec.BloodPressure is null))
+                            {
+                                concateResult = " Bp : " + rec.BloodPressure;
+                            }
+                            else if (!(rec.Pulse is null))
+                            {
+                                concateResult = " Pulse : " + rec.Pulse;
+                            }
+                            else if (!(rec.Respiration is null))
+                            {
+                                concateResult = " Resp : " + rec.Respiration;
+                            }
+                            else if (!(rec.Height is null))
+                            {
+                                concateResult = " Height : " + rec.Height;
+                            }
+                            else if (!(rec.Weight is null))
+                            {
+                                concateResult = " Weight : " + rec.Weight;
+                            }
+                            else if (!(rec.TempMethod is null))
+                            {
+                                concateResult = " Tem Meth : " + rec.TempMethod;
+                            }
+                            else if (!(rec.BMIStatus is null))
+                            {
+                                concateResult = " BMI Status : " + rec.BMIStatus;
+                            }
+                            else if (!(rec.BMI is null))
+                            {
+                                concateResult = " BMI : " + rec.BMI;
+                            }
+                            else if (!(rec.OxygenSaturation is null))
+                            {
+                                concateResult = " Oxygen Sat : " + rec.OxygenSaturation;
+                            }
+                            else if (!(rec.Allergies is null))
+                            {
+                                concateResult = " Allergies : " + rec.Allergies;
+                            }
+                            <td>@concateResult</td>
+                            <td>@rec.VisitId</td>
+                            @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                            {
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim" data-dropup-auto="false">
+                                        @if (rec.IsEditableOrNot)
+                                        {
+                                            <li><a href="@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = rec.PatientVitalId , actionType = "edit"})" class="option-a">Edit</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = rec.PatientVitalId, actionType = "view"})" class="option-a">View</a></li>
+                                        }
+
+                                        <li onclick="deleteVital(@rec.PatientVitalId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                        <li><a href="javascript:void(0);" class="option-a">Preview</a></li>
+                                        <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+
+                                    </ul>
+
+                                </td>
+                            }
+
+
+                        </tr>
+                    }
+
+                }
+
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Current Body Status</h4>
+        <table class="table dataTables_wrapper">
+            <thead>
+                <tr class="uppercase">
+
+                    <th>Date of Exam</th>
+                    <th>Examinar</th>
+                    <th>REASON FOR EXAM</th>
+                    <th>Results</th>
+                    <th>Visist id</th>
+                    @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                    {
+                        <th data-searchable="false" data-orderable="false" class="all">Action</th>
+
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vitallist != null)
+                {
+                    var rec = Model.Vitallist.OrderByDescending(x => x.PatientVitalId).FirstOrDefault();
+                    if (!(rec is null))
+                    {
+                        <tr class="card">
+                            <td>@rec.ExamTime.ToString("MM/dd/yyyy")</td>
+                            <td>Dr. @rec.Examiner.FirstName @rec.Examiner.LastName</td>
+                            <td>@rec.ReasonForExam.ReasonName</td>
+                            @if (rec.Temprature != null && rec.BloodPressure != null && rec.Pulse != null && rec.Respiration != null && rec.Height != null && rec.Weight != null && rec.TempMethod != null && rec.BMIStatus != null && rec.BMI != null && rec.OxygenSaturation != null && rec.Allergies != null)
+                            {
+                                concateResult = " Temp : " + rec.Temprature + " BP : " + rec.BloodPressure;
+                            }
+                            @if (!(rec.Temprature is null))
+                            {
+                                concateResult = " Temp : " + rec.Temprature;
+                            }
+                            else if (!(rec.BloodPressure is null))
+                            {
+                                concateResult = " Bp : " + rec.BloodPressure;
+                            }
+                            else if (!(rec.Pulse is null))
+                            {
+                                concateResult = " Pulse : " + rec.Pulse;
+                            }
+                            else if (!(rec.Respiration is null))
+                            {
+                                concateResult = " Resp : " + rec.Respiration;
+                            }
+                            else if (!(rec.Height is null))
+                            {
+                                concateResult = " Height : " + rec.Height;
+                            }
+                            else if (!(rec.Weight is null))
+                            {
+                                concateResult = " Weight : " + rec.Weight;
+                            }
+                            else if (!(rec.TempMethod is null))
+                            {
+                                concateResult = " Tem Meth : " + rec.TempMethod;
+                            }
+                            else if (!(rec.BMIStatus is null))
+                            {
+                                concateResult = " BMI Status : " + rec.BMIStatus;
+                            }
+                            else if (!(rec.BMI is null))
+                            {
+                                concateResult = " BMI : " + rec.BMI;
+                            }
+                            else if (!(rec.OxygenSaturation is null))
+                            {
+                                concateResult = " Oxygen Sat : " + rec.OxygenSaturation;
+                            }
+                            else if (!(rec.Allergies is null))
+                            {
+                                concateResult = " Allergies : " + rec.Allergies;
+                            }
+                            <td>@concateResult</td>
+                            <td>@rec.VisitId</td>
+                            @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                            {
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim" data-dropup-auto="false">
+                                        @if (rec.IsEditableOrNot)
+                                        {
+                                            <li><a href="@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = rec.PatientVitalId , actionType = "edit"})" class="option-a">Edit</a></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="@Url.Action("AddVitalsElite","PatientSideElite",new { patientVitalId = rec.PatientVitalId, actionType = "view"})" class="option-a">View</a></li>
+                                        }
+
+                                        <li onclick="deleteVital(@rec.PatientVitalId, this);"><a href="javascript:void(0);" class="option-a">Delete</a></li>
+
+                                        <li><a href="javascript:void(0);" class="option-a">Preview</a></li>
+                                        <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+
+                                    </ul>
+
+                                </td>
+                            }
+
+
+                        </tr>
+                    }
+
+                }
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>

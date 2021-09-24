@@ -1,0 +1,267 @@
+﻿@using MediClinic.Models.DTOs
+@model List<SettingAttorneyDto>
+
+@{
+    ViewData["Title"] = "Attorenies";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+
+@section styles{
+    <link href="~/Elite/css/pages/tab-page.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <style>
+        .tabs {
+            height: auto !important;
+        }
+
+        .card {
+            padding: 10px !important;
+        }
+
+        .toggle-handle {
+            margin-top: -3px !important;
+        }
+
+        .switch {
+            margin: 12px 0;
+        }
+
+        .toggle-group .btn {
+            padding: 0 1rem !important;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #428bca !important;
+        }
+
+        .btn-default {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #ccc;
+        }
+
+            .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .dropdown-toggle.btn-default {
+                color: #333;
+                background-color: #e6e6e6;
+                border-color: #adadad;
+            }
+    </style>
+    <style>
+        .select2 {
+            width: 100% !important;
+        }
+
+        .tab-content .container {
+            padding: 20px !important;
+            margin-bottom: 0 !important;
+        }
+
+        .tab-pane {
+            padding: 20px 0px !important;
+        }
+
+        .card-content {
+            padding: 16px !important;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .AddReminder p {
+            margin-top: 1rem !important;
+        }
+
+        .top_part {
+            margin: 1rem 0 0rem 0 !important;
+            border-radius: 0 0 2px 2px;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .display-flex {
+            display: flex;
+        }
+
+        .position-absolute {
+            position: absolute;
+        }
+
+        .search-icons {
+            left: 12px;
+            top: 12px;
+        }
+
+        .tablee .card {
+            border-radius: 5px !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+            position: relative !important;
+            flex-direction: column !important;
+            display: table-row !important;
+            box-shadow: 1px 1px 12px 1px #e2e2e2 !important;
+        }
+
+        h3, h4 {
+            color: #333 !important
+        }
+
+        .customtab li a.nav-link {
+            font-size: 16px;
+            margin-right: 4px !important;
+        }
+
+            .customtab li a.nav-link.active, .customtab li a.nav-link:hover {
+                color: #fff !important;
+                background-color: #547cea !important;
+            }
+
+            .customtab li a.nav-link.active {
+                border-bottom: 2px solid black !important;
+            }
+
+        .nav-tabs .nav-link {
+            border-top-left-radius: 0px !important;
+            border-top-right-radius: 0px !important;
+        }
+
+        .toggle-off:hover {
+            color: Gray !important;
+        }
+
+        .toggle-handle {
+            background-color: #e6e6e6 !important;
+            border-color: #ccc !important;
+        }
+    </style>
+}
+<div class="page-wrapper">
+    <div class="container">
+
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-md-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Attorney</h5>
+                </div>
+
+                <div class="col-md-10 text-align">
+
+                    <a asp-controller="Setting" asp-action="Attorney" class="btn  float-right add-btn set_smallscreen">
+                        Add New Attorney
+                    </a>
+
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row tablee">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="Attorney" class="table dataTables_wrapper ">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>Attorney Type</th>
+                                <th>Firm Name</th>
+
+                                <th>Phone</th>
+                                <th>Fax</th>
+                                <th>Email</th>
+                                <th>Address</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td>@item.TypeOFAttorney</td>
+                                <td>@item.FirmName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Fax</td>
+                                <td>@item.Email</td>
+                                <td>@item.Address</td>
+                                <td class="action">
+                                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                        Options
+                                        @*<span class="caret"></span>*@
+                                    </button>
+                                    <ul class="dropdown-menu Table_Drop ul_Caim">
+
+                                        <li><a href="@Url.Action("Attorney", "Setting", new { Id= @item.AttorneyId })" class="option-a"><i class=""></i>Edit</a></li>
+                                        <li><a href="javascript:void(0);" onclick="deleteAttorney(@item.AttorneyId, this)" class="option-a"><i class=""></i>Delete</a></li>
+                                        @*<li><a  class="option-a"><i class=""></i>View</a></li>*@
+
+
+                                        @*<li><a href="javascript:void(0);"><i class="mdi mdi-eye"></i>View</a></li>
+                <li><a href="javascript:void(0);"><i class="mdi mdi-printer"></i>Delete</a></li>
+                <li><a href="javascript:void(0);"><i class="mdi mdi-share-variant"></i>Edit</a></li>*@
+                                    </ul>
+
+                                </td>
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+
+
+        function deleteAttorney(attorneyId,event) {
+            event.closest('tr').remove();
+
+            $.get("/Setting/AttorneyDelete", { Id: attorneyId }).done(function (data) {
+                debugger;
+
+                new PNotify({
+                    title: 'Success!',
+                    text: 'Record deleted successfully',
+                    delay: 2500,
+                    type: 'success',
+                    addclass: 'pnotify-center'
+                });
+
+            });
+        }
+                $('.select2').select2();
+                $(function () {
+                    $('#Attorney').DataTable({
+                        "lengthMenu": false,
+                        "lengthChange": false,
+                        "scrollX": false,
+                        "searching": false,
+                        "responsive": true,
+                        "info": false,
+                      ///  'order': [], 'columnDefs': [{ "targets": [0, 14], "orderable": false }],
+
+                    });
+                
+
+                });
+
+    </script>
+
+
+}

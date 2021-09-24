@@ -1,0 +1,161 @@
+﻿@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+
+@{
+    var providerId = _sessionManager.GetProviderInfoId();
+    var patientInfoId = _sessionManager.GetPatientInfoId();
+    var UserRole = _sessionManager.GetRoleId();
+    var PatientId = ViewContext.RouteData.Values["id"];
+}
+
+<aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark sidenav-active-rounded displaynot">
+    <div class="brand-sidebar">
+        <h1 class="logo-wrapper">
+            @if (UserRole == 1)
+            {
+                <a class="brand-logo brand-logo2 darken-1" href="@Url.Action("PatientSummary","PatientSide", new {Id = patientInfoId })"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a>
+                <a class="navbar-toggler" href="javascript:void(0);"><i class="material-icons sideBarCollapseIcon sidebar-block">subject</i></a>
+            }
+            else
+            {
+                <a class="brand-logo brand-logo2 darken-1" href="@Url.Action("Index","Home", new {Id = providerId })"> <span class="logo-text hide-on-med-and-down">MediClinicEHR</span></a>
+                <a class="navbar-toggler" href="javascript:void(0);"><i class="material-icons sideBarCollapseIcon sidebar-block">subject</i></a>
+            }
+        </h1>
+    </div>
+    <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="accordion">
+
+        <li class="bold" id="@ViewBag.PatientAllergy">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientAllergy","Home",new {Id = patientInfoId })"><i class="material-icons">polymer</i><span class="menu-title" data-i18n="">Allergies</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.Appointment">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientAppointment","Appointment",new {Id = patientInfoId })"><i class="material-icons">event</i><span class="menu-title" data-i18n="">Calendar</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.patientCaregiver">
+            <a class="waves-effect waves-cyan " href="@Url.Action("patientCaregiver","home",new {Id = patientInfoId })"><i class="material-icons">face</i><span class="menu-title" data-i18n="">Care Givers</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.claiminfo">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ClaiminfoList","PatientSide" , new {Id = patientInfoId })"><i class="material-icons">mode_edit</i><span class="menu-title" data-i18n="">Claim Info</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientAllBills">
+            <a class="waves-effect waves-cyan  " href="@Url.Action("PatientAllBills","home",new {Id = patientInfoId })"><i class="material-icons">check</i><span class="menu-title" data-i18n="">Claims</span></a>
+
+            @*<ul id='nav-dropdown' class='dropdown-content'>
+                    <li><a href="@Url.Action("PatientAddClaiminfo","Home")">Add New Bill</a></li>
+                    <li><a href="@Url.Action("PatientBillStats","Home")"></a>Bill Stats</li>
+                    <li><a href="@Url.Action("PatientAllBills","Home")"></a>All Bills</li>
+                    <li><a href="@Url.Action("NonbillVisits","Home")"></a>Non-Bill Visits</li>
+
+                </ul>*@
+        </li>
+        <li class="bold" id="@ViewBag.clinicalnotes">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ClinicalNotesList","ClinicalNote",new {Id = patientInfoId })"><i class="material-icons">featured_video</i><span class="menu-title" data-i18n="">Clinical Notes</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.clinicalreminder">
+            <a class="waves-effect waves-cyan " href="@Url.Action("clinicalreminder","home",new {Id = patientInfoId })"><i class="material-icons">link</i><span class="menu-title" data-i18n="">Clinical Reminders</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.currentlocationinfacility">
+            <a class="waves-effect waves-cyan " href="@Url.Action("currentlocationinfacility","home",new {Id = patientInfoId })"><i class="material-icons">location_on</i><span class="menu-title" data-i18n="">Current Location in Facility</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.DMEsupplies">
+            <a class="waves-effect waves-cyan " href="@Url.Action("DMEsupplies","DME" ,new {Id = patientInfoId })"><i class="material-icons">child_friendly</i><span class="menu-title" data-i18n="">DME supllies/Equipment</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientClaims">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientClaims","Home",new {Id = patientInfoId })"><i class="material-icons">local_library</i><span class="menu-title" data-i18n="">Documents/Records</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.EUO">
+            <a class="waves-effect waves-cyan " href="@Url.Action("EUO","Home",new {Id = patientInfoId })"><i class="material-icons">local_play</i><span class="menu-title" data-i18n="">E.U.O</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientClaimsExams">
+
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientClaimsExams","Home", new {Id = patientInfoId })"><i class="material-icons">mode_edit</i><span class="menu-title" data-i18n="">Exams</span> </a>
+        </li>
+        @*<li class="bold" id="@ViewBag.FamilyHistory">
+                <a class="waves-effect waves-cyan " href="@Url.Action("FamilyHistory","Home", new {Id = patientInfoId })"><i class="material-icons">history</i><span class="menu-title" data-i18n="">Family History</span></a>
+            </li>*@
+        <li class="bold" id="@ViewBag.GrowthChartList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("GrowthChartList","Patient", new {Id = patientInfoId })"><i class="material-icons">trending_up</i><span class="menu-title" data-i18n="">Growth Charts</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.HipperRelease">
+            <a class="waves-effect waves-cyan " href="@Url.Action("HipperRelease","Home", new {Id = patientInfoId })"><i class="material-icons">tune</i><span class="menu-title" data-i18n="">Hipaa Release</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientHippaRelease">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientHippaRelease","Home", new {Id = patientInfoId })"><i class="material-icons">translate</i><span class="menu-title" data-i18n="">I.M.E</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientHippaReleaseImaging">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientHippaReleaseImaging","Home", new {Id = patientInfoId })"><i class="material-icons">image</i><span class="menu-title" data-i18n="">Imaging</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.Immunizations">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Immunizations","Home" , new {Id = patientInfoId })"><i class="material-icons">grain</i><span class="menu-title" data-i18n="">Immunizations</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.Labs">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Labs","Patient" , new {Id = patientInfoId })"><i class="material-icons">local_pharmacy</i><span class="menu-title" data-i18n="">Labs</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.LegalInfoList">
+            <a class="waves-effect waves-cyan" href="@Url.Action("LegalInfoList","PatientSide", new {Id = patientInfoId })"><i class="material-icons">leak_add</i><span class="menu-title" data-i18n="">Legal Info</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.MedicalHistory">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientMedicalHistory","PatientSide", new {Id = patientInfoId })"><i class="material-icons">history</i><span class="menu-title" data-i18n="">Medical History and Problems</span></a>
+        </li>
+        @*<li class="bold" id="@ViewBag.MedicalProblem">
+            <a href="@Url.Action("MedicalProblemlist","PatientSide" , new {Id = patientInfoId })" class="waves-effect waves-cyan "><i class="material-icons">hot_tub</i><span class="menu-title" data-i18n="">Medical Problems</span></a>
+        </li>*@
+        <li class="bold" id="@ViewBag.Medications">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Medications","Patient", new {Id = patientInfoId })"><i class="material-icons">iso</i><span class="menu-title" data-i18n="">Medications</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.Missing">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Missing","PatientSide" , new {Id = patientInfoId })"><i class="material-icons">location_disabled</i><span class="menu-title" data-i18n="">Missing</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.PatientSummary">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientSummary","PatientSide", new {Id = patientInfoId })"><i class="material-icons">nfc</i><span class="menu-title" data-i18n="">Patient Summary</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.Prescription">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Prescription","PatientSide", new { Id = patientInfoId })"><i class="material-icons">gradient</i><span class="menu-title" data-i18n="">Prescription</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.ProceduresandTests">
+            <a class="waves-effect waves-cyan " href="@Url.Action("ProceduresandTests","Home", new { Id = patientInfoId })"><i class="material-icons">gradient</i><span class="menu-title" data-i18n="">Procedures/Tests</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.RemindersList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("RemindersList","Patient", new { Id = patientInfoId })"><i class="material-icons">message</i><span class="menu-title" data-i18n="">Reminder</span> </a>
+        </li>
+        <li class="bold" id="@ViewBag.MessageList">
+            <a class="waves-effect waves-cyan " href="@Url.Action("MessageList","Patient", new { Id = patientInfoId })"><i class="material-icons">message</i><span class="menu-title" data-i18n="">Message</span> </a>
+        </li>
+
+        <li class="bold" id="@ViewBag.PatientReports">
+            <a class="waves-effect waves-cyan " href="@Url.Action("PatientReports","Patient", new { Id = patientInfoId })"><i><img src="~/app-assets/images/Dashboard-icons/reports.png"></i><span class="menu-title" data-i18n="">Reports</span></a>
+        </li>
+        @*<li>
+                <a class="collapsible-body collapsible-header waves-effect waves-cyan" href="#" data-i18n=""><i class="material-icons">payment</i><span>Reports</span></a>
+                <div class="collapsible-body">
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <a class="collapsible-body" href="@Url.Action("Reports","Patient")" ><i class="material-icons">radio_button_unchecked</i><span>Reports</span></a>
+                        </li>
+                        <li>
+                            <a class="collapsible-body" onclick="FeatureNotImplemented()" href="javascript:void(0);"><i class="material-icons">radio_button_unchecked</i><span>Saved Reports</span></a>
+                        </li>
+                        <li>
+                            <a class="collapsible-body" onclick="FeatureNotImplemented()" href="javascript:void(0);"><i class="material-icons">radio_button_unchecked</i><span>Favorite Reports</span></a>
+                        </li>
+                        <li>
+                            <a class="collapsible-body" onclick="FeatureNotImplemented()" href="javascript:void(0);"><i class="material-icons">radio_button_unchecked</i><span>Frequently Used</span></a>
+                        </li>
+                        <li>
+                            <a class="collapsible-body" onclick="FeatureNotImplemented()" href="javascript:void(0);"><i class="material-icons">radio_button_unchecked</i><span>Most Used</span></a>
+                        </li>
+                        <li>
+                            <a class="collapsible-body" onclick="FeatureNotImplemented()" href="javascript:void(0);"><i class="material-icons">radio_button_unchecked</i><span>Recommended</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </li>*@
+        <li class="bold" id="@ViewBag.Visits">
+            <a class="waves-effect waves-cyan " href="@Url.Action("Visits","Home", new { Id = patientInfoId })"><i class="material-icons">people</i><span class="menu-title" data-i18n="">Visits</span></a>
+        </li>
+        <li class="bold" id="@ViewBag.VITALS">
+            <a class="waves-effect waves-cyan " href="@Url.Action("VITALS","PatientSide", new { Id = patientInfoId })"><i class="material-icons">warning</i><span class="menu-title" data-i18n="">Vitals</span></a>
+        </li>
+    </ul>
+    <div class="navigation-background"></div><a class="sidenav-trigger btn-sidenav-toggle btn-floating btn-medium waves-effect waves-light hide-on-large-only" href="#" data-target="slide-out"><i class="material-icons">menu</i></a>
+</aside>

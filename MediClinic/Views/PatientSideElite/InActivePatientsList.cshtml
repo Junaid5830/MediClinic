@@ -1,0 +1,189 @@
+﻿
+@model MediClinic.Models.PatientViewModel
+
+@{
+    ViewData["Title"] = "InActivePatientsList";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+
+@section scripts{
+   
+    <script>
+        $('.select2').select2();
+        $(function () {
+           
+            var inActive = $('#inactive').DataTable({
+                "lengthMenu": false,
+                "lengthChange": false,
+                "scrollX": false,
+                "searching": true,
+                "responsive": true,
+                "info": false,
+                'order': [], 'columnDefs': [{ "targets": [0], "orderable": false }],
+
+            });
+
+            $('[data-search]').on('keyup', function () {
+                inActive.search(this.value).draw();
+            });
+          
+
+        });
+
+        function ActivePatient(PatientId,event) {
+            event.closest('tr').remove();
+
+            $.get("/PatientSideElite/PatientInfoActive", { patientId: patientInfoId }).done(function (data) {
+                debugger;
+
+
+                $(".checkmark").show().fadeOut(6000);
+
+            });
+        }
+    </script>
+
+
+}
+
+<div class="page-wrapper">
+    <div class="container">
+        <div id="breadcrumbs-wrapper">
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-2" margin-top-8">
+                    <h5 class="breadcrumbs-title color-blue">Inactive Patients</h5>
+                </div>
+                <div class="col-sm-9 col-md-5 col-lg-6" display-block">
+                    <div class="header-search-wrapper  display-flex position-relative">
+                        <i class="ti-search position-absolute  search-icons"></i>
+                        <input type="text" class="form-control set_Place search-box z-depth-2" data-search placeholder="Search" aria-label="Username" aria-describedby="basic-addon11">
+                        <a class="btn ml-2 search-btn">
+                            Search
+                        </a>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="table-responsive">
+                <table id="inactive" class="table dataTables_wrapper">
+                    <thead>
+                        <tr class="uppercase">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                    <label class="custom-control-label" for="selectAll" style="--bubble-color:#5a5a5a"></label>
+                                </div>
+                            </th>
+                            <th>Patient ID</th>
+                            <th>Full Name</th>
+                            <th>Gender</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            @*<th>Material Status</th>
+                            <th>Race Ethnicity</th>*@
+                            <th>Address</th>
+                            <th>Country</th>
+                            <th>option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.patientInfoList)
+                        {
+                        <tr class="card">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="@item.PatientInfoId">
+                                    <label class="custom-control-label" for="@item.PatientInfoId" style="--bubble-color:#5a5a5a"></label>
+                                </div>
+                            </th>
+                            <td>@item.PatientInfoId</td>
+                            <td>@item.FirstName @item.LastName</td>
+                            @if (!(item.Gender is null))
+                            {
+                                <td>@item.Gender.LookupValue</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            @if (!(item.Email is null))
+                            {
+                                <td>@item.Email</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            @if (!(item.DateOfBirth is null))
+                            {
+                                <td>@item.DateOfBirth.Value.ToString("MM/dd/yyyy")</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            @*@if (!(item.MaitalStatusId is null))
+                            {
+                                <td>@item.MaitalStatusId</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            @if (!(item.RaceEthnicityId is null))
+                            {
+                                <td>@item.RaceEthnicityId</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }*@
+                            @if (!(item.AddressLine1 is null))
+                            {
+                                <td>@item.AddressLine1</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            @if (!(item.Country is null))
+                            {
+                                <td>@item.Country</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                            <td class="action">
+                                <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                    Options
+                                    @*<span class="caret"></span>*@
+                                </button>
+                                <ul class="dropdown-menu Table_Drop ul_Caim">
+                                    <li onclick="ActivePatient(@item.PatientInfoId,this)"><a href="javascript:void(0);">Active</a></li>
+                                   
+                                </ul>
+                            </td>
+
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

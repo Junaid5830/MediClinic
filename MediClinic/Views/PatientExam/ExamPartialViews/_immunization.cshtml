@@ -1,0 +1,234 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility.Enum
+@{ 
+    DateTime Date = DateTime.Now;
+
+    var userRole = _sessionManager.GetRoleId();
+}
+
+<div id="immunizationList">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_ImmunizationList.cshtml" />
+
+</div>
+
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="immunizationsField">
+            Add New Immunizations
+        </a>
+    </div>
+</div>
+<div id="immunizationsForm" style="display:none">
+    <form asp-action="AssignImmunization" asp-controller="PatientExam" method="post" data-ajax="true" data-ajax-success="onCreateImmunization(data)">
+        <input hidden="hidden" type="text" asp-for="immunization.ImmunizationId" />
+        <input hidden="hidden" type="text" id="HiddenVisitId" asp-for="immunization.VisitId" />
+        <div class="row">
+
+            <div class="col-md-6 ">
+                <p>
+                    Vaccine Name
+                </p>
+
+                <div class="input-field">
+                    <select data-placeholder="Select Vaccine Name" class="select2  text-input"
+                            asp-for="immunization.VaccineName" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Adenovirus", Value="Adenovirus"},
+                                                new SelectListItem() {Text = "Anthrax", Value="Anthrax"},
+                                                new SelectListItem() {Text = "Cholera", Value="Cholera"},
+                                                new SelectListItem() {Text = "DTaP", Value="DTaP"},
+                                                new SelectListItem() {Text = "DT", Value="DT"},
+                                                new SelectListItem() {Text = "Haemophilus influenzae type b (Hib)", Value="Haemophilus influenzae type b (Hib)"},
+                                                new SelectListItem() {Text = "Hepatitis A", Value="Hepatitis A"},
+                                                new SelectListItem() {Text = "Hepatitis B", Value="Hepatitis B"},
+                                                new SelectListItem() {Text = "Herpes Zoster (Shingles)", Value="Herpes Zoster (Shingles)"},
+                                                new SelectListItem() {Text = "Human Papillomavirus (HPV)", Value="(HPV)"},
+                                                new SelectListItem() {Text = "Influenza", Value="Influenza"},
+                                                new SelectListItem() {Text = "Japanese encephalitis", Value="Before meals"},
+                                                new SelectListItem() {Text = "Measles, Mumps, Rubella", Value="Measles, Mumps, Rubella"},
+                                                new SelectListItem() {Text = "Meningococcal", Value="Meningococcal"},
+                                                new SelectListItem() {Text = "Pneumococcal", Value="Pneumococcal"},
+                                                new SelectListItem() {Text = "Polio", Value="Polio"},
+                                                new SelectListItem() {Text = "Rabies", Value="Rabies"},
+                                                new SelectListItem() {Text = "Rotavirus", Value="Rotavirus"},
+                                                new SelectListItem() {Text = "Tetanus, (reduced) Diphtheria ", Value="Tetanus, (reduced) Diphtheria"},
+                                                new SelectListItem() {Text = "Tetanus, (reduced) Diphtheria,(reduced) Pertussis", Value="Tetanus, (reduced) Diphtheria,(reduced) Pertussis"},
+                                                new SelectListItem() {Text = "Typhoid", Value="Typhoid"},
+                                                new SelectListItem() {Text = "Varicella", Value="Varicella"},
+                                                new SelectListItem() {Text = "Vaccinia (Smallpox)", Value="Vaccinia (Smallpox)"},
+                                                new SelectListItem() {Text = "Yellow Fever", Value="Yellow Fever"},
+                                                new SelectListItem() {Text = "DTaP, Polio", Value="DTaP, Polio"},
+                                                new SelectListItem() {Text = "DTaP, hepatitis B, Polio", Value="DTaP, hepatitis B, Polio"},
+                                                new SelectListItem() {Text = "DTaP, Polio, Haemophilus influenzae type b", Value="DTaP, Polio, Haemophilus influenzae type b"},
+                                                new SelectListItem() {Text = "DTaP, Polio, Haemophilus influenzae type b, hepatitis B", Value="DTaP, Polio, Haemophilus influenzae type b, hepatitis B"},
+                                                new SelectListItem() {Text = "Hepatitis A, Hepatitis B", Value="Hepatitis A, Hepatitis B"},
+                                                new SelectListItem() {Text = "Measles, Mumps, Rubella, Varicella", Value="Measles, Mumps, Rubella, Varicella"}
+                                         })">
+                        <option selected disabled value=""></option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <p>
+                    Abbreviations
+
+                </p>
+                <div class="input-field">
+                    <select data-placeholder="Select Abbreviations Name" class="select2 text-input"
+                            asp-for="immunization.VaccineAbberivation" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "AVA", Value="AVA"},
+                                                new SelectListItem() {Text = "DTaP", Value="DTaP"},
+                                                new SelectListItem() {Text = "DT", Value="DT"},
+                                                new SelectListItem() {Text = "Hib (PRP-T)", Value="Hib (PRP-T)"},
+                                                new SelectListItem() {Text = "Hib (PRP-OMP)", Value="Hib (PRP-OMP)"},
+                                                new SelectListItem() {Text = "HepA", Value="HepA"},
+                                                new SelectListItem() {Text = "HepB", Value="HepB"},
+                                                new SelectListItem() {Text = "ZVL", Value="ZVL"},
+                                                new SelectListItem() {Text = "RZV", Value="RZV"},
+                                                new SelectListItem() {Text = "9vHPV", Value="9vHPV"},
+                                                new SelectListItem() {Text = "IIV4", Value="IIV4"},
+                                                new SelectListItem() {Text = "IIV3", Value="IIV3"},
+                                                new SelectListItem() {Text = "RIV4", Value="RIV4"},
+                                                new SelectListItem() {Text = "ccIIV4", Value="ccIIV4"},
+                                                new SelectListItem() {Text = "LAIV4", Value="LAIV4"},
+                                                new SelectListItem() {Text = "JE", Value="JE"},
+                                                new SelectListItem() {Text = "MMR", Value="MMR"},
+                                                new SelectListItem() {Text = "MCV4 MenACWY-D", Value="MCV4 MenACWY-D"},
+                                                new SelectListItem() {Text = "MCV4 MenACWY-CRM", Value="MCV4 MenACWY-CRM"},
+                                                new SelectListItem() {Text = "MenB-FHbp", Value="MenB-FHbp"},
+                                                new SelectListItem() {Text = "MenB-4C", Value="MenB-4C"},
+                                                new SelectListItem() {Text = "PPSV23", Value="PPSV23"},
+                                                new SelectListItem() {Text = "PCV13", Value="PCV13"},
+                                                new SelectListItem() {Text = "IPV", Value="IPV"},
+                                                new SelectListItem() {Text = "RV5", Value="RV5"},
+                                                new SelectListItem() {Text = "RV1", Value="RV1"},
+                                                new SelectListItem() {Text = "Td", Value="Td"},
+                                                new SelectListItem() {Text = "Tdap", Value="Tdap"},
+                                                new SelectListItem() {Text = "VAR", Value="VAR"},
+                                                new SelectListItem() {Text = "YF", Value="YF"},
+                                                new SelectListItem() {Text = "DTaP-IPV", Value="DTaP-IPV"},
+                                                new SelectListItem() {Text = "DTaP-HepB-IPV", Value="DTaP-HepB-IPV"},
+                                                new SelectListItem() {Text = "DTaP-IPV/Hib", Value="DTaP-IPV/Hib"},
+                                                new SelectListItem() {Text = "DTaP-IPV-Hib-HepB", Value="DTaP-IPV-Hib-HepB"},
+                                                new SelectListItem() {Text = "HepA-HepB", Value="HepA-HepB"},
+                                                new SelectListItem() {Text = "MMRV", Value="MMRV"}
+                                         })">
+                        <option selected disabled value=""></option>
+
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-md-6">
+                <p>Current Patient Age</p>
+
+                <div class="input-field">
+                    <input type="text" class="text-input currentAgeDisable" value="@ViewBag.CurrentAgeMonth" placeholder="select date" readonly>
+                </div>
+            </div>
+            <div class=" col-md-6 ">
+                <p>
+                    Doses in
+                    Routine Series
+                </p>
+
+                <div class="input-field">
+                    <select data-placeholder="Select Dose" class="select2   text-input"
+                            asp-for="immunization.DoesInRouten" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "1", Value="1"},
+                                                new SelectListItem() {Text = "2", Value="2"},
+                                                new SelectListItem() {Text = "3", Value="3"},
+                                                new SelectListItem() {Text = "4", Value="4"},
+                                                new SelectListItem() {Text = "5", Value="5"},
+                                                new SelectListItem() {Text = "1 or 2", Value="1 or 2"},
+                                                new SelectListItem() {Text = "2 or 3", Value="2 or 3"},
+                                                new SelectListItem() {Text = "3 (pre-exposure)", Value="3 (pre-exposure)"},
+                                                new SelectListItem() {Text = "5 (post-exposure)", Value="5 (post-exposure)"},
+                                                new SelectListItem() {Text = "1 (Every 10 years)", Value="1 (Every 10 years)"}
+
+                                         })">
+                        <option selected disabled value=""></option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class=" col-md-6 ">
+                <p>ICD Code</p>
+
+                <div class="input-field">
+                    @*<select data-placeholder="Select ICD Code" class="select2 form-control  text-input" asp-for="ICDList">
+
+                        <option value="" selected disabled></option>
+                    </select>*@
+                    <select data-placeholder="Select ICD Code" class="select2 form-control  text-input" asp-for="immunization.ICDCode" asp-items="@(new SelectList(Model.ICDList,"ICDCodeId","Name"))">
+                        <option value="" selected disabled></option>
+                    </select>
+                </div>
+            </div>
+            <div class=" col-md-6">
+                <p>Route of Administration</p>
+
+                <div class="input-field">
+                    <input type="text" asp-for="immunization.RouteOfAdministration" class="text-input datepicker" placeholder="Enter Date">
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class=" col-md-6 ">
+                <p>Route</p>
+
+                <div class="input-field">
+                    <select data-placeholder="Select Route" id="route" class="select2 text-input" asp-for="immunization.Route" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "IM", Value="IM"},
+                                                new SelectListItem() {Text = "SC", Value="SC"},
+                                                new SelectListItem() {Text = "IM or SC", Value="IM or SC"},
+                                                new SelectListItem() {Text = "Intranasal", Value="Intranasal"},
+                                                new SelectListItem() {Text = "Percutaneous", Value="Percutaneous"},
+                                                new SelectListItem() {Text = "Oral (Liquid)", Value="Oral (Liquid)"},
+                                                new SelectListItem() {Text = "Oral (Capsules)", Value="Oral (Capsules)"},
+                                                new SelectListItem() {Text = "Oral (2 Tablets)", Value="Oral (2 Tablets)"}
+
+                                         })">
+                        <option selected disabled value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <p>Reason of vaccine assign?</p>
+                <div class="input-field">
+                    <div class="row">
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="emergencyPhoneYes" asp-for="immunization.ReasonOfVaccine" class="custom-control-input  patientPhoneTxtField numberFieldForModal" name="phoneYes" value="1">
+                                <label class="custom-control-label" for="emergencyPhoneYes">Medical Condition</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="emergencyPhoneNo" asp-for="immunization.ReasonOfVaccine" class="custom-control-input patientPhoneTxtField" name="phoneYes" value="0">
+                                <label class="custom-control-label" for="emergencyPhoneNo">Schedule for ages</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" id="phone_btn" class="btn waves-effect waves-light add-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewData["Title"] = "DMEInventory";
+    Layout = "~/Views/Shared/_LayoutElite.cshtml";
+}
+@section styles{
+
+    <style>
+        .form-control {
+            cursor: auto !important
+        }
+
+        .select2-container .select2-selection--single {
+            height: 38px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 36px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #e9ecef !important;
+        }
+    </style>
+
+}
+@section scripts{
+    
+
+}
+    <div class="page-wrapper">
+        <div class="container">
+
+            <div id="breadcrumbs-wrapper">
+                <!-- Search for small screen-->
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <h5 class="breadcrumbs-title color-blue">DME Inventory</h5>
+                    </div>
+                </div>
+                <div class="col">
+                    <a href="@Url.Action("InventoryList","DMEInventory")" class="waves-effect waves-light float-right" style="margin-top:-4%">
+                        <i class="mdi mdi-arrow-left right arrow-icon"></i>
+
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <form class="col-sm-12" method="post" id="DMEInventoryForm">
+                    <input hidden="hidden" id="hiddenVisitId" />
+                    <input type="hidden">
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Billing Code</p>
+                            <input type="text" class="text-input" placeholder="Enter Code">
+                        </div>
+                        <div class=" col ">
+                            <p>Name</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter  Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Description</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Description">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Cost</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Cost">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col ">
+                            <p>Out Cost</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Out Cost">
+                            </div>
+                        </div>
+                        <div class=" col ">
+                            <p>Quanitity</p>
+                            <div class="input-field">
+                                <input type="text" class="text-input" placeholder="Enter Quanitity">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="center">
+                                <button type="submit" form="LabForm" class="waves-effect waves-light btn add-btn">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+

@@ -1,0 +1,71 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+@if (Model.GetMHFamilyHistory != null && Model.GetMHFamilyHistory.Count() > 0)
+{
+    <table class="table centered">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Relation</th>
+                <th>If Deceased - Death Age</th>
+                <th>MEDICAL CONDITIONS/CAUSE OF DEATH</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHFamilyHistory)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    @if (loop.Relation != null)
+                    {
+                        <td>@loop.Relation</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.DeceasedOrDeathAge != null)
+                    {
+                        <td>@loop.DeceasedOrDeathAge</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.MedicalConditionsOrCauseDeath != null)
+                    {
+                        <td>@loop.MedicalConditionsOrCauseDeath</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.Notes != null)
+                    {
+                        <td class="">@loop.Notes</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHFamilyHistory(@loop.Id)"><i class="mdi mdi-pencil" style="color:#03a9f4"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHFamilyHistory(@loop.Id)"><i class="mdi mdi-delete" style="color:#d9534f"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

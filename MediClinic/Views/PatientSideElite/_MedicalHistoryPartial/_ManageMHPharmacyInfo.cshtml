@@ -1,0 +1,87 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+
+@if (Model.GetMHPharmacyInfo != null && Model.GetMHPharmacyInfo.Count() > 0)
+{
+    <table class="table centered highlight">
+        <thead>
+            <tr>
+                <th class="left">Sr#</th>
+                <th>Pharmacy Name</th>
+                <th>Phone No</th>
+                <th>Country</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Fax</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int Sr = 0;
+            }
+            @foreach (var loop in Model.GetMHPharmacyInfo)
+            {
+                <tr class="card">
+                    @{
+                        Sr++;
+                    }
+                    <td class="left">@Sr</td>
+                    <td>@loop.Name</td>
+                    @if (loop.PhoneNo != null)
+                    {
+                        <td>@loop.PhoneNo</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.CountryId != null)
+                    {
+                        <td>@loop.CountryId</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.State != null)
+
+                    {
+                        <td>@loop.State</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.City != null)
+                    {
+                        <td>@loop.City</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+                    @if (loop.FaxNo != null)
+                    {
+                        <td>@loop.FaxNo</td>
+                    }
+                    else
+                    {
+                        <td>NA</td>
+                    }
+
+
+                    <td>
+                        <a href="javascript:void(0)" onclick="EditMHPharmacyInfoHistory(@loop.Id)"><i class="mdi mdi-pencil"></i></a>
+                        <a href="javascript:void(0)" onclick="DeleteMHPharmacyInfoHistory(@loop.Id)"><i class="mdi mdi-delete"></i></a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,1173 @@
+﻿@model MediClinic.Models.PatientViewModel
+@{
+    ViewData["Title"] = "Denial Of Claim Form";
+    Layout = "~/Views/Shared/_NF2Layout.cshtml";
+}
+@section styles{
+    <link href="~/app-assets/vendors/flag-icon/css/flag-icon.min.css" rel="stylesheet" />
+    <link href="~/app-assets/vendors/dropify/css/dropify.min.css" rel="stylesheet" />
+    <link href="~/app-assets/signature-pad/signature-pad/css/signature-pad.css" rel="stylesheet" />
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+        .sidebar .sidebar-content .sidebar-header {
+            display: none !important;
+        }
+
+        .input-field {
+            margin: 0 auto !important;
+        }
+
+        .font-size-1 {
+            font-size: 1.5rem !important;
+        }
+
+        .dropify-wrapper {
+            margin-top: 14px !important;
+            height: 120px !important;
+            border-radius: 4px !important;
+        }
+
+        .form-firstName {
+            margin-top: -55px !important;
+        }
+
+        .form-inline p {
+            text-transform: capitalize
+        }
+
+        .select-wrapper input.select-dropdown {
+            display: none
+        }
+
+        @@media only screen and (max-width:900px) {
+            .card {
+                margin-top: 230px !important;
+            }
+        }
+
+        @@media only screen and (max-width:601px) {
+
+            .form-firstName {
+                margin-top: 12px !important;
+            }
+        }
+
+        textarea {
+            width: 102%;
+            height: 5rem;
+            border-radius: 4px;
+            border: 1px solid #cfcfcf !important;
+        }
+
+        #instruction {
+            height: 10rem;
+        }
+
+        .mt15 {
+            margin-top: 1.5rem !important;
+        }
+
+        .mt3 {
+            margin-top: 3rem !important
+        }
+
+        .mt5 {
+            margin-top: 5rem !important
+        }
+
+        .mt35 {
+            margin-top: 3.5rem !important
+        }
+
+        .center {
+            text-align: center !important;
+        }
+    </style>
+}
+@section scripts{
+    <script src="~/app-assets/vendors/dropify/js/dropify.min.js"></script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.treatmentyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#treatmentdiv').hide();
+                }
+            });
+            $('.treatmentno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#treatmentdiv').show();
+                }
+            });
+            $('.careyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#disablitydiv').hide();
+                    $('#carediv').show();
+                }
+            });
+            $('.careno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#carediv').hide();
+                    $('#disablitydiv').show();
+                }
+            });
+            $('.automobileyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#automobilediv').hide();
+                }
+            });
+            $('.automobileno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#automobilediv').show();
+                }
+            });
+            $('.injuryyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').show();
+                }
+            });
+            $('.injuryno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').hide();
+                }
+            });
+            $('.claimyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#claimdiv').show();
+                }
+            });
+            $('.claimno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#claimdiv').hide();
+                }
+            });
+            $('.lossyes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#lossdiv').show();
+                }
+            });
+            $('.lossno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#lossdiv').hide();
+                }
+            });
+            $('.newinneryes').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#newinnerdiv').show();
+                }
+            });
+            $('.newinnerno').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#newinnerdiv').hide();
+                }
+            });
+            $('.injurynono').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#injurydiv').hide();
+                }
+            });
+
+            $('.directpayment').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#hospitalproviderdiv').hide();
+                    $('#directpaymentdiv').show();
+                }
+            });
+            $('.hospitalprovider').change(function () {
+                if ($(this).prop("checked")) {
+                    $('#directpaymentdiv').hide();
+                    $('#hospitalproviderdiv').show();
+                }
+            });
+
+
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="container">
+
+            <div class="row mb-1">
+
+
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m10  margin-top-8">
+                                <h5 class="breadcrumbs-title color-blue">Denial Of Claim Form</h5>
+                            </div>
+
+
+                            <div class="col s6 m2 margin-top-8">
+                                <a class="waves-effect waves-light float-right mr-2 mt-2" href="javascript:void(0);">
+                                    <i class="material-icons right arrow-icon">arrow_back</i>
+
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <form class="form-inline col s12">
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Insurer/Self Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Name	</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="Enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col s12 m3">
+                                        <p>Policy Holder</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter policy holder">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Policy Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter policy number">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m3">
+                                        <p>Date of Accident</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Injured Person</p>
+                                        <div class="input-field col s12 m12 l12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter policy holder">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m3">
+                                        <p>Claim Number</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter claim number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Applicant Name</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Applicant Address</p>
+
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="Enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <div class="col s12 m12">
+                                            <p>As Assignee</p>
+                                        </div>
+                                        <div class="col s12 m12">
+                                            <div class="col s6 m6 input-field pl-0 mt-3">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="radio" id="DriverY" class="with-gap" name="yes" value="1" />
+                                                        <span>Yes</span>
+                                                    </label>
+                                                </p>
+
+                                            </div>
+                                            <div class="col s6 m6 input-field pl-0 mt-3">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="radio" id="DriverNo" class="with-gap" name="yes" value="0" />
+                                                        <span>No</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Loss of Earnings</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Health Service Benefits</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m4">
+                                        <p>Other Necessary Expenses</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Interest</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Attorney's Fee</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m4">
+                                        <p>Death Benefit</p>
+                                        <div class="input-field col s12 m12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <p class="center">
+                                        REASON(S) FOR DENIAL OF CLAIM (Check reasons and explain below in item 33)
+                                    </p>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p class="center">
+                                            POLICY ISSUES
+                                        </p>
+
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col s12 m2 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Policy not in force on date of accident</span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>  Injured person excluded under policy conditions or exclusion</span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Injured person not an "Eligible Injured Person" </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Injuries did not arise out of use or operation of a motor vehicle </span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mt-2">
+
+                                        <div class="col s12 m2 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Policy conditions violated</span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> No reasonable justification given for late notice of claim</span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Reasonable justification not established--You may qualify for special expedited arbitration-- </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>  Claim not within the scope of your election under Optional Basic Economic Loss coverage</span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p class="center">
+                                            LOSS OF EARNINGS BENEFITS DENIED
+                                        </p>
+
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Period of disability contested: period in dispute
+
+                                                </span>
+
+                                            </label>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>From</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>Through</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Exaggerated  earnings  claim of $______________per month denied </span>
+                                            </label>
+                                            <div class="col s12 m12">
+                                                <div class="inputinchek">
+                                                    <p>$</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input class="text-input" type="text" placeholder="Enter $">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Claimed loss not proven</span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>Statutory offset taken </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Other, explained below
+                                                </span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p class="center">
+                                            OTHER REASONABLE AND NECESSARY EXPENSES DENIE
+                                        </p>
+
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Amount of claim exceeds daily limit of coverage
+                                                </span>
+
+                                            </label>
+
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Unreasonable or unnecessary expenses </span>
+                                            </label>
+
+                                        </div>
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span> Incurred after one year from date of accident </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>Other, explained below</span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p class="center">
+                                            HEALTH SERVICE BENEFITS DENIED
+                                        </p>
+
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Excessive treatment, service or hospitalization
+                                                </span>
+                                            </label>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>From</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>Through</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col s12 m6">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Excessive treatment, service or hospitalization
+                                                </span>
+                                            </label>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>From</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s12 m6">
+                                                <div class="inputinchek">
+                                                    <p>Through</p>
+                                                    <div class="input-field col s12 pl-0">
+                                                        <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col s12 m5 ml-2">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>Fees not in accordance with fee schedules </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>Treatment not related to accident </span>
+                                            </label>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <label>
+                                                <input type="checkbox" />
+                                                <span>
+                                                    Other, explained below
+                                                </span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12">
+                                            <h5> CLAIM FOR HEALTH SERVICE BENEFITS IS DENIED</h5>
+                                        <div class="col s12 m12">
+                                            <div class="col s6 m6 input-field pl-0 mt-3">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="radio" id="DriverY" class="with-gap claimyes" name="yes" value="1" />
+                                                        <span>Yes</span>
+                                                    </label>
+                                                </p>
+
+                                            </div>
+                                            <div class="col s6 m6 input-field pl-0 mt-3">
+                                                <p class="check-btn">
+                                                    <label>
+                                                        <input type="radio" id="DriverNo" class="with-gap claimno" name="yes" value="0" />
+                                                        <span>No</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row one" id="claimdiv" style="display:none">
+                                    <div class="row">
+                                        <div class="col s12 m12">
+                                            <p>
+                                                Provider of Health Service
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m4">
+                                            <p>Name	</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter name">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>Address</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <textarea row="10" placeholder="Enter address"> </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>Zip Code</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter zip">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m4">
+                                            <p> Period of bill - Start	</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>Period of bill - End</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>
+                                                Date final verification received
+                                            </p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m4">
+                                            <p> Date of bill</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter zip">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>Amount of bill ($)</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter zip">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m4">
+                                            <p>
+                                                Type of service rendered
+                                            </p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter zip">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m3">
+                                            <p>Date bill received by insurer</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <p>Date final verification requested</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <p>Amount paid by insurer</p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter $">
+                                            </div>
+                                        </div>
+                                        <div class="col s12 m3">
+                                            <p>
+                                                Amount in dispute
+                                            </p>
+
+                                            <div class="input-field col s12 pl-0">
+                                                <input class="text-input" type="text" placeholder="Enter $">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s6 m6  margin-top-8">
+                                        <h5>Representative of Insurer</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m3">
+                                        <p>Name	</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Title</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter title">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Date	</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Telephone No. & Ext.</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter phone">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5>Insurer claim processor (Third Party Administrator)</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Name	</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Address</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="Enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Telephone No. & Ext.</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5>Loss of earnings</h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <p>Date Claim Made</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Gross earnings per month $</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5>
+                                            Period of dispute
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>From</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Through</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input type="text" class="datepicker text-input " placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Period of dispute $</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5>Health Services: (Attach bills in dispute and list each one separately)</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col s12 m3">
+                                        <p>Name of Provider(s)</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m2">
+                                        <p>Date Of Service</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m2">
+                                        <p>Amount of Bill</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m2">
+                                        <p>Amount in Dispute</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>Date Claim Mailed</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5>Other Necessary Expenses: (Attach bills in dispute and list each one separately)</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <div class="col s12 m4">
+                                        <p>Type of Expenses Claimed</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="col s12 m2">
+                                        <p>Amount Claimed</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m2">
+                                        <p>Date Incured</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col s12 m2">
+                                        <p>Date Claim Mailed</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m2">
+                                        <p>Amount in Dispute</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input class="text-input" type="text" placeholder="Enter $">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12">
+                                        <p style="color: #547CEA">
+                                            ANY PERSON WHO KNOWINGLY AND WITH INTENT TO DEFRAUD ANY INSURANCE COMPANY OR OTHER PERSON FILES AN APPLICATIONFOR COMMERCIAL INSURANCE OR A STATEMENT OF CLAIM FOR ANY COMMERCIAL OR PERSONAL INSURANCE BENEFITS CONTAINING ANY MATERIALLYFALSE INFORMATION,OR CONCEALSFOR THE PURPOSE OF MISLEADING,INFORMATIONCONCERNING ANY FACT MATERIAL THERETO, AND ANY PERSON WHO, IN CONNECTION WITH SUCH APPLICATION OR CLAIM, KNOWINGLY MAKES OR KNOWINGLY ASSISTS, ABETS, SOLICITS OR CONSPIRES WITH ANOTHER TO MAKE A FALSE REPORT OF THE THEFT, DESTRUCTION, DAMAGE OR CONVERSION OF ANY MOTOR VEHICLE TO A LAW ENFORCEMENT AGENCY, THE DEPARTMENT OF MOTOR VEHICLES OR AN INSURANCE COMPANY, COMMITS A FRAUDULENT INSURANCE ACT, WHICH IS A CRIME, AND SHALLALSOBE SUBJECT TO ACIVILPENALTY NOT TO EXCEED FIVE THOUSANDDOLLARSANDTHE VALUE OF THE SUBJECT MOTOR VEHICLE OR STATED CLAIM FOR EACH VIOLATION.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m12  margin-top-8">
+                                        <h5> Lawsuit To Recover The Amount Of Benefits </h5>
+                                        <p>
+                                            Arbitration Requested By
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m3">
+                                        <p>Last Name	</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m3">
+                                        <p>First Name</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <p>Name of Law Firm(If Any)</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Telephone Number</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter name">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Fax Number</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter number">
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Email Address</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <input class="text-input" type="text" placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m4">
+                                        <p>Address</p>
+                                        <div class="input-field col s12 pl-0">
+                                            <textarea row="10" placeholder="Enter address"> </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                            <div class="col s12 m12">
+                                                <p>Are You An Attorney?</p>
+                                            </div>
+                                            <div class="col s12 m12">
+                                                <div class="col s6 m6 input-field pl-0 mt-3">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" id="DriverY" class="with-gap" name="yes" value="1" />
+                                                            <span>Yes</span>
+                                                        </label>
+                                                    </p>
+
+                                                </div>
+                                                <div class="col s6 m6 input-field pl-0 mt-3">
+                                                    <p class="check-btn">
+                                                        <label>
+                                                            <input type="radio" id="DriverNo" class="with-gap" name="yes" value="0" />
+                                                            <span>No</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+                                        <p>Date</p>
+                                        <div class="input-field col s12 m12 l12 pl-0 mt15">
+                                            <input type="text" class="datepicker text-input" placeholder="MM/DD/YYYY">
+
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col s12 m8">
+
+                                        <p>Write Signature</p>
+                                        <div id="signature-pad1" class="m-signature-pad mt-2 mb-2">
+                                            <div class="m-signature-pad--body">
+                                                <canvas id="sigCanvas" width="500" height="200"></canvas>
+                                            </div>
+                                            <div class="m-signature-pad--footer pull-right" style="text-align: right;">
+                                                <div class="description">Save Your signature before submit the form</div>
+                                                <button type="button" class="btn btn-sm clear signature_pad_clear" data-action="clear">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="accept" class="btn btn-sm btn-info save1" data-action="save">
+                                                    Save Signature
+                                                </button>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m4">
+
+                                        <p>Upload Signature Image</p>
+                                        <input type="file" id="files" class="dropify forPatientSignature" />
+
+                                    </div>
+                                  
+                                </div>
+                               
+                                <div class="row mt-2 mb-2">
+                                    <div class="col s12 m12" style="text-align:center">
+                                        <a href="javascript:void(0);" class="waves-effect waves-light btn add-btn">Save</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Edit</a>
+                                        <a href="javascript:void(0);" class="waves-effect waves-light Recreate btn">Cancel</a>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

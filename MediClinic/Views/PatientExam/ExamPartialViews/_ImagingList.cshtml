@@ -1,0 +1,134 @@
+﻿@model PatientExamViewModel
+@using MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@using MedliClinic.Utilities.Utility
+@using MedliClinic.Utilities.Utility.Enum
+
+@{
+    var userRole = _sessionManager.GetRoleId();
+
+}
+
+<div class="row tablee">
+    <div class="col-md-12">
+        <h4 class="color-blue">Past Imaging</h4>
+        <div class="table-responsive">
+            <table id="myTableEUO" class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Date OfI maging</th>
+                        <th>Timming Of Imaging</th>
+                        <th>Reported By</th>
+                        <th>Type Of Image</th>
+                        <th>Report Status</th>
+                        <th>Image Film</th>
+                        <th>Diagnosis</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.getImagingDto is null))
+                    {
+                        var rec = Model.getImagingDto.OrderByDescending(x => x.ImagingId).Skip(1).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card">
+
+                                <td>@rec.DateOfImaging.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.TimmingOfImaging</td>
+                                <td>@rec.ReportedBy</td>
+                                <td>@rec.TypeOfImage</td>
+                                <td>@rec.ReportStatus</td>
+                                <td>@rec.ImageFilm</td>
+                                <td>@rec.Diagnosis</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.ImagingId,this)"><a>Delete</a></li>
+                                            <li><a href="/Imaging/Add?id=@rec.ImagingId">Edit</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row tablee">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="myTableEUO" class="table dataTables_wrapper">
+                <thead>
+                    <tr class="uppercase">
+
+                        <th>Date OfI maging</th>
+                        <th>Timming Of Imaging</th>
+                        <th>Reported By</th>
+                        <th>Type Of Image</th>
+                        <th>Report Status</th>
+                        <th>Image Film</th>
+                        <th>Diagnosis</th>
+                        @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                        {
+                            <th data-orderable="false" class="all">Action  </th>
+
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!(Model.getImagingDto is null))
+                    {
+                        var rec = Model.getImagingDto.OrderByDescending(x => x.ImagingId).FirstOrDefault();
+                        if (!(rec is null))
+                        {
+                            <tr class="card" style="cursor: pointer">
+
+                                <td>@rec.DateOfImaging.Value.ToString("MM/dd/yyyy")</td>
+                                <td>@rec.TimmingOfImaging</td>
+                                <td>@rec.ReportedBy</td>
+                                <td>@rec.TypeOfImage</td>
+                                <td>@rec.ReportStatus</td>
+                                <td>@rec.ImageFilm</td>
+                                <td>@rec.Diagnosis</td>
+                                @if (!(RoleNames.Patient.Equals(userRole.ToString())))
+                                {
+                                    <td class="action">
+                                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                            Options
+                                            @*<span class="caret"></span>*@
+                                        </button>
+                                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                                            <li onclick="deleteMesg(@rec.ImagingId,this)"><a>Delete</a></li>
+                                            <li><a href="/Imaging/Add?id=@rec.ImagingId">Edit</a></li>
+                                        </ul>
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

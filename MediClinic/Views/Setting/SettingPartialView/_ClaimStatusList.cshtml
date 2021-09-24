@@ -1,0 +1,51 @@
+﻿@model MediClinic.Models.PatientViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table id="treatment-table" class="display">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <label>
+                    <input type="checkbox" class="select-all" />
+                    <span></span>
+                </label>
+            </th>
+            <th>      Claim Status</th>
+
+            <th class="all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.ClaimStatusList != null)
+        {
+            @foreach (var Data in Model.ClaimStatusList)
+            {
+                <tr class="card">
+                    <th>
+                        <label>
+                            <input type="checkbox" />
+                            <span></span>
+                        </label>
+                    </th>
+                    <td>@Data.ClaimStatus1</td>
+
+                    <td>
+                        <a class='dropdown-trigger btn action-btn option-dropdown-btn' href='javascript:void(0);' data-target='dropdown+@Data.ClaimStatusId'>Options <i class="material-icons right arrow-set">keyboard_arrow_down</i></a>
+                        <!-- Dropdown Structure -->
+                        <ul id='dropdown+@Data.ClaimStatusId' class='dropdown-content'>
+                            <li><a href="@Url.Action("DeleteClaimStatus","Setting",new { Id=Data.ClaimStatusId})" class="option-a"><i class="material-icons">delete</i>Delete</a></li>
+                            <li><a href="javascript:void(0);" class="option-a" onclick="EditIncident(@Data.ClaimStatusId,'@Data.ClaimStatus1');"><i class="material-icons">edit</i>Edit</a></li>
+                        </ul>
+
+                    </td>
+                </tr>
+
+            }
+        }
+        
+
+
+    </tbody>
+
+</table>

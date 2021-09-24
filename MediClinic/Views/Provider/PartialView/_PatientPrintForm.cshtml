@@ -1,0 +1,419 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<form asp-action="PrintPreview" asp-controller="Setting" method="post">
+    <input hidden="hidden" class="PatientInfoIdPrint" asp-for="PatientPrintSettingDto.PatientId" />
+
+    <div class="row">
+        @if (Model.PatientPrintSettingDto.FIrstName)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>First Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="firstNameBox" asp-for="PatientPrintSettingDto.FIrstName" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+
+        @if (Model.PatientPrintSettingDto.LastName)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Last Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastNameBox" asp-for="PatientPrintSettingDto.LastName" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.DOB)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>DOB</p>
+                <div class="switch">
+                    <input type="checkbox" id="DOBPrintCheckBox" asp-for="PatientPrintSettingDto.DOB" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Age)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Age</p>
+                <div class="switch">
+                    <input type="checkbox" id="agePrintCheckBox" asp-for="PatientPrintSettingDto.Age" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Address)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Address</p>
+                <div class="switch">
+                    <input type="checkbox" id="AddressPrintCheckBox" asp-for="PatientPrintSettingDto.Address" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.SSNumber)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>SS Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="SSNPrintCheckBox" asp-for="PatientPrintSettingDto.SSNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Gender)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Gender</p>
+                <div class="switch">
+                    <input type="checkbox" id="GenderPrintCheckBox" asp-for="PatientPrintSettingDto.Gender" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.MaritalStatus)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Marital Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="MSCheckBox" asp-for="PatientPrintSettingDto.MaritalStatus" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.MobilePhone)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Mobile Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="MPhoneCheckBox" asp-for="PatientPrintSettingDto.MobilePhone" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.HomePhone)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Home Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="HPhoneCheckBox" asp-for="PatientPrintSettingDto.HomePhone" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.EmergencyPhone)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Emergency Phone</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmergencyPhoneCheckBox" asp-for="PatientPrintSettingDto.EmergencyPhone" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.languages)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Languages</p>
+                <div class="switch">
+                    <input type="checkbox" id="LanguagesPhoneCheckBox" asp-for="PatientPrintSettingDto.languages" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.CaseType)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Case Type</p>
+                <div class="switch">
+                    <input type="checkbox" id="CaseTypeCheckBox" asp-for="PatientPrintSettingDto.CaseType" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.ClaimNumber)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Claim Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="ClaimNumberCheckBox" asp-for="PatientPrintSettingDto.ClaimNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.PolicyNumber)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Policy Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="PolicyNumberCheckBox" asp-for="PatientPrintSettingDto.PolicyNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.WCBNumber)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>WCB Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="WCBCheckBox" asp-for="PatientPrintSettingDto.WCBNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.CarrierCaseNumber)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Carrier Case Number</p>
+                <div class="switch">
+                    <input type="checkbox" id="CCNumberCheckBox" asp-for="PatientPrintSettingDto.CarrierCaseNumber" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.PolicyHolderName)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Policy Holder Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="PHNameCheckBox" asp-for="PatientPrintSettingDto.PolicyHolderName" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.EmployerInfo)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Employer Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="EmployerInfoCheckBox" asp-for="PatientPrintSettingDto.EmployerInfo" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.DOA)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>DOA</p>
+                <div class="switch">
+                    <input type="checkbox" id="DOACheckBox" asp-for="PatientPrintSettingDto.DOA" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.PlaceTimeOfAccident)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Place/Time Of Incident</p>
+                <div class="switch">
+                    <input type="checkbox" id="PTOIncidentCheckBox" asp-for="PatientPrintSettingDto.PlaceTimeOfAccident" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.FullInsuranceInfo)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Full Insurance Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullInsurancInfoCheckBox" asp-for="PatientPrintSettingDto.FullInsuranceInfo" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.FullClaimInfo)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Full Claim Info</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullClaimInfoCheckBox" asp-for="PatientPrintSettingDto.FullClaimInfo" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Nf2fillingDate)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>NF2 Filling Date</p>
+                <div class="switch">
+                    <input type="checkbox" id="NF2FillingCheckBox" asp-for="PatientPrintSettingDto.Nf2fillingDate" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.DateCreated)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Created Date</p>
+                <div class="switch">
+                    <input type="checkbox" id="CreatedDateCheckBox" asp-for="PatientPrintSettingDto.DateCreated" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.PrimaryDr)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Primary Dr</p>
+                <div class="switch">
+                    <input type="checkbox" id="PrimaryDrCheckBox" asp-for="PatientPrintSettingDto.PrimaryDr" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.FirstVisit)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>First Visit</p>
+                <div class="switch">
+                    <input type="checkbox" id="FirstVisitPrintCheckBox" asp-for="PatientPrintSettingDto.FirstVisit" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.LastVisit)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Last Visit</p>
+                <div class="switch">
+                    <input type="checkbox" id="LastVisitCheckBox" asp-for="PatientPrintSettingDto.LastVisit" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.LastExam)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Last Exam</p>
+                <div class="switch">
+                    <input type="checkbox" id="LastExamCheckBox" asp-for="PatientPrintSettingDto.LastExam" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Vitals)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Vitals</p>
+                <div class="switch">
+                    <input type="checkbox" id="vitalsPrintCheckBox" asp-for="PatientPrintSettingDto.Vitals" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.BodyStatus)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Body Status</p>
+                <div class="switch">
+                    <input type="checkbox" id="bodyStatusPrintCheckBox" asp-for="PatientPrintSettingDto.BodyStatus" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Tests)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Tests</p>
+                <div class="switch">
+                    <input type="checkbox" id="testsPrintCheckBox" asp-for="PatientPrintSettingDto.Tests" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Reminder)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Reminders</p>
+                <div class="switch">
+                    <input type="checkbox" id="remainderPrintCheckBox" asp-for="PatientPrintSettingDto.Reminder" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Missing)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Missing</p>
+                <div class="switch">
+                    <input type="checkbox" id="MissingPrintCheckBox" asp-for="PatientPrintSettingDto.Missing" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.FullPIAttorneyinfo)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Full P.I. Attorney</p>
+                <div class="switch">
+                    <input type="checkbox" id="FullPIAttorneyPrintCheckBox" asp-for="PatientPrintSettingDto.FullPIAttorneyinfo" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.Paralegal)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Paralegal</p>
+                <div class="switch">
+                    <input type="checkbox" id="ParalegalPrintCheckBox" asp-for="PatientPrintSettingDto.Paralegal" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.CollectionAttorney)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Collection Attorney</p>
+                <div class="switch">
+                    <input type="checkbox" id="CollectionAttorneyPrintCheckBox" asp-for="PatientPrintSettingDto.CollectionAttorney" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.ReferralName)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Referral Name</p>
+                <div class="switch">
+                    <input type="checkbox" id="ReferralNamePrintCheckBox" asp-for="PatientPrintSettingDto.ReferralName" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.CurrentLocationInFacility)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Current Location in Facility</p>
+                <div class="switch">
+                    <input type="checkbox" id="CurrentlocationInFacilityPrintCheckBox" asp-for="PatientPrintSettingDto.CurrentLocationInFacility" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.LastIME)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Last I.M.E</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastIMEPrintCheckBox" asp-for="PatientPrintSettingDto.LastIME" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.LastEUO)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Last E.U.O</p>
+                <div class="switch">
+                    <input type="checkbox" id="lastEUOPrintCheckBox" asp-for="PatientPrintSettingDto.LastEUO" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.AllVisits)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>All Visits</p>
+                <div class="switch">
+                    <input type="checkbox" id="allVisitPrintCheckBox" asp-for="PatientPrintSettingDto.AllVisits" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.NumberOfVisits)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <p>Number Of Visits</p>
+                <div class="switch">
+                    <input type="checkbox" id="numberVisitPrintCheckBox" asp-for="PatientPrintSettingDto.NumberOfVisits" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+        @if (Model.PatientPrintSettingDto.RelatedPatientList)
+        {
+            <div class="col-sm-6 col-md-3 col-lg-3 ">
+                <p>Related Patient List</p>
+                <div class="switch">
+                    <input type="checkbox" id="relatedPatientPrintCheckBox" asp-for="PatientPrintSettingDto.RelatedPatientList" data-toggle="toggle" />
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" id="hiddenBtnForm" style="display:none;" class="btn btn-info">Print</button>
+
+</form>
+
+@section styles{
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+}
+@section Scripts{
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+}

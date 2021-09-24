@@ -1,0 +1,146 @@
+﻿@model PatientExamViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{ 
+    var roleId = _sessionManager.GetRoleId();
+
+}
+
+<div id="prescriptionList">
+    <partial name="~/Views/PatientExam/ExamPartialViews/_PrescriptionList.cshtml" />
+
+</div>
+<div class="row">
+    <div class="col">
+        <a class="btn  float-right add-btn" id="prescriptionField">
+            Add New Prescription
+        </a>
+    </div>
+</div>
+<div id="prescriptionForm" style="display:none;">
+    <form asp-action="AddPrescription" asp-controller="PatientExam" method="post" data-ajax="true" data-ajax-success="onCreatePrescription(data)">
+        <input hidden="hidden" type="text" id="HiddenVisitId" asp-for="prescriptionBasicDto.VisitId" />
+        <input hidden="hidden" asp-for="prescriptionBasicDto.Id" />
+        <input hidden="hidden" asp-for="prescriptionBasicDto.PatientInfoId" />
+
+       
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+                <p>
+                    Medication Name <span class="required">*</span>
+                </p>
+
+                <div class="input-field">
+                    <select data-placeholder="Select Medication Name" asp-for="prescriptionBasicDto.MedicationId" class="select2 combobox infoDropDListBeforeEditDisabled" asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))">
+                        @*asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))"*@
+                        <option></option>
+                    </select>
+                    <p class="required" id="medi_err"></p>
+
+                </div>
+            </div>
+            <div class=" col-12 col-sm-12 col-md-6">
+                <p>Quantity <span class="required">*</span></p>
+
+                <div class="input-field">
+                    <input class="text-input input-styling prescriptionTxtFields" asp-for="prescriptionBasicDto.Quantity" id="quantity" type="text" placeholder="Enter Quantity">
+                    <span class="required" id="errmsg_work"></span>
+                    <span class="required" asp-validation-for="prescriptionBasicDto.Quantity"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 ">
+                <p>Frequency</p>
+                <div class="input-field prescription_select" id="frequencyId">
+                    <select data-placeholder="Select Frequency" class="select2 infoDropDListBeforeEditDisabled" asp-for="prescriptionBasicDto.FrequencyId" id="Frequency" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Once", Value="Once"},
+                                                new SelectListItem() {Text = "Daily", Value="Daily"},
+                                                new SelectListItem() {Text = "Two Times a day", Value="Two Times a day"},
+                                                new SelectListItem() {Text = "Three Times a day", Value="Three Times a day"},
+                                                new SelectListItem() {Text = "Four Times a day", Value="Four Times a day"},
+                                                new SelectListItem() {Text = "Five Times a day", Value="Five Times a day"},
+                                                new SelectListItem() {Text = "Six Times a day", Value="Six Times a day"},
+                                                new SelectListItem() {Text = "Before Bed", Value="Before Bed"},
+                                                new SelectListItem() {Text = "Before Breakfast", Value="Before Breakfast"},
+                                                new SelectListItem() {Text = "Before Lunch", Value="Before Lunch"},
+                                                new SelectListItem() {Text = "Before Dinner", Value="Before Dinner"},
+                                                new SelectListItem() {Text = "Before meals", Value="Before meals"},
+                                                new SelectListItem() {Text = "Every 1 hour", Value="Every 1 hour"},
+                                                new SelectListItem() {Text = "Every 2 hour", Value="Every 2 hour"},
+                                                new SelectListItem() {Text = "Every 3 hour", Value="Every 3 hour"},
+                                                new SelectListItem() {Text = "Every 4 hour", Value="Every 4 hour"},
+                                                new SelectListItem() {Text = "Every 5 hour", Value="Every 5 hour"},
+                                                new SelectListItem() {Text = "Every 6 hour", Value="Every 6 hour"},
+                                                new SelectListItem() {Text = "Every 7 hour", Value="Every 7 hour"},
+                                                new SelectListItem() {Text = "Every week", Value="Every week"},
+                                                new SelectListItem() {Text = "Once a month", Value="Once a month"}
+                                         })">
+                        <option value="" selected disabled></option>
+                    </select>
+                </div>
+            </div>
+            <div class=" col-12 col-sm-12 col-md-6 ">
+                <p>Dose</p>
+                <div class="input-field">
+                    <input class="text-input prescriptionTxtFields" asp-for="prescriptionBasicDto.Dose" id="dose" type="text" placeholder="Enter Dose">
+                    <span class="required" id="errmsg_dose"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 ">
+                <p>Unit</p>
+                <div class="input-field">
+                    <select data-placeholder="Select Unit" class="select2 infoDropDListBeforeEditDisabled" asp-for="prescriptionBasicDto.Unit" id="Unit" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "mg", Value="mg"},
+                                                new SelectListItem() {Text = "ml", Value="ml"}
+                                         })">
+                        <option value="" selected disabled></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-12 col-sm-12 col-md-6 ">
+                <p>Start Date <span class="required">*</span></p>
+                <div class="input-field">
+                    <input type="text" id="Prescriptionfrom" class=" text-input prescriptionTxtFields" asp-for="prescriptionBasicDto.StartDate" placeholder="Select Date">
+                    <span class="required" asp-validation-for="prescriptionBasicDto.StartDate"></span>
+                </div>
+            </div>
+            <div class=" col-12 col-sm-12 col-md-6 ">
+                <p>End Date <span class="required">*</span></p>
+                <div class="input-field">
+                    <input type="text" id="Prescriptionto" class=" text-input prescriptionTxtFields" asp-for="prescriptionBasicDto.EndDate" placeholder="Select Date">
+                    <span class="required" asp-validation-for="prescriptionBasicDto.EndDate"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-12 col-md-6">
+                <p>Medication Comment</p>
+                <div class="input-field">
+                    <input class="text-input prescriptionTxtFields" type="text" asp-for="prescriptionBasicDto.Notes" placeholder="Enter Medication Comments">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col s12">
+                <div class="center">
+                    <button type="submit" id="pre_Savebtn" from="SinglePrescriptionForm" class="waves-effect waves-light btn add-btn sbt-btn">Save</button>
+                    @if (ViewBag.Action == "Update")
+                    {
+                        <a href="javascript:void(0);" onclick="enable();" class="Recreate btn sbt-btn">Edit</a>
+                        <a onclick="Disable();" class=" Recreate btn">Cancel</a>
+                    }
+                    @*else
+                    {
+                        <a href="@Url.Action("PrescriptionListElite", "PatientSideElite", new {Id = patientInfoId })" class=" Recreate btn">Cancel</a>
+                    }*@
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

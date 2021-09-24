@@ -1,0 +1,73 @@
+﻿<form action="/" method="post">
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <p>Date Of Exam</p>
+            <input class="text-input datepicker" type="text" placeholder="Date Of Exam">
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <p>Time Of Exam</p>
+            <input class="text-input time-picker" type="text" placeholder="Time Of Exam">
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <p>Examinar</p>
+            <input class="text-input time-picker" type="text" placeholder="Examinar Name">
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-12 col-lg-6">
+            <p>Type of exam</p>
+            <select id="Patient_caseType" class="select2" data-placeholder="Select Case Type">
+                <option selected value="" disabled></option>
+                <option value="No-Fault">No-Fault</option>
+                <option value="WC">WC</option>
+                <option value="Private">Private</option>
+                <option value="Self/Out of Pocket">Self/Out of Pocket</option>
+                <option value="Medicare">Medicare</option>
+                <option value="Tricare">Tricare</option>
+                <option value="Champva">Champva</option>
+                <option value="Group Health Plan">Group Health Plan</option>
+                <option value="Feca Blk Lung">Feca Blk Lung</option>
+                <option value="Medicaid">Medicaid</option>
+                <option value="Lien">Lien</option>
+            </select>        </div>
+        <div class="col-sm-12 col-lg-6">
+            <p>Reason of exam</p>
+            <input class="text-input time-picker" type="text" placeholder="Examinar Name">
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-12 col-lg-6">
+            <p>Diagnosis</p>
+            <input class="text-input time-picker" type="text" placeholder="Time Of Exam">
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <p>Reported</p>
+            <label>
+                <input type="radio" id="secondaryYes" class="with-gap " name="Reported" value="true" />
+                <span>Yes</span>
+            </label>
+            <label>
+                <input type="radio" id="secondaryNo" class="with-gap " name="Reported" value="false" />
+                <span>No</span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+
+
+        <div class="col-sm-12 col-lg-6">
+            <p>Signed</p>
+            <label>
+                <input type="radio" id="secondaryYes" class="with-gap " name="signed" value="true" />
+                <span>Yes</span>
+            </label>
+            <label>
+                <input type="radio" id="secondaryNo" class="with-gap " name="signed" value="false" />
+                <span>No</span>
+            </label>
+        </div>
+    </div>
+</form>

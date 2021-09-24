@@ -1,0 +1,545 @@
+﻿@model MediClinic.Models.ProviderViewModel
+@using  MediClinic.Services.Interfaces.SessionManager
+@inject ISessionManager _sessionManager
+@{
+    ViewData["Title"] = "AddTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ProviderInfoId = _sessionManager.GetProviderInfoId();
+
+}
+@section styles{
+    <link href="~/app-assets/base/jquery-ui.css" rel="stylesheet" />
+    <style>
+       
+        label, input {
+            position: relative;
+            display: block;
+            padding-right: 76px;
+            width: 170px;
+            box-sizing: border-box;
+        }
+
+            label::after {
+                content: '.' attr(data-domain);
+                position: absolute;
+                top: 4px;
+                left: 94px;
+                font-family: arial, helvetica, sans-serif;
+                font-size: 12px;
+                display: block;
+                color: rgba(0, 0, 0, 0.6);
+                font-weight: bold;
+            }
+
+        .abc {
+            width: 88% !important;
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important
+        }
+
+        .current .custom-combobox {
+            width: 94% !important
+        }
+
+        .custom-combobox {
+            width: 96% !important;
+            margin-top: 0px !important;
+        }
+
+        .custom-combobox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .custom-combobox-toggle {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin-left: -1px;
+            padding: 0;
+        }
+
+        .form-add-btn {
+            float: right !important
+        }
+
+        .custom-combobox-input {
+            margin: 0;
+            padding: 5px 10px;
+        }
+
+        .ui-widget .select-wrapper .select-dropdown, .select-wrapper .caret {
+            display: none
+        }
+
+        .input-field {
+            margin: 0 auto
+        }
+
+        .row .col.s3 {
+            width: auto !important;
+        }
+
+        .tabs {
+            border-bottom: 1px solid #6b6f82 !important;
+            border-left: 1px solid #6b6f82 !important;
+        }
+
+            .tabs li a {
+                font-size: 16px !important;
+                color: #6b6f82 !important;
+            }
+
+        .text-danger {
+            color: #CA0B00;
+        }
+
+        .d-none-td {
+            display: none;
+        }
+        .checkmark {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #4bb71b;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #4bb71b;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            position: fixed;
+            top: 12%;
+            right: 2%;
+            float: right;
+            z-index: 9999;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #4bb71b;
+            fill: #fff;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @@keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @@keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @@keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4bb71b;
+            }
+        }
+    </style>
+}
+
+<div id="breadcrumbs-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col s6 m6 ">
+                <h5 class="breadcrumbs-title color-blue mt-0">Add Medications Template</h5>
+            </div>
+            <div class="col s6 m6 ">
+                <a class="waves-effect waves-light float-right mr-2" style="margin-top: -1px;" href="@Url.Action("Template", "provider", new {Id = ProviderInfoId })">
+                    <i class="material-icons  right arrow-icon">arrow_back</i>
+
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <form class="form-inline col s12" asp-action="SaveMedicationTemplate" asp-controller="Provider" id="SaveTemplateForm">
+            <input type="hidden" asp-for="TemplateBasicDto.TemplateId" />
+            <input type="hidden" asp-for="PrescriptionTemplateDto.Id" />
+            @Html.HiddenFor(x => x.SelectedData, new { id = "selectedData" })
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Template Name <span class="required"> * </span></p>
+                        <input class="text-input" asp-for="TemplateBasicDto.Name" type="text" id="TemplateName" placeholder="Template Name">
+                        <span asp-validation-for="TemplateBasicDto.Name" class="required"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Medication Name <span class="required"> * </span> </p>
+                        <div class="ui-widget" id="medicineId">
+                            <select class="combobox" id="MedicationName" asp-items="@(new SelectList(Model.MedicineList, "Value", "Text"))">
+                                <option value="">Select Medicine Name</option>
+                            </select>
+                            <span id="medicinecheck" class="text-danger" style="        display: none;">Medicine Name is required</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field ">
+                        <p>Quantity <span class="required"> * </span></p>
+                        <input class="text-input" type="text" min="0" id="quantity" placeholder="Quantity">
+                        <span class="required" id="errmsg_work"></span>
+                        <span id="quantcheck" class="text-danger" style="display:none;">Quantity is required</span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Frequency</p>
+                        <div class="ui-widget" id="frequencyId">
+                            <select class="combobox" id="Frequency" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Once", Value="Once"},
+                                                new SelectListItem() {Text = "Daily", Value="Daily"},
+                                                new SelectListItem() {Text = "Two Times a day", Value="Two Times a day"},
+                                                new SelectListItem() {Text = "Three Times a day", Value="Three Times a day"},
+                                                new SelectListItem() {Text = "Four Times a day", Value="Four Times a day"},
+                                                new SelectListItem() {Text = "Five Times a day", Value="Five Times a day"},
+                                                new SelectListItem() {Text = "Six Times a day", Value="Six Times a day"},
+                                                new SelectListItem() {Text = "Before Bed", Value="Before Bed"},
+                                                new SelectListItem() {Text = "Before Breakfast", Value="Before Breakfast"},
+                                                new SelectListItem() {Text = "Before Lunch", Value="Before Lunch"},
+                                                new SelectListItem() {Text = "Before Dinner", Value="Before Dinner"},
+                                                new SelectListItem() {Text = "Before meals", Value="Before meals"},
+                                                new SelectListItem() {Text = "Every 1 hour", Value="Every 1 hour"},
+                                                new SelectListItem() {Text = "Every 2 hour", Value="Every 2 hour"},
+                                                new SelectListItem() {Text = "Every 3 hour", Value="Every 3 hour"},
+                                                new SelectListItem() {Text = "Every 4 hour", Value="Every 4 hour"},
+                                                new SelectListItem() {Text = "Every 5 hour", Value="Every 5 hour"},
+                                                new SelectListItem() {Text = "Every 6 hour", Value="Every 6 hour"},
+                                                new SelectListItem() {Text = "Every 7 hour", Value="Every 7 hour"},
+                                                new SelectListItem() {Text = "Every week", Value="Every week"},
+                                                new SelectListItem() {Text = "Once a month", Value="Once a month"}
+                                         })">
+                                <option value="">Select Frequency</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Dose</p>
+                        <input class="text-input" type="text" id="dose" placeholder="Dose">
+                        <span class="required" id="errmsg_dose"></span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Unit</p>
+                        <div class="ui-widget" id="unitId">
+                            <select class="combobox" id="Unit" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "mg", Value="mg"},
+                                                new SelectListItem() {Text = "ml", Value="ml"}
+                                         })">
+                                <option value="">Select Unit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Start Date <span class="required"> * </span></p>
+                        <input type="text" class="datepicker text-input" id="startDate" placeholder="Start Date">
+                        <span id="startdatecheck" class="text-danger" style="display:none;">Start Date is required</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>End Date <span class="required"> * </span></p>
+                        <input type="text" class="datepicker text-input" id="endDate" placeholder="End Date">
+                        <span id="enddatecheck" class="text-danger" style="display:none;">End Date is required</span>
+
+                    </div>
+                </div>
+                <div class="col s12 m6">
+                    <div class="input-field">
+                        <p>Medication Comments</p>
+                        <input class="text-input" type="text" id="comments" placeholder="Medication Comments">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2 mb-2">
+                <div class="col s12 m12" style="text-align:center">
+                    <a href="javascript:void(0);" onclick="onSaveTemplateMedicines();" class="waves-effect waves-light btn add-btn">Save</a>
+                    <a href="@Url.Action("Template", "Provider",new { Id = ProviderInfoId})" class="waves-effect waves-light Recreate btn">Cancel</a>
+                </div>
+            </div>
+            <br />
+            <div class="row" id="mediData">
+                <div class="col s12">
+                    <table class="centered highlight bordered" id="prescriptionData" style="margin-bottom:30px;">
+                        <thead>
+                            <tr class="uppercase">
+                                <th>Medication Name</th>
+                                <th>Quantity</th>
+                                <th>Frequency</th>
+                                <th>Dose</th>
+                                <th>Unit</th>
+                                <th>Start Date</th>
+                                <th>Ent Date</th>
+                                <th>Medication Comments</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicineTemplateBody"></tbody>
+                    </table>
+                </div>
+                <div class="col s12 m12" style="text-align:center">
+                    <button type="submit" id="saveTemplate" class="waves-effect waves-light btn add-btn mb-3">Save Template</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" /><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" /></svg>
+@section scripts{
+    <script>
+        var sweet3 = {
+            title: "Confirmation!",
+            text: "Do you want to delete this record?",
+            type: "errro",
+            showCloseButton: false,
+            showCancelButton: true,
+            confirmButtonAriaLabel: 'Thumbs up, great!',
+            confirmButtonText:
+                'Yes',
+            cancelButtonText:
+                'No',
+            cancelButtonAriaLabel: 'Thumbs down',
+            confirmButtonClass: 'btn btn-danger',
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            cancelButtonClass: 'btn btn-dark ml-1',
+        }
+        $(document).ready(function () {
+            var rowCount = $('#prescriptionData tbody tr').length;
+            if (rowCount > 0) {
+                $('#mediData').css('display', 'block');
+            }
+            else {
+                $('#mediData').css('display', 'none');
+            }
+        })
+        function onSaveTemplateMedicines() {
+            debugger;
+            var medicine = $("#medicineId .custom-combobox-input").val();
+            var medval = $("#MedicationName").val();
+            var qty = $("#quantity").val();
+            var unit = $("#unitId .custom-combobox-input").val();
+            var dose = $("#dose").val();
+            var freq = $("#frequencyId .custom-combobox-input").val();
+            var edate = $("#endDate").val();
+            var sdate = $("#startDate").val();
+            var comment = $("#comments").val();
+            if (medicine != "" && medval != "" && qty != "" && sdate != "" && edate != "") {
+                
+                $(".checkmark").show().fadeOut(6000);
+                $("#medicineTemplateBody").append("<tr class='card templateBody'><td class='d-none-td mId' mId=" + medval + ">" + medval + "</td><td class='center'>" + medicine + "</td><td class='qty' qty=" + qty + ">" + qty + "</td><td class='freq' freq=" + freq + " data-val = " + freq + " >" + freq + "</td><td class='dose' dose=" + dose + ">" + dose + "</td><td class='unit' unit=" + unit + ">" + unit + "</td><td class='sDate' sDate=" + sdate + ">" + sdate + "</td><td class='eDate' eDate=" + edate + ">" + edate + "</td><td class='comment' comment=" + comment + ">" + comment + "</td> <td class='center'> <a href='javascript:void(0);' class='btn-delete' med-name=" + medval + "><i class='material-icons' style='color:#d9534f'>delete</i></a> </td> </tr>");
+                $("#medicineId .custom-combobox-input").val('');
+                $("#quantity").val('');
+                $("#unitId .custom-combobox-input").val('');
+                $("#dose").val('');
+                $("#frequencyId .custom-combobox-input").val('');
+                $("#comments").val('');
+                $("#endDate").val('');
+                $("#startDate").val('');
+            }
+            if (medval == "" && medicine == "" && qty == "") {
+                $("#quantcheck").show();
+                $("#medicinecheck").show();
+            }
+            if (medval == "" && medicine == "") {
+                $("#medicinecheck").show();
+                $("#quantcheck").hide();
+            }
+            if (qty == "") {
+                $("#quantcheck").show();
+                $("#startdatecheck").show();
+                $("#medicinecheck").hide();
+            }
+            if (medicine == "") {
+                $("#medicinecheck").show();
+                $("#quantcheck").hide();
+                $("#enddatecheck").hide();
+            }
+            if (medval == "" && medicine == "") {
+                $("#medicinecheck").show();
+                $("#quantcheck").hide();
+            }
+            if (qty == "") {
+                $("#quantcheck").show();
+                $("#medicinecheck").hide();
+            }
+            if (medval == "" && medicine == "" && qty == "") {
+                $("#medicinecheck").show();
+                $("#quantcheck").show();
+            }
+            var rowCount = $('#prescriptionData tbody tr').length;
+            if (rowCount > 0) {
+                $('#mediData').css('display', 'block');
+            }
+            else {
+                $('#mediData').css('display', 'none');
+            }
+        }
+        $("#prescriptionData").on('click', '.btn-delete', function () {
+            Swal.fire(sweet3).then((result) => {
+                if (result.value) {
+                    $(this).closest('tr').remove();
+                    var rowCount = $('#prescriptionData tbody tr').length;
+                    if (rowCount > 0) {
+                        $('#mediData').css('display', 'block');
+                    }
+                    else {
+                        $('#mediData').css('display', 'none');
+                    }
+                }
+                if (result.dismiss === swal.DismissReason.cancel) {
+                    return false;
+                }
+            });
+        });
+    </script>
+    <script src="~/app-assets/base/jquery-ui.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/app-assets/js/jquery.form.js"></script>
+    <script>
+        $("#quantity").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg_work").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+        $("#dose").keypress(function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                //display error message
+                $("#errmsg_dose").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+        });
+        $(function () {
+            var dateFormat = "mm/dd/yy",
+                from = $("#startDate")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#endDate").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+
+    </script>
+
+    <script>
+        $('#SaveTemplateForm').on('submit', function (e) {
+            e.preventDefault();
+            if ($(this).valid()) {
+                var tblData = "";
+                $('#prescriptionData tr:not(:first)').each(function () {
+                    var template = $("#TemplateName").val();
+                    var medicineId = $(this).find(".mId").attr("mId");
+                    var freq = $(this).find(".freq").html();
+                     var qty = $(this).find(".qty").attr("qty");
+                    var dose = $(this).find(".dose").attr("dose");
+                    var sdate = $(this).find(".sDate").attr("sDate");
+                    var edate = $(this).find(".eDate").attr("eDate");
+                    var unit = $(this).find(".unit").attr("unit");
+                    var comment = $(this).find(".comment").attr("comment");
+                    tblData += (medicineId + "_" + freq + "_" + qty + "_" + dose + "_" + sdate + "_" + edate + "_" + unit + "_" + comment + "|-|");
+                });
+
+                //$("#saveTemplate").prop('disabled', true);
+                $("#selectedData").val(tblData);
+                $(this).ajaxSubmit({
+                    success: function (response) {
+                        debugger;
+                        if (response == "exist") {
+                            ExistsMsg();
+                        }
+                        else {
+                            SuccessMsg();
+                            window.location.href = '../Template';
+                        }
+                    }
+                });
+            }
+            else {
+                $("#saveTemplate").prop('disabled', false);
+            }
+        });
+        function ExistsMsg() {
+            new PNotify({
+                title: 'Error!',
+                text: "Template Name already exists",
+                delay: 2000,
+                type: 'error'
+            });
+        }
+        function SuccessMsg() {
+            new PNotify({
+                title: 'Success!',
+                text: "Record saved succesfully",
+                delay: 2000,
+                type: 'success'
+            });
+        }
+
+    </script>
+
+}

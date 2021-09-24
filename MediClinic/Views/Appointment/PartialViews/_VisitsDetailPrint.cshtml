@@ -1,0 +1,338 @@
+﻿@using MedliClinic.Utilities.Utility
+@model MediClinic.Models.AppointmentViewModel
+
+@{
+    var concateResult = string.Empty;
+    DateTime Date = DateTime.Now;
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+<h4 class="color-blue">Growth Chart</h4>
+<table id="myTableEUO" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll"></label>
+                </div>
+            </th>
+            <th>DOB</th>
+            <th>Weight</th>
+            <th>Height</th>
+            <th>Length</th>
+            <th>Head D.M</th>
+            <th>Neck D.M</th>
+            <th>Weist D.M</th>
+            <th>Shoulder Width</th>
+            <th class="all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.growthChartList)
+        {
+            <tr class="card" style="cursor: pointer">
+                <th>
+                    <div class="custom-control custom-checkbox">
+                    </div>
+                </th>
+
+                <td>@item.DOB.Value.ToString(SystemFormat.DateFormat())</td>
+                <td>@item.Weight</td>
+                <td>@item.Height</td>
+                <td>@item.Length</td>
+                <td>@item.HeadDiameter</td>
+                <td>@item.NeckDiameter</td>
+                <td>@item.WaistDiameter</td>
+                <td>@item.ShoulderWidth</td>
+                <td class="action">
+                    <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                        Options
+                        @*<span class="caret"></span>*@
+                    </button>
+                    <ul class="dropdown-menu Table_Drop ul_Caim">
+                        <li onclick="deleteMesg(@item.GrowthId,this)"><a href="javascript:void(0);">Delete</a></li>
+                        <li><a href="/GrowthChart/Add?id=@item.GrowthId">Edit</a></li>
+                    </ul>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<h4 class="color-blue">Prescription</h4>
+<table id="PrescriptionTab" class="table dataTables_wrapper ">
+    <thead>
+        <tr class="uppercase">
+            <th>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                    <label class="custom-control-label" for="selectAll"></label>
+                </div>
+            </th>
+            <th>Medication Name</th>
+            <th>Quantity</th>
+            <th>Frequency</th>
+            <th>Dose</th>
+            <th>Unit</th>
+            <th>Start Date</th>
+            <th>Stop Date</th>
+            <th>Medication Comments</th>
+            <th data-searchable=false data-orderable="false" class="all">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.prescriptionBasicsList != null)
+        {
+            foreach (var item in Model.prescriptionBasicsList)
+            {
+                <tr class="card">
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="@item.Id" value="check">
+                            <label class="custom-control-label" for="@item.Id"></label>
+                        </div>
+
+                    </td>
+                    <td>@item.Medication.Name</td>
+
+                    <td>@item.Quantity</td>
+                    <td>@item.FrequencyId</td>
+                    <td>@item.Dose</td>
+                    <td>@item.Unit</td>
+                    <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                    <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                    <td>@item.Notes</td>
+
+                    <td class="action">
+                        <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                            Options
+                            @*<span class="caret"></span>*@
+                        </button>
+                        <ul class="dropdown-menu Table_Drop ul_Caim">
+                            <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+
+                        </ul>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+<hr />
+
+<h4 class="color-blue">Vitals</h4>
+<div class="row tablee">
+    <div class="col-md-12">
+
+        <table id="VitalTab" class="table dataTables_wrapper ">
+            <thead>
+                <tr class="uppercase">
+                    <th>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                            <label class="custom-control-label" for="selectAll"></label>
+                        </div>
+
+                    </th>
+                    <th>Date of Exam</th>
+                    <th>Examinar</th>
+
+                    <th>REASON FOR EXAM</th>
+                    <th>Results</th>
+
+                    <th data-searchable="false" data-orderable="false" class="all">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vitallist != null)
+                {
+                    @foreach (var item in Model.Vitallist)
+                    {
+                        <tr class="card">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="@item.PatientVitalId">
+                                    <label class="custom-control-label" for="@item.PatientVitalId"></label>
+                                </div>
+                            </th>
+                            <td>@item.ExamTime.ToString("MM/dd/yyyy")</td>
+                            <td>Dr. @item.Examiner.FirstName @item.Examiner.LastName</td>
+                            <td>@item.ReasonForExam.ReasonName</td>
+                            @if (item.Temprature != null && item.BloodPressure != null && item.Pulse != null && item.Respiration != null && item.Height != null && item.Weight != null && item.TempMethod != null && item.BMIStatus != null && item.BMI != null && item.OxygenSaturation != null && item.Allergies != null)
+                            {
+                                concateResult = " Temp : " + item.Temprature + " BP : " + item.BloodPressure;
+                            }
+                            @if (!(item.Temprature is null))
+                            {
+                                concateResult = " Temp : " + item.Temprature;
+                            }
+                            else if (!(item.BloodPressure is null))
+                            {
+                                concateResult = " Bp : " + item.BloodPressure;
+                            }
+                            else if (!(item.Pulse is null))
+                            {
+                                concateResult = " Pulse : " + item.Pulse;
+                            }
+                            else if (!(item.Respiration is null))
+                            {
+                                concateResult = " Resp : " + item.Respiration;
+                            }
+                            else if (!(item.Height is null))
+                            {
+                                concateResult = " Height : " + item.Height;
+                            }
+                            else if (!(item.Weight is null))
+                            {
+                                concateResult = " Weight : " + item.Weight;
+                            }
+                            else if (!(item.TempMethod is null))
+                            {
+                                concateResult = " Tem Meth : " + item.TempMethod;
+                            }
+                            else if (!(item.BMIStatus is null))
+                            {
+                                concateResult = " BMI Status : " + item.BMIStatus;
+                            }
+                            else if (!(item.BMI is null))
+                            {
+                                concateResult = " BMI : " + item.BMI;
+                            }
+                            else if (!(item.OxygenSaturation is null))
+                            {
+                                concateResult = " Oxygen Sat : " + item.OxygenSaturation;
+                            }
+                            else if (!(item.Allergies is null))
+                            {
+                                concateResult = " Allergies : " + item.Allergies;
+                            }
+                            <td>@concateResult</td>
+                            <td class="action">
+                                <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                    Options
+                                    @*<span class="caret"></span>*@
+                                </button>
+                                <ul class="dropdown-menu Table_Drop ul_Caim" data-dropup-auto="false">
+                                    <li><a href="javascript:void(0);" class="option-a">Print</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr />
+<h4 class="color-blue">Immunization</h4>
+<div class="row tablee">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="Immunization" class="table dataTables_wrapper ">
+                <thead>
+                    <tr class="uppercase">
+                        <th class="disable">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input select-all" data-val="all" id="selectAll">
+                                <label class="custom-control-label" for="selectAll"></label>
+                            </div>
+                        </th>
+                        <th>Vaccine</th>
+                        <th>Abbreviations</th>
+                        <th>Age</th>
+                        <th>Dose</th>
+                        <th>Status</th>
+                        <th class="all">ACTION  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Listimmunization)
+                    {
+                        <tr class="card" style="cursor: pointer">
+                            <th>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="@item.ImmunizationId" value="check">
+                                    <label class="custom-control-label" for="@item.ImmunizationId"></label>
+                                </div>
+                            </th>
+
+                            <td>
+                                @item.VaccineName
+                            </td>
+                            <td>
+                                @item.VaccineAbberivation
+                            </td>
+                            <td>
+                                @item.PatientCurrentAge.Value.ToString("MM/dd/yyyy")
+                            </td>
+                            <td>
+                                @item.DoesInRouten
+                            </td>
+
+                            @if (item.RouteOfAdministration < Date)
+                            {
+                                <td>Past</td>
+
+                            }
+                            else if (item.RouteOfAdministration > Date)
+                            {
+                                <td>Future</td>
+                            }
+                            else
+                            {
+                                <td>Current</td>
+                            }
+                            <td class="action">
+                                <button class="btn btn-primary dropdown-toggle table_btn" type="button" data-toggle="dropdown">
+                                    Options
+                                    @*<span class="caret"></span>*@
+                                </button>
+                                <ul class="dropdown-menu Table_Drop ul_Caim">
+                                    <li><a href="javascript:void(0);">Print</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<hr />
+<h4 class="color-blue">CLinical Notes</h4>
+@if (!(Model.TemplateList is null))
+{
+    @foreach (var item in Model.TemplateList)
+    {
+        <div class="row tablee">
+            <div class="col-md-12">
+
+                <h6 class="dark-color">Template Name : @item.Name </h6>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var loop in item.VisitDetails)
+            {
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><span class="dark-color">@loop.Label</span> : <span style="color:#000 !important">@loop.Value</span></p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+}
+else
+{
+    <div class="row">
+        <div class="col-12">
+            <span class="center">No data available</span>
+
+        </div>
+    </div>
+}
+<hr />

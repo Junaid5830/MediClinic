@@ -1,0 +1,182 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="tab-pane " id="test2" role="tabpanel">
+
+    <div class="card">
+        <div class="card-content">
+
+            <div class="row">
+                <div class="row">
+                    <div class="col color-blue"> <h5 class="pl-2">Phone Number</h5></div>
+                </div>
+
+                <form class="col-sm-12  patientPhoneNumberForm" asp-action="PatientPhoneNumber" asp-controller="PatientSideElite" id="patientPhoneNumberForm" method="post">
+                    <input class="text-input input-styling" asp-for="patientPhoneNumber.UserId" type="text" hidden="hidden">
+                    <input hidden="hidden" asp-for="patientPhoneNumber.PhoneNumberId" />
+                    <input hidden="hidden" id="hiddenPatientPhoneUserId" class="patientinfobasichiddenUserId" asp-for="patientInfoBasicDto.UserId" />
+                    <div class="row">
+                        <div class=" col-md-6 ">
+                            <p>Home</p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField numberFieldForModal" type="text" id="home_phone" asp-for="patientPhoneNumber.HomePhone" placeholder="Enter Home Phone Number">
+                                <span class="required" id="errmsg_Home"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Mobile<span class="required"> * </span></p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField numberFieldForModal" type="text" id="mobile_num" asp-for="patientPhoneNumber.MobilePhone" placeholder="Enter Mobile Number">
+                                <span class="required" asp-validation-for="patientPhoneNumber.MobilePhone"></span>
+                                <span class="required" id="errmsg_mobile"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Work</p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField numberFieldForModal" type="text" id="work_number" asp-for="patientPhoneNumber.WorkPhone" placeholder="Enter Work Phone Number">
+                                <span class="required" id="errmsg_work"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Fax</p> 
+                            <div class="input-field">
+                                <input class="text-input fax phoneNumber_tab patientPhoneTxtField" type="text" id="Home_fax" asp-for="patientPhoneNumber.Fax" placeholder="Enter Fax Number">
+                                <span class="required" id="errmsg_fax"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Alternate Contact 1</p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField numberFieldForModal" type="text" id="" asp-for="patientPhoneNumber.ContactNumber2" placeholder="Enter Alternate Contact 1">
+                                <span class="required" id="errmsg_Home"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-6 ">
+                            <p>Alternate Contact 2</p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField numberFieldForModal" type="text" id="" asp-for="patientPhoneNumber.ContactNumber3" placeholder="Enter Alternate Contact 2">
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Emergency Number</p>
+                            <div class="input-field">
+                                <div class="row">
+                                    <div class="col-sm-3  col-3 col-lg-3 col-xl-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="emergencyPhoneYes" class="custom-control-input  patientPhoneTxtField numberFieldForModal" name="phoneYes" value="2">
+                                            <label class="custom-control-label" for="emergencyPhoneYes">Yes</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="emergencyPhoneNo" class="custom-control-input patientPhoneTxtField" checked name="phoneYes" value="3">
+                                            <label class="custom-control-label" for="emergencyPhoneNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="emergencyPhone_hideShow" style="display:none">
+                        <div class=" col-md-6 ">
+                            <p>Emergency</p>
+
+                            <div class="input-field">
+                                <input class="text-input phoneno phoneNumber_tab patientPhoneTxtField" type="text" id="emergency_number" asp-for="patientPhoneNumber.EmergencyPhone" placeholder="Enter Emergency Number">
+                                @*<span class="required" asp-validation-for="patientPhoneNumber.EmergencyPhone"></span>*@
+                                <span class="required" id="errmsg_emerg"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      
+                    </div>
+                    <br />
+                    <div class="row">
+
+                        <div class=" col-sm-6  col-6 col-lg-6 col-xl-6 ">
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientPhoneTxtField" id="customCheck1" asp-for="patientPhoneNumber.IsSMSNotified" checked>
+                                <label class="custom-control-label" for="customCheck1">Accept SMS Notification & Reminders</label>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6  col-6 col-lg-6 col-xl-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input checkFirst patientPhoneTxtField" asp-for="patientPhoneNumber.IsEmailNotified" id="customCheck2" checked>
+                                <label class="custom-control-label" for="customCheck2">Accept Email Notification & Reminders</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <p>Communication Preference</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientPhoneTxtField" asp-for="patientPhoneNumber.IsCommunicationSMS" id="customCheck3" checked>
+                                    <label class="custom-control-label" for="customCheck3">SMS</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientPhoneTxtField" asp-for="patientPhoneNumber.IsCommunicationPhone" id="customCheck4" checked>
+                                    <label class="custom-control-label" for="customCheck4">Phone</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2  col-4 col-lg-2 col-xl-2">
+                            <div class="input-field">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input checkFirst patientPhoneTxtField" asp-for="patientPhoneNumber.IsCommunicationEmail" id="customCheck5" checked>
+                                    <label class="custom-control-label" for="customCheck5">Email</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-2 mb-2">
+                        <div class="col s12">
+                            <div class="center">
+                                <button type="submit" id="phone_btn" class="btn waves-effect waves-light add-btn">Save</button>
+
+                                @if (ViewBag.Action == "Update")
+                                {
+                                    <button type="button" data-val="phoneForm" id="phoneEdit_btn" class="btn Recreate patientEditBtn">Edit</button>
+                                    <button type="button" data-val="phoneForm" id="phoneCancel_btn" class="Recreate btn patientCancelBtn">Cancel</button>
+                                }
+                                else
+                                {
+                                    @*<a href="javascript:void(0);" data-val="NewForm" id="phoneEdit_btn" class="btn Recreate">Edit</a>*@
+                                    <a href="javascript:void(0);" data-val="NewForm" id="phoneCancel_btn" onclick="emptyPatientPhoneFields();" class="Recreate btn">Cancel</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</div>

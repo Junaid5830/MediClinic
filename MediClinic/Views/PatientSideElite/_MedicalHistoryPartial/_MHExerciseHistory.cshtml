@@ -1,0 +1,87 @@
+﻿@model MediClinic.Models.PatientViewModel
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-content">
+                <div class="container">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="card-title">EXERCISE HISTORY</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div id="MHExerciseHistoryGrid">
+                    @*<partial name="../_PatientPartialView/_ManageMHExerciseHistory" />*@
+                    <partial name="../_MedicalHistoryPartial/_ManageMHExerciseHistory.cshtml" />
+
+                </div>
+            </div>
+        </div>
+                    <form asp-action="SavePMHExerciseHistory" asp-controller="PatientMedicalHistory" data-ajax="true" data-ajax-success="onMHExerciseHistorySucess(data)" id="ExerciseHistoryForm">
+                        <input type="hidden" asp-for="MHExerciseHistory.Id" />
+                        <div class="row current">
+                            <div class="col s12 m4">
+                                <p>Exercise <span class="required"> * </span></p>
+                        
+                                    <select data-placeholder="Select Exercise" id="exerciseId" class="select2" asp-for="MHExerciseHistory.Exercise" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "Yes", Value="Yes"},
+                                                                 new SelectListItem() {Text = "No", Value="No"}
+                                         })">
+                                        <option value="" selected disabled></option>
+                                    </select>
+                              
+                                <span class="required" id="MHExerciseHistory_Exercise_err"></span>
+                            </div>
+                            <div class="col">
+                                <p class=" content-p">
+                                    Exercise Type <span class="required"> * </span>
+                                </p>
+                                <input class="text-input" asp-for="MHExerciseHistory.ExerciseType" type="text" placeholder="Exercise Type ">
+                                <span class="required" asp-validation-for="MHExerciseHistory.ExerciseType"></span>
+                            </div>
+                            <div class="col">
+                                <p>
+                                    Number Of Days Per Week
+                                </p>
+                     
+                                    <select data-placeholder="Select No of Days Per Weeks" id="weekDaysId" class="select2" asp-for="MHExerciseHistory.ExerciseNoOfDaysPerWeek" asp-items="@( new List<SelectListItem>{
+                                                                 new SelectListItem() {Text = "1", Value="1"},
+                new SelectListItem() {Text = "2", Value="2"},
+                new SelectListItem() {Text = "3", Value="3"},
+                new SelectListItem() {Text = "4", Value="4"},
+                new SelectListItem() {Text = "5", Value="5"},
+                new SelectListItem() {Text = "6", Value="6"}
+                                         })">
+                                        <option value="" selected disabled>
+                                           
+                                        </option>
+                                    </select>
+                                    <span class="required" asp-validation-for="MHExerciseHistory.ExerciseNoOfDaysPerWeek"></span>
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p class="content-p">Hobbies/Leisure Activities</p>
+                                <input class="text-input" asp-for="MHExerciseHistory.HobbiesOrLeisureActivities" type="text" placeholder="Hobbies/Leisure Activities">
+                                <span class="required" asp-validation-for="MHExerciseHistory.HobbiesOrLeisureActivities"></span>
+                            </div>
+
+                        </div>
+                        <div class="row mt-2 mb-2">
+                            <div class="col s12 m12" style="text-align:center">
+                                <button type="submit" id="SaveExerciseHistoryForm" class="btn add-btn">Save</button>
+                                <button type="reset" class="Recreate btn">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
